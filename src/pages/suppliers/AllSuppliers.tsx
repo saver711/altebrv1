@@ -134,7 +134,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
     isError,
     isSuccess,
     error,
-    isLoading: suppliersLoading,
+    isFetching
   } = useFetch<supplier[]>({
     endpoint: "/supplier/api/v1/suppliers",
     queryKey: ["suppliers"],
@@ -148,6 +148,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
     },
     onError: (err) => console.log(err),
   })
+    console.log("🚀 ~ file: AllSuppliers.tsx:151 ~ AllSuppliers ~ suppliers:", suppliers)
 
   ///
   /////////// CUSTOM HOOKS
@@ -206,8 +207,8 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
           />
         </div>
       )}
-      {suppliersLoading && <Loading mainTitle={t("View Suppliers")} />}
-      {isSuccess && !!!dataSource?.length && (
+      {isFetching && <Loading mainTitle={t("View Suppliers")} />}
+      { (!isFetching && isSuccess && !!!dataSource?.length) && (
         <EmptyDataView>
           <AddSupplier title={"اضافة مورد"} />
         </EmptyDataView>

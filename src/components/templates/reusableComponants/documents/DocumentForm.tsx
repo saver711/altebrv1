@@ -10,7 +10,6 @@ import { Button } from "../../../atoms"
 import { BaseInputField, DateInputField, Select } from "../../../molecules"
 import { DropFile } from "../../../molecules/files/DropFile"
 import { allDocs_TP } from "./Documents"
-import { formatDate } from "../../../../utils/date"
 
 ///
 /////////// Types
@@ -34,7 +33,6 @@ export const DocumentForm = ({
   setEditableData,
   addDocPopup,
 }: DocumentFormProps_TP) => {
-  console.log("🚀 ~ file: DocumentForm.tsx:36 ~ editableData:", editableData)
   ///
   /////////// VARIABLES
   ///
@@ -47,7 +45,7 @@ export const DocumentForm = ({
       label: "سجل تجاري",
       value: "1",
     },
-    endDate: !!editableData?.endDate ?  new Date(editableData?.endDate) : new Date(),
+    endDate: editableData?.endDate || new Date(),
     reminder: editableData?.reminder || "60",
     id: editableData?.id || crypto.randomUUID(),
   }
@@ -64,20 +62,6 @@ export const DocumentForm = ({
   /////////// CUSTOM HOOKS
   ///
 
-  // // get identity
-  // const {
-  //   data: identity,
-  //   isLoading: identityLoading,
-  // } = useFetch<SelectOption_TP[]>({
-  //   endpoint: "identity",
-  //   queryKey: ["identity"],
-  //   select: (identities) =>
-  //     identities.map((identity: any) => ({
-  //       id: identity.id,
-  //       value: identity.identityName,
-  //       label: identity.identityName,
-  //     })),
-  // })
   const docTypeOptions = [
     { id: 1, value: "1", label: "سجل تجاري" },
     { id: 2, value: "2", label: "شهادة الزكاة والدخل" },
@@ -111,20 +95,7 @@ export const DocumentForm = ({
 
     setDocsFormValues((prev: any) => {
       const newDocs = prev.filter((doc: allDocs_TP) => doc.id !== values.id)
-      return [
-        ...newDocs,
-        {
-          id: values.id,
-          data: {
-            docName: values.docName,
-            docType: newDocType,
-            docNumber: values.docNumber,
-            endDate: formatDate(values.endDate),
-            reminder: values.reminder,
-          },
-          files: values.files,
-        },
-      ]
+      return [...newDocs, { ...values, docType: newDocType }]
     })
   }
 
@@ -133,8 +104,6 @@ export const DocumentForm = ({
       initialValues={initialValues}
       onSubmit={(values) => {
         handleAddDocData(values)
-        console.log("🚀 ~ file: DocumentForm.tsx:180 ~ values:", values)
-
         setEditableData({} as allDocs_TP)
         setAddDocPopup(false)
       }}

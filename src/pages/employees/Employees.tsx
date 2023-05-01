@@ -38,7 +38,7 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
   ///
   /////////// STATES
   ///
-  const [ editEmployeeData,setEditEmployeeData ] = useState<InitialValues_TP>()
+  const [editEmployeeData, setEditEmployeeData] = useState<InitialValues_TP>()
   ///
   /////////// SIDE EFFECTS
   ///
@@ -46,7 +46,7 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  if (employeesLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t('employees are loading')}`} />
+  if (employeesLoading) return <Loading mainTitle={`${t('loading...')}`} subTitle={`${t('employees are loading')}`} />
 
 
   ///
@@ -70,21 +70,13 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
         {isSuccess &&
           employees.length > 0 &&
           employees.map(({ id, name, img, ...rest }) => (
-            <EmployeeCard id={id} name={name} img={img} key={id} rest={rest} 
-            setEditEmployeeData={setEditEmployeeData} editEmployeeData={editEmployeeData}/>
+            <EmployeeCard id={id} name={name} img={img} key={id} rest={rest}
+              setEditEmployeeData={setEditEmployeeData} editEmployeeData={editEmployeeData} />
           ))}
       </div>
       {/* SUCCESS & 0 Employees */}
       {isSuccess && employees.length === 0 && (
-        <div>
-          <p>لا يوجد موظفين</p>
-          <Button
-            action={() => navigate(`/add-employee`)}
-            className="flex items-center gap-2"
-          >
-            <AddIcon /> {t("add-employee")}
-          </Button>
-        </div>
+        <h2 className="font-bold text-2xl text-center mt-16" > {t('There ara no employees')} </h2>
       )}
 
       {/* ERROR */}

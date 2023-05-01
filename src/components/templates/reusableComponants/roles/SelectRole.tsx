@@ -13,14 +13,12 @@ type SelectRoleProps_TP = {
   label?: string,
   field?: "id" | "value",
   stateValue?: any
-  onChange?: (option:any) => void,
-  value?:{[x:string]:string}
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
-export const SelectRole = ({ name , field , onChange , value }:SelectRoleProps_TP) => {
+export const SelectRole = ({ name , field }:SelectRoleProps_TP) => {
   /////////// VARIABLES
   ///
 
@@ -30,6 +28,7 @@ export const SelectRole = ({ name , field , onChange , value }:SelectRoleProps_T
   ///
   /////////// CUSTOM HOOKS
   ///
+  const { values , setFieldValue } = useFormikContext()
  // get job title
  const {
     data: jobTitlesOptions,
@@ -79,8 +78,13 @@ export const SelectRole = ({ name , field , onChange , value }:SelectRoleProps_T
       //@ts-ignore
       CreateComponent={AddAdministrativeStructure}
       isDisabled={!jobTitlesLoading && !!jobTitlesErrorReason}
-      onChange={onChange}
-      {...{...(value && {value})}}
+      {...{...(values?.role_value && { value:{
+        value: values?.role_value || "",
+        label: values?.role_value || ""
+      }})}}
+      onChange={(option=>{
+        setFieldValue("role_value", option!.value)
+      })}
     />
     {
       jobTitlesErrorReason &&

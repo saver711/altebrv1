@@ -1,4 +1,4 @@
-
+/* 
 export const tableData = [
     {
       "sizes": [
@@ -12,7 +12,6 @@ export const tableData = [
       "stones": [
         {
           "stone_id": 1,
-          "stoneType_value": 'زمرد',
           "color_id": [
             1,
             2
@@ -22,11 +21,9 @@ export const tableData = [
             2
           ],
           "purity_id": 1,
-          'stonePurity_value':'نقاء 224',
           "weight": "10",
           "count": "12",
           "nature_id": 1,
-          "stoneNature_value": 'طبيعة 55',
           "certificate_number": "323",
           "certificate_source": "fdsfdssff",
           "certificate_url": "url",
@@ -45,11 +42,8 @@ export const tableData = [
       "mezan_type": "manual",
       "model_number": "213651615",
       "category_id": 12,
-      "category_value": 'سلسلة',
       "country_id": 2,
-      "country_value": 'مصر',
       "color_id": 5,
-      'color_value':"أخضر",
       "weight": 300,
       "wage": "30",
       "has_stones": "true",
@@ -63,7 +57,7 @@ export const tableData = [
       ],
       "bond_id": 3,
       "band_id": 11,
-      "weightitems": [
+      "weight_items": [
         {
           "category_id": "3",
           "weight": "200"
@@ -86,11 +80,8 @@ export const tableData = [
       "mezan_type": "automatic",
       "model_number": "12345",
       "category_id": 14,
-      "category_value": 'غويشة',
       "country_id": 12,
-      "country_value": 'سوريا',
       "color_id": 21,
-      'color_value':"أسود",
       "weight": 280,
       "wage": "50",
       "has_stones": "false",
@@ -104,7 +95,7 @@ export const tableData = [
       ],
       "bond_id": 5,
       "band_id": 51,
-      "weightitems": [
+      "weight_items": [
         {
           "category_id": "5",
           "weight": "500"
@@ -116,18 +107,9 @@ export const tableData = [
       ]
     } ,
     {
-      "sizes": [
-        {
-          "id": "5cf70c8f-0695-45d3-943e-a193d145868d",
-          "category_id": 5,
-          "size_type": 5,
-          "sizeNumber_id": 53
-        }
-      ],
       "stones": [
         {
           "stone_id": 3,
-          "stoneType_value": 'عقيق',
           "color_id": [
             5,
             9
@@ -137,11 +119,9 @@ export const tableData = [
             6
           ],
           "purity_id": 5,
-          'stonePurity_value':'نقاء 665',
           "weight": "10",
           "count": "12",
           "nature_id": 1,
-          "stoneNature_value": 'طبيعة 999',
           "certificate_number": "323",
           "certificate_source": "fdsfdssff",
           "certificate_url": "url",
@@ -160,18 +140,15 @@ export const tableData = [
       "mezan_type": "manual",
       "model_number": "213651615",
       "category_id": 10,
-      "category_value": 'خاتم',
       "country_id": 1,
-      "country_value": 'السعودية',
       "color_id": 1,
-      'color_value':"أحمر",
       "weight": 300,
       "wage": "30",
       "has_stones": "true",
       "details": " مواصفات الحجر تحتوي على قطعة زمرد , بها قطعة الماس",
       "bond_id": 3,
       "band_id": 11,
-      "weightitems": [
+      "weight_items": [
         {
           "category_id": "3",
           "weight": "200"
@@ -182,4 +159,4 @@ export const tableData = [
         }
       ]
     }
-  ]
+  ] */

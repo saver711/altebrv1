@@ -75,10 +75,10 @@ export const AllRoutesProvider = () => {
             path="/add-supplier"
             element={<AddSupplier title={t("add supplier")} />}
           />
-          {/* <Route
+          <Route
             path="/add-employee"
             element={<AddEmployee title={t("add-employee")} />}
-          /> */}
+          />
           <Route
             path="/employees"
             element={<Employees title={t("employees")} />}
