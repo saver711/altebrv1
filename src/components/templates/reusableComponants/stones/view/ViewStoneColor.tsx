@@ -18,6 +18,7 @@ import { Loading } from "../../../../organisms/Loading"
 import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 
 ///
 /////////// TYPES
@@ -51,6 +52,7 @@ export const ViewStoneColor = () => {
   const [model, setModel] = useState<boolean>(false)
   const [editData, setEditData] = useState<StonesColors>()
   const [deleteData, setDeleteData] = useState<StonesColors>()
+  const [page, setPage] = useState<number>(1)
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
@@ -95,12 +97,13 @@ export const ViewStoneColor = () => {
   /////////// CUSTOM HOOKS
   ///
   const isRTL = useIsRTL()
-  const { isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesColors[]>({
+  const { data: colors, isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesColors[]>({
     endpoint: search === '' 
-    ? 'stones/api/v1/colors' 
-    : `stones/api/v1/colors?${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    ? `stones/api/v1/colors?page=${page}` 
+    : `stones/api/v1/colors?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_colors'],
-    onSuccess(data) {setDataSource(data)}
+    pagination: true,
+    onSuccess(data) {setDataSource(data.data)}
   })
 
   const {
@@ -125,6 +128,14 @@ export const ViewStoneColor = () => {
 
   useEffect(() => {
     refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
   }, [search])
 
   return (
@@ -145,7 +156,7 @@ export const ViewStoneColor = () => {
               type="text"
               placeholder={`${t("search")}`}
             />
-            <Button type="submit" loading={isRefetching}>
+            <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
             </Button>
           </Form>
@@ -188,7 +199,7 @@ export const ViewStoneColor = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {isLoading && <Loading mainTitle={t("stones colors")} />}
+        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
         {isSuccess && !!!dataSource?.length && (
           <div className="mb-5 pr-5">
             <Header
@@ -197,8 +208,37 @@ export const ViewStoneColor = () => {
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !!dataSource.length && (
-          <Table data={dataSource} showNavigation columns={cols} />
+        {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <Table data={dataSource} columns={cols}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+              <div className="flex items-center gap-2 font-bold">
+                عدد الصفحات
+                <span className=" text-mainGreen">
+                  {colors.current_page}
+                </span>
+                من
+                <span className=" text-mainGreen">
+                  {colors.pages}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 ">
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev - 1)}
+                  disabled={page == 1}
+                >
+                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                </Button>
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev + 1)}
+                  disabled={page == colors.pages}
+                >
+                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                </Button>
+              </div>
+            </div>
+          </Table>
         )}
       </div>
     </>

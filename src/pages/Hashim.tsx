@@ -10,8 +10,8 @@ const Hashim = () => {
     <div>
       {/* <Select_test /> */}
       {/* <Create_test /> */}
-      {/* <View_test /> */}
-      <ViewCategories />
+      <View_test />
+      {/* <ViewCategories /> */}
       {/* <AccountingTree /> */}
     </div>
   )
