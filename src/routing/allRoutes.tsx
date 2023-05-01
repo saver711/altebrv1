@@ -6,8 +6,8 @@ import { TestSystem } from "../components/templates/systemEstablishment/TestSyst
 import AddSupplier from "../components/templates/systemEstablishment/supplier/AddSupplier"
 import { authCtx } from "../context/auth-and-perm/auth"
 import { PermissionCtxProvider } from "../context/auth-and-perm/permissions"
-import { AddAdministrativeStructure } from "../pages/AdministrativeStructure/AddAdministrativeStructure"
-import { AdministrativeStructure } from "../pages/AdministrativeStructure/AdministrativeStructure"
+import { AddAdministrativeStructure } from "../pages/administrativeStructure/AddAdministrativeStructure"
+import { AdministrativeStructure } from "../pages/administrativeStructure/AdministrativeStructure"
 import Hashim from "../pages/Hashim"
 import { Home } from "../pages/Home"
 import { Login } from "../pages/Login"
@@ -30,6 +30,8 @@ import { Operation } from "../pages/operation/Operation"
 import { GoldCodingWrapper } from "../pages/coding/gold/GoldCodingWrapper"
 import { AllPartner } from "../pages/partner/AllPartner"
 import { OnePartner } from "../pages/partner/OnePartner"
+import { Bonds } from "../pages/gold-supply/Bonds"
+import { Bond } from "../pages/gold-supply/Bond"
 export const AllRoutesProvider = () => {
   const { permissions, userData } = useContext(authCtx)
   return (
@@ -114,6 +116,14 @@ export const AllRoutesProvider = () => {
         <Route
           path="/gold-first-form"
           element={<GoldSupply title={t("gold supply")} />}
+        />
+        <Route
+          path="/bonds"
+          element={<Bonds title={t("bonds")} />}
+        />
+        <Route
+          path="/bonds/:bondID"
+          element={<Bond title={t("bond")} />}
         />
       </Routes>
     </PermissionCtxProvider>

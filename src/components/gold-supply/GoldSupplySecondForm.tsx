@@ -28,7 +28,7 @@ export type BoxesTypes = {
     karat_18_aggregate: number
     total_24_gold_by_stock: number
     total_wages: number
-    total_tax: number
+    total_tax: number   
     total_weight: number
 }
 export type GoldTableProperties_TP = {
@@ -108,11 +108,11 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
     }, 0)
 
     const total_wages = boxValues.reduce((acc, curr) => {
-        return +acc + Number(curr.wage)
+        return +acc + (Number(curr.wage) * Number(curr.weight))
     }, 0)
 
     const total_tax = boxValues.reduce((acc, curr) => {
-        return +acc + (Number(curr.weight * curr.wage * .15) + Number(curr.weight * curr.stock * formValues?.api_gold_price * .15))
+        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(formValues?.api_gold_price) * .15))
     }, 0)
 
     const total_weight = boxValues.reduce((acc, curr) => {
@@ -226,7 +226,7 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                                     number: `${i + 1}`,
                                     total_wages: (Number(item.weight) * Number(item.wage)).toFixed(3),
                                     wage_tax: (Number(item.weight) * Number(item.wage) * .15).toFixed(3),
-                                    gold_tax: (Number(item.weight) * Number(item.stock) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3)
+                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3),
                                 }
                             })
                         })

@@ -107,7 +107,7 @@ export const GoldSupplyFirstForm = ({
             }
             }
             initialValues={GoldFirstFormInitValues}
-            //validationSchema={goldValidatingSchema}
+            validationSchema={goldValidatingSchema}
         >
             {({ values , setFieldValue }) => (
                 <Form>
@@ -224,7 +224,7 @@ export const GoldSupplyFirstForm = ({
                             <BaseInputField
                                 id="entity_gold_price"
                                 label={`${t("gold price")}`}
-                                name="entity_gold_price"
+                                name="api_gold_price"
                                 type="text"
                                 placeholder={`${t("gold price")}`}
                                 required

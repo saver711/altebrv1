@@ -70,7 +70,7 @@ export const OTableForm = ({ editRow, categoriesOptions, karatsOptions, data, se
         }),
         columnHelper.accessor('gold_tax', {
             header: `${t('gold tax')}`,
-            cell: (info) => (info.row.original.weight * info.row.original.stock * Number(formValues?.api_gold_price) * .15).toFixed(3),
+            cell: (info) => (info.row.original.weight * Number(formValues?.api_gold_price) * .15).toFixed(3),
         })
     ]
 
@@ -280,7 +280,7 @@ export const OTableForm = ({ editRow, categoriesOptions, karatsOptions, data, se
                                     <Field id='wage_tax' name='wage_tax' value={(Number(values.weight) * Number(values.wage) * .15).toFixed(3)} onChange={() => setFieldValue('wage_tax', Number(values.weight) * Number(values.wage) * .15)} className="border-none outline-none cursor-default caret-transparent text-center" />
                                 </td>
                                 <td>
-                                    <Field id='gold_tax' name='gold_tax' value={(Number(values.weight) * Number(values.stock) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3)} onChange={() => setFieldValue('gold_tax', Number(values.weight) * Number(values.stock) * Number(formValues?.api_gold_price) * .15)} className="border-none outline-none cursor-default caret-transparent text-center" />
+                                    <Field id='gold_tax' name='gold_tax' value={(Number(values.weight) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3)} onChange={() => setFieldValue('gold_tax', Number(values.weight) * Number(formValues?.api_gold_price) * .15)} className="border-none outline-none cursor-default caret-transparent text-center" />
                                 </td>
                                 <td>
                                     {

@@ -15,10 +15,16 @@ const client = axios.create({
   baseURL,
 })
 
-export const request = async <T>(options: AxiosRequestConfig): Promise<T> => {
+export const request = async <T>(options: AxiosRequestConfig, pagination): Promise<T> => {
   const token = Cookies.get("token");
 
-  const onSuccess = (response: AxiosResponse) => response.data.data;
+  const onSuccess = (response: AxiosResponse) => {
+    if (pagination) {
+      return response.data
+    } else {
+      return response.data.data
+    }
+  };
 
   try {
     const response = await client({
