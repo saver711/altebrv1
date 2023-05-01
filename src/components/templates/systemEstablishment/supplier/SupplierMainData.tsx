@@ -8,7 +8,6 @@ import { SingleValue } from "react-select"
 import { useFetch } from "../../../../hooks"
 import { supplier } from "../../../../pages/suppliers/AllSuppliers"
 import { SelectOption_TP } from "../../../../types"
-import { EditIcon } from "../../../atoms/icons"
 import {
   BaseInputField,
   CheckBoxField,
@@ -17,8 +16,8 @@ import {
   PhoneInput,
   Select,
 } from "../../../molecules"
-import { DropFile } from "../../../molecules/files/DropFile"
 import RadioGroup from "../../../molecules/RadioGroup"
+import { DropFile } from "../../../molecules/files/DropFile"
 import { CreateNationalities } from "../../CreateNationalities"
 ///
 /////////// Types
@@ -137,11 +136,14 @@ export const SupplierMainData = ({
           placeholder={`${t("address")}`}
           labelProps={{ className: "mb-1" }}
         />
-        <PhoneInput
-          label={`${t("mobile number")}`}
-          name="mobile"
-          placeholder={`${t("mobile number")}`}
-        />
+        {
+          !!!editData?.phone &&
+          <PhoneInput
+            label={`${t("mobile number")}`}
+            name="mobile"
+            placeholder={`${t("mobile number")}`}
+          />
+        }
         <BaseInputField
           id="phone"
           required
@@ -159,14 +161,17 @@ export const SupplierMainData = ({
           type="email"
           placeholder={`${t("email")}`}
         />
-        <BaseInputField
-          id="password"
-          required
-          label={`${t("password")}`}
-          name="password"
-          type="password"
-          placeholder={`${t("password")}`}
-        />
+        {
+          !!!editData?.phone &&
+          <BaseInputField
+            id="password"
+            required
+            label={`${t("password")}`}
+            name="password"
+            type="password"
+            placeholder={`${t("password")}`}
+          />
+        }
         <BaseInputField
           id="fax"
           required
@@ -232,22 +237,10 @@ export const SupplierMainData = ({
           labelProps={{ className: "mb-2" }}
         />
 
-        {editData && !updateLogo ? (
-          <div className="col-span-4 w-24 h-24 flex">
-            <img src={editData?.logo} alt="" />
-            <div>
-              <EditIcon
-                className=" fill-mainGreen "
-                action={() => setUpdateLogo(true)}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="col-span-4">
-            <h2>{`${t("attach the company logo")}`}</h2>
-            <DropFile name="logo" />
-          </div>
-        )}
+        <div className="col-span-4">
+          <h2>{`${t("attach the company logo")}`}</h2>
+          <DropFile name="logo" />
+        </div>
         {/* {updateLogo && (
           <div className="col-span-4">
             <h2>{`${t("attach the company logo")}`}</h2>

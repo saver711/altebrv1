@@ -17,10 +17,10 @@ import { OuterFormLayout } from "../../../molecules"
 import { Loading } from "../../../organisms/Loading"
 import { NationalAddress } from "../../NationalAddress"
 import {
-    allDocs_TP, Documents
+  Documents,
+  allDocs_TP,
 } from "../../reusableComponants/documents/Documents"
 import { SupplierMainData } from "./SupplierMainData"
-import { supplierValidatingSchema } from "./validation-and-types"
 ///
 /////////// Types
 ///
@@ -42,6 +42,13 @@ const AddSupplier = ({
 }: AddSupplierProps_TP) => {
   /////////// VARIABLES
 
+  const incomingData = !!editData ? editData!.document.map(item => ({
+    ...item.data,
+    endDate: new Date(item.data.endDate),
+    files: item?.files || [],
+    id: item.id
+  }
+  )) : []
   const initialValues = {
     // supplier data
     name: editData ? editData.name : "",
@@ -60,7 +67,9 @@ const AddSupplier = ({
       : false,
     company_name: editData ? editData.company_name : "",
     country_id: editData ? editData.country_id : "",
+    country_value: editData?.country_name || "",
     city_id: editData ? editData.city_id : "",
+    city_value: editData?.nationalAddress.city.name || "",
     address: editData ? editData.address : "",
     mobile: "",
     phone: editData ? editData.phone : "",
@@ -70,9 +79,13 @@ const AddSupplier = ({
     nationality_id: editData ? editData.nationality_id : "",
     national_number: editData ? editData.national_number : "",
     national_expire_date: new Date(),
-    logo:[],
+    logo: !!editData?.logo ? [{
+      path: editData?.logo,
+      type: "image"
+    }] : [],
     // national address data
     district_id: editData ? editData?.nationalAddress?.district?.id : "",
+    district_value: editData?.nationalAddress.district.name || "",
     min_Address: "",
     building_number: editData ? editData?.nationalAddress?.building_number : "",
     street_number: editData ? editData?.nationalAddress?.street_number : "",
@@ -80,7 +93,6 @@ const AddSupplier = ({
     zip_code: editData ? editData?.nationalAddress?.zip_code : "",
   }
   ///
-  console.log("editData", editData)
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -117,7 +129,7 @@ const AddSupplier = ({
   ///
   /////////// STATES
   ///
-  const [docsFormValues, setDocsFormValues] = useState<allDocs_TP[]>([])
+  const [docsFormValues, setDocsFormValues] = useState<allDocs_TP[]>(incomingData)
   const navigate = useNavigate()
 
   ///
@@ -155,24 +167,23 @@ const AddSupplier = ({
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-        
+
           const tax =
             values.gold_tax && values.wages_tax
               ? "gold_and_wages"
               : values.gold_tax
-              ? "gold"
-              : values.wages_tax
-              ? "wages"
-              : "no"
+                ? "gold"
+                : values.wages_tax
+                  ? "wages"
+                  : "no"
 
           const is_mediator = values.is_mediator ? 1 : 0
-          const editedVals = {
+          let editedValues = {
             ...values,
             document: docsFormValues,
             tax,
             is_mediator,
             logo: values.logo[0],
-            // _method: "put",
             nationalAddress: {
               city_id: values.city_id,
               district_id: values.district_id,
@@ -183,31 +194,33 @@ const AddSupplier = ({
               zip_code: values.zip_code,
             },
           }
-          console.log("editedVals=>", editedVals)
-
-          mutate({
-            endpointName: editData
-              ? `supplier/api/v1/suppliers/${editData.id}`
-              : "supplier/api/v1/suppliers",
-            values: { ...editedVals, ...(editData && { _method: "put" }) },
-            dataType: "formData",
-            method: "post",
-          })
-          //    mutate({
-          //     endpointName: editData
-          //       ? `supplier/api/v1/suppliers/${editData.id}`
-          //       : "supplier/api/v1/suppliers",
-          //     values: editedVals,
-          //     ...(editData && { _method: "put" }),
-          //     dataType: "formData",
-          //     method: "post",
-          //   })
-          // }}
+          if (!!editData) {
+            let { document, ...editedValuesWithoutDocument } = editedValues;
+            if (docsFormValues.length > editData.document.length)
+              editedValues = { ...editedValues, document: editedValues.document.slice(editData.document.length) }
+            if (docsFormValues.length === editData.document.length)
+              editedValues = editedValuesWithoutDocument
+            if (JSON.stringify(values.logo[0].path) === JSON.stringify(editData.logo))
+              delete (editedValues.logo)
+            mutate({
+              endpointName: `supplier/api/v1/suppliers/${editData.id}`,
+              values: editedValues,
+              dataType: "formData",
+              editWithFormData: true
+            })
+          }
+          else {
+            mutate({
+              endpointName: `supplier/api/v1/suppliers`,
+              values: editedValues,
+              dataType: "formData",
+            })
+          }
         }}
-        validationSchema={() => supplierValidatingSchema()}
+      //  validationSchema={() => supplierValidatingSchema()}
       >
         <Form>
-          <HandleBackErrors errors={error?.response?.data?.errors}>
+          <HandleBackErrors errors={error?.response.data.errors}>
             <OuterFormLayout
               header={`${t("add supplier")}`}
               submitComponent={
