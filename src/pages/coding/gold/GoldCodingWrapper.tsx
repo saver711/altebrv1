@@ -37,19 +37,6 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
-      onSuccess: (data) => {
-        notify("success")
-        console.log(`GoldCodingWrapper ~ data:`, data)
-        if(data){
-          const filteredPieces = addedPieces.filter((piece) => {
-            console.log(`filteredPieces ~ data:`, data.front_key)
-            console.log(`filteredPieces ~ piece:`, piece.front_key)
-            return piece.front_key !== data.front_key
-          })
-          setAddedPieces(filteredPieces)
-          setAddedPiecesLocal(filteredPieces)
-        }
-      },
     })
 
   ///
@@ -66,30 +53,38 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  const sendPieces = () => {
-    try {
-      addedPieces.map(async (piece) => {
-        console.log(">>>")
-
-        mutate({
-          endpointName: "tarqimGold/api/v1/tarqim_gold",
-          dataType: "formData",
-          values: piece,
-        })
-        console.log("<<<")
-
-        // if (data) {
-        //   const filteredPieces = addedPieces.filter(
-        //     (piece) => piece.front_key !== data.front_key
-        //   )
-        //   setAddedPieces(filteredPieces)
-        //   setAddedPiecesLocal(filteredPieces)
-        // }
-      })
-    } catch (err) {
-      console.log(`addedPieces.map ~ send pieces err:`, err)
-    }
+  const sendPieces = async (pieces: GoldCodingSanad_initialValues_TP[]) => {
+  if (pieces.length === 0) {
+    return;
   }
+
+  const [piece, ...remainingPieces] = pieces;
+
+  try {
+    const result = await mutateAsync({
+      endpointName: "tarqimGold/api/v1/tarqim_gold",
+      dataType: "formData",
+      values: piece,
+    });
+
+    if (result) {
+      const filteredPieces = remainingPieces.filter(
+        (p) => p.front_key !== result.front_key
+      );
+
+      setAddedPieces(filteredPieces);
+      setAddedPiecesLocal(filteredPieces);
+    }
+  } catch (err) {
+    const error = err as CError_TP
+    if(error.response.data.message){
+      notify("error", error.response.data.message)
+    }
+    
+  }
+
+  await sendPieces(remainingPieces);
+};
   ///
   return (
     <>
@@ -108,7 +103,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
         <>
           <p>Second screen</p>
           {!!addedPieces.length && (
-            <Button loading={isLoading} action={sendPieces}>
+            <Button loading={isLoading} action={()=> sendPieces(addedPieces)}>
               إرسال القطع
             </Button>
           )}
