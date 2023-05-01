@@ -78,20 +78,20 @@ export const PartnerMainData = () => {
           placeholder={`${t("mobile number")}`}
         />
         
-        <BaseInputField
+        {/* <BaseInputField
           id="address"
           label={`${t("address")}`}
-          name="address"
+          name="address_partner"
           type="text"
           placeholder={`${t("address")}`}
           labelProps={{ className: "mb-1" }}
           required
-        />
+        /> */}
 
         <Country_city_distract_markets
-          countryName="country_id"
+          countryName="x_country"
           countryLabel={`${t("country")}`}
-          cityName="city_id"
+          cityName="x_city"
           cityLabel={`${t("city")}`}
         />
         <SelectNationality name="nationality_id" />

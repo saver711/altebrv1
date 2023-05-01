@@ -10,7 +10,7 @@ import {
 } from '@tanstack/react-table'
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { FilesPreview } from "../../components/molecules/files/FilesPreview"
+import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 import { Query_TP } from "../coding/gold/AddStone"
 import { StoneTable } from "./StoneTable"
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -20,7 +20,10 @@ import { StoneTable } from "./StoneTable"
 const columnHelper = createColumnHelper<any>()
 
 export const SubTables = ({ subTableData }: any) => {
-
+console.log("🚀 ~ file: SubTables.tsx:23 ~ SubTables ~ subTableData:", subTableData)
+/// variables 
+const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
+  console.log("🚀 ~ file: SubTables.tsx:25 ~ SubTables ~ selectedRow:", selectedRow)
   const columns = useMemo<any>(
     () => [
       columnHelper.accessor('supply_date', {
@@ -29,38 +32,57 @@ export const SubTables = ({ subTableData }: any) => {
       columnHelper.accessor('size_type', {
         header: `${t('size type')}`
       }),
-      columnHelper.accessor('sizeNumber_id', {
+      columnHelper.accessor('size_number', {
         header: `${t('size number')}`
       }),
-      columnHelper.accessor('country_value', {
+      columnHelper.accessor('country', {
         header: `${t('country')}`
       }),
-      //   columnHelper.accessor('selling_price', {
-      //     header: `${t('selling price')}`
-      // }),
-    ],
+      columnHelper.accessor('sellingPrice', {
+        header: `${t('selling price')}`
+      }),
+    ]
+    ,
     []
   )
   ////////// STATES
-  const [sizeType, setSizeType] = useState([])
-  console.log("🚀 ~ file: SubTables.tsx:51 ~ SubTables ~ sizeType:", sizeType)
+  const [queryData, setQueryData] = useState<any[] | undefined>()
+
   const queryClient = useQueryClient()
 
+  //@ts-ignore
+  const modifiedData = selectedRow.map(item => ({ ...item, supply_date: '1-10-95', size_type:!!item?.sizes[0] ? item?.sizes[0].sizeType_value
+  : "", size_number: item?.sizes[0]?  item?.sizes[0].sizeNumber_value : '' }))
+  
   useEffect(() => {
     if(queryClient){
-      const types = queryClient.getQueryData<Query_TP[]>(["sizeType"])
-      setSizeType(types)
+      const types = queryClient.getQueryData<Query_TP[]>(["sizes"])
+      const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
+      const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
+      const allQueries = modifiedData?.map((item) => {
+        const finaleItem = {
+          cc:countries,
+          types: types?.find((type) => type.id == item.stones[0].stone_id)?.name,
+          country: countries?.find((country) => country.id == item.country_id)?.name,
+        }
+        console.log('finaleItem' , finaleItem)
+        return finaleItem
+      })
+      setQueryData(allQueries)
     }
-  }, [])
+  }, [queryClient])
+
   
   ///
   //@ts-ignore
-  const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
 
-
-  //@ts-ignore
-  const modifiedData = selectedRow.map(item => ({ ...item, supply_date: '1-10-95', size_type: item!.sizes[0].sizeNumber_id, sizeNumber_id: item!.sizes[0].size_type }))
   const [data, setData] = useState(modifiedData)
+  
+  useEffect(() => {
+    if(queryData){
+      setData(modifiedData.map(item => ({ ...item?.sizes[0],types:queryData[0]?.types , country:queryData[0]?.country})))
+    }
+  }, [queryData])
 
   const table = useReactTable({
     data,
@@ -114,11 +136,13 @@ export const SubTables = ({ subTableData }: any) => {
                 <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id} className="border-l-[#b9b7b7]-500 border" >
-                        {flexRender(
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
+                        {
+                          !!cell.getContext().getValue() ?
+                        flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )}
+                        ) : '---'}
                       </td>
                     )
                   })}
@@ -128,83 +152,20 @@ export const SubTables = ({ subTableData }: any) => {
           </tbody>
           <tfoot className='h-8' >
             {table.getRowModel().rows.map(row => {
+              console.log("first=>" , row.original)
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-               <span className="text-l font-bold">{t('piece description')} </span> :{row.original.details}
+              <span>{selectedRow[0].details} :</span> <span className="text-l font-bold">{t('piece description')} </span> 
               </td>
             }).slice(0, 1)}
           </tfoot>
         </table>
-        <div className="h-2" />
-        {/* <div className="flex items-center gap-2">
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                table.setPageIndex(page)
-              }}
-              className="border p-1 rounded w-16"
-            />
-          </span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={e => {
-              table.setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 20, 30, 40, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>{table.getRowModel().rows.length} Rows</div>
-        <div>
-          <button onClick={() => rerender()}>Force Rerender</button>
-        </div> */}
+        <div/>
+        
         <div className="p-2 flex flex-col justify-center items-center gap-x-4" >
           {
             !!selectedRow[0].media &&
             selectedRow[0].media.length >=0 &&
-          <FilesPreview images={selectedRow[0].media} pdfs={[]} preview />
+          <FilesPreviewOutFormik images={selectedRow[0].media} pdfs={[]} preview />
           }
         </div>
       </div>

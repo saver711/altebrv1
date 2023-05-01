@@ -2,7 +2,6 @@
 ///
 import { t } from "i18next"
 import { formatDate } from "../../../../utils/date"
-import { pdfOrImage } from "../../../../utils/helpers"
 import { FilesPreview } from "../../../molecules/files/FilesPreview"
 import { allDocs_TP } from "./Documents"
 ///
@@ -16,27 +15,22 @@ type DocsDataProps_TP = {
 ///
 ///
 export const DocsData = ({ docsData }: DocsDataProps_TP) => {
-  console.log("🚀 ~ file: DocsData.tsx:21 ~ DocsData:", docsData)
 
-  const checkType = () => {
-    if (docsData?.files.type === "pdf") {
-      return "pdf"
-    } else {
-      return "image"
-    }
-  }
-
-  let images: any = docsData?.files.filter(
-    (file: any) => pdfOrImage(file) === checkType()
-  )
-  console.log("🚀 ~ file: DocsData.tsx:36 ~ DocsData ~ images:", images)
-
-  let pdfs: any = docsData?.files.filter(
-    (file: any) => pdfOrImage(file) === checkType()
-  )
+  const images: any = docsData?.files.filter(
+    (file: any) => !(file?.preview?.includes('.pdf') || file?.path?.includes('.pdf')
+    )) || []
+  const pdfs: any = docsData?.files.filter(
+    (file: any) => (file?.preview?.includes('.pdf') || file?.path?.includes('.pdf')
+    )
+  ) || []
 
   /////////// VARIABLES
   ///
+  const imagePreview = images.map(image => ({
+    preview: image.preview,
+    path: image.path,
+    type: 'image'
+  }))
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -62,7 +56,7 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
         <div className="col-span-1">
           <div className="flex gap-x-2">
             <span className="font-bold">{t("document type")} :</span>
-            <span className="font-thin">{docsData?.data?.docType.label}</span>
+            <span className="font-thin">{docsData?.docType.label}</span>
           </div>
         </div>
         {/* document type end */}
@@ -71,7 +65,7 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
         <div className="col-span-1">
           <div className="flex gap-x-2">
             <span className="font-bold">{t("document name")} :</span>
-            <span className="font-thin">{docsData?.data?.docName}</span>
+            <span className="font-thin">{docsData?.docName}</span>
           </div>
         </div>
         {/* document name end */}
@@ -80,7 +74,7 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
         <div className="col-span-1">
           <div className="flex gap-x-2">
             <span className="font-bold">{t("document number")} :</span>
-            <span className="font-thin">{docsData?.data?.docNumber}</span>
+            <span className="font-thin">{docsData?.docNumber}</span>
           </div>
         </div>
         {/* document number end */}
@@ -89,7 +83,7 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
         <div className="col-span-1">
           <div className="flex gap-x-2">
             <span className="font-bold"> {t("document end date")} :</span>
-            <span className="font-thin">{docsData!?.data?.endDate}</span>
+            <span className="font-thin">{formatDate(docsData!.endDate)}</span>
           </div>
         </div>
         {/* document end date end */}
@@ -98,16 +92,19 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
         <div className="col-span-1">
           <div className="flex gap-x-2">
             <span className="font-bold">{t("reminder days count")} :</span>
-            <span className="font-thin">{docsData?.data?.reminder}</span>
+            <span className="font-thin">{docsData?.reminder}</span>
           </div>
         </div>
         {/* document days count end */}
 
         {/* media start */}
-        <div className="col-span-1 flex items-center">
-          <span className="font-bold">{t("media")} :</span>
-          <FilesPreview preview images={images} pdfs={pdfs} />
-        </div>
+        {
+          docsData?.files.length !== 0 &&
+          <div className="col-span-1 flex items-center">
+            <span className="font-bold">{t("media")} :</span>
+            <FilesPreview preview images={[...imagePreview]} pdfs={pdfs} />
+          </div>
+        }
         {/* media end */}
       </div>
     </>

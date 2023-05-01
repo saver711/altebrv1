@@ -20,16 +20,16 @@ export const StoneTable = ({ subTableData }: any) => {
 
   const columns = useMemo<any>(
     () => [
-      columnHelper.accessor('stoneType_value', {
+      columnHelper.accessor('types', {
         header: `${t('stone type')}`
       }),
-      columnHelper.accessor('color_value', {
+      columnHelper.accessor('colors', {
         header: `${t('stone color')}`
       }),
-      columnHelper.accessor('shape_value', {
+      columnHelper.accessor('shapes', {
         header: `${t('stone shape')}`
       }),
-      columnHelper.accessor('stonePurity_value', {
+      columnHelper.accessor('purities', {
         header: `${t('purity degree')}`
       }),
       columnHelper.accessor('weight', {
@@ -38,7 +38,7 @@ export const StoneTable = ({ subTableData }: any) => {
       columnHelper.accessor('count', {
         header: `${t('stone count')}`
       }),
-      columnHelper.accessor('stoneNature_value', {
+      columnHelper.accessor('natures', {
         header: `${t('stone nature')}`
       }),
       columnHelper.accessor('certificate_number', {
@@ -93,11 +93,10 @@ export const StoneTable = ({ subTableData }: any) => {
   //@ts-ignore
   const StonesData = selectedRow.filter(item => item?.stones)
   const [data, setData] = useState([])
-  console.log("🚀 ~ file: StoneTable.tsx:101 ~ StoneTable ~ data:", data)
   //@ts-ignore
   useEffect(() => {
     if(queryData){
-      setData(StonesData.map(item => ({ ...item?.stones[0],stoneType_value:queryData[0]?.stone,  color_value:queryData[0]?.color ,shape_value:queryData[0]?.shape ,stonePurity_value:queryData[0]?.purity ,stoneNature_value:queryData[0]?.nature})))
+      setData(StonesData.map(item => ({ ...item?.stones[0],types:queryData[0]?.stone,  colors:queryData[0]?.color ,shapes:queryData[0]?.shape ,purities:queryData[0]?.purity ,natures:queryData[0]?.nature})))
     }
   }, [queryData])
   
@@ -156,11 +155,13 @@ export const StoneTable = ({ subTableData }: any) => {
                 <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id} className="border-l-[#b9b7b7]-500 border">
-                        {flexRender(
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
+                        {
+                          !!cell.getContext().getValue() ?
+                        flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )}
+                        ) : '---'}
                       </td>
                     )
                   })}

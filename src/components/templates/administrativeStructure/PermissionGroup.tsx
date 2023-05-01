@@ -5,6 +5,7 @@ import { useFormikContext } from "formik"
 import { ChangeEvent } from "react"
 import { CheckBoxField } from "../../molecules"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
+import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 
 ///
 /////////// Types
@@ -12,6 +13,7 @@ import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-t
 type PermissionGroupProps_TP = {
   permissions: Permission_TP[]
   name: string
+  editData: PermissionGroup_TP | undefined
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -20,8 +22,8 @@ type PermissionGroupProps_TP = {
 export const PermissionGroup = ({
   name,
   permissions,
+  editData
 }: PermissionGroupProps_TP) => {
-  console.log("🚀 ~ file: PermissionGroup.tsx:24 ~ permissions:", permissions)
   /////////// VARIABLES
   ///
 
@@ -57,6 +59,7 @@ export const PermissionGroup = ({
                   ? setFieldValue(id, id)
                   : setFieldValue(id, "")
               }}
+              editData={editData}
             />
           </div>
         ))}

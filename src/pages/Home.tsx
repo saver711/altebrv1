@@ -5,9 +5,6 @@ import { Form, Formik } from "formik"
 import { Helmet } from "react-helmet-async"
 import * as Yup from "yup"
 import { Button } from "../components/atoms/buttons/Button"
-import { SelectCategorySize } from "../components/templates/categories-sizes/SelectCategorySize"
-import { ExpandableTable } from "./try-osama/ExapndableTable"
-import { tableData } from "./try-osama/TabelData"
 
 ///
 /////////// Types
@@ -80,7 +77,7 @@ export const Home = ({ title }: HomeProps_TP) => {
           {({ errors }) => (
             <Form>
               {/* <SelectCategory name="category_id" /> */}
-              <SelectCategorySize
+              {/* <SelectCategorySize
                 // initialCategory={{
                 //   id: 3,
                 //   name: "خاتم",
@@ -184,7 +181,7 @@ export const Home = ({ title }: HomeProps_TP) => {
                 categoryName="category_id"
                 sizeTypeName="size_type"
                 theSizeName="size_unit_id"
-              />
+              /> */}
 
               {/* <SelectCategoryAndSize
                 categorySelectName="category_id"
@@ -192,7 +189,6 @@ export const Home = ({ title }: HomeProps_TP) => {
                 sizeNumberSelectName="sizeNumber_id"
                 setValidateYupTypeAndCategory={setValidateYupTypeAndCategory}
               /> */}
-              <ExpandableTable tableData={tableData}/>
               <Button type="submit" variant="primary">
                 Submit
               </Button>
