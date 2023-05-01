@@ -1,0 +1,196 @@
+import * as yup from 'yup'
+import { Category_TP, KaratValues_TP } from '../../types'
+
+// فورم الترقيم
+export type GoldCodingSanad_initialValues_TP = {
+    front_key:string
+    mezan_type: 'manual' | "mezan"
+    category_id: string
+    model_number: string
+    weight: number
+    country_id: string
+    color_id: string
+    wage: number,
+    media: []
+    has_stones: boolean
+    details: string
+    size_type?: string
+    size_unit_id?: string
+    sizeIsRequired?: boolean
+    // city_id?: string
+    // district_id?: string
+    left_weight?: number
+    weightitems?: { category_id: string, weight: string }[]
+    stones?: GoldCodingStoneValues_TP[]
+    band_id?: string
+    karat_value?: KaratValues_TP
+    bond_date?: string
+}
+export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
+    mezan_type: 'manual',
+    model_number: '',
+    category_id: '',
+    country_id: '',
+    color_id: '',
+    weight: 0,
+    wage: 0,
+    has_stones: true,
+    details: '',
+    size_type: '',
+    size_unit_id: '',
+    media: [],
+}
+
+export const codingSanad_schema = yup.object().shape({
+    bond_id: yup.string().trim().required(),
+    mezan_type: yup.string().trim().oneOf(["manual", "mezan"]).required(),
+    color_id: yup.string().trim().required(),
+    country_id: yup.string().trim().required(),
+    model_number: yup.string().trim().required(),
+    weight: yup.number().required().min(1).max(yup.ref("left_weight")),
+    wage: yup.number().required().min(1),
+    has_stones: yup.boolean(),
+    media: yup.array().required().min(1),
+    category_id: yup.string().trim().required(),
+    // size_type: yup.string()
+    //     .trim()
+    //     .when("sizeIsRequired", {
+    //         is: (val: boolean) => val === true,
+    //         then: (schema) => schema.required(),
+    //     }),
+    // size_unit_id: yup.string()
+    //     .trim()
+    //     .when("sizeIsRequired", {
+    //         is: (val: boolean) => val === true,
+    //         then: (schema) => schema.required(),
+    //     }),
+})
+
+export const addTa2mSizesSchema = yup.object().shape({
+    size_type: yup.string()
+        .trim()
+        .when("sizeIsRequired", {
+            is: (val: boolean) => val === true,
+            then: (schema) => schema.required(),
+        }),
+    size_unit_id: yup.string()
+        .trim()
+        .when("sizeIsRequired", {
+            is: (val: boolean) => val === true,
+            then: (schema) => schema.required(),
+        }),
+})
+
+
+/* 
+TYPES
+*/
+type GoldSanadBox_TP = {
+    id: string
+    account: string
+    value: number
+    unit: 'SAR' | 'GRAM'
+}
+
+export type GoldSanadBand_TP = {
+    category: Category_TP
+    goldKarat: number
+    goldWeight: number
+    payoff: number
+    itemStock: number
+    id: string
+    discount: number
+    itemTaxes: number
+    payoffTaxes: number
+    payoffTotal: number
+    leftWeight: number
+}
+export type GoldSanad_TP = {
+    id: string
+    classification: string
+    supplier_name: string
+    bond_date: string
+    total_gold_by_24: string
+    total_money: string
+    item_count: string
+    bond_id: string
+    boxes: GoldSanadBox_TP[]
+    items: GoldSanadBand_TP[]
+}
+
+export type GoldAddedPiece_TP = {
+    id: string
+    model_number: string
+    stones: GoldCodingStoneValues_TP[]
+}
+
+// فورم الحجر
+export type GoldCodingStoneValues_TP = {
+    stone_id: string
+    color_id: string[]
+    shape_id: string[]
+    purity_id: string
+    weight: number
+    count: number
+    nature_id: string
+    certificate_number: string
+    certificate_source: string
+    certificate_url: string
+    certificate_files: []
+    stone_type: "added" | "not_added"
+    details: string
+}
+
+export const goldCodingStoneValues: GoldCodingStoneValues_TP = {
+    stone_id: '',
+    color_id: [],
+    shape_id: [],
+    purity_id: '',
+    weight: 0,
+    count: 0,
+    nature_id: '',
+    certificate_number: '',
+    certificate_source: '',
+    certificate_url: '',
+    certificate_files: [],
+    stone_type: "added",
+    details: ''
+}
+
+export const goldCodingStoneSchema = yup.object().shape({
+    stone_id: yup.string().trim().required(),
+    color_id: yup.array().required().min(1),
+    shape_id: yup.array().required().min(1),
+    purity_id: yup.string().trim().required(),
+    weight: yup.number().min(1).required(),
+    count: yup.number().min(1).required(),
+    nature_id: yup.string().trim().required(),
+    certificate_number: yup.string().trim().required(),
+    certificate_source: yup.string().trim().required(),
+    certificate_url: yup.string().trim().required(),
+    certificate_files: yup.array().required().min(1),
+    not_added_stone: yup.boolean(),
+    stone_type: yup.string().matches(/^(added|not_added)$/),
+})
+// .test(
+//     'myCustomTest',
+//     'null',
+//     (obj) => {
+//         if (!!obj.not_added_stone || !!obj.added_stone) {
+//             return true; // everything is fine
+//         }
+
+//         return new yup.ValidationError(
+//             'Please check one checkbox',
+//             null,
+//             'at_least_one'
+//         );
+//     }
+// );
+
+export type SizePopup_TP = {
+    id: string
+    category_id: string | number
+    size_type: string,
+    size_unit_id: string,
+}

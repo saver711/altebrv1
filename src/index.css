@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Todo:  use tw classes instead*/
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  width: 1rem;
+  height: 1rem;
+  border: 0.1rem solid #295e56;
+  place-content: center;
+  color: #295e56;
+}
+
+@layer base {
+  * {
+    font-family: "Almarai" !important;
+  }
+
+  .shadows {
+    box-shadow: 0.5px 0.5px 4px rgba(0, 0, 0, 0.25) !important;
+  }
+}
+/* end base */
+
+/* UTILITIES */
+@layer utilities {
+  .scrollbar {
+    @apply scrollbar-thin scrollbar-thumb-mainGreen scrollbar-track-green hover:scrollbar-thumb-mainOrange;
+  }
+  .GlobalTable th {
+    @apply border-b-2 border-l-2 bg-mainGreen  p-2  text-center  text-white first:!rounded-tr-lg last:!rounded-tl-lg;
+  }
+  .GlobalTable td {
+    @apply border-b-2 border-l-2  bg-lightGreen p-2  text-center  text-mainGreen;
+  }
+  .subTable th {
+    @apply border-l-2 bg-lightGreen  p-2  text-center  text-mainGreen ;
+  }
+  .subTable td {
+    @apply border-l-2  bg-white p-2  text-center   text-black;
+  }
+}
+/* ./UTILITIES */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-mainGreen text-white;
+}
+
+.react-datepicker__close-icon {
+  @apply after:text-white after:bg-mainGreen after:content-['X'] relative after:absolute pl-6 pt-2 after:pt-1.5  after:rounded-full after:w-6 after:h-6 after:font-bold after:leading-none after:text-center;
+}
+
+.react-datepicker__input-container {
+  @apply flex;
+}
+.PhoneInputInput {
+  @apply border-0 px-5 py-0;
+}
+[type="tel"] {
+  @apply !shadow-none !ring-0;
+}
+
+.PhoneInputInput {
+  direction: inherit;
+}
+.pdf-no-scroll .rpv-core__inner-pages--vertical {
+  overflow-y: hidden;
+}

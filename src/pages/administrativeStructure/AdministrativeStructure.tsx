@@ -1,0 +1,189 @@
+/////////// IMPORTS
+///
+import { t } from "i18next"
+import { Helmet } from "react-helmet-async"
+import { useNavigate } from "react-router-dom"
+import { Button } from "../../components/atoms"
+import { OuterFormLayout } from "../../components/molecules/OuterFormLayout"
+///
+import { useEffect, useState } from "react"
+import {
+  ColumnDef,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import { Modal } from "../../components/molecules/Modal"
+import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
+import { EditIcon, ViewIcon } from "../../components/atoms/icons"
+import { Table } from "../../components/templates/reusableComponants/tantable/Table"
+import { useMemo } from "react"
+import { Loading } from "../../components/organisms/Loading"
+import { Header } from "../../components/atoms/Header"
+import { AddAdministrativeStructure } from "./AddAdministrativeStructure"
+import { AddButton } from "../../components/molecules/AddButton"
+import { useFetch, useMutate } from "../../hooks"
+import { mutateData } from "../../utils/mutateData"
+import { notify } from "../../utils/toast"
+import { PermissionGroup_TP } from "./types-and-schemas"
+/////////// Types
+///
+type AdministrativeStructureProps_TP = {
+  title: string
+}
+/////////// HELPER VARIABLES & FUNCTIONS
+///
+type Admin = {
+  id: string
+  name: string
+  action: any
+}
+
+const columnHelper = createColumnHelper<Admin>()
+
+///
+export const AdministrativeStructure = ({
+  title,
+}: AdministrativeStructureProps_TP) => {
+  /////////// VARIABLES
+  ///
+  const navigate = useNavigate()
+  const AddAdministrative = (
+    <Button action={() => navigate("/add-administrative-structure")}>
+      {t("add")}
+    </Button>
+  )
+
+  // states
+  const [dataSource, setDataSource] = useState<PermissionGroup_TP[]>([])
+  const [open, setOpen] = useState<boolean>(false)
+  const [model, setModel] = useState(false)
+  const [editData, setEditData] = useState<any>()
+  const [deleteData, setDeleteData] = useState<any>()
+
+  ///
+  /////////// CUSTOM HOOKS
+  ///
+  const { isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
+    endpoint: 'administrative/api/v1/roles',
+    queryKey: ['allRoles'],
+    onSuccess: (data)=> { setDataSource(data) }
+  })
+
+  const {
+    mutate,
+    isLoading: isDeleting,
+  } = useMutate({
+    mutationFn: mutateData,
+    onSuccess: () => {
+      setDataSource((prev:PermissionGroup_TP[]) => prev.filter(p => p.id !== deleteData?.id))
+      setOpen(false)
+      notify("success")
+    }
+  })
+
+
+  const cols = useMemo<ColumnDef<PermissionGroup_TP>[]>(
+    () => [
+      {
+        header: 'Name',
+        cell: (info) => info.renderValue(),
+        accessorKey: 'name',
+      },
+      {
+        header: 'Edit',
+        cell: (info) =>
+          <div className="flex items-center justify-center gap-4">
+            <EditIcon
+              action={() => {
+                setOpen((prev) => !prev)
+                setEditData(info.row.original)
+                setModel(true)
+              }}
+            />
+            <SvgDelete
+              action={() => {
+                setOpen((prev) => !prev)
+                setDeleteData(info.row.original)
+                setModel(false)
+              }}
+              stroke="#ef4444"
+            />
+          </div>,
+        accessorKey: 'edit',
+      },
+    ],
+    []
+  )
+  ////
+
+  ///
+  /////////// STATES
+  ///
+  ///
+  /////////// SIDE EFFECTS
+  ///
+
+  ///
+  /////////// FUNCTIONS | EVENTS | IF CASES
+  ///
+  const handleSubmit = () => {
+    console.log(deleteData?.id)
+    mutate({
+      endpointName: `administrative/api/v1/roles/${deleteData?.id}`,
+      method: "delete",
+    })
+  }
+  if (isFetching) return <Loading mainTitle={t("administrative structure")} />
+  ///
+  return (
+    <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+
+      <OuterFormLayout
+        leftComponent={AddAdministrative}
+        header="الهيكل الإداري"
+      >
+        <div className="flex justify-between mb-8">
+          <h3 className="font-bold">
+            {`${t('administrative structure')}`}
+          </h3>
+        </div>
+        <Modal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+        >
+          {model ? (
+            <AddAdministrativeStructure title={t("add-administrative-structure")} editData={editData} />
+          ) : (
+            <div className="flex flex-col gap-8 justify-center items-center">
+              <Header header={` حذف : ${deleteData?.name}`} />
+              <div className="flex gap-4 justify-center items-cent">
+                <Button action={handleSubmit} loading={isDeleting} variant="danger">
+                  {`${t('confirm')}`}
+                </Button>
+                <Button action={() => setOpen(false)}>{`${t('close')}`}</Button>
+              </div>
+            </div>
+          )}
+        </Modal>
+        <div className="flex flex-col gap-6 items-center">
+          {
+            dataSource.length <= 0 && <div className="mb-5 pr-5">
+            <Header
+              header={t(`add administrative structure`)}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+          }
+          {isSuccess && !!dataSource && !!dataSource.length && (
+            <Table data={dataSource} showNavigation columns={cols} />
+          )}
+        </div>
+      </OuterFormLayout>
+    </>
+  )
+}

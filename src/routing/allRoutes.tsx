@@ -1,0 +1,121 @@
+import { t } from "i18next"
+import { useContext } from "react"
+import { Route, Routes } from "react-router-dom"
+import { AddEmployee } from "../components/templates/employee/AddEmployee"
+import { TestSystem } from "../components/templates/systemEstablishment/TestSystem"
+import AddSupplier from "../components/templates/systemEstablishment/supplier/AddSupplier"
+import { authCtx } from "../context/auth-and-perm/auth"
+import { PermissionCtxProvider } from "../context/auth-and-perm/permissions"
+import { AddAdministrativeStructure } from "../pages/AdministrativeStructure/AddAdministrativeStructure"
+import { AdministrativeStructure } from "../pages/AdministrativeStructure/AdministrativeStructure"
+import Hashim from "../pages/Hashim"
+import { Home } from "../pages/Home"
+import { Login } from "../pages/Login"
+import { Settings } from "../pages/Settings"
+import { System } from "../pages/System"
+import { TestAbdo } from "../pages/TestAbdo"
+import { Tests } from "../pages/Tests"
+import { CodingSanad } from "../pages/coding/gold/CodingSanad"
+import { GoldCoding } from "../pages/coding/gold/GoldCoding"
+import { Employees } from "../pages/employees/Employees"
+import { OneEmployee } from "../pages/employees/OneEmployee"
+import { GoldSupply } from "../pages/gold-supply/GoldSupply"
+import { Suppliers } from "../pages/suppliers"
+import { ErrorPage } from "./ErrorPage"
+import { Root } from "./Root"
+import { Coding } from "../pages/coding/Coding"
+import { SupplierDetails } from "../components/templates/systemEstablishment/supplier/SupplierDetails"
+import { AllSuppliers } from "../pages/suppliers/AllSuppliers"
+import { Operation } from "../pages/operation/Operation"
+import { GoldCodingWrapper } from "../pages/coding/gold/GoldCodingWrapper"
+import { AllPartner } from "../pages/partner/AllPartner"
+import { OnePartner } from "../pages/partner/OnePartner"
+export const AllRoutesProvider = () => {
+  const { permissions, userData } = useContext(authCtx)
+  return (
+    <PermissionCtxProvider userPermissions={permissions || [""]}>
+      <Routes>
+        <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
+          <Route index element={<Home title={t("home")} />} />
+          <Route
+            path="/settings"
+            element={<Settings title={t("settings")} />}
+          />
+          {/* CODING */}
+          <Route path="/coding" element={<Coding title={t("coding")} />} />
+          <Route
+            path="/coding/gold"
+            element={<GoldCoding title={t("gold coding")} />}
+          />
+          <Route
+            path="/coding/gold/:sanadId"
+            element={<GoldCodingWrapper title="ترقيم سند ذهب" />}
+          />
+          {/* ./CODING */}
+          <Route path="/system" element={<System title={t("system")} />} />
+          <Route
+            path="/administrative-structure"
+            element={
+              <AdministrativeStructure title={t("administrative-structure")} />
+            }
+          />
+          <Route
+            path="/add-administrative-structure"
+            element={
+              <AddAdministrativeStructure
+                title={t("add-administrative-structure")}
+              />
+            }
+          />
+          <Route path="/hashim" element={<Hashim />} />
+
+          <Route
+            path="/add-supplier"
+            element={<AddSupplier title={t("add supplier")} />}
+          />
+          {/* <Route
+            path="/add-employee"
+            element={<AddEmployee title={t("add-employee")} />}
+          /> */}
+          <Route
+            path="/employees"
+            element={<Employees title={t("employees")} />}
+          />
+          <Route path="/employees/:employeeID" element={<OneEmployee />} />
+          <Route
+            path="/all-partner"
+            element={<AllPartner title={t("all-partner")} />}
+          />
+          <Route path="/all-partner/:partnerID" element={<OnePartner />} />
+
+          <Route path="/abdo" element={<TestAbdo title={t("Test")} />} />
+        </Route>
+        <Route
+          errorElement={<ErrorPage />}
+          path="/login"
+          element={<Login title={t("login")} />}
+        />
+        <Route path="/tests" element={<Tests />} />
+        <Route path="/testSystem" element={<TestSystem title={t("test")} />} />
+        <Route path="/testSystem" element={<TestSystem title={t("test")} />} />
+        <Route
+          path="/operation"
+          element={<Operation title={t("Operation")} />}
+        />
+
+        <Route
+          path="/suppliers"
+          element={<AllSuppliers title={t("all suppliers")} />}
+        />
+        <Route
+          path="/suppliers/:SupplierID"
+          element={<SupplierDetails title={t("supplier details").toString()} />}
+        />
+        <Route
+          path="/gold-first-form"
+          element={<GoldSupply title={t("gold supply")} />}
+        />
+      </Routes>
+    </PermissionCtxProvider>
+  )
+}

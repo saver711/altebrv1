@@ -1,0 +1,42 @@
+name: remote ssh command
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Update on server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connecting to remote server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          # host: ${{ secrets.HOST }}
+          # username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          # port: ${{ secrets.PORT }}
+          host: 142.93.242.42
+          username: root
+          password: HaCkErB0y
+          port: 22
+          script: |
+            if [ -d /home/front_stage/ ]  && [ -d /home/front_stage/.git/ ]; then
+              cd /home/front_stage/
+              git pull
+            else
+              rm -rf /home/front_stage/
+              git clone https://$GH_TOKEN@github.com/saver711/altebrNew /home/front_stage/
+              cd /home/front_stage/
+            fi
+            if [-d .node_modules/]; then
+              rm -rf .node_modules/
+            fi
+            npm install
+
+            # check if .env exists
+            if [ -f .env ]; then
+              chown www:www .env
+            else
+              touch .env
+              chown www:www .env
+            fi
