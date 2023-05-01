@@ -10,7 +10,7 @@ export function AccountingTreeNode({ tree }: AccountingTreeNode_TP) {
     <>
       {tree.map((node, i) => (
         <TreeNode label={node.label} key={i}>
-          {node.children && <AccountingTreeNode tree={node.children} />}
+          {(node.children && node.children.length > 0) && <AccountingTreeNode tree={node.children} />}
         </TreeNode>
       ))}
     </>
