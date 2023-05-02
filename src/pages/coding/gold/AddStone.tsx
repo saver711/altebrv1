@@ -10,11 +10,11 @@ import { Header } from "../../../components/atoms/Header"
 import {
   Accordion,
   BaseInputField,
-  TextAreaField,
+  TextAreaField
 } from "../../../components/molecules"
+import { DropFile } from "../../../components/molecules/files/DropFile"
 import NinjaTable from "../../../components/molecules/NinjaTable"
 import RadioGroup from "../../../components/molecules/RadioGroup"
-import { DropFile } from "../../../components/molecules/files/DropFile"
 import { Column } from "../../../components/molecules/table/types"
 import SelectColor from "../../../components/templates/reusableComponants/SelectColor"
 import SelectStoneNature from "../../../components/templates/reusableComponants/stones/select/SelectStoneNature"
@@ -23,9 +23,8 @@ import SelectStoneShape from "../../../components/templates/reusableComponants/s
 import SelectStoneType from "../../../components/templates/reusableComponants/stones/select/SelectStoneType"
 import { SetState_TP } from "../../../types"
 import {
-  GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
-  goldCodingStoneValues,
+  goldCodingStoneValues, GoldCodingStoneValues_TP
 } from "../coding-types-and-helpers"
 
 ///
@@ -119,6 +118,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newQueryData = [...queryData]
               newQueryData?.splice(props.rowIndex, 1)
               setQueryData(newQueryData)
+              const newStones = [...stones]
+              newStones?.splice(props.rowIndex, 1)
+              setStones(newStones)
             }}
           />
         )
@@ -306,9 +308,10 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                     label="مواصفات الحجر"
                   />
                 </div>
+
                 <div className="col-span-4 flex justify-end items-end">
                   <Button action={submitForm} bordered>
-                    إضافة حجر آخر
+                    {stones.length > 0 ? "إضافة حجر آخر" :"إضافة حجر"}
                   </Button>
                 </div>
               </div>

@@ -4,16 +4,15 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/atoms'
 import { Header } from '../../../components/atoms/Header'
-import { BaseInputField, DateInputField, Select } from '../../../components/molecules'
+import { BaseInputField, DateInputField } from '../../../components/molecules'
 import NinjaTable from '../../../components/molecules/NinjaTable'
 import RadioGroup from '../../../components/molecules/RadioGroup'
 import { Column } from '../../../components/molecules/table/types'
 import { Loading } from '../../../components/organisms/Loading'
 import { useFetch } from '../../../hooks'
+import { formatDate, getDayBefore } from "../../../utils/date"
 import { notify } from '../../../utils/toast'
 import { GoldSanad_TP } from '../coding-types-and-helpers'
-import { formatDate, getDayBefore } from "../../../utils/date"
-import { SelectOption_TP } from '../../../types'
 
 type InitialValues_TP = {
   sanad_type: 'tawrid' | 'talme3'
@@ -195,7 +194,7 @@ export const GoldCodingSanadPicker = () => {
                     className="shadow-xs"
                     type="text"
                   />
-                  <Button type="submit" loading={isRefetching}>
+                  <Button type="submit" loading={isRefetching} className="flex h-[40px] mt-7" bordered>
                     search
                   </Button>
                 </div>

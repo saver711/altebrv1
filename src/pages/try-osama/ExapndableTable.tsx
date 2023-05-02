@@ -4,9 +4,7 @@ import React from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import {
-  ExpandedState,
-  createColumnHelper,
-  flexRender,
+  createColumnHelper, ExpandedState, flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFilteredRowModel,
@@ -14,7 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { t } from 'i18next'
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ViewIcon } from '../../components/atoms/icons'
 import { Modal } from '../../components/molecules'
 import { SubTables } from './SubTables'
@@ -131,7 +129,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
     <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
       <div>
         <div />
-        <table className='mt-2 border-mainGreen shadow-lg mb-2'>
+        <table className='mt-2 border-mainGreen shadow-lg mb-2 w-[1500px]'>
           <thead className='bg-mainGreen text-white'>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
