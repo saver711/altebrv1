@@ -9,8 +9,10 @@ import { SelectBranches } from "../reusableComponants/branches/SelectBranches"
 import { SelectRole } from "../reusableComponants/roles/SelectRole"
 import { SelectNationality } from "../systemEstablishment/SelectNationality"
 import { allDocs_TP } from "../reusableComponants/documents/Documents"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { InitialValues_TP } from "./validation-and-types"
+import { useFetch } from "../../../hooks"
+import { SelectOption_TP } from "../../../types"
 ///
 /////////// Types
 ///
@@ -29,6 +31,30 @@ export const EmployeeMainData = ({ title, editEmployeeData }: EmployeeMainDataPr
   /////////// CUSTOM HOOKS
   ///
   const { setFieldValue, values } = useFormikContext<FormikSharedConfig>()
+  const [xx, setxx] = useState<any>()
+  console.log("🚀 ~ file: AddEmployee.tsx:84 ~ AddEmployee ~ xx:", xx)
+  ///
+  const {
+    data: countriesOptions,
+    isLoading: countriesLoading,
+    refetch: refetchCountries,
+    failureReason: countriesErrorReason
+} = useFetch<SelectOption_TP[]>({
+    endpoint: "governorate/api/v1/countries",
+    queryKey: ["countries"],
+    select: (countries) => countries.map((country: any) => ({
+        id: country.id,
+        value: country.name,
+        label: country.name ,
+    })),
+    onSuccess:(data=>{
+      setxx(data?.find((country) => country.id == editEmployeeData.country.id)?.value || '')
+    })
+})
+useEffect(()=>{
+  setFieldValue('country_id',xx)
+  console.log('country_id=>' , values)
+},[xx])
 
   ///
   /////////// STATES

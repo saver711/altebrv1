@@ -213,6 +213,12 @@ export const GoldCodingSanadFormHandler = ({
     }
   }, [selectedSanad])
 
+  useEffect(()=>{
+    if(!!selectedSanad){
+      setFieldValue("bond_date", selectedSanad.bond_date)
+    }
+  }, [selectedSanad])
+
   // useEffect(() => {
   //   if (!!selectedSanad) {
       // setActiveBand(selectedSanad.items[0])

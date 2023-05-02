@@ -198,6 +198,18 @@ export const AllRoutesProvider = () => {
           <Route path="/all-partner/:partnerID" element={<OnePartner />} />
 
           <Route path="/abdo" element={<TestAbdo title={t("Test")} />} />
+          <Route
+            path="/gold-first-form"
+            element={<GoldSupply title={t("gold supply")} />}
+          />
+          <Route
+            path="/bonds"
+            element={<Bonds title={t("bonds")} />}
+          />
+          <Route
+            path="/bonds/:bondID"
+            element={<Bond title={t("bond")} />}
+          />
         </Route>
         <Route
           errorElement={<ErrorPage />}
