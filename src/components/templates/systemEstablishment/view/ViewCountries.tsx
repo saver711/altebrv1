@@ -44,10 +44,10 @@ export const ViewCountries = () => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "id",
-        header: () => <span>{t("Sequence ")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
-        header: () => <span>{t("Countries")} </span>,
+        header: () => <span>{t("countries")} </span>,
         accessorKey: "name",
         cell: (info) => info.getValue(),
       },
