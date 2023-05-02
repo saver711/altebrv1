@@ -158,6 +158,7 @@ export const Cities = ({
   label = "city",
   editData,
 }: Cities_TP) => {
+  console.log("🚀 ~ file: Cities.tsx:161 ~ editData:", editData)
   /////////// VARIABLES
   ///
   const { setFieldValue, values } = useFormikContext()
@@ -204,6 +205,14 @@ export const Cities = ({
       setFieldValue(cityName, null)
     }
   }, [JSON.stringify(cities)])
+
+  useEffect(() => {
+    setNewValue({
+      id:editData?.city.id,
+      value:editData?.city.name,
+      label:editData?.city.name,
+    })
+  }, [])
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
