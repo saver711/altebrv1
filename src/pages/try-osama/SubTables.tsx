@@ -19,21 +19,25 @@ import { StoneTable } from "./StoneTable"
 ///
 const columnHelper = createColumnHelper<any>()
 
-export const SubTables = ({ subTableData }: any) => {
-console.log("🚀 ~ file: SubTables.tsx:23 ~ SubTables ~ subTableData:", subTableData)
+export const  SubTables = ({ subTableData }: any) => {
 /// variables 
 const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
-  console.log("🚀 ~ file: SubTables.tsx:25 ~ SubTables ~ selectedRow:", selectedRow)
   const columns = useMemo<any>(
     () => [
-      columnHelper.accessor('supply_date', {
+      columnHelper.accessor('bond_date', {
         header: `${t('supply date')}`
+      }),
+      columnHelper.accessor('karat_value', {
+        header: `${t('karat value')}`
       }),
       columnHelper.accessor('size_type', {
         header: `${t('size type')}`
       }),
-      columnHelper.accessor('size_number', {
+      columnHelper.accessor('size_unit_id', {
         header: `${t('size number')}`
+      }),
+      columnHelper.accessor('color', {
+        header: `${t('color')}`
       }),
       columnHelper.accessor('country', {
         header: `${t('country')}`
@@ -51,8 +55,8 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
   const queryClient = useQueryClient()
 
   //@ts-ignore
-  const modifiedData = selectedRow.map(item => ({ ...item, supply_date: '1-10-95', size_type:!!item?.sizes[0] ? item?.sizes[0].sizeType_value
-  : "", size_number: item?.sizes[0]?  item?.sizes[0].sizeNumber_value : '' }))
+  const modifiedData = selectedRow.map(item => ({ ...item, size_type:!!item?.sizes[0] ? item?.sizes[0].size_type
+  : "", size_number: item?.sizes[0]?  item?.sizes[0].size_unit_id : ''}))
   
   useEffect(() => {
     if(queryClient){
@@ -61,11 +65,10 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = modifiedData?.map((item) => {
         const finaleItem = {
-          cc:countries,
           types: types?.find((type) => type.id == item.stones[0].stone_id)?.name,
           country: countries?.find((country) => country.id == item.country_id)?.name,
+          color: colors?.find((color) => color.id == item.color_id)?.name,
         }
-        console.log('finaleItem' , finaleItem)
         return finaleItem
       })
       setQueryData(allQueries)
@@ -77,10 +80,11 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
   //@ts-ignore
 
   const [data, setData] = useState(modifiedData)
+  console.log("🚀 ~ file: SubTables.tsx:79 ~ SubTables ~ data:", data)
   
   useEffect(() => {
     if(queryData){
-      setData(modifiedData.map(item => ({ ...item?.sizes[0],types:queryData[0]?.types , country:queryData[0]?.country})))
+      setData(modifiedData.map(item => ({ ...item?.sizes[0],types:queryData[0]?.types , country:queryData[0]?.country , color:queryData[0]?.color, karat_value:item.karat_value, bond_date:item.bond_date })))
     }
   }, [queryData])
 
@@ -152,9 +156,8 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
           </tbody>
           <tfoot className='h-8' >
             {table.getRowModel().rows.map(row => {
-              console.log("first=>" , row.original)
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-              <span>{selectedRow[0].details} :</span> <span className="text-l font-bold">{t('piece description')} </span> 
+             <span className="text-l font-bold">{t('piece description')}: </span> <span>{selectedRow[0].details} </span>  
               </td>
             }).slice(0, 1)}
           </tfoot>

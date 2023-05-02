@@ -8,8 +8,7 @@ import { Helmet } from "react-helmet-async"
 import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
 import { EmployeeMainData, NationalAddress } from ".."
-import { useFetch, useMutate } from "../../../hooks"
-import { SelectOption_TP } from "../../../types"
+import { useMutate } from "../../../hooks"
 import { formatDate, getDayBefore } from "../../../utils/date"
 import { requiredTranslation } from "../../../utils/helpers"
 import { mutateData } from "../../../utils/mutateData"
@@ -32,7 +31,7 @@ type AddEmployeeProps_TP = {
 
 ///
 export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) => {
-console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:", editEmployeeData)
+  console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:", editEmployeeData)
 
   // validation 
   const employeeValidatingSchema = () => Yup.object({
@@ -41,12 +40,12 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
     branch_id: Yup.string().trim().required(requiredTranslation),
     role_id: Yup.string().trim().required(requiredTranslation),
     address: Yup.string().trim().required(requiredTranslation),
-    mobile:!!!editEmployeeData ? Yup.string()
+    mobile: !!!editEmployeeData ? Yup.string()
       .trim()
       .required(requiredTranslation).test('isValidateNumber', 'رقم غير صحيح', function (value: string) {
         return isValidPhoneNumber(value || "")
       }) : Yup.string().trim(),
-    phone:!!!editEmployeeData ? Yup.string().trim().required(requiredTranslation) : Yup.string().trim(),
+    phone: !!!editEmployeeData ? Yup.string().trim().required(requiredTranslation) : Yup.string().trim(),
     nationality_id: Yup.string().required(requiredTranslation),
     date_of_birth: Yup.date().required(requiredTranslation),
     national_expire_date: Yup.date().required(requiredTranslation),
@@ -80,22 +79,6 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
   /////////// STATES
   ///
   const [docsFormValues, setDocsFormValues] = useState<allDocs_TP[]>(incomingData)
-  ///
-  const {
-    data: countriesOptions,
-    isLoading: countriesLoading,
-    refetch: refetchCountries,
-    failureReason: countriesErrorReason
-} = useFetch<SelectOption_TP[]>({
-    endpoint: "governorate/api/v1/countries",
-    queryKey: ["countries"],
-    select: (countries) => countries.map((country: any) => ({
-        id: country.id,
-        value: country.name,
-        label: country.name ,
-    })),
-})
-
 
   const initialValues: InitialValues_TP = {
     // employee main data initial values
@@ -105,16 +88,12 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
     username: editEmployeeData?.username || "",
     is_active: editEmployeeData?.is_active ? 'Yes' : "No" || "Yes",
     city_id: editEmployeeData?.nationalAddress.city.id || "",
-    city_value: editEmployeeData?.nationalAddress.city.name || "",
     nationality_id: editEmployeeData?.nationality.id || "",
-    nationality_value: editEmployeeData?.nationality.name || "",
     country_id: editEmployeeData?.country.id || "",
-    country_value: editEmployeeData?.country.name || "",
     role_id: editEmployeeData?.role.id || "",
     role_value: editEmployeeData?.role.name || "",
     date_of_birth: !!editEmployeeData ? new Date(editEmployeeData?.date_of_birth) : new Date(),
     branch_id: editEmployeeData?.branch.id || "",
-    branch_value: editEmployeeData?.branch.name || "",
     national_number: editEmployeeData?.national_number || "",
     national_expire_date: new Date(),
     national_image: !!editEmployeeData?.image ? [{
@@ -190,14 +169,14 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
           }
           if (!!editEmployeeData) {
             let { document, ...editedValuesWithoutDocument } = editedValues;
-            if(docsFormValues.length > editEmployeeData.document.length)
-            editedValues = {...editedValues , document:editedValues.document.slice(editEmployeeData.document.length)}
-            if(docsFormValues.length === editEmployeeData.document.length)
-            editedValues = editedValuesWithoutDocument
-            if(JSON.stringify(values.national_image[0].path) === JSON.stringify(editEmployeeData.national_image))
-            delete(editedValues.national_image)
-            if(JSON.stringify(values.image[0].path) === JSON.stringify(editEmployeeData.image))
-            delete(editedValues.image)
+            if (docsFormValues.length > editEmployeeData.document.length)
+              editedValues = { ...editedValues, document: editedValues.document.slice(editEmployeeData.document.length) }
+            if (docsFormValues.length === editEmployeeData.document.length)
+              editedValues = editedValuesWithoutDocument
+            if (JSON.stringify(values.national_image[0].path) === JSON.stringify(editEmployeeData.national_image))
+              delete (editedValues.national_image)
+            if (JSON.stringify(values.image[0].path) === JSON.stringify(editEmployeeData.image))
+              delete (editedValues.image)
             mutate({
               endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
               values: editedValues,
@@ -206,7 +185,7 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
             })
           }
           else {
-            console.log("editedValues=>" ,editedValues )
+            console.log("editedValues=>", editedValues)
             mutate({
               endpointName: "employee/api/v1/employees",
               values: editedValues,
@@ -227,7 +206,7 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
               }
             >
               <EmployeeMainData title={`${t("main data")}`} editEmployeeData={editEmployeeData} />
-              <NationalAddress />
+              <NationalAddress editData={editEmployeeData}/>
               <Documents
                 docsFormValues={docsFormValues}
                 setDocsFormValues={setDocsFormValues}
@@ -236,7 +215,7 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
-      </Formik> 
+      </Formik>
     </>
   )
 }
