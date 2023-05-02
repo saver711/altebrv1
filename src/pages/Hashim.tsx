@@ -11,8 +11,8 @@ const Hashim = () => {
       {/* <Select_test /> */}
       {/* <Create_test /> */}
       {/* <View_test /> */}
-      <ViewCategories />
-      {/* <AccountingTree /> */}
+      {/* <ViewCategories /> */}
+      <AccountingTree />
     </div>
   )
 }
