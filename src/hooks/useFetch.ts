@@ -19,6 +19,7 @@ type Args_TP<T, ComingTP> = {
   refetchInterval?: number
   staleTime?: number
   cacheTime?: number
+  pagination?: boolean
 }
 
 
@@ -30,6 +31,7 @@ export const useFetch = <T, ComingTP = T>({ ...args }: Args_TP<T, ComingTP>) => 
     endpoint,
     select,
     enabled = true,
+    pagination = false,
     onSuccess,
     onError,
     axiosOptions,
@@ -40,11 +42,11 @@ export const useFetch = <T, ComingTP = T>({ ...args }: Args_TP<T, ComingTP>) => 
 
   // useQuery infers queryFn return type
   const query = useQuery(queryKey, {
-    queryFn: () => request<ComingTP>({ url: endpoint, ...axiosOptions }),
+    queryFn: () => request<ComingTP>({ url: endpoint, ...axiosOptions }, pagination),
     enabled,
     onSuccess,
     onError: (err: CError_TP) => {
-      if (err.response?.status === HttpStatusCode.Unauthorized) {
+      if (err.response.status === HttpStatusCode.Unauthorized) {
         frontLogOutHandler()
         return
       }

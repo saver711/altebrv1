@@ -74,7 +74,7 @@ export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
     Sub_AccountSelectOption_TP[]
   >({
     queryKey: [`sub_accounts`],
-    endpoint: `/accounting/api/v1/sub_accounts`,
+    endpoint: `/accounting/api/v1/all_tree_account`,
     enabled: !!operationId,
     select: (accounts) =>
       accounts.map(({ label, name, value, numeric_system }) => ({

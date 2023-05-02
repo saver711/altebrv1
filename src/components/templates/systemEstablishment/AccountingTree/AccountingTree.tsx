@@ -3,7 +3,6 @@
 import { Form, Formik, FormikValues } from "formik"
 import { t } from "i18next"
 import { useState } from "react"
-import { SingleValue } from "react-select"
 import * as Yup from "yup"
 import { useFetch, useMutate } from "../../../../hooks"
 import { SelectOption_TP } from "../../../../types"
@@ -18,9 +17,13 @@ import {
   InnerFormLayout,
   OuterFormLayout,
   RadioField,
-  Select
+  Select,
 } from "../../../molecules"
 import { AccountingTreeForm } from "./AccountingTreeForm"
+import { useQueryClient } from "@tanstack/react-query"
+import { Schema } from "yup"
+import { SingleValue } from "react-select"
+import RadioGroup from "../../../molecules/RadioGroup"
 /////////// Types
 ///
 
@@ -203,7 +206,7 @@ export const AccountingTree = () => {
       >
         {({ setFieldValue }) => (
           <Form>
-            <HandleBackErrors errors={error?.response?.data?.errors}>
+            <HandleBackErrors errors={error?.response.data.errors}>
               <OuterFormLayout
                 submitComponent={
                   <Button
@@ -231,18 +234,20 @@ export const AccountingTree = () => {
                   </div>
                   <div className="col-span-2 flex items-center justify-end gap-2">
                     <span>طبيعة الحساب :</span>
-                    <RadioField
-                      label={t("Credit")}
-                      id={"creditor"}
-                      name={"nature"}
-                      value="creditor"
-                    />
-                    <RadioField
-                      label={t("indebted")}
-                      id={"debtor"}
-                      name={"nature"}
-                      value="debtor"
-                    />
+                    <RadioGroup name="nature">
+                      <div className="flex gap-3">
+                        <RadioGroup.RadioButton
+                          value="creditor"
+                          label={t("creditor")}
+                          id="creditor"
+                        />
+                        <RadioGroup.RadioButton
+                          value="debtor"
+                          label={`${t("debtor")}`}
+                          id="debtor"
+                        />
+                      </div>
+                    </RadioGroup>
                   </div>
                   <Button
                     action={() => {
