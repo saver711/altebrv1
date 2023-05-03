@@ -155,7 +155,7 @@
   "stone color": "لون الحجر",
   "close": "إغلاق",
   "document": " وثيقة",
-  "document endDate": "تاريخ انتهاء الوثيقة",
+  "document end date": "تاريخ انتهاء الوثيقة",
   "days": "ايام",
   "national Address": "العنوان الوطني",
   "index": "التسلسل",
@@ -210,7 +210,7 @@
   "search": "بحث",
   "Bonds": "السندات",
   "Add bond": "اضافة سند",
-  "Sequence": "التسلسل",
+  "Sequence ": "التسلسل",
   "twred type": "نوع التوريد",
   "bond date": "تاريخ السند",
   "total money": "اجمالي النقدية",
@@ -272,5 +272,12 @@
   "from": "من",
   "checking accounts operations": "تدقيق عمليات الحسابات",
   "accounting tree": "الشجرة المحاسبية",
-  "Back": "رجوع"
+  "employees": "الموظفين",
+  "Back": "رجوع",
+  "administrative structure": "الهيكل الاداري",
+  "back": "رجوع",
+  "username": "اسم المتسخدم",
+  "role": "الوظيفة",
+  "is active": "فعال",
+  "Edit": "تعديل"
 }

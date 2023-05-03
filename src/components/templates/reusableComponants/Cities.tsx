@@ -179,7 +179,7 @@ export const Cities = ({
     setNewValue({
       id: editData?.nationalAddress.city.id,
       value: editData?.nationalAddress.city.name,
-      label: editData?.nationalAddress.city.name,
+      label: editData?.nationalAddress.city.name || "اختر مدينة",
     })
   }, [])
 

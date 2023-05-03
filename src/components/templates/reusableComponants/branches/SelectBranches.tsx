@@ -56,7 +56,7 @@ export const SelectBranches = ({ name, editData }: { name: string; editData?:any
     setNewValue({
       id: editData?.branch.id,
       value: editData?.branch.name,
-      label: editData?.branch.name,
+      label: editData?.branch.name || "اختر فرع",
     })
   }, [])
   ///

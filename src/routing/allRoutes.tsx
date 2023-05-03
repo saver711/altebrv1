@@ -85,7 +85,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/suppliers/:supplierID"
-            element={<OneSupplier />}
+            element={<OneSupplier title="المورد" />}
           />
           <Route
             path="/system/operations"
