@@ -125,7 +125,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         {isSuccess &&
           data.length > 0 &&
           <Table data={data} showNavigation columns={columns} />
-        )}
+        }
       </div>
       {isSuccess && data.length === 0 && (
         <div>
