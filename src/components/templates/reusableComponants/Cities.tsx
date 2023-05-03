@@ -115,7 +115,7 @@ const NewCitiesOptionComponent = ({
         }}
         validationSchema={validationSchema}
       >
-        <HandleBackErrors errors={error?.response?.data?.errors}>
+        <HandleBackErrors errors={error?.response.data.errors}>
           <Form className="w-full">
             <div className="flex gap-x-8 items-center">
               <BaseInputField
@@ -158,7 +158,7 @@ export const Cities = ({
   label = "city",
   editData,
 }: Cities_TP) => {
-  console.log("🚀 ~ file: Cities.tsx:161 ~ editData:", editData)
+  console.log(`editData:`, editData)
   /////////// VARIABLES
   ///
   const { setFieldValue, values } = useFormikContext()
@@ -175,6 +175,13 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
+   useEffect(() => {
+     setNewValue({
+       id: editData?.nationalAddress.city.id,
+       value: editData?.nationalAddress.city.name,
+       label: editData?.nationalAddress.city.name,
+     })
+   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -207,12 +214,9 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    setNewValue({
-      id:editData?.city.id,
-      value:editData?.city.name,
-      label:editData?.city.name,
-    })
-  }, [])
+    setFieldValue("city_value", "")
+  }, [country?.id])
+
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -237,7 +241,7 @@ export const Cities = ({
         onChange={(option: SingleValue<SelectOption_TP>) => {
           if (cityName) {
             setFieldValue(cityName, option?.id)
-            setFieldValue('city_value', option!.value)
+            // setFieldValue('city_value', option!.value)
           }
           if (distractName && editData) {
             setFieldValue(distractName, editData?.district_id)
@@ -264,6 +268,10 @@ export const Cities = ({
             ? "لا يوجد "
             : "اختر الدوله اولا ",
         }}
+        // {...{...(values?.city_value && { value:{
+        //   value: values?.city_value || "",
+        //   label: values?.city_value || ""
+        // }})}}
       />
       <RefetchErrorHandler
         failureReason={failureReason}

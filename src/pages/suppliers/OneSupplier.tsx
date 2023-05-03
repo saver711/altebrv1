@@ -9,6 +9,7 @@ import { InnerFormLayout, OuterFormLayout } from "../../components/molecules"
 import { TextLine } from "../../components/templates/employee/TextLine"
 import { useFetch } from "../../hooks"
 import { Employee_TP } from "../employees/employees-types"
+import { formatDate } from "../../utils/date"
 ///
 /////////// Types
 ///
@@ -121,7 +122,9 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 {supplier.national_expire_date && (
                   <TextLine
                     boldText={t("hiring date")}
-                    lightString={supplier.national_expire_date}
+                    lightString={formatDate(
+                      new Date(supplier.national_expire_date)
+                    )}
                   />
                 )}
                 {supplier.email && (

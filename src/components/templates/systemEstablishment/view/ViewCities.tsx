@@ -20,6 +20,7 @@ import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { Table } from "../../reusableComponants/tantable/Table"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
+import { Back } from "../../../../utils/utils-components/Back"
 
 ///
 export type ViewCities_TP = {
@@ -147,6 +148,11 @@ export const ViewCities = () => {
         <EmptyDataView>
           <AddCities />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

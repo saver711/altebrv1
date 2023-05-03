@@ -16,7 +16,10 @@ import { Loading } from "../../../organisms/Loading"
 import { NationalAddress } from "../../NationalAddress"
 import { Documents } from "../../reusableComponants/documents/Documents"
 import { PartnerMainData } from "./PartnerMainData"
-import { InitialValues_TP, partnerValidatingSchema } from "./validation-and-types-partner"
+import {
+  InitialValues_TP,
+  partnerValidatingSchema,
+} from "./validation-and-types-partner"
 ///
 /////////// Types
 ///
@@ -47,8 +50,8 @@ export const AddPartners = ({
     name: editData?.name || "",
     email: editData?.email || "",
     phone: editData?.phone || "",
-    end_date: editData ? new Date(editData?.end_date)   : new Date() ,
-    start_date:editData ?  new Date(editData?.start_date) :  new Date() ,
+    end_date: editData ? new Date(editData?.end_date) : new Date(),
+    start_date: editData ? new Date(editData?.start_date) : new Date(),
     x_city: editData?.city?.id || "",
     // city_value: editData?.city?.name || "",
     x_country: editData?.country?.id || "",
@@ -128,7 +131,6 @@ export const AddPartners = ({
 
   const queryClient = useQueryClient()
 
-
   if (checkOperationsLoading)
     return (
       <Loading
@@ -182,7 +184,10 @@ export const AddPartners = ({
           }
           console.log("🚀 ~ file: AddPartners.tsx:262 ~ values:", values)
           if (!!editData) {
-            console.log("🚀 ~ file: AddPartners.tsx:262 ~ editedValues:", editedValues)
+            console.log(
+              "🚀 ~ file: AddPartners.tsx:262 ~ editedValues:",
+              editedValues
+            )
 
             let { document, ...editedValuesWithoutDocument } = editedValues
             if (docsFormValues.length > editData.document.length)
@@ -229,16 +234,17 @@ export const AddPartners = ({
                 </Button>
               }
             >
-              <PartnerMainData />
+              <PartnerMainData editData={editData} />
               <Documents
                 setDocsFormValues={setDocsFormValues}
                 docsFormValues={docsFormValues}
               />
-              <NationalAddress />
+              <NationalAddress editData={editData} />
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>
-    </>
-  )
+               
+    </>
+  )
 }

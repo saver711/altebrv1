@@ -117,11 +117,7 @@ export const ViewCompanyDetails = () => {
   ///
   return (
     <>
- 
-
-
-      <OuterFormLayout header={`${t("view details company")}`}>
-
+      <OuterFormLayout header={`${t("view details company")}`} leftComponent={<Back/>}>
         {isError && (
           <div className=" m-auto">
             <Header
@@ -132,9 +128,8 @@ export const ViewCompanyDetails = () => {
         )}
         {companyDetailsLoading && (
           <>
-          <Loading mainTitle={t("view company Details")} />
+            <Loading mainTitle={t("view company Details")} />
           </>
-       
         )}
 
         {isSuccess &&
@@ -445,9 +440,7 @@ export const ViewCompanyDetails = () => {
               </>
             </InnerFormLayout>
           ))}
-
-
       </OuterFormLayout>
     </>
-  );
+  )
 };

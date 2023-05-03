@@ -80,7 +80,7 @@ export const AllRoutesProvider = () => {
             path="/system/partners"
             element={<AllPartner title="الشركاء" />}
           />
-           <Route path="/system/partners/:partnerID" element={<OnePartner />} />
+          <Route path="/system/partners/:partnerID" element={<OnePartner />} />
 
           <Route path="/system/accounts" element={<AccountingTree />} />
           <Route
@@ -203,13 +203,13 @@ export const AllRoutesProvider = () => {
             path="/gold-first-form"
             element={<GoldSupply title={t("gold supply")} />}
           />
+          <Route path="/bonds" element={<Bonds title={t("bonds")} />} />
+          <Route path="/bonds/:bondID" element={<Bond title={t("bond")} />} />
           <Route
-            path="/bonds"
-            element={<Bonds title={t("bonds")} />}
-          />
-          <Route
-            path="/bonds/:bondID"
-            element={<Bond title={t("bond")} />}
+            path="/suppliers/:SupplierID"
+            element={
+              <SupplierDetails title={t("supplier details").toString()} />
+            }
           />
         </Route>
         <Route
@@ -229,10 +229,7 @@ export const AllRoutesProvider = () => {
           path="/suppliers"
           element={<AllSuppliers title={t("all suppliers")} />}
         />
-        <Route
-          path="/suppliers/:SupplierID"
-          element={<SupplierDetails title={t("supplier details").toString()} />}
-        />
+
         <Route
           path="/gold-first-form"
           element={<GoldSupply title={t("gold supply")} />}

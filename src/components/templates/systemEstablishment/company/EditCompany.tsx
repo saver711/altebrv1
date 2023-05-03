@@ -57,7 +57,7 @@ export const EditCompany = ({
     // city_value:valuesData.city.name,
     district_id: valuesData.district.id || "",
     // district_value:valuesData.country.name,
-    address: valuesData.address || "",
+    // address: valuesData.address || "",
     establishment_date: new Date() || valuesData.establishmentDate,
     phone: valuesData.phone || "",
     email: valuesData.email || "",
@@ -227,8 +227,8 @@ export const EditCompany = ({
         initialValues={initialValues}
         // validationSchema={companyValidatingSchema}
         onSubmit={(values: InitialValues_TP) => {
-          updateHandler(values);
-          console.log("ششش", { ...values, ...docsFormValues });
+          updateHandler(values)
+          console.log("ششش", { ...values, ...docsFormValues })
         }}
       >
         <Form>
@@ -245,16 +245,16 @@ export const EditCompany = ({
                 </Button>
               }
             >
-              <CompanyMainData valuesData={valuesData}/>
+              <CompanyMainData valuesData={valuesData} />
               <Documents
                 docsFormValues={docsFormValues}
                 setDocsFormValues={setDocsFormValues}
               />
-              <NationalAddress />
+              <NationalAddress editData={valuesData} />
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>
     </>
-  );
+  )
 };

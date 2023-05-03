@@ -36,7 +36,7 @@ const navigate = useNavigate()
 ///
 return (
   <Button action={() => navigate(-1)} bordered>
-    {t("back")}
+    {t("Back")}
   </Button>
 )
 }

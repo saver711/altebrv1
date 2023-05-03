@@ -20,6 +20,7 @@ import { AddCountry } from "../AddCountry"
 import { useQueryClient } from "@tanstack/react-query"
 import { Table } from "../../reusableComponants/tantable/Table"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
+import { Back } from "../../../../utils/utils-components/Back"
 ///
 export type ViewCountries_TP = {
   id: string
@@ -72,7 +73,7 @@ export const ViewCountries = () => {
                 }}
                 stroke="#ef4444"
               />
-              <ViewIcon action={() => console.log("view", info.row.original)} />
+              {/* <ViewIcon action={() => console.log("view", info.row.original)} /> */}
             </div>
           )
         },
@@ -146,13 +147,13 @@ export const ViewCountries = () => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-const fake =[{id:'1',name:'llll'}]
+  const fake = [{ id: "1", name: "llll" }]
   ///
   return (
     <div className="p-4">
       {/* <Table data={fake} showNavigation columns={columns} /> */}
 
-       {isError && (
+      {isError && (
         <div className=" m-auto">
           <Header
             className="text-center text-2xl font-bold"
@@ -165,9 +166,13 @@ const fake =[{id:'1',name:'llll'}]
         <EmptyDataView>
           <AddCountry />
         </EmptyDataView>
-      )} 
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
+      )}
       {isSuccess && !!dataSource && !!dataSource.length && (
-        
         <Table data={dataSource} showNavigation columns={columns} />
       )}
       <Modal

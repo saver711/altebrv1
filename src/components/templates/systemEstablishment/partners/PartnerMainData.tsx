@@ -10,7 +10,7 @@ import {
   BaseInputField,
   DateInputField,
   InnerFormLayout,
-  PhoneInput
+  PhoneInput,
 } from "../../../molecules"
 import { DropFile } from "../../../molecules/files/DropFile"
 import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
@@ -20,7 +20,7 @@ import { SelectNationality } from "../SelectNationality"
 ///
 
 ///
-export const PartnerMainData = () => {
+export const PartnerMainData = ({ editData }: { editData?: any }) => {
   /////////// VARIABLES
   ///
 
@@ -36,7 +36,6 @@ export const PartnerMainData = () => {
   ///
   /////////// SIDE EFFECTS
   ///
-
 
   ///
   /////////// IF CASES
@@ -77,7 +76,7 @@ export const PartnerMainData = () => {
           name="phone"
           placeholder={`${t("mobile number")}`}
         />
-        
+
         {/* <BaseInputField
           id="address"
           label={`${t("address")}`}
@@ -93,8 +92,24 @@ export const PartnerMainData = () => {
           countryLabel={`${t("country")}`}
           cityName="x_city"
           cityLabel={`${t("city")}`}
+          editData={{
+            nationalAddress: {
+              country: {
+                country_id: editData?.country.id,
+                country_name: editData?.country.name,
+              },
+              city: {
+                id: editData?.city.id,
+                name: editData?.city.name,
+              },
+              district: {
+                country_id: editData?.country.id,
+                country_name: editData?.country.name,
+              },
+            },
+          }}
         />
-        <SelectNationality name="nationality_id" />
+        <SelectNationality name="nationality_id" editData={editData} />
         {/* تاريخ انتهاء الهوية */}
         <DateInputField label={`${t("End IdNumber")}`} name="end_date" />
 
@@ -108,6 +123,7 @@ export const PartnerMainData = () => {
           <DropFile name="national_image" />
         </div>
       </InnerFormLayout>
+          
     </>
   )
 }

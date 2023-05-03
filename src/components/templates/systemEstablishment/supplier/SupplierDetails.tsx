@@ -11,6 +11,7 @@ import { Header } from "../../../atoms/Header"
 import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
 import { Loading } from "../../../organisms/Loading"
 import { TextLine } from "../../employee/TextLine"
+import { formatDate } from "../../../../utils/date"
 
 ///
 /////////// Types
@@ -82,8 +83,8 @@ export const SupplierDetails = ({ title }: SupplierDetailsProps_TP) => {
       >
         {isSuccess && (
           <InnerFormLayout title={supplier?.name}>
-            <div className=" flex gap-4 p-6">
-              <div className=" border-l-2">
+            <div className="   gap-4 p-6 col-span-4 grid grid-cols-3">
+              <div className="border-l-2 col-span-1">
                 <div className=" flex flex-col gap-4 mb-8">
                   <div className=" w-28  bg-slate-200 p-2 rounded-2xl">
                     <img
@@ -113,7 +114,7 @@ export const SupplierDetails = ({ title }: SupplierDetailsProps_TP) => {
                   )}
                 </div>
               </div>
-              <div className=" ">
+              <div className="col-span-2 ">
                 <div className=" flex flex-col gap-4 mb-8 ">
                   {/* التواصل */}
                   <div className=" flex flex-col gap-4  border-b-2 border-dashed p-4">
@@ -151,7 +152,9 @@ export const SupplierDetails = ({ title }: SupplierDetailsProps_TP) => {
                       />
                       <TextLine
                         boldText={t("national expire date")}
-                        lightString={supplier?.national_expire_date}
+                        lightString={formatDate(
+                          new Date(supplier?.national_expire_date)
+                        )}
                       />
 
                       {/* <TextLine
@@ -223,7 +226,9 @@ export const SupplierDetails = ({ title }: SupplierDetailsProps_TP) => {
                           <TextLine
                             containerClasses="w-fit "
                             boldText={t("document end Date")}
-                            lightString={doc?.data?.endDate}
+                            lightString={formatDate(
+                              new Date(doc?.data?.endDate)
+                            )}
                           />
                           <TextLine
                             boldText={t("document reminder")}
