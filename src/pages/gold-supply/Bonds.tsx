@@ -117,27 +117,26 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <div className="flex justify-between mb-5" >
-        <h2 className="font-bold text-2xl" >{t('Bonds')}</h2>
+      <div className="flex justify-between mb-5">
+        <h2 className="font-bold text-2xl">{t("Bonds")}</h2>
         <Button
-          action={() => navigate(`/gold-first-form`)}
+          action={() => navigate(`/bonds/gold`)}
           className="flex items-center gap-2"
         >
           <AddIcon /> {t("Add bond")}
         </Button>
       </div>
       {isLoading && <Loading mainTitle={t("View Bonds")} />}
-      <div className="" >
-        {isSuccess &&
-          data.length > 0 &&
+      <div className="">
+        {isSuccess && data.length > 0 && (
           <Table data={data} showNavigation columns={columns} />
-        }
+        )}
       </div>
       {isSuccess && data.length === 0 && (
         <div>
           <p>لا يوجد سندات</p>
           <Button
-            action={() => navigate(`/gold-first-form`)}
+            action={() => navigate(`/bonds/gold`)}
             className="flex items-center gap-2"
           >
             <AddIcon /> {t("Add bond")}

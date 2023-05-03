@@ -1,31 +1,36 @@
 /////////// IMPORTS
 ///
-import { t } from "i18next"
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
+import { Button } from "../../components/atoms"
 import { Modal } from "../../components/molecules"
-import { CreateNationalities } from "../../components/templates/CreateNationalities"
-import CreateCategory from "../../components/templates/reusableComponants/categories/create/CreateCategory"
-import { CreateClassification } from "../../components/templates/reusableComponants/classifications/create/CreateClassification"
-import CreateColor from "../../components/templates/reusableComponants/CreateColor"
-import CreateKarat from "../../components/templates/reusableComponants/karats/create/CreateKarat"
-import CreateStoneNature from "../../components/templates/reusableComponants/stones/create/CreateStoneNature"
-import CreateStonePurity from "../../components/templates/reusableComponants/stones/create/CreateStonePurity"
-import CreateStoneQuality from "../../components/templates/reusableComponants/stones/create/CreateStoneQuality"
-import CreateStoneShape from "../../components/templates/reusableComponants/stones/create/CreateStoneShape"
-import CreateStoneType from "../../components/templates/reusableComponants/stones/create/CreateStoneType"
-import { AddCities } from "../../components/templates/systemEstablishment/AddCities"
 import { AddCountry } from "../../components/templates/systemEstablishment/AddCountry"
-import { AddDistrict } from "../../components/templates/systemEstablishment/AddDistrict"
-import { AddMarket } from "../../components/templates/systemEstablishment/markets/AddMarket"
-import { StonesCard } from "../../components/templates/systemEstablishment/StonesCard"
-import { SystemCard } from "../../components/templates/systemEstablishment/SystemCard"
-import { Back } from "../../utils/utils-components/Back"
 import {
-  Card_TP, GlobalFormNames_TP,
-  StonesFormNames_TP
+  Card_TP,
+  FormNames_TP,
+  GlobalFormNames_TP,
+  StonesFormNames_TP,
 } from "./types-and-helpers"
+import { AddCities } from "../../components/templates/systemEstablishment/AddCities"
+import { AddDistrict } from "../../components/templates/systemEstablishment/AddDistrict"
+import { CreateNationalities } from "../../components/templates/CreateNationalities"
+import { t } from "i18next"
+import CreateColor from "../../components/templates/reusableComponants/CreateColor"
+import { CreateClassification } from "../../components/templates/reusableComponants/classifications/create/CreateClassification"
+import CreateKarat from "../../components/templates/reusableComponants/karats/create/CreateKarat"
+import CreateCategory from "../../components/templates/reusableComponants/categories/create/CreateCategory"
+import { AddMarket } from "../../components/templates/systemEstablishment/markets/AddMarket"
+import { AddStone } from "../coding/gold/AddStone"
+import CreateStoneType from "../../components/templates/reusableComponants/stones/create/CreateStoneType"
+import { AddIcon, ViewIcon } from "../../components/atoms/icons"
+import CreateStoneShape from "../../components/templates/reusableComponants/stones/create/CreateStoneShape"
+import CreateStoneQuality from "../../components/templates/reusableComponants/stones/create/CreateStoneQuality"
+import CreateStonePurity from "../../components/templates/reusableComponants/stones/create/CreateStonePurity"
+import CreateStoneNature from "../../components/templates/reusableComponants/stones/create/CreateStoneNature"
+import { Back } from "../../utils/utils-components/Back"
+import { SystemCard } from "../../components/templates/systemEstablishment/SystemCard"
+import { StonesCard } from "../../components/templates/systemEstablishment/StonesCard"
 ///
 /////////// Types
 ///
@@ -227,7 +232,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       </Helmet>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-lg font-bold">تأسيس عام وأحجار</h1>
-        <Back />
+        <Back path="/system" />
       </div>
 
       <div className="grid grid-cols-4 gap-4">

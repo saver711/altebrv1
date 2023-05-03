@@ -49,6 +49,7 @@ import { ErrorPage } from "./ErrorPage"
 import { Root } from "./Root"
 export const AllRoutesProvider = () => {
   const { permissions, userData } = useContext(authCtx)
+  
   return (
     <PermissionCtxProvider userPermissions={permissions || [""]}>
       <Routes>
@@ -80,7 +81,7 @@ export const AllRoutesProvider = () => {
             path="/system/partners"
             element={<AllPartner title="الشركاء" />}
           />
-           <Route path="/system/partners/:partnerID" element={<OnePartner />} />
+          <Route path="/system/partners/:partnerID" element={<OnePartner />} />
 
           <Route path="/system/accounts" element={<AccountingTree />} />
           <Route
@@ -89,7 +90,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/operations"
-            element={<Operation title="كل الموردين" />}
+            element={<Operation title="كل العمليات" />}
           />
           {/* ------- عام واحجار -------- */}
           <Route
@@ -178,12 +179,6 @@ export const AllRoutesProvider = () => {
               />
             }
           />
-          <Route path="/hashim" element={<Hashim />} />
-
-          <Route
-            path="/add-supplier"
-            element={<AddSupplier title={t("add supplier")} />}
-          />
           <Route
             path="/add-employee"
             element={<AddEmployee title={t("add-employee")} />}
@@ -194,51 +189,17 @@ export const AllRoutesProvider = () => {
           />
           <Route path="/employees/:employeeID" element={<OneEmployee />} />
           <Route
-            path="/all-partner"
-            element={<AllPartner title={t("all-partner")} />}
-          />
-
-          <Route path="/abdo" element={<TestAbdo title={t("Test")} />} />
-          <Route
-            path="/gold-first-form"
+            path="/bonds/gold"
             element={<GoldSupply title={t("gold supply")} />}
           />
-          <Route
-            path="/bonds"
-            element={<Bonds title={t("bonds")} />}
-          />
-          <Route
-            path="/bonds/:bondID"
-            element={<Bond title={t("bond")} />}
-          />
+          <Route path="/bonds" element={<Bonds title={t("bonds")} />} />
+          <Route path="/bonds/:bondID" element={<Bond title={t("bond")} />} />
         </Route>
         <Route
           errorElement={<ErrorPage />}
           path="/login"
           element={<Login title={t("login")} />}
         />
-        <Route path="/tests" element={<Tests />} />
-        <Route path="/testSystem" element={<TestSystem title={t("test")} />} />
-        <Route path="/testSystem" element={<TestSystem title={t("test")} />} />
-        <Route
-          path="/operation"
-          element={<Operation title={t("Operation")} />}
-        />
-
-        <Route
-          path="/suppliers"
-          element={<AllSuppliers title={t("all suppliers")} />}
-        />
-        <Route
-          path="/suppliers/:SupplierID"
-          element={<SupplierDetails title={t("supplier details").toString()} />}
-        />
-        <Route
-          path="/gold-first-form"
-          element={<GoldSupply title={t("gold supply")} />}
-        />
-        <Route path="/bonds" element={<Bonds title={t("bonds")} />} />
-        <Route path="/bonds/:bondID" element={<Bond title={t("bond")} />} />
       </Routes>
     </PermissionCtxProvider>
   )
