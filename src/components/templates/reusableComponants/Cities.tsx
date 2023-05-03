@@ -175,13 +175,13 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
-   useEffect(() => {
-     setNewValue({
-       id: editData?.nationalAddress.city.id,
-       value: editData?.nationalAddress.city.name,
-       label: editData?.nationalAddress.city.name,
-     })
-   }, [])
+  useEffect(() => {
+    setNewValue({
+      id: editData?.nationalAddress.city.id,
+      value: editData?.nationalAddress.city.name,
+      label: editData?.nationalAddress.city.name,
+    })
+  }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///

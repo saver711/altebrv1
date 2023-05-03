@@ -41,7 +41,7 @@ const App = () => {
   ///
   return (
     <>
-      <Breadcrumbs/>
+      {/* <Breadcrumbs/> */}
       <AllRoutesProvider />
       <ToastContainer rtl={isRTL} />
       <ReactQueryDevtools initialIsOpen={false} position={"bottom-right"} />

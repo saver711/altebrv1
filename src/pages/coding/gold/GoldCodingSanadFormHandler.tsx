@@ -73,24 +73,24 @@ export const GoldCodingSanadFormHandler = ({
   const columns: Column[] = [
     {
       name: "category",
-      label: "category",
+      label: t("category"),
       Cell: ({ value }) => <span>{value?.name}</span>,
     },
     {
       name: "goldWeight",
-      label: "goldWeight",
+      label: t("goldWeight"),
     },
     {
       name: "goldKarat",
-      label: "goldKarat",
+      label: t("goldKarat"),
     },
     {
       name: "wage",
-      label: "wage",
+      label: t("wage"),
     },
     {
       name: "leftWeight",
-      label: "leftWeight",
+      label: t("leftWeight"),
     },
   ]
 
@@ -352,14 +352,14 @@ export const GoldCodingSanadFormHandler = ({
             {/* {sanadData.boxes.map()} */}
             <div className="flex flex-col gap-3 ">
               <Header header="إجماليات الترقيم" className=" text-lg " />
-              <ul className="flex gap-6">
+              <ul className="grid grid-cols-6 gap-6">
                 {totals.map(({ name, key, unit, value }) => (
                   <BoxesDataBase variant="secondary" key={key}>
-                    <div className="flex">
+                    <div className="flex flex-col gap-2">
+                      <p>{name}</p>
                       <p>
                         {value} {t(unit)}
                       </p>
-                      <p>{name}</p>
                     </div>
                   </BoxesDataBase>
                 ))}

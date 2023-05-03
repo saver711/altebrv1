@@ -141,24 +141,23 @@ export const Countries = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { setFieldValue , values } = useFormikContext()
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// STATES
   ///
-   const [newValue, setNewValue] =
-     useState<SingleValue<SelectOption_TP> | null>()
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
 
   ///
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-   setNewValue({
-     id: editData?.nationalAddress?.city.country_id || "",
-     value: editData?.nationalAddress?.district.country_name || "",
-     label: editData?.nationalAddress?.district.country_name || "",
-   })
+    setNewValue({
+      id: editData?.nationalAddress?.city.country_id || "",
+      value: editData?.nationalAddress?.district.country_name || "",
+      label: editData?.nationalAddress?.district.country_name || "",
+    })
   }, [])
-  
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///

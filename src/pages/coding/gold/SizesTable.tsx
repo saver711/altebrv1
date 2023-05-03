@@ -67,6 +67,7 @@ export const SizesTable = ({ sizes, setSizes }: SizesTableProps_TP) => {
             const row = info.row.original as unknown as SizePopup_TP
             setSizes((curr) => curr.filter((size) => size.id !== row.id))
           }}
+          className="mx-auto"
         />
       ),
     },

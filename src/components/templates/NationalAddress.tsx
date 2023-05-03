@@ -43,7 +43,6 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
         <Country_city_distract_markets
           cityName="city_id"
           countryName="country_id"
-
           distractName="district_id"
           editData={editData}
         />

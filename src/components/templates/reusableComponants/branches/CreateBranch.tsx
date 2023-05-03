@@ -3,14 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
-import { useState } from "react"
 import * as Yup from "yup"
 import { NationalAddress } from "../.."
 import { useMutate } from "../../../../hooks"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { Button } from "../../../atoms"
-import { PhoneInput } from "../../../molecules"
 import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
 ///
@@ -77,6 +75,7 @@ export const CreateBranch = ({
     const {
         mutate,
         error: errorQuery,
+        isLoading
     } = useMutate({
         mutationFn: mutateData,
         onSuccess: (data) => {
@@ -88,6 +87,7 @@ export const CreateBranch = ({
         },
         onError: (error) => {
             notify("error")
+            console.log(error)
         }
     })
     /////////// SIDE EFFECTS
@@ -99,140 +99,145 @@ export const CreateBranch = ({
     function PostNewValue(values: InitialValues_TP) {
 
         mutate({
-            endpointName: "branch/api/v1/branches",
-            values
+          endpointName: "branch/api/v1/branches",
+          values: {
+            ...values,
+            nationalAddress: {
+              sub_number: values.sub_number,
+              city_id: values.city_id,
+              district_id: values.district_id,
+              zip_code: values.zip_code,
+              address: values.address,
+              building_number: values.building_number,
+              street_number: values.street_number,
+            },
+          },
         })
     }
     ///
     return (
-        <div className="flex items-center justify-between gap-2">
-            <Formik
-                initialValues={initialValues}
-                onSubmit={(values) => {
-                    PostNewValue(values)
-                }
-                }
-                validationSchema={validationSchema}
-            >
-                <Form className="w-full">
-                    <div className="flex flex-col gap-y-8" >
+      <div className="flex items-center justify-between gap-2">
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            PostNewValue(values)
+          }}
+          validationSchema={validationSchema}
+        >
+          <Form className="w-full">
+            <div className="flex flex-col gap-y-8">
+              <div className="grid-cols-4 items-center grid gap-x-4">
+                {/* branch ar  start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="name_ar"
+                    label={`${t("branch in arabic")}`}
+                    name="name_ar"
+                    type="text"
+                    placeholder={`${t("branch in arabic")}`}
+                  />
+                </div>
+                {/* branch ar  end */}
 
-                        <div className="grid-cols-4 items-center grid gap-x-4">
-                            {/* branch ar  start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="name_ar"
-                                    label={`${t("branch in arabic")}`}
-                                    name="name_ar"
-                                    type="text"
-                                    placeholder={`${t("branch in arabic")}`}
-                                />
-                            </div>
-                            {/* branch ar  end */}
+                {/* branch en  start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="name_en"
+                    label={`${t("branch in english")}`}
+                    name="name_en"
+                    type="text"
+                    placeholder={`${t("branch in english")}`}
+                  />
+                </div>
+                {/* branch en  end */}
 
-                            {/* branch en  start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="name_en"
-                                    label={`${t("branch in english")}`}
-                                    name="name_en"
-                                    type="text"
-                                    placeholder={`${t("branch in english")}`}
-                                />
-                            </div>
-                            {/* branch en  end */}
+                {/* branch number  start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="number"
+                    label={`${t("branch number")}`}
+                    name="number"
+                    type="text"
+                    placeholder={`${t("branch number")}`}
+                  />
+                </div>
+                {/* branch number  end */}
 
-                            {/* branch number  start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="number"
-                                    label={`${t("branch number")}`}
-                                    name="number"
-                                    type="text"
-                                    placeholder={`${t("branch number")}`}
-                                />
-                            </div>
-                            {/* branch number  end */}
+                {/* market  start */}
+                <Country_city_distract_markets
+                  cityFieldKey="value"
+                  cityLabel={`${t("city")}`}
+                  cityName="city_branch_value"
+                  countryFieldKey="value"
+                  countryLabel={`${t("country")}`}
+                  countryName="country_branch_value"
+                  distractFieldKey="value"
+                  distractLabel={`${t("district")}`}
+                  distractName="district_branch_value"
+                  marketFieldKey="id"
+                  marketLabel={`${t("market")}`}
+                  marketName="market_id"
+                />
+                {/* market  end */}
 
-                            {/* market  start */}
-                            <Country_city_distract_markets cityFieldKey="value"
-                                cityLabel={`${t('city')}`}
-                                cityName="city_branch_value"
-                                countryFieldKey='value'
-                                countryLabel={`${t('country')}`}
-                                countryName="country_branch_value"
-                                distractFieldKey="value"
-                                distractLabel={`${t('district')}`}
-                                distractName="district_branch_value"
-                                marketFieldKey='id'
-                                marketLabel={`${t('market')}`}
-                                marketName="market_id"
-                            />
-                            {/* market  end */}
+                {/* market number start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="market_number"
+                    label={`${t("market number")}`}
+                    name="market_number"
+                    type="number"
+                    placeholder={`${t("market number")}`}
+                  />
+                </div>
+                {/* market number  end */}
 
-                            {/* market number start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="market_number"
-                                    label={`${t("market number")}`}
-                                    name="market_number"
-                                    type="number"
-                                    placeholder={`${t("market number")}`}
-                                />
-                            </div>
-                            {/* market number  end */}
+                {/* address start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="address"
+                    label={`${t("address")}`}
+                    name="address"
+                    type="text"
+                    placeholder={`${t("address")}`}
+                  />
+                </div>
+                {/* address  end */}
 
-                            {/* address start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="address"
-                                    label={`${t("address")}`}
-                                    name="address"
-                                    type="text"
-                                    placeholder={`${t("address")}`}
-                                />
-                            </div>
-                            {/* address  end */}
+                {/* phone start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="phone"
+                    label={`${t("phone")}`}
+                    name="phone"
+                    type="text"
+                    placeholder={`${t("phone")}`}
+                  />
+                </div>
+                {/* phone end */}
 
-                            {/* phone start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="phone"
-                                    label={`${t("phone")}`}
-                                    name="phone"
-                                    type="text"
-                                    placeholder={`${t("phone")}`}
-                                />
-                            </div>
-                            {/* phone end */}
+                {/* fax start */}
+                <div className="col-sapn-1">
+                  <BaseInputField
+                    id="fax"
+                    label={`${t("fax")}`}
+                    name="fax"
+                    type="text"
+                    placeholder={`${t("fax")}`}
+                  />
+                </div>
+                {/* fax end */}
+              </div>
 
-                            {/* fax start */}
-                            <div className="col-sapn-1" >
-                                <BaseInputField
-                                    id="fax"
-                                    label={`${t("fax")}`}
-                                    name="fax"
-                                    type="text"
-                                    placeholder={`${t("fax")}`}
-                                />
-                            </div>
-                            {/* fax end */}
-
-                        </div>
-
-                        <div>
-                            <NationalAddress />
-                        </div>
-
-                    </div>
-                    <Button
-                        type="submit"
-                        className="mr-auto"
-                    >
-                        {t('submit')}
-                    </Button>
-                </Form>
-            </Formik>
-        </div>
+              <div>
+                <NationalAddress />
+              </div>
+            </div>
+            <Button loading={isLoading} type="submit" className="mr-auto">
+              {t("submit")}
+            </Button>
+          </Form>
+        </Formik>
+      </div>
     )
 }
