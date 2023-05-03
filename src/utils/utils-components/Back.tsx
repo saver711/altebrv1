@@ -1,9 +1,9 @@
 /////////// IMPORTS
 ///
 
+import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
-import { t } from "i18next"
 
 ///
 /////////// Types

@@ -1,36 +1,31 @@
 /////////// IMPORTS
 ///
+import { t } from "i18next"
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
-import { Button } from "../../components/atoms"
 import { Modal } from "../../components/molecules"
-import { AddCountry } from "../../components/templates/systemEstablishment/AddCountry"
-import {
-  Card_TP,
-  FormNames_TP,
-  GlobalFormNames_TP,
-  StonesFormNames_TP,
-} from "./types-and-helpers"
-import { AddCities } from "../../components/templates/systemEstablishment/AddCities"
-import { AddDistrict } from "../../components/templates/systemEstablishment/AddDistrict"
 import { CreateNationalities } from "../../components/templates/CreateNationalities"
-import { t } from "i18next"
-import CreateColor from "../../components/templates/reusableComponants/CreateColor"
-import { CreateClassification } from "../../components/templates/reusableComponants/classifications/create/CreateClassification"
-import CreateKarat from "../../components/templates/reusableComponants/karats/create/CreateKarat"
 import CreateCategory from "../../components/templates/reusableComponants/categories/create/CreateCategory"
-import { AddMarket } from "../../components/templates/systemEstablishment/markets/AddMarket"
-import { AddStone } from "../coding/gold/AddStone"
-import CreateStoneType from "../../components/templates/reusableComponants/stones/create/CreateStoneType"
-import { AddIcon, ViewIcon } from "../../components/atoms/icons"
-import CreateStoneShape from "../../components/templates/reusableComponants/stones/create/CreateStoneShape"
-import CreateStoneQuality from "../../components/templates/reusableComponants/stones/create/CreateStoneQuality"
-import CreateStonePurity from "../../components/templates/reusableComponants/stones/create/CreateStonePurity"
+import { CreateClassification } from "../../components/templates/reusableComponants/classifications/create/CreateClassification"
+import CreateColor from "../../components/templates/reusableComponants/CreateColor"
+import CreateKarat from "../../components/templates/reusableComponants/karats/create/CreateKarat"
 import CreateStoneNature from "../../components/templates/reusableComponants/stones/create/CreateStoneNature"
-import { Back } from "../../utils/utils-components/Back"
-import { SystemCard } from "../../components/templates/systemEstablishment/SystemCard"
+import CreateStonePurity from "../../components/templates/reusableComponants/stones/create/CreateStonePurity"
+import CreateStoneQuality from "../../components/templates/reusableComponants/stones/create/CreateStoneQuality"
+import CreateStoneShape from "../../components/templates/reusableComponants/stones/create/CreateStoneShape"
+import CreateStoneType from "../../components/templates/reusableComponants/stones/create/CreateStoneType"
+import { AddCities } from "../../components/templates/systemEstablishment/AddCities"
+import { AddCountry } from "../../components/templates/systemEstablishment/AddCountry"
+import { AddDistrict } from "../../components/templates/systemEstablishment/AddDistrict"
+import { AddMarket } from "../../components/templates/systemEstablishment/markets/AddMarket"
 import { StonesCard } from "../../components/templates/systemEstablishment/StonesCard"
+import { SystemCard } from "../../components/templates/systemEstablishment/SystemCard"
+import { Back } from "../../utils/utils-components/Back"
+import {
+  Card_TP, GlobalFormNames_TP,
+  StonesFormNames_TP
+} from "./types-and-helpers"
 ///
 /////////// Types
 ///
@@ -139,35 +134,35 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
     },
     {
       id: crypto.randomUUID(),
-      title: "stonesColors",
+      title: t("stonesColors"),
       addComponent: <CreateColor />,
       name: "colors",
       viewHandler: () => navigate("stones-colors"),
     },
     {
       id: crypto.randomUUID(),
-      title: "stonesShapes",
+      title: t("stonesShapes"),
       addComponent: <CreateStoneShape />,
       name: "shapes",
       viewHandler: () => navigate("stones-shapes"),
     },
     {
       id: crypto.randomUUID(),
-      title: "stonesQualities",
+      title: t("stonesQualities"),
       addComponent: <CreateStoneQuality />,
       name: "qualities",
       viewHandler: () => navigate("stones-qualities"),
     },
     {
       id: crypto.randomUUID(),
-      title: "stonesPurities",
+      title: t("stonesPurities"),
       addComponent: <CreateStonePurity />,
       name: "purities",
       viewHandler: () => navigate("stones-purities"),
     },
     {
       id: crypto.randomUUID(),
-      title: "stonesNatures",
+      title: t("stonesNatures"),
       addComponent: <CreateStoneNature />,
       name: "natures",
       viewHandler: () => navigate("stones-natures"),

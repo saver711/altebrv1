@@ -20,12 +20,17 @@ import { StoneTable } from "./StoneTable"
 const columnHelper = createColumnHelper<any>()
 
 export const  SubTables = ({ subTableData }: any) => {
+export const  SubTables = ({ subTableData }: any) => {
 /// variables 
 const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
   const columns = useMemo<any>(
     () => [
       columnHelper.accessor('bond_date', {
+      columnHelper.accessor('bond_date', {
         header: `${t('supply date')}`
+      }),
+      columnHelper.accessor('karat_value', {
+        header: `${t('karat value')}`
       }),
       columnHelper.accessor('karat_value', {
         header: `${t('karat value')}`
@@ -34,7 +39,11 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
         header: `${t('size type')}`
       }),
       columnHelper.accessor('size_unit_id', {
+      columnHelper.accessor('size_unit_id', {
         header: `${t('size number')}`
+      }),
+      columnHelper.accessor('color', {
+        header: `${t('color')}`
       }),
       columnHelper.accessor('color', {
         header: `${t('color')}`
@@ -57,6 +66,8 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
   //@ts-ignore
   const modifiedData = selectedRow.map(item => ({ ...item, size_type:!!item?.sizes[0] ? item?.sizes[0].size_type
   : "", size_number: item?.sizes[0]?  item?.sizes[0].size_unit_id : ''}))
+  const modifiedData = selectedRow.map(item => ({ ...item, size_type:!!item?.sizes[0] ? item?.sizes[0].size_type
+  : "", size_number: item?.sizes[0]?  item?.sizes[0].size_unit_id : ''}))
   
   useEffect(() => {
     if(queryClient){
@@ -67,6 +78,7 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
         const finaleItem = {
           types: types?.find((type) => type.id == item.stones[0].stone_id)?.name,
           country: countries?.find((country) => country.id == item.country_id)?.name,
+          color: colors?.find((color) => color.id == item.color_id)?.name,
           color: colors?.find((color) => color.id == item.color_id)?.name,
         }
         return finaleItem
@@ -81,9 +93,11 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
 
   const [data, setData] = useState(modifiedData)
   console.log("🚀 ~ file: SubTables.tsx:79 ~ SubTables ~ data:", data)
+  console.log("🚀 ~ file: SubTables.tsx:79 ~ SubTables ~ data:", data)
   
   useEffect(() => {
     if(queryData){
+      setData(modifiedData.map(item => ({ ...item?.sizes[0],types:queryData[0]?.types , country:queryData[0]?.country , color:queryData[0]?.color, karat_value:item.karat_value, bond_date:item.bond_date })))
       setData(modifiedData.map(item => ({ ...item?.sizes[0],types:queryData[0]?.types , country:queryData[0]?.country , color:queryData[0]?.color, karat_value:item.karat_value, bond_date:item.bond_date })))
     }
   }, [queryData])

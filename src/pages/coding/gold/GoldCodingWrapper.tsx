@@ -58,7 +58,11 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
     if (pieces.length === 0) {
       return;
     }
+    if (pieces.length === 0) {
+      return;
+    }
 
+    const [piece, ...remainingPieces] = pieces;
     const [piece, ...remainingPieces] = pieces;
 
     try {
@@ -67,7 +71,17 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
         dataType: "formData",
         values: piece,
       });
+    try {
+      const result = await mutateAsync({
+        endpointName: "tarqimGold/api/v1/tarqim_gold",
+        dataType: "formData",
+        values: piece,
+      });
 
+      if (result) {
+        const filteredPieces = remainingPieces.filter(
+          (p) => p.front_key !== result.front_key
+        );
       if (result) {
         const filteredPieces = remainingPieces.filter(
           (p) => p.front_key !== result.front_key
@@ -84,7 +98,20 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       }
 
     }
+        setAddedPieces(filteredPieces);
+        setAddedPiecesLocal(filteredPieces);
+        setStage(1)
+      }
+    } catch (err) {
+      const error = err as CError_TP
+      if (error.response.data.message) {
+        notify("error", error.response.data.message)
+      }
 
+    }
+
+    await sendPieces(remainingPieces);
+  };
     await sendPieces(remainingPieces);
   };
   ///

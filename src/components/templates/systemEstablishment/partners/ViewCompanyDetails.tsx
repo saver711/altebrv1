@@ -11,6 +11,9 @@ import { Loading } from "../../../organisms/Loading";
 import { TextLine } from "../../employee/TextLine";
 import { EditCompany } from "../company/EditCompany";
 import { formatDate } from "../../../../utils/date";
+import { FilesPreview } from "../../../molecules/files/FilesPreview";
+import { FilesPreviewOutFormik } from "../../../molecules/files/FilesPreviewOutFormik";
+import { Back } from "../../../../utils/utils-components/Back";
 ///
 ///
 /////////// Types
@@ -114,7 +117,11 @@ export const ViewCompanyDetails = () => {
   ///
   return (
     <>
+ 
+
+
       <OuterFormLayout header={`${t("view details company")}`}>
+
         {isError && (
           <div className=" m-auto">
             <Header
@@ -124,7 +131,10 @@ export const ViewCompanyDetails = () => {
           </div>
         )}
         {companyDetailsLoading && (
+          <>
           <Loading mainTitle={t("view company Details")} />
+          </>
+       
         )}
 
         {isSuccess &&
@@ -223,7 +233,7 @@ export const ViewCompanyDetails = () => {
                 {/* الوثائق */}
 
                 <div className="flex justify-between gap-4 col-span-4 align-middle ">
-                  <h3 className=" font-bold">{t("main documents")}</h3>
+                  <h1 className="font-bold ">{t("main documents")}</h1>
                   {company.document.length > 2 && (
                     <Button action={() => setDocumentOpen(true)}>
                       {t("view all documents")}
@@ -234,69 +244,16 @@ export const ViewCompanyDetails = () => {
                 <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                   {company.document?.map((doc, i) => (
                     <>
-                      <div className="flex gap-4 flex-col col-span-4 justify-center align-middle">
-                        <h4 className="bg-[#E9EDEC] p-2 px-11 rounded-xl m-auto text-mainGreen font-bold">
-                          {" "}
-                          {t(`document`)}
-                          {` ${i + 1} `}
-                        </h4>
-                      </div>
-                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                        <div className="flex gap-4 flex-col">
-                          {doc.data?.docType?.label && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docType?.label}
-                            />
-                          )}
+                      <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed mt-3  justify-center align-middle">
+                        <div className=" flex items-center justify-center ">
+                          <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                            <p className=" text-lg font-bold text-mainGreen">
+                              {t(`document`)} {i + 1}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex gap-4 flex-col">
-                          {doc.data?.docName && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docName}
-                            />
-                          )}
-                        </div>
-                        <div className="flex gap-4 flex-col  ">
-                          {doc.data?.docNumber && (
-                            <TextLine
-                              boldText={t("document number")}
-                              lightString={doc.data?.docNumber}
-                            />
-                          )}
-                        </div>
-                        <div className="flex gap-4 flex-col  ">
-                          {doc.data?.endDate && (
-                            <TextLine
-                              boldText={t("document endDate")}
-                              lightString={doc.data?.endDate}
-                            />
-                          )}
-                        </div>
-                        <div className="flex gap-4 flex-col">
-                          {doc.data?.reminder && (
-                            <TextLine
-                              boldText={t("reminder days count")}
-                              lightString={doc.data?.reminder}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </>
-                  ))}
-                </Modal>
-                {company.document.length !== 0
-                  ? company.document?.slice(0, 2).map((doc, i) => (
-                      <>
-                        <div className="flex gap-4 flex-col col-span-4 justify-center align-middle">
-                          <h4 className="bg-[#E9EDEC] p-2 px-11 rounded-xl m-auto text-mainGreen font-bold">
-                            {" "}
-                            {t(`document`)}
-                            {` ${i + 1} `}
-                          </h4>
-                        </div>
-                        <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+
+                        <div className="bg-flatWhite rounded-lg p-4  grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                           <div className="flex gap-4 flex-col">
                             {doc.data?.docType?.label && (
                               <TextLine
@@ -325,7 +282,7 @@ export const ViewCompanyDetails = () => {
                             {doc.data?.endDate && (
                               <TextLine
                                 boldText={t("document endDate")}
-                                lightString={formatDate( new Date(doc.data?.endDate))}
+                                lightString={doc.data?.endDate}
                               />
                             )}
                           </div>
@@ -336,6 +293,67 @@ export const ViewCompanyDetails = () => {
                                 lightString={doc.data?.reminder}
                               />
                             )}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ))}
+                </Modal>
+
+                {company.document.length !== 0
+                  ? company.document?.slice(0, 2).map((doc, i) => (
+                      <>
+                        <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
+                          <div className=" flex items-center justify-center mb-8">
+                            <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                              <p className=" text-lg font-bold text-mainGreen">
+                                {t(`document`)} {i + 1}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                            <div className="flex gap-4 flex-col">
+                              {doc.data?.docType?.label && (
+                                <TextLine
+                                  boldText={t("document name")}
+                                  lightString={doc.data?.docType?.label}
+                                />
+                              )}
+                            </div>
+                            <div className="flex gap-4 flex-col">
+                              {doc.data?.docName && (
+                                <TextLine
+                                  boldText={t("document name")}
+                                  lightString={doc.data?.docName}
+                                />
+                              )}
+                            </div>
+                            <div className="flex gap-4 flex-col  ">
+                              {doc.data?.docNumber && (
+                                <TextLine
+                                  boldText={t("document number")}
+                                  lightString={doc.data?.docNumber}
+                                />
+                              )}
+                            </div>
+                            <div className="flex gap-4 flex-col  ">
+                              {doc.data?.endDate && (
+                                <TextLine
+                                  boldText={t("document endDate")}
+                                  lightString={formatDate(
+                                    new Date(doc.data?.endDate)
+                                  )}
+                                />
+                              )}
+                            </div>
+                            <div className="flex gap-4 flex-col">
+                              {doc.data?.reminder && (
+                                <TextLine
+                                  boldText={t("reminder days count")}
+                                  lightString={doc.data?.reminder}
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
                       </>
@@ -427,7 +445,9 @@ export const ViewCompanyDetails = () => {
               </>
             </InnerFormLayout>
           ))}
+
+
       </OuterFormLayout>
     </>
-  )
+  );
 };
