@@ -117,7 +117,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
               <ViewIcon
                 size={15}
                 action={() => {
-                  navigate(`/suppliers/${info.row.original.id}`)
+                  navigate(`${info.row.original.id}`)
                 }}
               />
             </div>
