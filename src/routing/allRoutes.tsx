@@ -165,25 +165,13 @@ export const AllRoutesProvider = () => {
           />
           {/* ./SYSTEM */}
           <Route
-            path="/administrative-structure"
+            path="system/administrative-structure"
             element={
               <AdministrativeStructure title={t("administrative-structure")} />
             }
           />
           <Route
-            path="/add-administrative-structure"
-            element={
-              <AddAdministrativeStructure
-                title={t("add-administrative-structure")}
-              />
-            }
-          />
-          <Route
-            path="/add-employee"
-            element={<AddEmployee title={t("add-employee")} />}
-          />
-          <Route
-            path="/employees"
+            path="system/employees"
             element={<Employees title={t("employees")} />}
           />
           <Route path="/employees/:employeeID" element={<OneEmployee />} />
