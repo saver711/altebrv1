@@ -118,7 +118,7 @@ export const ViewCategories = () => {
   } = useFetch<ViewCategories_TP[]>({
     endpoint: search === '' 
     ? `classification/api/v1/categories?page=${page}` 
-    : `classification/api/v1/categories?page=${1}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    : `classification/api/v1/categories?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: [`AllCategory`],
     pagination: true,
     onSuccess(data) {
@@ -157,7 +157,15 @@ export const ViewCategories = () => {
 
   useEffect(() => {
     refetch()
-  }, [search, page])
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
+  }, [search])
 
   ///
   return (

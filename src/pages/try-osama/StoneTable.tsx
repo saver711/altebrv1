@@ -48,7 +48,7 @@ export const StoneTable = ({ subTableData }: any) => {
         header: `${t('certificate source')}`
       }),
       columnHelper.accessor('certificate_url', {
-        header: `${t('stone certificate url')}`
+        header: `${t('certificate url')}`
       }),
     ],
     []
@@ -134,7 +134,7 @@ export const StoneTable = ({ subTableData }: any) => {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[120px] md:min-w-[80px] lg:min-w-[110px] lg:max-w-[130px] whitespace-nowrap items-start pe-2'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -152,7 +152,7 @@ export const StoneTable = ({ subTableData }: any) => {
           <tbody>
             {table.getRowModel().rows.map(row => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
+                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
@@ -169,10 +169,10 @@ export const StoneTable = ({ subTableData }: any) => {
               )
             })}
           </tbody>
-          <tfoot className='h-8' >
+          <tfoot className='h-[40px]' >
             {table.getRowModel().rows.map(row => {
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-                   <span className="text-l font-bold">{t('piece description')} </span> :{row.original.details}
+                   {row.original.details} :<span className="text-l font-bold">{t('stone description')} </span> 
                 </td>
             }).slice(0, 1)}
           </tfoot>

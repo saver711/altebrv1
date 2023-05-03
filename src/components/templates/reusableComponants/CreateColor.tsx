@@ -50,8 +50,8 @@ const CreateColor = ({
   ///
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_en: !isRTL ? value! : "",
-    name_ar: isRTL ? value! : "",
+    name_en: item ? item.name_en: !isRTL ? value! : "",
+    name_ar: item ? item.name_ar: isRTL ? value! : "",
   }
   ///
   /////////// CUSTOM HOOKS

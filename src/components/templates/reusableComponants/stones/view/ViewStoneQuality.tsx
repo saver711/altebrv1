@@ -18,6 +18,7 @@ import CreateStoneQuality from "../create/CreateStoneQuality"
 import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 
 ///
 /////////// TYPES
@@ -51,6 +52,7 @@ export const ViewStoneQuality = () => {
   const [model, setModel] = useState<boolean>(false)
   const [editData, setEditData] = useState<StonesQualities>()
   const [deleteData, setDeleteData] = useState<StonesQualities>()
+  const [page, setPage] = useState<number>(1)
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
@@ -95,14 +97,15 @@ export const ViewStoneQuality = () => {
   /////////// CUSTOM HOOKS
   ///
   const isRTL = useIsRTL()
-  const { isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesQualities[]>({
+  const { data: qualities, isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesQualities[]>({
     endpoint: search === '' 
-    ? 'stones/api/v1/qualities' 
-    : `stones/api/v1/qualities?${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    ? `stones/api/v1/qualities?page=${page}`
+    : `stones/api/v1/qualities?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_qualities'],
+    pagination: true,
     onSuccess(data) {
       console.log(data)
-      setDataSource(data)
+      setDataSource(data.data)
     }
   })
 
@@ -128,6 +131,14 @@ export const ViewStoneQuality = () => {
 
   useEffect(() => {
     refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
   }, [search])
 
   return (
@@ -148,7 +159,7 @@ export const ViewStoneQuality = () => {
               type="text"
               placeholder={`${t("search")}`}
             />
-            <Button type="submit" loading={isRefetching}>
+            <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
             </Button>
           </Form>
@@ -191,7 +202,7 @@ export const ViewStoneQuality = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {isLoading && <Loading mainTitle={t("stones colors")} />}
+        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
         {isSuccess && !!!dataSource?.length && (
           <div className="mb-5 pr-5">
             <Header
@@ -200,8 +211,37 @@ export const ViewStoneQuality = () => {
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !!dataSource.length && (
-          <Table data={dataSource} showNavigation columns={cols} />
+        {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <Table data={dataSource} columns={cols}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+              <div className="flex items-center gap-2 font-bold">
+                عدد الصفحات
+                <span className=" text-mainGreen">
+                  {qualities.current_page}
+                </span>
+                من
+                <span className=" text-mainGreen">
+                  {qualities.pages}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 ">
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev - 1)}
+                  disabled={page == 1}
+                >
+                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                </Button>
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev + 1)}
+                  disabled={page == qualities.pages}
+                >
+                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                </Button>
+              </div>
+            </div>
+          </Table>
         )}
       </div>
     </>

@@ -172,7 +172,7 @@ export const GoldItemCodingForm = ({
         !!!activeBand.category.has_size && (
           <div>
             <p>الصنف</p>
-            <p className="shadows py-1 rounded-md bg-white h-9 mt-1 px-3 cursor-default">
+            <p className="shadows py-1 rounded-md bg-gray-300 h-9 mt-1 px-3 cursor-default">
               {activeBand.category.name}
             </p>
           </div>
@@ -261,6 +261,9 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
+          className={`${
+            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+          }`}
         />
       </div>
 
@@ -289,7 +292,10 @@ export const GoldItemCodingForm = ({
       />
       {/* يحتوي علي حجر ام لا */}
       <div className=" col-span-1 flex items-center justify-center">
-        <CheckBoxField name="has_stones" label={`${!!!values.has_stones ? 'لا' : ''} يحتوي علي أحجار`} />
+        <CheckBoxField
+          name="has_stones"
+          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
+        />
         {/* <RadioGroup name="has_stones">
           <RadioGroup.RadioButton
             value={true}
@@ -369,7 +375,11 @@ export const GoldItemCodingForm = ({
                     theSizeName="size_unit_id"
                   />
                 </div>
-                <Button type="button" action={submitForm}>
+                <Button
+                  type="button"
+                  action={submitForm}
+                  className="mt-8 mr-auto flex"
+                >
                   حفظ
                 </Button>
               </>
@@ -422,21 +432,26 @@ export const GoldItemCodingForm = ({
           }}
         >
           {({ submitForm, values }) => (
-            <div>
-              {awzanItems?.map((item, i) => (
-                <BaseInputField
-                  key={item.id}
-                  label={item.name}
-                  id={`${item.name}_${i}`}
-                  name={item.id.toString()}
-                  type="number"
-                />
-              ))}
-
-              <Button type="button" action={submitForm}>
+            <>
+              <div className="grid grid-cols-4 gap-5 py-20">
+                {awzanItems?.map((item, i) => (
+                  <BaseInputField
+                    key={item.id}
+                    label={item.name}
+                    id={`${item.name}_${i}`}
+                    name={item.id.toString()}
+                    type="number"
+                  />
+                ))}
+              </div>
+              <Button
+                type="button"
+                action={submitForm}
+                className="mt-8 mr-auto flex"
+              >
                 تأكيد
               </Button>
-            </div>
+            </>
           )}
         </Formik>
       </Modal>
