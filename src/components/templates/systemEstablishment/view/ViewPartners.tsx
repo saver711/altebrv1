@@ -83,7 +83,7 @@ export const ViewPartners = () => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "index",
-        header: () => <span>{t("Sequence ")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
         header: () => <span>{t("partners")} </span>,

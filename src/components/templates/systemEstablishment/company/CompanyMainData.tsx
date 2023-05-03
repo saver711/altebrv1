@@ -12,13 +12,16 @@ import { Country_city_distract_markets } from "../../reusableComponants/Country_
 ///
 /////////// Types
 ///
+type CompanyMainData_TP ={
+  valuesData:any
+}
 
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
-export const CompanyMainData = () => {
+export const CompanyMainData = ({valuesData}:CompanyMainData_TP) => {
   /////////// VARIABLES
   ///
 
@@ -96,11 +99,10 @@ export const CompanyMainData = () => {
           required
         />
         {/* رقم الجوال */}
-        <PhoneInput
-          label={`${t("mobile number")}`}
-          name="phone"
-          placeholder={`${t("mobile number")}`}
-        />
+        {
+        !!!valuesData &&
+          <PhoneInput label={`${t('mobile number')}`} name="phone" placeholder={`${t('mobile number')}`} />
+        }
 
         {/* الفاكس */}
 

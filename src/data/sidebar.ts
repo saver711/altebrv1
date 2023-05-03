@@ -134,12 +134,7 @@ export const sideBarItems: MenuItem_TP[] = [
           },
         ],
       },
-      {
-        id: crypto.randomUUID(),
-        label: t("employees"),
-        link: "/employees",
-        icon: GrGroup,
-      }, {
+       {
         id: crypto.randomUUID(),
         label: "حجز الذهب ",
         link: "accessories",
@@ -158,6 +153,12 @@ export const sideBarItems: MenuItem_TP[] = [
     label: t("administrative-structure"),
     link: "/administrative-structure",
     icon: MdManageAccounts,
+  },
+  {
+    id: crypto.randomUUID(),
+    label: t("employees"),
+    link: "/employees",
+    icon: GrGroup,
   },
   {
     id: crypto.randomUUID(),

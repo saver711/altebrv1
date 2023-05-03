@@ -77,7 +77,7 @@ export const EditCompany = ({
     files: [],
     //national Address
     building_number: valuesData.nationalAddress?.building_number || "",
-    // address: "" || valuesData.nationalAddress?.address,
+    address:  valuesData.nationalAddress?.address || "",
     street_number:  valuesData.nationalAddress?.street_number  || "",
     sub_number:  valuesData.nationalAddress?.sub_number || "",
     zip_code:  valuesData.nationalAddress?.zip_code || "",
@@ -245,7 +245,7 @@ export const EditCompany = ({
                 </Button>
               }
             >
-              <CompanyMainData/>
+              <CompanyMainData valuesData={valuesData}/>
               <Documents
                 docsFormValues={docsFormValues}
                 setDocsFormValues={setDocsFormValues}
