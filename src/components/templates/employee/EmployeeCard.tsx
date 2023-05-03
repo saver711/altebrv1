@@ -89,7 +89,7 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
           className="flex items-center mx-1"
         >
           <ViewIcon />
-          عرض
+          {/* عرض */}
         </Button>
         <Button bordered className="flex items-center mx-1" action={()=>{
             setEditEmployeeData({
@@ -98,11 +98,11 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
            setOpen(true)
           }} >
           <EditIcon/>
-          تعديل
+          {/* تعديل */}
         </Button>
         <Button variant="danger"  className="flex items-center mx-1" action={()=>deleteHandler(id)} loading={deleteLoading}>
           <DeleteIcon/>
-          حذف
+          {/* حذف */}
         </Button>
       </div>
       <Modal 

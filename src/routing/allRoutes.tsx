@@ -80,6 +80,8 @@ export const AllRoutesProvider = () => {
             path="/system/partners"
             element={<AllPartner title="الشركاء" />}
           />
+           <Route path="/system/partners/:partnerID" element={<OnePartner />} />
+
           <Route path="/system/accounts" element={<AccountingTree />} />
           <Route
             path="/system/suppliers"
@@ -195,7 +197,6 @@ export const AllRoutesProvider = () => {
             path="/all-partner"
             element={<AllPartner title={t("all-partner")} />}
           />
-          <Route path="/all-partner/:partnerID" element={<OnePartner />} />
 
           <Route path="/abdo" element={<TestAbdo title={t("Test")} />} />
           <Route
