@@ -1,10 +1,10 @@
 /////////// IMPORTS
 import { t } from "i18next"
 import {
-    BaseInputField,
-    DateInputField,
-    InnerFormLayout,
-    PhoneInput
+  BaseInputField,
+  DateInputField,
+  InnerFormLayout,
+  PhoneInput
 } from "../../../molecules"
 import { DropFile } from "../../../molecules/files/DropFile"
 import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
@@ -75,6 +75,7 @@ export const CompanyMainData = ({valuesData}:CompanyMainData_TP) => {
           cityLabel={`${t("city")}`}
           distractName="district_id"
           distractLabel={`${t("district")}`}
+          editData={valuesData}
         />
 
         {/* {"عنوان الشركة"} */}

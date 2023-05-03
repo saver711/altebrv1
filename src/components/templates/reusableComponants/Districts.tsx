@@ -225,7 +225,7 @@ export const Districts = ({
      setNewValue({
        id: editData?.nationalAddress.district.id,
        value: editData?.nationalAddress.district.name,
-       label: editData?.nationalAddress.district.name,
+       label: editData?.nationalAddress.district.name || "اختر الحي",
      })
    }, [])
   // console.log("distractNameeditData", editData)

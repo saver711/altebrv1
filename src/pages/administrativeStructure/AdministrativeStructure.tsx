@@ -6,26 +6,21 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { OuterFormLayout } from "../../components/molecules/OuterFormLayout"
 ///
-import { useEffect, useState } from "react"
 import {
   ColumnDef,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
+  createColumnHelper
 } from "@tanstack/react-table"
-import { Modal } from "../../components/molecules/Modal"
-import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
-import { EditIcon, ViewIcon } from "../../components/atoms/icons"
-import { Table } from "../../components/templates/reusableComponants/tantable/Table"
-import { useMemo } from "react"
-import { Loading } from "../../components/organisms/Loading"
+import { useMemo, useState } from "react"
 import { Header } from "../../components/atoms/Header"
-import { AddAdministrativeStructure } from "./AddAdministrativeStructure"
-import { AddButton } from "../../components/molecules/AddButton"
+import { EditIcon } from "../../components/atoms/icons"
+import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
+import { Modal } from "../../components/molecules/Modal"
+import { Loading } from "../../components/organisms/Loading"
+import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import { useFetch, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
+import { AddAdministrativeStructure } from "./AddAdministrativeStructure"
 import { PermissionGroup_TP } from "./types-and-schemas"
 /////////// Types
 ///
@@ -87,12 +82,12 @@ export const AdministrativeStructure = ({
   const cols = useMemo<ColumnDef<PermissionGroup_TP>[]>(
     () => [
       {
-        header: 'Name',
+        header: t('Name'),
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: t('Edit'),
         cell: (info) =>
           <div className="flex items-center justify-center gap-4">
             <EditIcon
