@@ -66,7 +66,7 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
           <AddIcon /> {t("add employee")}
         </Button>
       </div>
-      <div className="grid grid-cols-2" >
+      <div className="grid grid-cols-3" >
         {isSuccess &&
           employees.length > 0 &&
           employees.map(({ id, name, img, ...rest }) => (

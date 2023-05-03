@@ -187,7 +187,7 @@ export const SelectComp = ({
             <Select {...selectProps} />
           )}
         </div>
-        <FormikError name={name as string} />
+        <FormikError name={name as string} className="whitespace-nowrap" />
       </div>
     </>
   )

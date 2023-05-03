@@ -127,9 +127,9 @@ export const ViewCategories = () => {
     select: (data) => {
       return {
         ...data,
-        data: data.data.map((category) => ({
+        data: data.data.map((category, i) => ({
           ...category,
-          index: count++,
+          index: i + 1,
         })),
       }
     }
