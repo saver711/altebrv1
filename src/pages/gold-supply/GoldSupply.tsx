@@ -88,7 +88,7 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
       </Helmet>
       {stage !== 3 && (
         <div className="mb-5 pr-5">
-          <h1 className="text-2xl font-bold">إنشاء سند ذهب</h1>
+          {/* <h1 className="text-2xl font-bold">إنشاء سند ذهب</h1> */}
         </div>
       )}
 

@@ -21,6 +21,7 @@ import { Modal } from "../../../molecules"
 import { ColumnDef } from "@tanstack/react-table"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { CreateClassification } from "../../reusableComponants/classifications/create/CreateClassification"
+import { Back } from "../../../../utils/utils-components/Back"
 ///
 export type ViewClassifications_TP = {
   id: string
@@ -187,6 +188,11 @@ export const ViewClassifications = () => {
         <EmptyDataView>
           <CreateClassification />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

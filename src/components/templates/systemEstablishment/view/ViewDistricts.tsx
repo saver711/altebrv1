@@ -22,6 +22,7 @@ import { notify } from "../../../../utils/toast"
 import { Modal } from "../../../molecules"
 import { AddDistrict } from "../AddDistrict"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
+import { Back } from "../../../../utils/utils-components/Back"
 
 ///
 export type ViewDistricts_TP = {
@@ -191,6 +192,11 @@ export const ViewDistricts = () => {
         <EmptyDataView>
           <AddDistrict />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

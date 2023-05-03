@@ -22,6 +22,7 @@ import { Table } from "../../reusableComponants/tantable/Table"
 import { Modal } from "../../../molecules"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import StonesColors from "../hashim/StonesColors"
+import { Back } from "../../../../utils/utils-components/Back"
 
 ///
 export type ViewColors_TP = {
@@ -150,6 +151,11 @@ export const ViewColors = () => {
         <EmptyDataView>
           <StonesColors />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

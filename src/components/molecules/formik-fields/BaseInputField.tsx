@@ -60,7 +60,7 @@ export const BaseInputField = ({
           }}
         />
       </div>
-      <FormikError name={props.name} />
+      <FormikError name={props.name} className="whitespace-nowrap" />
     </div>
   )
 }

@@ -257,6 +257,9 @@
   "name colors in arabic":" لون الحجر بالعربي",
   "name colors in english" :"لون الحجر بالانجليزي",
   "market in arabic":"اسم السوق بالعربي",
-  "market in english":"اسم السوق بالانجليزي"
+  "market in english":"اسم السوق بالانجليزي",
+  "country_name":"اسم الدولة",
+  "city_name":"اسم المدينة",
+  "Back":"رجوع"
 
 }
