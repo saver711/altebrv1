@@ -4,16 +4,16 @@
 /////////// Types
 ///
 import { useFormikContext } from "formik"
-import { BaseInputField, InnerFormLayout } from "../../molecules"
-import { PermissionGroup } from "./PermissionGroup"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
+import { BaseInputField, InnerFormLayout } from "../../molecules"
+import { PermissionGroup } from "./PermissionGroup"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 type PermissionProps_TP = {
   permissions: PermissionGroup_TP[]
-  editData: PermissionGroup_TP | undefined
+  editData?: PermissionGroup_TP | undefined
 }
 ///
 export const PermissionForm = ({ permissions , editData }: PermissionProps_TP) => {
