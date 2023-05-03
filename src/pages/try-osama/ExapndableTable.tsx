@@ -132,7 +132,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[140px] md:min-w-[80px] lg:min-w-[120px] whitespace-nowrap'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[140px] md:min-w-[80px] lg:min-w-[190px] whitespace-nowrap'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
