@@ -4,26 +4,26 @@
 ///
 /////////// Types
 
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { Button } from "../../../atoms"
-import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
-import { AddButton } from "../../../molecules/AddButton"
-import { Form, Formik } from "formik"
-import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import * as Yup from 'yup'
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
 import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
+import { AddButton } from "../../../molecules/AddButton"
+import { Loading } from "../../../organisms/Loading"
+import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
+import { Table } from "../../reusableComponants/tantable/Table"
 
 ///
 type ViewCategories_TP = {
