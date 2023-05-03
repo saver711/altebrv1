@@ -57,7 +57,7 @@ export const EditCompany = ({
     // city_value:valuesData.city.name,
     district_id: valuesData.district.id || "",
     // district_value:valuesData.country.name,
-    address: valuesData.address || "",
+    // address: valuesData.address || "",
     establishment_date: new Date() || valuesData.establishmentDate,
     phone: valuesData.phone || "",
     email: valuesData.email || "",

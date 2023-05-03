@@ -52,7 +52,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "index",
-        header: () => <span>{t(" Sequence")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
         header: () => <span>{t("classification")} </span>,
@@ -128,7 +128,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
           <AddIcon /> {t("Add bond")}
         </Button>
       </div>
-      {isLoading && <Loading mainTitle={t("View Bonds")} />}
+      {isLoading && <Loading mainTitle={t("Bonds")} />}
       <div className="" >
         {isSuccess &&
           data.length > 0 &&

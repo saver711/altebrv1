@@ -20,7 +20,7 @@ export const BondTotals = ({
 }: BondTotalsProps_TP) => {
   return (
     <div className="flex flex-col gap-4 py-4">
-      <h2 className="text-xl font-bold">{title ? title : "إجمالي السند"}</h2>
+      <h2 className="text-xl font-bold">{title ? title : t('document total')}</h2>
       <ul
         className={
           balance
