@@ -55,7 +55,7 @@ export const SelectNationality = ({ name, editData }: { name: string , editData?
       setNewValue({
         id: editData?.nationality.id,
         value: editData?.nationality.name,
-        label: editData?.nationality.name,
+        label: editData?.nationality.name || "اختر جنسية",
       })
     }, [])
 

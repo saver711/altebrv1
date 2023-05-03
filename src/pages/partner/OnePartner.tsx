@@ -309,7 +309,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                           <div className="flex gap-4 flex-col  ">
                             {doc.data?.endDate && (
                               <TextLine
-                                boldText={t("document endDate")}
+                                boldText={t("document end date")}
                                 lightString={formatDate(
                                   new Date(doc.data?.endDate)
                                 )}

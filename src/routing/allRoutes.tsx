@@ -9,9 +9,6 @@ import { ViewStoneShape } from "../components/templates/reusableComponants/stone
 import { ViewStoneType } from "../components/templates/reusableComponants/stones/view/ViewStoneType"
 import AccountingTree from "../components/templates/systemEstablishment/AccountingTree/view/AccountingTree"
 import { ViewCompanyDetails } from "../components/templates/systemEstablishment/partners/ViewCompanyDetails"
-import AddSupplier from "../components/templates/systemEstablishment/supplier/AddSupplier"
-import { SupplierDetails } from "../components/templates/systemEstablishment/supplier/SupplierDetails"
-import { TestSystem } from "../components/templates/systemEstablishment/TestSystem"
 import { ViewCategories } from "../components/templates/systemEstablishment/view/ViewCategories"
 import { ViewCities } from "../components/templates/systemEstablishment/view/ViewCities"
 import { ViewClassifications } from "../components/templates/systemEstablishment/view/ViewClassifications"
@@ -33,7 +30,6 @@ import { OneEmployee } from "../pages/employees/OneEmployee"
 import { Bond } from "../pages/gold-supply/Bond"
 import { Bonds } from "../pages/gold-supply/Bonds"
 import { GoldSupply } from "../pages/gold-supply/GoldSupply"
-import Hashim from "../pages/Hashim"
 import { Home } from "../pages/Home"
 import { Login } from "../pages/Login"
 import { Operation } from "../pages/operation/Operation"
@@ -41,10 +37,9 @@ import { AllPartner } from "../pages/partner/AllPartner"
 import { OnePartner } from "../pages/partner/OnePartner"
 import { Settings } from "../pages/Settings"
 import { AllSuppliers } from "../pages/suppliers/AllSuppliers"
+import { OneSupplier } from "../pages/suppliers/OneSupplier"
 import { GlobalAndStones } from "../pages/system/GlobalAndStones"
 import { System } from "../pages/system/System"
-import { TestAbdo } from "../pages/TestAbdo"
-import { Tests } from "../pages/Tests"
 import { ErrorPage } from "./ErrorPage"
 import { Root } from "./Root"
 export const AllRoutesProvider = () => {
@@ -87,6 +82,10 @@ export const AllRoutesProvider = () => {
           <Route
             path="/system/suppliers"
             element={<AllSuppliers title="كل الموردين" />}
+          />
+          <Route
+            path="/system/suppliers/:supplierID"
+            element={<OneSupplier title="المورد" />}
           />
           <Route
             path="/system/operations"
