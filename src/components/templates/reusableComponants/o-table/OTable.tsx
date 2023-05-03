@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
   category_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
   weight: Yup.number().positive('برجاء إدخال وزن صحيح').required("برجاء ملئ هذا الحقل"),
   karat_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-  stock: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+  stock: Yup.number().positive('برجاء إدخال سهم صحيح').max(1, 'اعلي قيمة للسهم هو 1').required("برجاء ملئ هذا الحقل"),
   wage: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
 })
 

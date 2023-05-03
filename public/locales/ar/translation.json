@@ -128,8 +128,8 @@
   "global": "خارجي",
   "is mediator": "وسيط",
   "dealing type": "نوع التعامل",
-  "gold tax": "ضريبة علي الذهب",
-  "wages tax": "ضريبة علي الأجور",
+  "gold tax": "ضريبة الذهب",
+  "wages tax": "ضريبة الأجور",
   "company name": "اسم الشركة",
   "attach the company logo": "ارفاق شعار الشركة",
   "name": "الاسم",
@@ -260,6 +260,17 @@
   "market in english":"اسم السوق بالانجليزي",
   "country_name":"اسم الدولة",
   "city_name":"اسم المدينة",
+  "karat":"العيار",
+  "total tax": "إجمالي الضريبة",
+  "description": "البيان",
+  "gram (debtor)": "جرام (مدين)",
+  "ryal (debtor)": "ريال (مدين)",
+  "gram (creditor)": "جرام (دائن)",
+  "ryal (creditor)": "ريال (دائن)",
+  "totals": "الإجماليات",
+  "page": "الصحفة",
+  "from": "من",
+  "checking accounts operations": "تدقيق عمليات الحسابات",
+  "accounting tree": "الشجرة المحاسبية"
   "Back":"رجوع"
-
 }

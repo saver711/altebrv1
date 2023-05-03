@@ -104,7 +104,7 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
 
               <li className="flex gap-x-2 items-center">
                 <strong>{t("supply type")}:</strong>
-                <p>{twred_type}</p>
+                <p>{`${t(twred_type)}`}</p>
               </li>
 
               <li className="flex gap-x-2 items-center">

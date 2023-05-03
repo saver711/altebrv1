@@ -1,4 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table"
+import { t } from "i18next"
 import { useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
@@ -56,47 +57,47 @@ export const Bond = ({ title }: BondProps_TP) => {
   const cols1 = useMemo<ColumnDef<TableRow_TP>[]>(
     () => [
       {
-        header: 'الصنف',
+        header: `${t('category')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'itemType',
       },
       {
-        header: 'الوزن',
+        header: `${t('weight')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'goldWeight',
       },
       {
-        header: 'العيار',
+        header: `${t('karat')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'goldKarat',
       },
       {
-        header: 'الأسهم',
+        header: `${t('stocks')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'itemStock',
       },
       {
-        header: 'الأجرة للجرام',
+        header: `${t('wage')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'wage',
       },
       {
-        header: 'إجمالي الأجرة',
+        header: `${t('total wages')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'totalWage',
       },
       {
-        header: 'ضريبة الأجور',
+        header: `${t('wage tax')}`,
         cell: (info) => parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3)),
         accessorKey: 'payoffTaxes',
       },
       {
-        header: 'ضريبة الذهب',
+        header: `${t('gold tax')}`,
         cell: (info) => info.row.original.goldWeight * 15/100 * 20,
         accessorKey: 'itemTaxes',
       },
       {
-        header: 'إجمالي الضريبة',
+        header: `${t('total tax')}`,
         cell: (info) => (info.row.original.goldWeight * 15/100 * 20) + parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3)),
         accessorKey: 'itemTaxes',
       },
@@ -107,27 +108,27 @@ export const Bond = ({ title }: BondProps_TP) => {
   const cols2 = useMemo<ColumnDef<TableRow_TP>[]>(
     () => [
       {
-        header: 'البيان',
+        header: `${t('description')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'bian',
       },
       {
-        header: 'جرام (مدين)',
+        header: `${t('gram (debtor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'debtor_gram',
       },
       {
-        header: 'ريال (مدين)',
+        header: `${t('ryal (debtor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'debtor_SRA',
       },      
       {
-        header: 'جرام (دائن)',
+        header: `${t('gram (creditor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'creditor_gram',
       },
       {
-        header: 'ريال (دائن)',
+        header: `${t('ryal (creditor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'creditor_SRA',
       }
@@ -213,7 +214,7 @@ export const Bond = ({ title }: BondProps_TP) => {
   let restrictionsTotals;
   if (restrictions && !!restrictions.length) {
     restrictionsTotals = restrictions?.reduce((prev, curr) => ({
-      bian: "الإجماليات",
+      bian: `${t('totals')}`,
       debtor_gram: prev.debtor_gram + curr.debtor_gram,
       debtor_SRA: prev.debtor_SRA + curr.debtor_SRA,
       creditor_gram: prev.creditor_gram + curr.creditor_gram,
@@ -229,7 +230,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         <title>{title}</title>
       </Helmet>
       {isError && <h2 className="text-mainRed">{failureReason?.response.data.message}</h2>}
-      {(isLoading || isFetching) && <Loading mainTitle="تحميل السند" />}
+      {(isLoading || isFetching) && <Loading mainTitle={t('document total')} />}
       {!(isLoading || isFetching) && isSuccess && !!contract?.boxes?.length && (
         <BondTotals boxesData={contract?.boxes} />
       )}

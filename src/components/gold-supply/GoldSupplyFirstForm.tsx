@@ -114,7 +114,6 @@ export const GoldSupplyFirstForm = ({
               {/* <HandleBackErrors errors={}> */}
 
               <OuterFormLayout
-                header={`${t("create gold document")}`}
                 submitComponent={
                   <Button type="submit" className="ms-auto mt-8">
                     {t("submit")}
@@ -125,7 +124,7 @@ export const GoldSupplyFirstForm = ({
                   title={`${t("main data")}`}
                   leftComponent={
                     <p className="font-bold">
-                      `رقم السند/
+                      {`${t('bond number')}`}/
                       <span className=" text-mainOrange">
                         {nextBondNumber ? nextBondNumber : "تحميل رقم ..."}
                       </span>
@@ -302,11 +301,3 @@ export const GoldSupplyFirstForm = ({
       </>
     )
 }
-
-
-
-
-
-
-///////////////////////////////////////////////////////
-
