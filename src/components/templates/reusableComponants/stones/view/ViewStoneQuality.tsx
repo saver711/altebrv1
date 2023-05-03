@@ -19,6 +19,7 @@ import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { Back } from "../../../../../utils/utils-components/Back"
 
 ///
 /////////// TYPES
@@ -145,11 +146,13 @@ export const ViewStoneQuality = () => {
     <>
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('stones qualities')}`}
+          {`${t("system establishment")} / ${t("stones qualities")}`}
         </h3>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {setSearch(values.search)}}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
           validationSchema={validationSchema}
         >
           <Form className="flex align-middle gap-2">
@@ -160,7 +163,9 @@ export const ViewStoneQuality = () => {
               placeholder={`${t("search")}`}
             />
             <Button type="submit" disabled={isRefetching}>
-              <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
             </Button>
           </Form>
         </Formik>
@@ -171,8 +176,11 @@ export const ViewStoneQuality = () => {
               setModel(true)
               setOpen(true)
             }}
-            addLabel={`${t('add')}`}
-            />
+            addLabel={`${t("add")}`}
+          />
+          <div className="ms-2">
+            <Back />
+          </div>
         </div>
       </div>
       {error && (
@@ -183,26 +191,34 @@ export const ViewStoneQuality = () => {
           />
         </div>
       )}
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-      >
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
-          <CreateStoneQuality value={editData?.name} item={editData} setDataSource={setDataSource} setShow={setOpen} />
-          ) : (
+          <CreateStoneQuality
+            value={editData?.name}
+            item={editData}
+            setDataSource={setDataSource}
+            setShow={setOpen}
+          />
+        ) : (
           <div className="flex flex-col gap-8 justify-center items-center">
             <Header header={` حذف : ${deleteData?.name}`} />
             <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} loading={isDeleting} variant="danger">
-                {`${t('confirm')}`}
+              <Button
+                action={handleSubmit}
+                loading={isDeleting}
+                variant="danger"
+              >
+                {`${t("confirm")}`}
               </Button>
-              <Button action={() => setOpen(false)}>{`${t('close')}`}</Button>
+              <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
             </div>
           </div>
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
+        {(isLoading || isRefetching) && (
+          <Loading mainTitle={t("stones colors")} />
+        )}
         {isSuccess && !!!dataSource?.length && (
           <div className="mb-5 pr-5">
             <Header
@@ -211,38 +227,40 @@ export const ViewStoneQuality = () => {
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <Table data={dataSource} columns={cols}>
-            <div className="mt-3 flex items-center justify-end gap-5 p-2">
-              <div className="flex items-center gap-2 font-bold">
-                عدد الصفحات
-                <span className=" text-mainGreen">
-                  {qualities.current_page}
-                </span>
-                من
-                <span className=" text-mainGreen">
-                  {qualities.pages}
-                </span>
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <Table data={dataSource} columns={cols}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  عدد الصفحات
+                  <span className=" text-mainGreen">
+                    {qualities.current_page}
+                  </span>
+                  من
+                  <span className=" text-mainGreen">{qualities.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == qualities.pages}
+                  >
+                    <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center gap-2 ">
-                <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
-                  action={() => setPage(prev => prev - 1)}
-                  disabled={page == 1}
-                >
-                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
-                </Button>
-                <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
-                  action={() => setPage(prev => prev + 1)}
-                  disabled={page == qualities.pages}
-                >
-                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
-                </Button>
-              </div>
-            </div>
-          </Table>
-        )}
+            </Table>
+          )}
       </div>
     </>
   )

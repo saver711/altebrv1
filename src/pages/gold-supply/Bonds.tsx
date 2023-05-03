@@ -14,14 +14,14 @@ type BondsProps_TP = {
 }
 
 export type Bond_TP = {
-  id: number,
-  classification: string,
-  twred_type: string,
-  supplier_name: string,
-  bond_date: string,
-  total_gold_by_24: number,
-  total_money: number,
-  item_count: number,
+  id: number
+  classification: string
+  twred_type: string
+  supplier_name: string
+  bond_date: string
+  total_gold_by_24: number
+  total_money: number
+  item_count: number
   bond_number: number
 }
 
@@ -29,13 +29,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
   const navigate = useNavigate()
 
   let count = 1
-  const {
-    data,
-    isError,
-    isSuccess,
-    error,
-    isLoading,
-  } = useFetch<Bond_TP[]>({
+  const { data, isError, isSuccess, error, isLoading } = useFetch<Bond_TP[]>({
     endpoint: "/twredGold/api/v1/bond",
     queryKey: ["bonds"],
     select: (data) =>
@@ -50,15 +44,15 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "index",
-        header: () => <span>{t("Sequence")} </span>,
+        header: () => <span>{t("Sequence")}</span>,
       },
       {
-        header: () => <span>{t("classification")} </span>,
+        header: () => <span>{t("classifications")} </span>,
         accessorKey: "classification",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("twred type")} </span>,
+        header: () => <span>{t("supply type")} </span>,
         accessorKey: "twred_type",
         cell: (info) => info.getValue(),
       },
@@ -68,7 +62,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("bond date")} </span>,
+        header: () => <span>{t("document date")} </span>,
         accessorKey: "bond_date",
         cell: (info) => info.getValue(),
       },
@@ -93,7 +87,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("view")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
@@ -118,12 +112,12 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("Bonds")}</h2>
+        <h2 className="font-bold text-2xl">{t("bonds")}</h2>
         <Button
           action={() => navigate(`/bonds/gold`)}
           className="flex items-center gap-2"
         >
-          <AddIcon /> {t("Add bond")}
+          <AddIcon /> {t("add bond")}
         </Button>
       </div>
       {isLoading && <Loading mainTitle={t("Bonds")} />}

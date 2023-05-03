@@ -22,6 +22,7 @@ import { Table } from "../../reusableComponants/tantable/Table"
 import { Modal } from "../../../molecules"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import CreateKarat from "../../reusableComponants/karats/create/CreateKarat"
+import { Back } from "../../../../utils/utils-components/Back"
 ///
 export type ViewKarats_TP = {
   id: string
@@ -189,6 +190,11 @@ export const ViewKarats = () => {
         <EmptyDataView>
           <CreateKarat />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

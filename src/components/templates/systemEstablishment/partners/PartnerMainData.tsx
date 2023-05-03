@@ -10,7 +10,7 @@ import {
   BaseInputField,
   DateInputField,
   InnerFormLayout,
-  PhoneInput
+  PhoneInput,
 } from "../../../molecules"
 import { DropFile } from "../../../molecules/files/DropFile"
 import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
@@ -20,7 +20,7 @@ import { SelectNationality } from "../SelectNationality"
 ///
 
 ///
-export const PartnerMainData = ({ editData }: { editData?:any}) => {
+export const PartnerMainData = ({ editData }: { editData?: any }) => {
   /////////// VARIABLES
   ///
 
@@ -123,6 +123,7 @@ export const PartnerMainData = ({ editData }: { editData?:any}) => {
           <DropFile name="national_image" />
         </div>
       </InnerFormLayout>
+          
     </>
   )
 }

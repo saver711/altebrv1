@@ -16,6 +16,7 @@ import { Table } from "../../components/templates/reusableComponants/tantable/Ta
 import { notify } from "../../utils/toast"
 import { mutateData } from "../../utils/mutateData"
 import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
+import { Back } from "../../utils/utils-components/Back"
 
 ///
 ///
@@ -222,6 +223,9 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
               {t("Back")}
             </Button>
           </div> */}
+          <div className="flex justify-end mb-2">
+            <Back/>
+          </div>
 
           {isSuccess && !!dataSource && !!dataSource.length && (
             <Table data={dataSource} showNavigation columns={columns} />

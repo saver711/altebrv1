@@ -62,8 +62,8 @@ export const TestAbdo = ({ title }: TestAbdo_TP) => {
       {/* <AddCountry/> */}
       {/* <AddCities/> */}
       {/* <AddDistrict/> */}
-      {/* <AddPartners title="add partner"  /> */}
-      <ViewCompanyDetails/>
+      <AddPartners title="add partner"  />
+      {/* <ViewCompanyDetails/> */}
       {/* <OneSupplier/> */}
       {/* <AllSuppliers title=""/> */}
       {/* <AllPartner title="partner"/> */}
