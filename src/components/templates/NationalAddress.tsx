@@ -11,7 +11,7 @@ import { supplier } from "../../pages/suppliers/AllSuppliers"
 /////////// Types
 ///
 type NationalAddress_TP = {
-  editData?: supplier
+  editData?: any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -43,20 +43,19 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
         <Country_city_distract_markets
           cityName="city_id"
           countryName="country_id"
-
           distractName="district_id"
           editData={editData}
         />
-        {/* min address start */}
+        {/* short address start */}
         <BaseInputField
-          id="minAddress"
+          id="address"
           label={`${t("short address")}`}
-          name="min_Address"
+          name="address"
           type="text"
           placeholder={`${t("short address")}`}
           required
         />
-        {/* min address end */}
+        {/* short address end */}
 
         {/* street number start */}
         <BaseInputField
@@ -91,7 +90,7 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
         />
         {/* sub number end */}
 
-        {/* postal number start */}
+        {/* zip number start */}
         <BaseInputField
           id="zip_code"
           label={`${t("zip code")}`}
@@ -100,7 +99,7 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
           placeholder={`${t("zip code")}`}
           required
         />
-        {/* postal number end */}
+        {/* zip number end */}
       </InnerFormLayout>
     </>
   )

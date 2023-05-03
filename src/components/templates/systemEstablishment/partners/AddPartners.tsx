@@ -182,7 +182,10 @@ export const AddPartners = ({
           }
           console.log("🚀 ~ file: AddPartners.tsx:262 ~ values:", values)
           if (!!editData) {
-            console.log("🚀 ~ file: AddPartners.tsx:262 ~ editedValues:", editedValues)
+            console.log(
+              "🚀 ~ file: AddPartners.tsx:262 ~ editedValues:",
+              editedValues
+            )
 
             let { document, ...editedValuesWithoutDocument } = editedValues
             if (docsFormValues.length > editData.document.length)
@@ -229,16 +232,17 @@ export const AddPartners = ({
                 </Button>
               }
             >
-              <PartnerMainData />
+              <PartnerMainData editData={editData} />
               <Documents
                 setDocsFormValues={setDocsFormValues}
                 docsFormValues={docsFormValues}
               />
-              <NationalAddress />
+              <NationalAddress editData={editData} />
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>
-    </>
-  )
+          
+    </>
+  )
 }

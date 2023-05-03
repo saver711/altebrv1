@@ -16,14 +16,14 @@ import { notify } from "../../../utils/toast"
 import { HandleBackErrors } from "../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../atoms"
 import { OuterFormLayout } from "../../molecules"
-import { Documents, allDocs_TP } from "../reusableComponants/documents/Documents"
+import { allDocs_TP, Documents } from "../reusableComponants/documents/Documents"
 import { Email_TP, InitialValues_TP } from "./validation-and-types"
 ///
 /////////// Types
 ///
 type AddEmployeeProps_TP = {
   title: string
-  editEmployeeData: InitialValues_TP | undefined
+  editEmployeeData?: InitialValues_TP | undefined
 }
 
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -31,7 +31,6 @@ type AddEmployeeProps_TP = {
 
 ///
 export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) => {
-  console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:", editEmployeeData)
 
   // validation 
   const employeeValidatingSchema = () => Yup.object({

@@ -2,17 +2,16 @@
 ///
 import { FormikSharedConfig, useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect, useState } from "react"
+import { useFetch } from "../../../hooks"
+import { SelectOption_TP } from "../../../types"
 import { BaseInputField, DateInputField, InnerFormLayout, PhoneInput } from "../../molecules"
-import RadioGroup from "../../molecules/RadioGroup"
 import { DropFile } from "../../molecules/files/DropFile"
+import RadioGroup from "../../molecules/RadioGroup"
 import { SelectBranches } from "../reusableComponants/branches/SelectBranches"
 import { SelectRole } from "../reusableComponants/roles/SelectRole"
 import { SelectNationality } from "../systemEstablishment/SelectNationality"
-import { allDocs_TP } from "../reusableComponants/documents/Documents"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { InitialValues_TP } from "./validation-and-types"
-import { useFetch } from "../../../hooks"
-import { SelectOption_TP } from "../../../types"
 ///
 /////////// Types
 ///
@@ -32,7 +31,6 @@ export const EmployeeMainData = ({ title, editEmployeeData }: EmployeeMainDataPr
   ///
   const { setFieldValue, values } = useFormikContext<FormikSharedConfig>()
   const [xx, setxx] = useState<any>()
-  console.log("🚀 ~ file: AddEmployee.tsx:84 ~ AddEmployee ~ xx:", xx)
   ///
   const {
     data: countriesOptions,
@@ -74,18 +72,17 @@ useEffect(()=>{
         {/* name ar start */}
         <BaseInputField
           id="name"
-          label={`${t('name')}`}
+          label={`${t("name")}`}
           name="name"
           type="text"
-          placeholder={`${t('name')}`}
+          placeholder={`${t("name")}`}
           labelProps={{ className: "mb-1" }}
           required
         />
         {/* name ar end */}
 
-
         {/* branch start */}
-        <SelectBranches name='branch_id' />
+        <SelectBranches name="branch_id" editData={editEmployeeData} />
         {/* branch end */}
 
         {/* job title start */}
@@ -104,62 +101,67 @@ useEffect(()=>{
         {/* address end */}
 
         {/* mobile start */}
-        {
-          !!!editEmployeeData &&
-          <PhoneInput label={`${t('mobile number')}`} name="mobile" placeholder={`${t('mobile number')}`} />
-        }
+        {!!!editEmployeeData && (
+          <PhoneInput
+            label={`${t("mobile number")}`}
+            name="mobile"
+            placeholder={`${t("mobile number")}`}
+          />
+        )}
         {/* mobile end */}
 
         {/* phone start */}
         <BaseInputField
           id="phone"
-          label={`${t('phone number')}`}
+          label={`${t("phone number")}`}
           name="phone"
           type="text"
-          placeholder={`${t('phone number')}`}
+          placeholder={`${t("phone number")}`}
         />
         {/* phone end */}
 
         {/* nationalities start */}
-        <div className="flex flex-col" >
-          <SelectNationality name="nationality_id" />
+        <div className="flex flex-col">
+          <SelectNationality
+            name="nationality_id"
+            editData={editEmployeeData}
+          />
         </div>
         {/* nationalities end */}
 
         {/* birth date start */}
         <DateInputField
-          label={`${t('birth date')}`}
+          label={`${t("birth date")}`}
           name="date_of_birth"
           maxDate={new Date()}
         />
         {/* birth date end */}
 
         {/* hiring date start */}
-        {
-          !!!editEmployeeData &&
+        {!!!editEmployeeData && (
           <DateInputField
-            label={`${t('hiring date')}`}
+            label={`${t("hiring date")}`}
             name="date_of_hiring"
             maxDate={new Date()}
           />
-        }
+        )}
 
         {/* hiring date end */}
 
         {/* national_number start */}
         <BaseInputField
           id="national_number"
-          label={`${t('national number')}`}
+          label={`${t("national number")}`}
           name="national_number"
           type="text"
-          placeholder={`${t('national number')}`}
+          placeholder={`${t("national number")}`}
           required
         />
         {/* national_number end */}
 
         {/* national_expire_date start */}
         <DateInputField
-          label={`${t('national expire date')}`}
+          label={`${t("national expire date")}`}
           name="national_expire_date"
           minDate={new Date()}
         />
@@ -179,17 +181,16 @@ useEffect(()=>{
         {/* username start */}
         <BaseInputField
           id="username"
-          label={`${t('username')}`}
+          label={`${t("username")}`}
           name="username"
           type="text"
-          placeholder={`${t('username')}`}
+          placeholder={`${t("username")}`}
           required
         />
         {/* username end */}
 
         {/* password start */}
-        {
-          !!!editEmployeeData &&
+        {!!!editEmployeeData && (
           <BaseInputField
             id="password"
             label={`${t("password")}`}
@@ -198,33 +199,29 @@ useEffect(()=>{
             placeholder={`${t("password")}`}
             required
           />
-        }
+        )}
         {/* password end */}
 
         {/* isActive start */}
-        <div className="flex gap-x-2 mt-8" >
-          <span className="font-bold" >{t('is active')}</span>
+        <div className="flex gap-x-2 mt-8">
+          <span className="font-bold">{t("is active")}</span>
           <RadioGroup name="is_active">
-            <div className="flex gap-x-2" >
+            <div className="flex gap-x-2">
               <RadioGroup.RadioButton
                 value="Yes"
-                label={`${t('Yes')}`}
+                label={`${t("Yes")}`}
                 id="Yes"
               />
-              <RadioGroup.RadioButton
-                value="No"
-                label={`${t('No')}`}
-                id="No"
-              />
+              <RadioGroup.RadioButton value="No" label={`${t("No")}`} id="No" />
             </div>
           </RadioGroup>
         </div>
         {/* isActive end */}
-        <div className="col-span-2" >
+        <div className="col-span-2">
           <h2>ارفاق صورة الهوية</h2>
           <DropFile name="national_image" />
         </div>
-        <div className="col-span-2" >
+        <div className="col-span-2">
           <h2>ارفاق الصورة الشخصية</h2>
           <DropFile name="image" />
         </div>
