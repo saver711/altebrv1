@@ -61,16 +61,16 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps_TP) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all sm:my-8 sm:max-w-6xl">
-                <Dialog.Title
+              <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-start align-middle shadow-xl transition-all sm:my-8 sm:max-w-6xl">
+                <Dialog.Title 
                   as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900 relative mb-2"
+                  className="text-lg font-medium leading-6 text-gray-900 relative mb-2 "
                 >
                   {title}
 
                   <button
                     type="button"
-                    className="absolute top-0 right-0 "
+                    className="absolute top-0 left-0 "
                     onClick={() => onClose(false)}
                   >
                     <span className="sr-only">Close</span>

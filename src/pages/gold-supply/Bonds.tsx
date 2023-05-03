@@ -4,12 +4,10 @@ import { useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
-import { Header } from "../../components/atoms/Header"
 import { AddIcon, ViewIcon } from "../../components/atoms/icons"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import { useFetch } from "../../hooks"
-import { BondCard } from "./BondCard"
 
 type BondsProps_TP = {
   title: string
