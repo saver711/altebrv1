@@ -65,19 +65,19 @@ export const sideBarItems: MenuItem_TP[] = [
           {
             id: crypto.randomUUID(),
             label: "السندات",
-            link: "/contracts",
+            link: "/bonds",
             icon: RiVipCrownLine,
           },
           {
             id: crypto.randomUUID(),
             label: "سند توريد ذهب ",
-            link: "/contracts/gold",
+            link: "/bonds/gold",
             icon: AiFillGolden,
           },
           {
             id: crypto.randomUUID(),
             label: "سند توريد الماس  ",
-            link: "/contracts/diamond",
+            link: "/bonds/diamond",
             icon: GiCutDiamond,
           },
           {

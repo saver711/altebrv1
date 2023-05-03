@@ -2,6 +2,8 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik, FormikValues, useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect, useState } from "react"
+import { SingleValue } from "react-select"
 import * as Yup from "yup"
 import { useFetch, useMutate } from "../../../hooks"
 import { SelectOption_TP } from "../../../types"
@@ -90,7 +92,7 @@ const NewCountryOptionComponent = ({
         }}
         validationSchema={validationSchema}
       >
-        <HandleBackErrors errors={error?.response?.data?.errors}>
+        <HandleBackErrors errors={error?.response.data.errors}>
           <Form className="w-full">
             <div className="flex gap-x-8 items-center">
               <BaseInputField
@@ -139,14 +141,23 @@ export const Countries = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { setFieldValue } = useFormikContext()
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// STATES
   ///
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
 
   ///
   /////////// SIDE EFFECTS
   ///
+  useEffect(() => {
+    setNewValue({
+      id: editData?.nationalAddress?.city.country_id || "",
+      value: editData?.nationalAddress?.district.country_name || "",
+      label: editData?.nationalAddress?.district.country_name || "",
+    })
+  }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -181,6 +192,7 @@ export const Countries = ({
         creatable={true}
         CreateComponent={NewCountryOptionComponent}
         fieldKey={fieldKey}
+        value={newValue}
         onChange={(option) => {
           //@ts-ignore
           setFieldValue(countryName, option!.id)
@@ -189,11 +201,16 @@ export const Countries = ({
           // if (distractName && editData) setFieldValue(distractName,editData?.district_id)
           //@ts-ignore
           setCountry(option)
+          setNewValue(option)
         }}
         defaultValue={{
           value: editData ? editData?.country_name : "",
           label: editData ? editData?.country_name : t("choose country"),
         }}
+        // {...{...(values?.country_value && { value:{
+        //   value: values?.country_value || "",
+        //   label: values?.country_value || ""
+        // }})}}
       />
       <RefetchErrorHandler
         failureReason={failureReason}

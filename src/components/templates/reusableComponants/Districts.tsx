@@ -213,7 +213,15 @@ export const Districts = ({
       })
       setFieldValue(distractName, null)
     }
+    
   }, [JSON.stringify(districts)])
+   useEffect(() => {
+     setNewValue({
+       id: editData?.nationalAddress.district.id,
+       value: editData?.nationalAddress.district.name,
+       label: editData?.nationalAddress.district.name,
+     })
+   }, [])
   // console.log("distractNameeditData", editData)
   return (
     <div className="flex flex-col gap-1 justify-center">

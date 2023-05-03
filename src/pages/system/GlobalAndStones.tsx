@@ -232,7 +232,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       </Helmet>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-lg font-bold">تأسيس عام وأحجار</h1>
-        <Back />
+        <Back path="/system" />
       </div>
 
       <div className="grid grid-cols-4 gap-4">
