@@ -4,9 +4,7 @@ import React from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import {
-  ExpandedState,
-  createColumnHelper,
-  flexRender,
+  createColumnHelper, ExpandedState, flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFilteredRowModel,
@@ -14,7 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { t } from 'i18next'
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ViewIcon } from '../../components/atoms/icons'
 import { Modal } from '../../components/molecules'
 import { SubTables } from './SubTables'
@@ -64,9 +62,6 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
       columnHelper.accessor('category', {
         header: `${t('category')}`
       }),
-      columnHelper.accessor('karat_id', {
-        header: `${t('karat')}`
-      }),
       columnHelper.accessor('model_number', {
         header: `${t('model number')}`
       }),
@@ -85,7 +80,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
           setSubTableData({ index: info.row.original.index, data: modifiedData })
           setModalOpen(true)
         }
-        } className='ms-5' />
+        } className='mx-auto text-mainGreen text-2xl' />
       }),
     ],
     []
@@ -126,7 +121,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
   }, [queryData])
 
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center w-full'>
     <h2 className='font-bold text-2xl' >{t('final review')}</h2>
     <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
       <div>
@@ -137,7 +132,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[140px] md:min-w-[80px] lg:min-w-[120px] whitespace-nowrap'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -155,7 +150,7 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
           <tbody>
             {table.getRowModel().rows.map(row => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
+                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >

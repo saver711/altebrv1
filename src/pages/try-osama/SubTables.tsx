@@ -119,7 +119,7 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
               <tr key={headerGroup.id} >
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[130px] md:min-w-[80px] lg:min-w-[120px]'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -137,7 +137,7 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
           <tbody>
             {table.getRowModel().rows.map(row => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
+                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
@@ -154,10 +154,10 @@ const selectedRow = subTableData.data.filter(item => item.index === subTableData
               )
             })}
           </tbody>
-          <tfoot className='h-8' >
+          <tfoot className='h-[40px]' >
             {table.getRowModel().rows.map(row => {
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-             <span className="text-l font-bold">{t('piece description')}: </span> <span>{selectedRow[0].details} </span>  
+            <span>{selectedRow[0].details} :</span>  <span className="text-l font-bold">{t('piece description')} </span>  
               </td>
             }).slice(0, 1)}
           </tfoot>

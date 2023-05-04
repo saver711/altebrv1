@@ -52,7 +52,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "index",
-        header: () => <span>{t(" Sequence")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
         header: () => <span>{t("classification")} </span>,
@@ -95,7 +95,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("view")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
