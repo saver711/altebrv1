@@ -1,7 +1,9 @@
+import { t } from "i18next";
 import { AiFillGolden } from "react-icons/ai";
 import { BiDiamond } from "react-icons/bi";
 import { CiExport, CiImport, CiSettings } from "react-icons/ci";
 import { GiCutDiamond } from "react-icons/gi";
+import { GrGroup } from "react-icons/gr";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import { MdOutlineAttachMoney, MdOutlinePayments } from "react-icons/md";
