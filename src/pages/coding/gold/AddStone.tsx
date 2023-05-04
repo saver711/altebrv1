@@ -3,6 +3,7 @@
 
 import { useQueryClient } from "@tanstack/react-query"
 import { Formik } from "formik"
+import { t } from "i18next"
 import { useEffect, useState } from "react"
 import { AiFillDelete } from "react-icons/ai"
 import { Button } from "../../../components/atoms"
@@ -23,13 +24,11 @@ import SelectStonePurity from "../../../components/templates/reusableComponants/
 import SelectStoneShape from "../../../components/templates/reusableComponants/stones/select/SelectStoneShape"
 import SelectStoneType from "../../../components/templates/reusableComponants/stones/select/SelectStoneType"
 import { SetState_TP } from "../../../types"
+import { notify } from "../../../utils/toast"
 import {
-  GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
   goldCodingStoneValues
 } from "../coding-types-and-helpers"
-import { notify } from "../../../utils/toast"
-import { t } from "i18next"
 
 ///
 /////////// Types
@@ -125,6 +124,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newStones = [...stones]
               newStones?.splice(props.rowIndex, 1)
               setStones(newStones)
+              const newStones = [...stones]
+              newStones?.splice(props.rowIndex, 1)
+              setStones(newStones)
             }}
           />
         )
@@ -200,9 +202,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   label="نوع الحجر"
                   name="stone_id"
                   field="id"
-                  // onChange={(option) => {
-                  //   setFieldValue("stoneType_value", option.value)
-                  // }}
+                // onChange={(option) => {
+                //   setFieldValue("stoneType_value", option.value)
+                // }}
                 />
                 <SelectColor
                   field="id"
@@ -210,26 +212,26 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   label="لون الحجر"
                   name="color_id"
                   modalTitle="إضافة لون حجر"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneColor_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stoneColor_value', option.value)
+                // })}
                 />
                 <SelectStoneShape
                   multi
                   field="id"
                   label="قطع شكل الحجر"
                   name="shape_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneShape_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stoneShape_value', option.value)
+                // })}
                 />
                 <SelectStonePurity
                   field="id"
                   label="نقاء الحجر"
                   name="purity_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stonePurity_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stonePurity_value', option.value)
+                // })}
                 />
                 <BaseInputField
                   id="weight"
@@ -247,9 +249,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   field="id"
                   label="طبيعة الحجر"
                   name="nature_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneNature_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stoneNature_value', option.value)
+                // })}
                 />
                 <BaseInputField
                   id="certificate_number"

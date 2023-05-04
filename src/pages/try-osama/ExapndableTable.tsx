@@ -4,7 +4,9 @@ import React from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import {
-  createColumnHelper, ExpandedState, flexRender,
+  ExpandedState,
+  createColumnHelper,
+  flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFilteredRowModel,
@@ -28,15 +30,16 @@ type Categories_TP = {
   selling_type: string
   type: string
 }
-export function ExpandableTable({addedPieces}:any) {
-// variables
+export function ExpandableTable({ addedPieces }: any) {
+  // variables
   let count = 0
 
 
   const columnHelper = createColumnHelper<any>()
   // عشان احط الداتا اللي ناقصه ستاتيك حاليا لحد ما نشوف بعدين
-  const modifiedData = addedPieces.map(item => ({ ...item, classification: 'ذهب', id_code: crypto.randomUUID().slice(0, 5), karat_id: crypto.randomUUID().slice(0, 2), index: ++count , sizes:item?.sizes || []
-}))
+  const modifiedData = addedPieces.map(item => ({
+    ...item, classification: 'ذهب', id_code: crypto.randomUUID().slice(0, 5), karat_id: crypto.randomUUID().slice(0, 2), index: ++count, sizes: item?.sizes || []
+  }))
 
   //states
   const [data, setData] = useState(modifiedData)
@@ -99,9 +102,9 @@ export function ExpandableTable({addedPieces}:any) {
 
   // custom hooks 
   const queryClient = useQueryClient()
-  
+
   useEffect(() => {
-    if(queryClient){
+    if (queryClient) {
       const categories = queryClient.getQueryData(['categories'])
       const allQueries = modifiedData?.map((item) => {
         const finaleItem = {
@@ -114,15 +117,15 @@ export function ExpandableTable({addedPieces}:any) {
   }, [queryClient])
 
   useEffect(() => {
-    if(queryData){
-      setData(modifiedData.map(item => ({ ...item,category:queryData[0]?.category , view:'icon'})))
+    if (queryData) {
+      setData(modifiedData.map(item => ({ ...item, category: queryData[0]?.category, view: 'icon' })))
     }
   }, [queryData])
 
   return (
     <div className='flex flex-col justify-center items-center w-full'>
-    <h2 className='font-bold text-2xl' >{t('final review')}</h2>
-    <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
+      <h2 className='font-bold text-2xl' >{t('final review')}</h2>
+      <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
       <div className='w-full'>
         <table className='mt-2 border-mainGreen shadow-lg mb-2 w-full'>
           <thead className='bg-mainGreen text-white'>
@@ -151,13 +154,13 @@ export function ExpandableTable({addedPieces}:any) {
                 <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed'}`} >
                         {
                           !!cell.getContext().getValue() ?
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        ) : '---'}
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            ) : '---'}
                       </td>
                     )
                   })}
