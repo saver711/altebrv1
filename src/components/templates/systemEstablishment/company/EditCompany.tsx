@@ -57,7 +57,7 @@ export const EditCompany = ({
     // city_value:valuesData.city.name,
     district_id: valuesData.district.id || "",
     // district_value:valuesData.country.name,
-    address: valuesData.address || "",
+    // address: valuesData.address || "",
     establishment_date: new Date() || valuesData.establishmentDate,
     phone: valuesData.phone || "",
     email: valuesData.email || "",
@@ -77,7 +77,7 @@ export const EditCompany = ({
     files: [],
     //national Address
     building_number: valuesData.nationalAddress?.building_number || "",
-    // address: "" || valuesData.nationalAddress?.address,
+    address:  valuesData.nationalAddress?.address || "",
     street_number:  valuesData.nationalAddress?.street_number  || "",
     sub_number:  valuesData.nationalAddress?.sub_number || "",
     zip_code:  valuesData.nationalAddress?.zip_code || "",
@@ -227,8 +227,8 @@ export const EditCompany = ({
         initialValues={initialValues}
         // validationSchema={companyValidatingSchema}
         onSubmit={(values: InitialValues_TP) => {
-          updateHandler(values);
-          console.log("ششش", { ...values, ...docsFormValues });
+          updateHandler(values)
+          console.log("ششش", { ...values, ...docsFormValues })
         }}
       >
         <Form>
@@ -245,16 +245,16 @@ export const EditCompany = ({
                 </Button>
               }
             >
-              <CompanyMainData/>
+              <CompanyMainData valuesData={valuesData} />
               <Documents
                 docsFormValues={docsFormValues}
                 setDocsFormValues={setDocsFormValues}
               />
-              <NationalAddress />
+              <NationalAddress editData={valuesData} />
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>
     </>
-  );
+  )
 };

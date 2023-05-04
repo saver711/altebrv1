@@ -10,6 +10,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { Button } from "../../../atoms"
 import { ReactNode } from "react"
+import { t } from "i18next"
 interface ReactTableProps<T extends object> {
   data: T[]
   columns: ColumnDef<T>[]
@@ -76,11 +77,11 @@ export const Table = <T extends object>({
         {showNavigation ? (
           <div className="mt-3 flex items-center justify-end gap-5 p-2">
             <div className="flex items-center gap-2 font-bold">
-              عدد الصفحات
+              {t('page')}
               <span className=" text-mainGreen">
                 {table.getState().pagination.pageIndex + 1}
               </span>
-              من
+              {t('from')}
               <span className=" text-mainGreen">{table.getPageCount()} </span>
             </div>
             <div className="flex items-center gap-2 ">

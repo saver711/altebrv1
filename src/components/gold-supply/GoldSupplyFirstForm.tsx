@@ -98,195 +98,206 @@ export const GoldSupplyFirstForm = ({
     ///
 
     ///
-    return <>
+    return (
+      <>
         <Formik
-            onSubmit={(values) => {
-                setStage(prev => prev + 1)
-                setFormValues(values)
-                console.log({ ...values, bond_date: formatDate(values.bond_date) })
-            }
-            }
-            initialValues={GoldFirstFormInitValues}
-            validationSchema={goldValidatingSchema}
+          onSubmit={(values) => {
+            setStage((prev) => prev + 1)
+            setFormValues(values)
+            console.log({ ...values, bond_date: formatDate(values.bond_date) })
+          }}
+          initialValues={GoldFirstFormInitValues}
+          validationSchema={goldValidatingSchema}
         >
-            {({ values , setFieldValue }) => (
-                <Form>
-                    {/* <HandleBackErrors errors={}> */}
+          {({ values, setFieldValue }) => (
+            <Form>
+              {/* <HandleBackErrors errors={}> */}
 
-                    <OuterFormLayout header={`${t('create gold document')}`} submitComponent={
-                        <Button type="submit" className="ms-auto mt-8">
-                            {t('submit')}
-                        </Button>
-                    }>
-                        <InnerFormLayout title="main data" leftComponent={
-                            <p className="font-bold">
-                                `رقم السند/
-                                <span className=" text-mainOrange">
-                                    {nextBondNumber
-                                        ? nextBondNumber
-                                        : "تحميل رقم ..."}
-                                </span>
-                            </p>
-                        }>
+              <OuterFormLayout
+                submitComponent={
+                  <Button type="submit" className="ms-auto mt-8">
+                    {t("submit")}
+                  </Button>
+                }
+              >
+                <InnerFormLayout
+                  title={`${t("main data")}`}
+                  leftComponent={
+                    <p className="font-bold">
+                      {`${t('bond number')}`}/
+                      <span className=" text-mainOrange">
+                        {nextBondNumber ? nextBondNumber : "تحميل رقم ..."}
+                      </span>
+                    </p>
+                  }
+                >
+                  {/* supply type start */}
+                  <div className="flex gap-x-2 mt-8 col-span-4">
+                    <span className="font-bold">{t("supply type")}</span>
+                    <RadioGroup name="twred_type">
+                      <div className="flex gap-x-2">
+                        <RadioGroup.RadioButton
+                          value="local"
+                          label={`${t("local")}`}
+                          id="local"
+                        />
+                        <RadioGroup.RadioButton
+                          value="global"
+                          label={`${t("global")}`}
+                          id="global"
+                        />
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  {/* supply type end */}
 
-                            {/* supply type start */}
-                            <div className="flex gap-x-2 mt-8 col-span-4">
-                                <span className="font-bold" >{t('supply type')}</span>
-                                <RadioGroup name="twred_type">
-                                    <div className="flex gap-x-2" >
-                                        <RadioGroup.RadioButton
-                                            value="local"
-                                            label={`${t('local')}`}
-                                            id="local"
-                                        />
-                                        <RadioGroup.RadioButton
-                                            value="global"
-                                            label={`${t('global')}`}
-                                            id="global"
-                                        />
-                                    </div>
-                                </RadioGroup>
-                            </div>
-                            {/* supply type end */}
+                  {/* document date start */}
+                  <DateInputField
+                    label={`${t("document date")}`}
+                    name="bond_date"
+                    maxDate={new Date()}
+                  />
+                  {/* document date end */}
 
-                            {/* document date start */}
-                            <DateInputField
-                                label={`${t('document date')}`}
-                                name="bond_date"
-                                maxDate={new Date()}
-                            />
-                            {/* document date end */}
+                  {/* buyer name name start */}
+                  <div className="flex flex-col">
+                    <Select
+                      id="employee_id"
+                      label={`${t("buyer name")}`}
+                      name="employee_id"
+                      placeholder={`${t("buyer name")}`}
+                      loadingPlaceholder={`${t("loading")}`}
+                      options={employees}
+                      fieldKey="id"
+                      loading={employeesLoading}
+                      isDisabled={!employeesLoading && !!employeeError}
+                      onChange={(option: any) => {
+                        setFieldValue("employee_value", option!.value)
+                        setFieldValue("employee_id", option!.id)
+                      }}
+                      value={{
+                        value:
+                          values.employee_value || formValues?.employee_value,
+                        label:
+                          values.employee_value ||
+                          formValues?.employee_value ||
+                          t("buyer name"),
+                        id: values.employee_id || values.employee_id,
+                      }}
+                    />
+                    <RefetchErrorHandler
+                      failureReason={employeeError}
+                      isLoading={employeesLoading}
+                      refetch={refetchEmployee}
+                    />
+                  </div>
+                  {/* buyer name name end */}
 
-                            {/* buyer name name start */}
-                            <div className="flex flex-col">
-                                <Select
-                                    id="employee_id"
-                                    label={`${t('buyer name')}`}
-                                    name="employee_id"
-                                    placeholder={`${t('buyer name')}`}
-                                    loadingPlaceholder={`${t('loading')}`}
-                                    options={employees}
-                                    fieldKey="id"
-                                    loading={employeesLoading}
-                                    isDisabled={!employeesLoading && !!employeeError}
-                                    onChange={(option:any)=>{
-                                        setFieldValue('employee_value' ,option!.value )
-                                        setFieldValue('employee_id' ,option!.id )
-                                    }}
-                                    value={{
-                                        value: values.employee_value || formValues?.employee_value,
-                                        label: values.employee_value || formValues?.employee_value || t('buyer name'),
-                                        id: values.employee_id || values.employee_id
-                                    }}
-                                />
-                                <RefetchErrorHandler failureReason={employeeError} isLoading={employeesLoading} refetch={refetchEmployee} />
-                            </div>
-                            {/* buyer name name end */}
+                  {/* supplier name start */}
+                  <div className="flex flex-col">
+                    <Select
+                      id="supplier_id"
+                      label={`${t("supplier name")}`}
+                      name="supplier_id"
+                      placeholder={`${t("supplier name")}`}
+                      loadingPlaceholder={`${t("loading")}`}
+                      options={suppliers}
+                      fieldKey="id"
+                      loading={suppliersLoading}
+                      isDisabled={!suppliersLoading && !!suppliersErrorReason}
+                      onChange={(option: any) => {
+                        setFieldValue("supplier_value", option!.value)
+                        setFieldValue("supplier_id", option!.id)
+                      }}
+                      value={{
+                        value:
+                          values.supplier_value || formValues?.supplier_value,
+                        label:
+                          values.supplier_value ||
+                          formValues?.supplier_value ||
+                          t("supplier name"),
+                        id: values.supplier_id || values.supplier_id,
+                      }}
+                    />
+                    <RefetchErrorHandler
+                      failureReason={suppliersErrorReason}
+                      isLoading={suppliersLoading}
+                      refetch={refetchSupplier}
+                    />
+                  </div>
+                  {/* supplier name end */}
 
-                            {/* supplier name start */}
-                            <div className="flex flex-col">
-                                <Select
-                                    id="supplier_id"
-                                    label={`${t('supplier name')}`}
-                                    name="supplier_id"
-                                    placeholder={`${t('supplier name')}`}
-                                    loadingPlaceholder={`${t('loading')}`}
-                                    options={suppliers}
-                                    fieldKey="id"
-                                    loading={suppliersLoading}
-                                    isDisabled={!suppliersLoading && !!suppliersErrorReason}
-                                    onChange={(option:any)=>{
-                                        setFieldValue('supplier_value' ,option!.value)
-                                        setFieldValue('supplier_id' ,option!.id)
-                                    }}
-                                    value={{
-                                        value: values.supplier_value || formValues?.supplier_value,
-                                        label: values.supplier_value || formValues?.supplier_value  || t('supplier name'),
-                                        id: values.supplier_id || values.supplier_id
-                                    }}
-                                />
-                                <RefetchErrorHandler failureReason={suppliersErrorReason} isLoading={suppliersLoading} refetch={refetchSupplier} />
-                            </div>
-                            {/* supplier name end */}
+                  {/* document number start */}
+                  <BaseInputField
+                    id="bond_number"
+                    label={`${t("bond number")}`}
+                    name="bond_number"
+                    type="text"
+                    placeholder={`${t("bond number")}`}
+                    required
+                  />
+                  {/* document number end */}
 
-                            {/* document number start */}
-                            <BaseInputField
-                                id="bond_number"
-                                label={`${t("bond number")}`}
-                                name="bond_number"
-                                type="text"
-                                placeholder={`${t("bond number")}`}
-                                required
-                            />
-                            {/* document number end */}
+                  {/* gold price start */}
+                  <BaseInputField
+                    id="entity_gold_price"
+                    label={`${t("gold price")}`}
+                    name="api_gold_price"
+                    type="text"
+                    placeholder={`${t("gold price")}`}
+                    required
+                  />
+                  {/* gold price end */}
 
-                            {/* gold price start */}
-                            <BaseInputField
-                                id="entity_gold_price"
-                                label={`${t("gold price")}`}
-                                name="api_gold_price"
-                                type="text"
-                                placeholder={`${t("gold price")}`}
-                                required
-                            />
-                            {/* gold price end */}
+                  {/* outer goods amount start */}
+                  {values.twred_type === "global" && (
+                    <BaseInputField
+                      id="out_goods_value"
+                      label={`${t("oute goods amount")}`}
+                      name="out_goods_value"
+                      type="text"
+                      placeholder={`${t("oute goods amount")}`}
+                      required
+                    />
+                  )}
+                  {/* outer goods amount end */}
+                  <div className="col-span-4 flex justify-between gap-x-4">
+                    {/*doc file start */}
+                    <div className="w-full">
+                      <h2>{t("attach supplier document file")}</h2>
+                      <DropFile name="media" />
+                    </div>
+                    {/*doc file end */}
 
-                            {/* outer goods amount start */}
-                            {
-                                values.twred_type === 'global' &&
-                                <BaseInputField
-                                    id="out_goods_value"
-                                    label={`${t("oute goods amount")}`}
-                                    name="out_goods_value"
-                                    type="text"
-                                    placeholder={`${t("oute goods amount")}`}
-                                    required
-                                />
-                            }
-                            {/* outer goods amount end */}
-                            <div className="col-span-4 flex justify-between gap-x-4" >
-                                {/*doc file start */}
-                                <div className="w-1/2" >
-                                    <h2>{t('attach supplier document file')}</h2>
-                                    <DropFile name="media" />
-                                </div>
-                                {/*doc file end */}
+                    {/*doc goods file start */}
+                    {values.twred_type === "global" && (
+                      <div className="w-1/2">
+                        <h2>{t("attach goods document file")}</h2>
+                        <DropFile name="goods_media" />
+                      </div>
+                    )}
+                    {/*doc goods file end */}
+                  </div>
 
-                                {/*doc goods file start */}
-                                {
-                                    values.twred_type === 'global' &&
-                                    <div className="w-1/2" >
-                                        <h2>{t('attach goods document file')}</h2>
-                                        <DropFile name="goods_media" />
-                                    </div>
+                  {/* gold price start */}
+                  <div className="col-span-4">
+                    <TextAreaField
+                      name="notes"
+                      className="col-span-4"
+                      rows={3}
+                      placeholder={`${t("notes")}`}
+                      id="notes"
+                      label={`${t("notes")}`}
+                    />
+                  </div>
+                  {/* gold price end */}
+                </InnerFormLayout>
+              </OuterFormLayout>
 
-                                }
-                                {/*doc goods file end */}
-                            </div>
-
-                            {/* gold price start */}
-                            <div className="col-span-4" >
-                                <TextAreaField name="notes" className="col-span-4" rows={3} placeholder="notes" id="notes" label="notes" />
-                            </div>
-                            {/* gold price end */}
-                        </InnerFormLayout>
-                    </OuterFormLayout>
-
-                    {/* </HandleBackErrors> */}
-
-
-                </Form>
-
-            )}
-
+              {/* </HandleBackErrors> */}
+            </Form>
+          )}
         </Formik>
-    </>
+      </>
+    )
 }
-
-
-
-
-
-
-///////////////////////////////////////////////////////
-

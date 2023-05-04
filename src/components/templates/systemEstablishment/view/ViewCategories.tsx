@@ -4,25 +4,26 @@
 ///
 /////////// Types
 
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { Button } from "../../../atoms"
-import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
-import { AddButton } from "../../../molecules/AddButton"
-import { Form, Formik } from "formik"
-import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import * as Yup from 'yup'
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
+import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
+import { AddButton } from "../../../molecules/AddButton"
+import { Loading } from "../../../organisms/Loading"
+import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
+import { Table } from "../../reusableComponants/tantable/Table"
 
 ///
 type ViewCategories_TP = {
@@ -127,9 +128,9 @@ export const ViewCategories = () => {
     select: (data) => {
       return {
         ...data,
-        data: data.data.map((category) => ({
+        data: data.data.map((category, i) => ({
           ...category,
-          index: count++,
+          index: i + 1,
         })),
       }
     }
@@ -172,11 +173,13 @@ export const ViewCategories = () => {
     <div className="p-4">
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('categories')}`}
+          {`${t("system establishment")} / ${t("categories")}`}
         </h3>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {setSearch(values.search)}}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
           validationSchema={validationSchema}
         >
           <Form className="flex align-middle gap-2">
@@ -187,7 +190,9 @@ export const ViewCategories = () => {
               placeholder={`${t("search")}`}
             />
             <Button type="submit" disabled={isRefetching}>
-              <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
             </Button>
           </Form>
         </Formik>
@@ -198,8 +203,13 @@ export const ViewCategories = () => {
               setModel(true)
               setOpen(true)
             }}
-            addLabel={`${t('add')}`}
-            />
+            addLabel={`${t("add")}`}
+          />
+          {!isLoading && (
+            <div className="flex justify-end ms-2">
+              <Back />
+            </div>
+          )}
         </div>
       </div>
       {isError && (
@@ -211,38 +221,40 @@ export const ViewCategories = () => {
         </div>
       )}
       {(isLoading || isRefetching) && <Loading mainTitle={t("categories")} />}
-      {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-        <Table data={dataSource} columns={columns}>
-          <div className="mt-3 flex items-center justify-end gap-5 p-2">
-            <div className="flex items-center gap-2 font-bold">
-              عدد الصفحات
-              <span className=" text-mainGreen">
-                {categories.current_page}
-              </span>
-              من
-              <span className=" text-mainGreen">
-                {categories.pages}
-              </span>
+      {isSuccess &&
+        !!dataSource &&
+        !isLoading &&
+        !isRefetching &&
+        !!dataSource.length && (
+          <Table data={dataSource} columns={columns}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+              <div className="flex items-center gap-2 font-bold">
+                عدد الصفحات
+                <span className=" text-mainGreen">
+                  {categories.current_page}
+                </span>
+                من
+                <span className=" text-mainGreen">{categories.pages}</span>
+              </div>
+              <div className="flex items-center gap-2 ">
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage((prev) => prev - 1)}
+                  disabled={page == 1}
+                >
+                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                </Button>
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage((prev) => prev + 1)}
+                  disabled={page == categories.pages}
+                >
+                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-2 ">
-              <Button
-                className=" rounded bg-mainGreen p-[.18rem] "
-                action={() => setPage(prev => prev - 1)}
-                disabled={page == 1}
-              >
-                <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
-              </Button>
-              <Button
-                className=" rounded bg-mainGreen p-[.18rem] "
-                action={() => setPage(prev => prev + 1)}
-                disabled={page == categories.pages}
-              >
-                <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
-              </Button>
-            </div>
-          </div>
-        </Table>
-      )}
+          </Table>
+        )}
       <Modal
         isOpen={open}
         onClose={() => {
@@ -259,10 +271,14 @@ export const ViewCategories = () => {
           <div className="flex flex-col gap-8 justify-center items-center">
             <Header header={` حذف : ${deleteData?.name}`} />
             <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} loading={mutateLoading} variant="danger">
-                {`${t('confirm')}`}
+              <Button
+                action={handleSubmit}
+                loading={mutateLoading}
+                variant="danger"
+              >
+                {`${t("confirm")}`}
               </Button>
-              <Button>{`${t('close')}`}</Button>
+              <Button>{`${t("close")}`}</Button>
             </div>
           </div>
         )}

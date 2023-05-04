@@ -1,13 +1,10 @@
-import { t } from "i18next";
 import { AiFillGolden } from "react-icons/ai";
 import { BiDiamond } from "react-icons/bi";
 import { CiExport, CiImport, CiSettings } from "react-icons/ci";
 import { GiCutDiamond } from "react-icons/gi";
-import { GrGroup } from "react-icons/gr";
-import { HiUserAdd } from "react-icons/hi";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
-import { MdManageAccounts, MdOutlineAttachMoney, MdOutlinePayments } from "react-icons/md";
+import { MdOutlineAttachMoney, MdOutlinePayments } from "react-icons/md";
 import { RiVipCrownLine } from "react-icons/ri";
 import { TbSmartHome } from "react-icons/tb";
 
@@ -32,6 +29,12 @@ export const sideBarItems: MenuItem_TP[] = [
     icon: TbSmartHome,
     label: "الرئيسيه",
     link: "/",
+  },
+  {
+    id: crypto.randomUUID(),
+    label: "اعدادات النظام ",
+    link: "system",
+    icon: CiSettings,
   },
   {
     id: crypto.randomUUID(),
@@ -65,19 +68,19 @@ export const sideBarItems: MenuItem_TP[] = [
           {
             id: crypto.randomUUID(),
             label: "السندات",
-            link: "/contracts",
+            link: "/bonds",
             icon: RiVipCrownLine,
           },
           {
             id: crypto.randomUUID(),
             label: "سند توريد ذهب ",
-            link: "/contracts/gold",
+            link: "/bonds/gold",
             icon: AiFillGolden,
           },
           {
             id: crypto.randomUUID(),
             label: "سند توريد الماس  ",
-            link: "/contracts/diamond",
+            link: "/bonds/diamond",
             icon: GiCutDiamond,
           },
           {
@@ -146,18 +149,6 @@ export const sideBarItems: MenuItem_TP[] = [
         icon: MdOutlinePayments,
       },
     ],
-  },
-  {
-    id: crypto.randomUUID(),
-    label: "تأسيس النظام ",
-    link: "system",
-    icon: CiSettings,
-  },
-  {
-    id: crypto.randomUUID(),
-    label: t("administrative-structure"),
-    link: "/administrative-structure",
-    icon: MdManageAccounts,
   },
   {
     id: crypto.randomUUID(),

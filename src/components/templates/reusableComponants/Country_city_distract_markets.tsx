@@ -45,6 +45,7 @@ export const Country_city_distract_markets = ({
   marketFieldKey,
   editData,
 }: Country_city_distract_markets_TP) => {
+  console.log(`editData:`, editData)
   /////////// VARIABLES
   ///
 

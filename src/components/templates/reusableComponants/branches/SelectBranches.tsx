@@ -1,6 +1,9 @@
 /////////// IMPORTS
 ///
+import { useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect, useState } from "react"
+import { SingleValue } from "react-select"
 import { useFetch } from "../../../../hooks"
 import { SelectOption_TP } from "../../../../types"
 import { Select } from "../../../molecules"
@@ -13,7 +16,7 @@ import { CreateBranch } from "./CreateBranch"
 ///
 
 ///
-export const SelectBranches = ({name}:{name:string}) => {
+export const SelectBranches = ({ name, editData }: { name: string; editData?:any }) => {
   /////////// VARIABLES
   ///
 
@@ -33,18 +36,29 @@ export const SelectBranches = ({name}:{name:string}) => {
         return {
           id: branch.id,
           value: branch.name || "",
-          label: branch.name || "",        }
+          label: branch.name || "",
+        }
       }),
-      onError:(err)=>console.log(err)
+    onError: (err) => console.log(err),
   })
   ///
   /////////// STATES
   ///
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
+      const { setFieldValue, values } = useFormikContext()
+
 
   ///
   /////////// SIDE EFFECTS
   ///
-
+  useEffect(() => {
+    setNewValue({
+      id: editData?.branch.id,
+      value: editData?.branch.name,
+      label: editData?.branch.name || "اختر فرع",
+    })
+  }, [])
   ///
   /////////// IF CASES
   ///
@@ -60,15 +74,26 @@ export const SelectBranches = ({name}:{name:string}) => {
         id="branch"
         label={`${t("Branch")}`}
         name={name}
-        placeholder={branchesOptions?.length !==0 ? `${t("branch")}`: 'اضف فرع '}
+        placeholder={
+          branchesOptions?.length !== 0 ? `${t("branch")}` : "اضف فرع "
+        }
         loadingPlaceholder={`${t("loading")}`}
         options={branchesOptions}
         loading={branchesLoading}
         creatable
         CreateComponent={CreateBranch}
         fieldKey="id"
-        isDisabled={!branchesLoading && !!branchesErrorReason} />
-      <RefetchErrorHandler failureReason={branchesErrorReason} isLoading={branchesLoading} refetch={refetchBranches} />
+        value={newValue}
+        isDisabled={!branchesLoading && !!branchesErrorReason}
+        onChange={(option) => {
+          setNewValue(option)
+        }}
+      />
+      <RefetchErrorHandler
+        failureReason={branchesErrorReason}
+        isLoading={branchesLoading}
+        refetch={refetchBranches}
+      />
     </div>
   )
 }

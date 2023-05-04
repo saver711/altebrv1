@@ -14,6 +14,7 @@ import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { Query_TP } from "../coding/gold/AddStone"
 import { SelectOption_TP } from "../../types"
+import { formatDate } from "../../utils/date"
 ///
 /////////// Types
 ///
@@ -48,60 +49,60 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
 
   /////////// STATES
   ///
-  const [allData, setAllData] = useState<any[] | undefined>()
-  console.log("🚀 ~ file: OnePartner.tsx:51 ~ OnePartner ~ allData:", allData)
+  // const [allData, setAllData] = useState<any[] | undefined>()
+  // console.log("🚀 ~ file: OnePartner.tsx:51 ~ OnePartner ~ allData:", allData)
 
   // const queryClient = useQueryClient()
 
-  const {
-    data: countriesOptions,
-    isLoading: countriesLoading,
-    refetch: refetchCountries,
-    failureReason: countriesErrorReason
-} = useFetch<SelectOption_TP[]>({
-    endpoint: "governorate/api/v1/countries",
-    queryKey: ["countries"],
-    select: (countries) => countries.map((country: any) => ({
-        id: country.id,
-        value: country.name,
-        label: country.name ,
-    })),
-})
+//   const {
+//     data: countriesOptions,
+//     isLoading: countriesLoading,
+//     refetch: refetchCountries,
+//     failureReason: countriesErrorReason
+// } = useFetch<SelectOption_TP[]>({
+//     endpoint: "governorate/api/v1/countries",
+//     queryKey: ["countries"],
+//     select: (countries) => countries.map((country: any) => ({
+//         id: country.id,
+//         value: country.name,
+//         label: country.name ,
+//     })),
+// })
   
   
-    const {
-      data: citiesOptions,
-      isLoading: citiesLoading,
-      refetch: refetchCities,
-      failureReason: citiesErrorReason,
-    } = useFetch<SelectOption_TP[]>({
-      endpoint: "governorate/api/v1/cities",
-      queryKey: ["cities"],
-      select: (cities) =>
-        cities.map((city: any) => ({
-          id: city.id,
-          value: city.name,
-          label: city.name,
-        })),
-    })
-      console.log("🚀 ~ file: OnePartner.tsx:87 ~ OnePartner ~ citiesOptions:", citiesOptions)
-    console.log("🚀 ~ file: OnePartner.tsx:70 ~ OnePartner ~ countriesOptions:", countriesOptions)
+//     const {
+//       data: citiesOptions,
+//       isLoading: citiesLoading,
+//       refetch: refetchCities,
+//       failureReason: citiesErrorReason,
+//     } = useFetch<SelectOption_TP[]>({
+//       endpoint: "governorate/api/v1/cities",
+//       queryKey: ["cities"],
+//       select: (cities) =>
+//         cities.map((city: any) => ({
+//           id: city.id,
+//           value: city.name,
+//           label: city.name,
+//         })),
+//     })
+//       console.log("🚀 ~ file: OnePartner.tsx:87 ~ OnePartner ~ citiesOptions:", citiesOptions)
+//     console.log("🚀 ~ file: OnePartner.tsx:70 ~ OnePartner ~ countriesOptions:", countriesOptions)
 
 
-  useEffect(() => {
-    const allData = {
+//   useEffect(() => {
+//     const allData = {
 
-       country : countriesOptions?.find(
-        (country) => country.id == partner?.country?.id
-      )?.value,
-       city : citiesOptions?.find(
-        (city) => city.id == partner?.city.id
-      )?.value
-    }
+//        country : countriesOptions?.find(
+//         (country) => country.id == partner?.country?.id
+//       )?.value,
+//        city : citiesOptions?.find(
+//         (city) => city.id == partner?.city.id
+//       )?.value
+//     }
 
 
-    setAllData(allData)
-  }, [countriesOptions, citiesOptions])
+//     setAllData(allData)
+//   }, [countriesOptions, citiesOptions])
   ///
   /////////// SIDE EFFECTS
   ///
@@ -141,66 +142,66 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                 {partner.nationality_name && (
                   <TextLine
                     boldText={t("nationality_name")}
-                    lightString={partner.nationality_name}
+                    lightString={partner?.nationality_name}
                   />
                 )}
 
                 {partner.phone && (
                   <TextLine
                     boldText={t("phone number")}
-                    lightString={partner.phone}
+                    lightString={partner?.phone}
                   />
                 )}
               </div>
               <div className="flex gap-4 flex-col">
-                {allData?.country && (
+                {partner?.country && (
                   <TextLine
                     boldText={t("country_name")}
-                    lightString={allData?.country}
+                    lightString={partner?.country.name}
                   />
                 )}
-                {allData?.city && (
+                {partner?.city && (
                   <TextLine
                     boldText={t("city_name")}
-                    lightString={allData?.city}
+                    lightString={partner?.city.name}
                   />
                 )}
               </div>
               <div className="flex gap-4 flex-col">
-                {partner.start_date && (
+                {partner?.start_date && (
                   <TextLine
                     boldText={t("hiring date")}
-                    lightString={partner.start_date}
+                    lightString={partner?.start_date}
                   />
                 )}
-                {partner.end_date && (
+                {partner?.end_date && (
                   <TextLine
                     boldText={t("end date")}
-                    lightString={partner.end_date}
+                    lightString={partner?.end_date}
                   />
                 )}
-                {partner.tax && (
-                  <TextLine boldText={t("tax")} lightString={partner.tax} />
+                {partner?.tax && (
+                  <TextLine boldText={t("tax")} lightString={partner?.tax} />
                 )}
-                {partner.type && (
-                  <TextLine boldText={t("type")} lightString={partner.type} />
+                {partner?.type && (
+                  <TextLine boldText={t("type")} lightString={partner?.type} />
                 )}
               </div>
               <div className="flex gap-4 flex-col">
-                {partner.address && (
+                {partner?.address && (
                   <TextLine
                     boldText={t("address")}
-                    lightString={partner.address}
+                    lightString={partner?.address}
                   />
                 )}
-                {partner.national_number && (
+                {partner?.national_number && (
                   <TextLine
                     boldText={t("national number")}
-                    lightString={partner.national_number}
+                    lightString={partner?.national_number}
                   />
                 )}
-                {partner.email && (
-                  <TextLine boldText={t("email")} lightString={partner.email} />
+                {partner?.email && (
+                  <TextLine boldText={t("email")} lightString={partner?.email} />
                 )}
               </div>
               <div className="flex justify-between gap-4 col-span-4 align-middle ">
@@ -212,114 +213,122 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                 {partner?.document?.map((doc, i) => (
                   <>
-                    <div className="flex gap-4 flex-col col-span-4 justify-center align-middle">
-                      <h4 className="bg-[#E9EDEC] p-2 px-11 rounded-xl m-auto text-mainGreen font-bold">
-                        {" "}
-                        {t(`document`)}
-                        {` ${i + 1} `}
-                      </h4>
-                    </div>
-                    <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                      <div className="flex gap-4 flex-col">
-                        {doc.data?.docType?.label && (
-                          <TextLine
-                            boldText={t("document name")}
-                            lightString={doc.data?.docType?.label}
-                          />
-                        )}
+                    <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed mt-3  justify-center align-middle">
+                      <div className=" flex items-center justify-center ">
+                        <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                          <p className=" text-lg font-bold text-mainGreen">
+                            {t(`document`)} {i + 1}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex gap-4 flex-col">
-                        {doc.data?.docName && (
-                          <TextLine
-                            boldText={t("document name")}
-                            lightString={doc.data?.docName}
-                          />
-                        )}
-                      </div>
-                      <div className="flex gap-4 flex-col  ">
-                        {doc.data?.docNumber && (
-                          <TextLine
-                            boldText={t("document number")}
-                            lightString={doc.data?.docNumber}
-                          />
-                        )}
-                      </div>
-                      <div className="flex gap-4 flex-col  ">
-                        {doc.data?.endDate && (
-                          <TextLine
-                            boldText={t("document endDate")}
-                            lightString={doc.data?.endDate}
-                          />
-                        )}
-                      </div>
-                      <div className="flex gap-4 flex-col">
-                        {doc.data?.reminder && (
-                          <TextLine
-                            boldText={t("reminder days count")}
-                            lightString={doc.data?.reminder}
-                          />
-                        )}
+                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.docType?.label && (
+                            <TextLine
+                              boldText={t("document name")}
+                              lightString={doc.data?.docType?.label}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.docName && (
+                            <TextLine
+                              boldText={t("document name")}
+                              lightString={doc.data?.docName}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col  ">
+                          {doc.data?.docNumber && (
+                            <TextLine
+                              boldText={t("document number")}
+                              lightString={doc.data?.docNumber}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col  ">
+                          {doc.data?.endDate && (
+                            <TextLine
+                              boldText={t("document endDate")}
+                              lightString={formatDate(
+                                new Date(doc.data?.endDate)
+                              )}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.reminder && (
+                            <TextLine
+                              boldText={t("reminder days count")}
+                              lightString={doc.data?.reminder}
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </>
                 ))}
               </Modal>
               {partner.document.length !== 0
-                  ? 
-                partner?.document?.slice(0, 2).map((doc, i) => (
-                <>
-                  <div className="flex gap-4 flex-col col-span-4 justify-center align-middle">
-                    <h4 className="bg-[#E9EDEC] p-2 px-11 rounded-xl m-auto text-mainGreen font-bold">
-                      {" "}
-                      {t(`document`)}
-                      {` ${i + 1} `}
-                    </h4>
-                  </div>
-                  <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                    <div className="flex gap-4 flex-col">
-                      {console.log("zz", doc.data.docName)}
-                      {doc.data?.docType?.label && (
-                        <TextLine
-                          boldText={t("document name")}
-                          lightString={doc.data?.docType?.label}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {doc.data?.docName && (
-                        <TextLine
-                          boldText={t("document name")}
-                          lightString={doc.data?.docName}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col  ">
-                      {doc.data?.docNumber && (
-                        <TextLine
-                          boldText={t("document number")}
-                          lightString={doc.data?.docNumber}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col  ">
-                      {doc.data?.endDate && (
-                        <TextLine
-                          boldText={t("document endDate")}
-                          lightString={doc.data?.endDate}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {doc.data?.reminder && (
-                        <TextLine
-                          boldText={t("reminder days count")}
-                          lightString={doc.data?.reminder}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </>
-              )):"لايوجد الوثائق"}
+                ? partner?.document?.slice(0, 2).map((doc, i) => (
+                    <>
+                      <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
+                        <div className=" flex items-center justify-center mb-8">
+                          <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                            <p className=" text-lg font-bold text-mainGreen">
+                              {t(`document`)} {i + 1}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                          <div className="flex gap-4 flex-col">
+                            {console.log("zz", doc.data.docName)}
+                            {doc.data?.docType?.label && (
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docType?.label}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col">
+                            {doc.data?.docName && (
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docName}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col  ">
+                            {doc.data?.docNumber && (
+                              <TextLine
+                                boldText={t("document number")}
+                                lightString={doc.data?.docNumber}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col  ">
+                            {doc.data?.endDate && (
+                              <TextLine
+                                boldText={t("document end date")}
+                                lightString={formatDate(
+                                  new Date(doc.data?.endDate)
+                                )}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col">
+                            {doc.data?.reminder && (
+                              <TextLine
+                                boldText={t("reminder days count")}
+                                lightString={doc.data?.reminder}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ))
+                : "لايوجد الوثائق"}
               {/* العنوان الوطني */}
               <>
                 <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>

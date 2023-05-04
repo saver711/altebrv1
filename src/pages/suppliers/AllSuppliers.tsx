@@ -1,21 +1,22 @@
 /////////// IMPORTS
+import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
+import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { Header } from "../../components/atoms/Header"
 import { EditIcon, ViewIcon } from "../../components/atoms/icons"
+import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
 import { Modal } from "../../components/molecules"
 import { Loading } from "../../components/organisms/Loading"
+import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
+import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import AddSupplier from "../../components/templates/systemEstablishment/supplier/AddSupplier"
 import { useFetch, useMutate } from "../../hooks"
-import { ColumnDef } from "@tanstack/react-table"
-import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
-import { Table } from "../../components/templates/reusableComponants/tantable/Table"
-import { notify } from "../../utils/toast"
 import { mutateData } from "../../utils/mutateData"
-import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
+import { notify } from "../../utils/toast"
+import { Back } from "../../utils/utils-components/Back"
 
 ///
 ///
@@ -84,7 +85,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "id",
-        header: () => <span>{t(" Sequence")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
         header: () => <span>{t("supplier")} </span>,
@@ -116,7 +117,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
               <ViewIcon
                 size={15}
                 action={() => {
-                  navigate(`/suppliers/${info.row.original.id}`)
+                  navigate(`${info.row.original.id}`)
                 }}
               />
             </div>
@@ -222,6 +223,9 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
               {t("Back")}
             </Button>
           </div> */}
+          <div className="flex justify-end mb-2">
+            <Back/>
+          </div>
 
           {isSuccess && !!dataSource && !!dataSource.length && (
             <Table data={dataSource} showNavigation columns={columns} />

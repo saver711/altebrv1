@@ -149,7 +149,7 @@ const AccountingTreeData = () => {
       )}
       {isLoading && <Loading mainTitle={t("accounting tree")} />}
       {isSuccess && !!data && !!data.length && (
-        <Tree label={'الشجرة المحاسبية'}>
+        <Tree label={t('accounting tree')}>
           <AccountingTreeNode tree={data} />
         </Tree>
       )}

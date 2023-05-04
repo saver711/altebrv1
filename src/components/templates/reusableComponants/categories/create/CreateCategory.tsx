@@ -146,7 +146,7 @@ const CreateCategory = ({
     refetch: categoryRefetch,
     isLoading: categoryLoading,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "classification/api/v1/categories",
+    endpoint: "classification/api/v1/categories?type=single",
     queryKey: ["categories"],
     select: (categories) => {
       return categories.map((category: any) => ({
