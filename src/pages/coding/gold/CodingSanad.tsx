@@ -1,6 +1,7 @@
 /////////// IMPORTS
 ///
 import { Formik } from "formik"
+import { t } from "i18next"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Header } from "../../../components/atoms/Header"
@@ -9,12 +10,12 @@ import { useGetQueryData } from "../../../hooks/useGetQueryData"
 import { Category_TP, SelectOption_TP, SetState_TP } from "../../../types"
 import { notify } from "../../../utils/toast"
 import {
-  codingSanad_initialValues,
-  codingSanad_schema,
   GoldCodingSanad_initialValues_TP,
   GoldCodingStoneValues_TP,
   GoldSanad_TP,
-  SizePopup_TP
+  SizePopup_TP,
+  codingSanad_initialValues,
+  codingSanad_schema
 } from "../coding-types-and-helpers"
 import { GoldCodingSanadFormHandler } from "./GoldCodingSanadFormHandler"
 ///
@@ -70,7 +71,6 @@ export const CodingSanad = ({
     selectedSanadLocal
   )
   const [sizes, setSizes] = useState<SizePopup_TP[]>([])
-  console.log(`sizes:`, sizes)
 
   const [stones, setStones] = useState<GoldCodingStoneValues_TP[]>([])
 
@@ -127,7 +127,6 @@ export const CodingSanad = ({
 
   function finalSubmit(values: GoldCodingSanad_initialValues_TP) {
     if (!isAbleToCodeMore()) return
-    console.log(`finalSubmit ~ values:`, values)
     updateSanadWithNewWeight(values.band_id!, values.weight)
     // setAddedPieces((curr) => [...curr, { ...values, stones }])
     setAddedPieces((curr) => [...curr, {...values, front_key: crypto.randomUUID()}])
@@ -142,11 +141,12 @@ export const CodingSanad = ({
             validationSchema={codingSanad_schema}
             initialValues={codingSanad_initialValues}
             onSubmit={(values) => {
+              notify('success' , `${t('piece has been added')}`)
               // VARS
               const selectedCateg = categories?.find(
                 (categ) => categ.id === values.category_id
               )
-              const hasSize = selectedCateg?.has_size
+              const hasSize = selectedCateg?.has_sizee
               const isTa2m = selectedCateg?.type === "multi"
               const thereAreSizes = !!sizes.length
               const thereAreWeightItems = !!values.weightitems?.length
@@ -178,8 +178,6 @@ export const CodingSanad = ({
 
               // ---> غير محدد - طقم - يوجد مقاسات مفصة
               if (isTa2m) {
-                console.log(`isTa2m:`, isTa2m)
-                console.log(`thereAreSizes:`, thereAreSizes)
                 const vals = {
                   ...baseValues,
                   ...(thereAreSizes && { sizes }),
@@ -298,8 +296,6 @@ export const CodingSanad = ({
           >
             {({ values, setFieldValue, submitForm, errors }) => (
               <>
-                {/* {console.log("errors", errors)} */}
-                {/* {console.log("initial values", values)} */}
                 <GoldCodingSanadFormHandler
                   selectedSanad={selectedSanad}
                   setSelectedSanad={setSelectedSanad}

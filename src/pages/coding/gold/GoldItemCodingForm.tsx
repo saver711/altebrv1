@@ -7,8 +7,8 @@ import { Button } from "../../../components/atoms"
 import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
 import {
   BaseInputField,
-  Checkbox,
   CheckBoxField,
+  Checkbox,
   Modal,
   TextAreaField
 } from "../../../components/molecules"
@@ -20,10 +20,10 @@ import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import { prepareItemsToShowInCaseOfTa2m } from "../../../utils/helpers"
 import { notify } from "../../../utils/toast"
 import {
-  addTa2mSizesSchema,
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
-  SizePopup_TP
+  SizePopup_TP,
+  addTa2mSizesSchema
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 
@@ -193,7 +193,7 @@ export const GoldItemCodingForm = ({
         <Button
           action={() => setAddSizesModal(true)}
           bordered
-          className="h-10 mt-7"
+          className="h-10 mt-7 whitespace-nowrap"
         >
           إضافة مقاسات الطقم
         </Button>
@@ -249,10 +249,10 @@ export const GoldItemCodingForm = ({
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
-                value: detailedWeight_total,
-                onChange: (e) => setDetailedWeight_total(+e.target.value),
-                disabled: true,
-              }),
+              value: detailedWeight_total,
+              onChange: (e) => setDetailedWeight_total(+e.target.value),
+              disabled: true,
+            }),
           }}
           // value={detailedWeight_total !== 0 && detailedWeight_total ? detailedWeight_total : undefined}
           // onChange={(e) => setDetailedWeight_total(+e.target.value)}
@@ -261,9 +261,8 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          className={`${
-            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-          }`}
+          className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+            }`}
         />
       </div>
 
@@ -278,9 +277,9 @@ export const GoldItemCodingForm = ({
         modalTitle="إضافة لون ذهب"
         name="color_id"
         label="لون الذهب"
-        // onChange={(option) => {
-        //   setFieldValue("color_value", option.value)
-        // }}
+      // onChange={(option) => {
+      //   setFieldValue("color_value", option.value)
+      // }}
       />
       {/* الاجرة */}
       <BaseInputField
@@ -292,6 +291,10 @@ export const GoldItemCodingForm = ({
       />
       {/* يحتوي علي حجر ام لا */}
       <div className=" col-span-1 flex items-center justify-center">
+        <CheckBoxField
+          name="has_stones"
+          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
+        />
         <CheckBoxField
           name="has_stones"
           label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
@@ -311,7 +314,9 @@ export const GoldItemCodingForm = ({
       </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
-        <SizesTable sizes={sizes} setSizes={setSizes} />
+        <div className=" col-span-4" >
+          <SizesTable sizes={sizes} setSizes={setSizes} />
+        </div>
       )}
       {/* صورة القطعة */}
       <div className=" col-span-4 flex flex-col gap-2">
@@ -384,13 +389,13 @@ export const GoldItemCodingForm = ({
                 </Button>
               </>
             )}
-          </Formik>
+              </Formik>
         ))}
-      </Modal>
+          </Modal>
 
-      {/* تفاصيل الاوزان */}
-      <Modal
-        isOpen={
+      {/* تفاصيل الاوزان */ }
+          < Modal
+        isOpen = {
           !!awzanItems &&
           !!awzanItems.length &&
           weightItemsModal &&
@@ -453,8 +458,8 @@ export const GoldItemCodingForm = ({
               </Button>
             </>
           )}
-        </Formik>
-      </Modal>
+            </Formik>
+      </>
     </div>
   )
 }

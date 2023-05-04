@@ -9,7 +9,6 @@ import { PermissionCtxProvider } from "../context/auth-and-perm/permissions"
 import { Home } from "../pages/Home"
 import { Login } from "../pages/Login"
 import { Settings } from "../pages/Settings"
-import { AddAdministrativeStructure } from "../pages/administrativeStructure/AddAdministrativeStructure"
 import { AdministrativeStructure } from "../pages/administrativeStructure/AdministrativeStructure"
 import { Coding } from "../pages/coding/Coding"
 import { GoldCoding } from "../pages/coding/gold/GoldCoding"
@@ -65,8 +64,6 @@ export const AllRoutesProvider = () => {
             element={<GoldCodingWrapper title="ترقيم سند ذهب" />}
           />
           {/* ./CODING */}
-
-          {/* SYSTEM */}
           <Route path="/system" element={<System title={t("system")} />} />
           <Route
             path="/system/company-profile"
@@ -174,7 +171,7 @@ export const AllRoutesProvider = () => {
             path="system/employees"
             element={<Employees title={t("employees")} />}
           />
-          <Route path="/employees/:employeeID" element={<OneEmployee />} />
+          <Route path="system/employees/:employeeID" element={<OneEmployee />} />
           <Route
             path="/bonds/gold"
             element={<GoldSupply title={t("gold supply")} />}
