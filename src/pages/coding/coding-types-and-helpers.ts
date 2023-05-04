@@ -50,7 +50,7 @@ export const codingSanad_schema = yup.object().shape({
     weight: yup.number().required().min(1).max(yup.ref("left_weight")),
     wage: yup.number().required().min(1),
     has_stones: yup.boolean(),
-    media: yup.array().required().min(1),
+    // media: yup.array().required().min(1),
     category_id: yup.string().trim().required(),
     // size_type: yup.string()
     //     .trim()
@@ -168,7 +168,7 @@ export const goldCodingStoneSchema = yup.object().shape({
     certificate_number: yup.string().trim().required(),
     certificate_source: yup.string().trim().required(),
     certificate_url: yup.string().trim().required(),
-    certificate_files: yup.array().required().min(1),
+    // certificate_files: yup.array().required().min(1),
     not_added_stone: yup.boolean(),
     stone_type: yup.string().matches(/^(added|not_added)$/),
 })

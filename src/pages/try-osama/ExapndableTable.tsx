@@ -29,7 +29,6 @@ type Categories_TP = {
   type: string
 }
 export function ExpandableTable({addedPieces}:any) {
-console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces:", addedPieces)
 // variables
   let count = 0
 
@@ -124,15 +123,14 @@ console.log("🚀 ~ file: ExapndableTable.tsx:39 ~ ExpandableTable ~ addedPieces
     <div className='flex flex-col justify-center items-center w-full'>
     <h2 className='font-bold text-2xl' >{t('final review')}</h2>
     <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
-      <div>
-        <div />
-        <table className='mt-2 border-mainGreen shadow-lg mb-2'>
+      <div className='w-full'>
+        <table className='mt-2 border-mainGreen shadow-lg mb-2 w-full'>
           <thead className='bg-mainGreen text-white'>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[140px] md:min-w-[80px] lg:min-w-[190px] whitespace-nowrap'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none  whitespace-nowrap'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(

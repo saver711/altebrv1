@@ -85,7 +85,6 @@ export const SubTables = ({ subTableData }: any) => {
   //@ts-ignore
 
   const [data, setData] = useState(modifiedData)
-  console.log("🚀 ~ file: SubTables.tsx:79 ~ SubTables ~ data:", data)
 
   useEffect(() => {
     if (queryData) {
@@ -130,9 +129,8 @@ export const SubTables = ({ subTableData }: any) => {
         {" "}
         {t("piece details")}{" "}
       </p>
-      <div className="p-2 flex justify-center ms-40">
-        <div />
-        <table className="border-mainGreen shadow-lg mb-7 text-center text-sm font-light">
+      <div className="p-2 flex justify-center ms-10 w-full ">
+        <table className="border-mainGreen shadow-lg mb-7 text-center text-sm font-light w-full">
           <thead className="bg-mainGreen text-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -141,7 +139,7 @@ export const SubTables = ({ subTableData }: any) => {
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none min-w-[130px] md:min-w-[80px] lg:min-w-[120px]"
+                      className="p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none "
                     >
                       {header.isPlaceholder ? null : (
                         <div>

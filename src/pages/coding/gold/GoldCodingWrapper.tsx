@@ -1,6 +1,6 @@
 /////////// IMPORTS
 ///
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
 import { Button } from "../../../components/atoms"
@@ -44,12 +44,10 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   /////////// STATES
   ///
 
-  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
 
   const [stage, setStage] = useState(1)
   ///
   /////////// SIDE EFFECTS
-  ///
 
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
@@ -104,7 +102,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       {stage === 2 && (
           <div className="flex flex-col mx-auto relative" >
             <ExpandableTable addedPieces={addedPieces} />
-            <div className=" flex item-center gap-x-2 left-48 absolute -bottom-10">
+            <div className=" flex item-center gap-x-2 mr-auto">
               <Button action={() => setStage(1)} bordered>رجوع</Button>
               <Button loading={isLoading} action={() => sendPieces(addedPieces)} className="">ارسال</Button>
             </div>

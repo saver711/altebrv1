@@ -77,3 +77,6 @@ input:-webkit-autofill:active {
 .pdf-no-scroll .rpv-core__inner-pages--vertical {
   overflow-y: hidden;
 }
+input::placeholder{
+  padding-bottom: 2px;
+}
