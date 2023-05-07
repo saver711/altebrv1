@@ -127,7 +127,7 @@ export const GoldSupplySecondForm = ({
     }, 0)
 
     const total_tax = boxValues.reduce((acc, curr) => {
-        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(formValues?.api_gold_price) * .15))
+        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
     }, 0)
 
     const total_weight = boxValues.reduce((acc, curr) => {
