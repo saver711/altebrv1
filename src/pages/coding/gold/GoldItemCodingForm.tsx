@@ -295,10 +295,6 @@ export const GoldItemCodingForm = ({
           name="has_stones"
           label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
         />
-        <CheckBoxField
-          name="has_stones"
-          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
-        />
         {/* <RadioGroup name="has_stones">
           <RadioGroup.RadioButton
             value={true}
@@ -394,7 +390,7 @@ export const GoldItemCodingForm = ({
           </Modal>
 
       {/* تفاصيل الاوزان */ }
-          < Modal
+          <Modal
         isOpen = {
           !!awzanItems &&
           !!awzanItems.length &&
@@ -459,7 +455,7 @@ export const GoldItemCodingForm = ({
             </>
           )}
             </Formik>
-      </>
+      </Modal>
     </div>
   )
 }
