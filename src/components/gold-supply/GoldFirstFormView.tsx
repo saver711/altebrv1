@@ -19,7 +19,19 @@ type GoldFirstFormViewProps_TP = {
 export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldFirstFormViewProps_TP) => {
     /////////// VARIABLES
     ///
-    const { bond_date, bond_number, entity_gold_price, goods_media, media, notes, out_goods_value, twred_type, employee_value, supplier_value } = formValues!
+    const { 
+      bond_date, 
+      bond_number, 
+      entity_gold_price, 
+      api_gold_price, 
+      goods_media, 
+      media, 
+      notes, 
+      out_goods_value, 
+      twred_type, 
+      employee_value, 
+      supplier_value 
+    } = formValues!
     ///
     /////////// CUSTOM HOOKS
     ///
@@ -71,7 +83,7 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
           <div className="col-span-4">
             <ul className="grid grid-cols-3 gap-y-2 list-disc">
               <li className="flex gap-x-2 items-center">
-                <strong>{t("document date")}:</strong>
+                <strong>{t("bond date")}:</strong>
                 {formatDate(bond_date)}
               </li>
 
@@ -87,7 +99,7 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
 
               <li className="flex gap-x-2 items-center">
                 <strong>{t("gold price")}:</strong>
-                {entity_gold_price}
+                {api_gold_price}
               </li>
 
               {!!out_goods_value && (
@@ -106,17 +118,23 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
                 <strong>{t("supply type")}:</strong>
                 <p>{`${t(twred_type)}`}</p>
               </li>
-
-              <li className="flex gap-x-2 items-center">
+              {goods_media ? 
+                [...media, ...goods_media].length > 0 && (
+                  <li className="flex gap-x-2 items-center col-span-2">
+                    <strong>{t("media")}:</strong>
+                    <FilesPreviewOutFormik images={[...media, ...goods_media]} />
+                  </li>
+                )
+              : media.length > 0 && (
+                <li className="flex gap-x-2 items-center col-span-2">
+                  <strong>{t("media")}:</strong>
+                  <FilesPreviewOutFormik images={media} />
+                </li>
+              )}
+              <li className="flex gap-x-2 col-span-2">
                 <strong>{t("notes")}:</strong>
                 <p className="wrapText">{notes}</p>
               </li>
-              {[...media, ...goods_media].length > 0 && (
-                <li className="flex gap-x-2 items-center col-span-2">
-                  <strong>{t("media")}:</strong>
-                  <FilesPreviewOutFormik images={[...media, ...goods_media]} />
-                </li>
-              )}
             </ul>
           </div>
         </InnerFormLayout>

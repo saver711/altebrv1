@@ -62,7 +62,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("document date")} </span>,
+        header: () => <span>{t("bond date")} </span>,
         accessorKey: "bond_date",
         cell: (info) => info.getValue(),
       },
@@ -129,7 +129,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       </div>
       {isSuccess && data.length === 0 && (
         <div>
-          <p>لا يوجد سندات</p>
+          <p>{t('no bonds')}</p>
           <Button
             action={() => navigate(`/bonds/gold`)}
             className="flex items-center gap-2"

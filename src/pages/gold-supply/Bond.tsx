@@ -118,7 +118,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         accessorKey: 'debtor_gram',
       },
       {
-        header: `${t('ryal (debtor)')}`,
+        header: `${t('reyal (debtor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'debtor_SRA',
       },      
@@ -128,7 +128,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         accessorKey: 'creditor_gram',
       },
       {
-        header: `${t('ryal (creditor)')}`,
+        header: `${t('reyal (creditor)')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'creditor_SRA',
       }
@@ -230,7 +230,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         <title>{title}</title>
       </Helmet>
       {isError && <h2 className="text-mainRed">{failureReason?.response.data.message}</h2>}
-      {(isLoading || isFetching) && <Loading mainTitle={t('document total')} />}
+      {(isLoading || isFetching) && <Loading mainTitle={t('bond total')} />}
       {!(isLoading || isFetching) && isSuccess && !!contract?.boxes?.length && (
         <BondTotals boxesData={contract?.boxes} />
       )}

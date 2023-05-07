@@ -17,6 +17,7 @@ import {
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
+    setDirty: Dispatch<SetStateAction<boolean>>
     editRow: boolean
     categoriesOptions: never[]
     karatsOptions: never[]
@@ -31,6 +32,7 @@ import {
   
   ///
   export const OTableForm = ({
+    setDirty,
     editRow,
     categoriesOptions,
     karatsOptions,
@@ -42,8 +44,22 @@ import {
     setEditRow,
     setEditData,
   }: OTableFormProps_TP) => {
-    let { enableReinitialize, resetForm, values, setFieldValue, submitForm } =
+    let { enableReinitialize, resetForm, values, setFieldValue, submitForm, dirty } =
       useFormikContext<any>()
+      useEffect(() => {
+        if (
+          values.wage !== "" || 
+          (values.stock !== undefined && values.stock !== "") || 
+          values.weight !== "" ||
+          values.category_id !== "" || 
+          values.karat_id !== ""
+        )  {
+          setDirty(true)
+        } else {
+          setDirty(false)
+        }
+      }, [values.wage, values.stock, values.weight, values.category_id, values.karat_id])
+    
     const columnHelper = createColumnHelper<any>()
     const columns: any = [
       columnHelper.accessor("number", {
@@ -89,6 +105,9 @@ import {
             0.15
           ).toFixed(3),
       }),
+      columnHelper.accessor("actions", {
+        header: `${t("action")}`,
+      }),
     ]
   
     const table = useReactTable({
@@ -128,23 +147,42 @@ import {
     return (
       <>
         <Form>
-          <table className="mt-8 border-mainGreen shadow-lg mb-2">
+          <table className="mt-8 border-mainGreen mb-2">
             <thead className="bg-mainGreen text-white ">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id} className="">
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="p-4 border-l-2 border-l-lightGreen rounded-t-lg"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </th>
-                  ))}
+                  {headerGroup.headers.map((header, i) => {
+                    if (i === 1 || i === 3) {
+                      return (
+                        <th
+                          key={header.id}
+                          className="p-4 border-l-2 border-l-lightGreen rounded-t-lg"
+                          style={{minWidth: '180px'}}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </th>
+                      )
+                    } else {
+                      return (
+                        <th
+                          key={header.id}
+                          className="p-4 border-l-2 border-l-lightGreen rounded-t-lg"
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </th>
+                      )
+                    }
+                  })}
                 </tr>
               ))}
             </thead>
@@ -155,21 +193,23 @@ import {
                   className={`${
                     editRow && editData.id !== row.original.id
                       ? "hidden cursor-not-allowed pointer-events-none"
-                      : ""
+                      : "border-b-2 border-b-flatWhite"
                   }`}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="border-l-2 px-6 py-4 whitespace-nowrap border-l-flatWhite text-center bg-lightGray"
-                      style={{
-                        minWidth: "max-content",
-                      }}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                  <td className="flex gap-x-2 items-center mt-2">
+                  {row.getVisibleCells().map((cell, i) => {
+
+                    return ((i + 1) !== row.getVisibleCells().length) ? (
+                      <td
+                        key={cell.id}
+                        className="border-l-2 px-6 py-4 whitespace-nowrap border-l-flatWhite text-center bg-lightGray"
+                        style={{
+                          minWidth: "max-content",
+                        }}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ) : (
+                      <td className="flex px-6 py-5 bg-lightGreen gap-x-2 items-center">
                     {!editRow && (
                       <DeleteIcon
                         action={() => deleteRowHandler(row.original.id)}
@@ -216,10 +256,12 @@ import {
                       />
                     )}
                   </td>
+                    )
+                  })}
                 </tr>
               ))}
             </tbody>
-            <tfoot>
+            <tfoot className="bg-lightGray">
               {editRow ? (
                 <tr>
                   <td className="text-center">
@@ -304,10 +346,10 @@ import {
                 </tr>
               ) : (
                 <tr>
-                  <td className="text-center">
+                  <td className="text-center border-l-2 border-l-flatWhite">
                     {table.getRowModel().rows.length + 1}
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <SelectCategory
                       name="category_id"
                       onChange={(option) => {
@@ -323,10 +365,10 @@ import {
                       }}
                     />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <BaseInputField id="weight" name="weight" type="number" />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <SelectKarat
                       field="id"
                       name="karat_id"
@@ -349,23 +391,23 @@ import {
                       }}
                     />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <BaseInputField id="stock" name="stock" type="number" />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <BaseInputField id="wage" name="wage" type="number" />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <Field
                       id="total_wages"
                       name="total_wages"
                       value={(
                         Number(values.weight) * Number(values.wage)
                       ).toFixed(3)}
-                      className="border-none outline-none cursor-default caret-transparent text-center"
+                      className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <Field
                       id="wage_tax"
                       name="wage_tax"
@@ -380,10 +422,10 @@ import {
                           Number(values.weight) * Number(values.wage) * 0.15
                         )
                       }
-                      className="border-none outline-none cursor-default caret-transparent text-center"
+                      className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
-                  <td>
+                  <td className="border-l-2 border-l-flatWhite">
                     <Field
                       id="gold_tax"
                       name="gold_tax"
@@ -400,13 +442,13 @@ import {
                             0.15
                         )
                       }
-                      className="border-none outline-none cursor-default caret-transparent text-center"
+                      className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
                   <td>
                     {!editRow && (
                       <AiOutlinePlus
-                        className="cursor-pointer text-lg font-bold bg-mainGray rounded-md w-[30px] h-[30px] shadow-lg active:shadow-none active:w-[28px]"
+                        className="cursor-pointer text-lg font-bold rounded-md mx-auto w-[30px] h-[30px] active:shadow-none active:w-[28px]"
                         onClick={submitForm}
                       />
                     )}
