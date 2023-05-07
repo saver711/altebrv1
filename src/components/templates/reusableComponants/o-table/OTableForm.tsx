@@ -355,6 +355,7 @@ import {
                       onChange={(option) => {
                         setFieldValue("category_value", option!.value)
                       }}
+                      all={true}
                       value={{
                         value: values.category_value || editData.category_value,
                         label:
