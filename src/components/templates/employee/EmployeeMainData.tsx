@@ -1,13 +1,13 @@
 /////////// IMPORTS
 ///
-import { FormikSharedConfig, useFormikContext } from "formik"
+import { useFormikContext } from "formik"
 import { t } from "i18next"
-import { useEffect, useState } from "react"
-import { useFetch } from "../../../hooks"
-import { SelectOption_TP } from "../../../types"
-import { BaseInputField, DateInputField, InnerFormLayout, PhoneInput } from "../../molecules"
-import { DropFile } from "../../molecules/files/DropFile"
+import { useState } from "react"
+import { Button } from "../../atoms"
+import { EditIcon } from "../../atoms/icons"
+import { BaseInputField, DateInputField, InnerFormLayout, Modal, PhoneInput } from "../../molecules"
 import RadioGroup from "../../molecules/RadioGroup"
+import { DropFile } from "../../molecules/files/DropFile"
 import { SelectBranches } from "../reusableComponants/branches/SelectBranches"
 import { SelectRole } from "../reusableComponants/roles/SelectRole"
 import { SelectNationality } from "../systemEstablishment/SelectNationality"
@@ -29,34 +29,11 @@ export const EmployeeMainData = ({ title, editEmployeeData }: EmployeeMainDataPr
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { setFieldValue, values } = useFormikContext<FormikSharedConfig>()
-  const [xx, setxx] = useState<any>()
-  ///
-  const {
-    data: countriesOptions,
-    isLoading: countriesLoading,
-    refetch: refetchCountries,
-    failureReason: countriesErrorReason
-} = useFetch<SelectOption_TP[]>({
-    endpoint: "governorate/api/v1/countries",
-    queryKey: ["countries"],
-    select: (countries) => countries.map((country: any) => ({
-        id: country.id,
-        value: country.name,
-        label: country.name ,
-    })),
-    onSuccess:(data=>{
-      setxx(data?.find((country) => country.id == editEmployeeData.country.id)?.value || '')
-    })
-})
-useEffect(()=>{
-  setFieldValue('country_id',xx)
-  console.log('country_id=>' , values)
-},[xx])
-
+    const {values} = useFormikContext()
   ///
   /////////// STATES
   ///
+  const [modalOpen , setModalOpen] = useState(false)
 
   ///
   /////////// SIDE EFFECTS
@@ -190,16 +167,22 @@ useEffect(()=>{
         {/* username end */}
 
         {/* password start */}
-        {!!!editEmployeeData && (
+        <div className="flex items-center gap-x-2" >
           <BaseInputField
             id="password"
             label={`${t("password")}`}
             name="password"
             type="password"
-            placeholder={`${t("password")}`}
+            placeholder={ !!editEmployeeData ? "***********" : `${t("password")}`}
             required
+            disabled={!!editEmployeeData}
+            className={!!editEmployeeData ? "placeholder:font-bold placeholder:text-black placeholder:text-xl" : ''} 
           />
-        )}
+          {
+            !!editEmployeeData &&
+          <EditIcon action={()=>setModalOpen(true)} />
+          }
+        </div>
         {/* password end */}
 
         {/* isActive start */}
@@ -226,6 +209,26 @@ useEffect(()=>{
           <DropFile name="image" />
         </div>
       </InnerFormLayout>
+      <Modal isOpen={modalOpen} onClose={()=>setModalOpen(false)}>
+      <BaseInputField
+            id="password"
+            label={`${t("edit password")}`}
+            name="password"
+            type="password"
+            placeholder={`${t("password")}`}
+            className="w-1/5"
+          />
+          {
+          values.password.length <=8 &&
+          <p className="text-red-700" >{t('at least 8 characters')}</p>
+          }
+          <Button type="button" action={()=> {
+            if(values.password.length >=8)
+            setModalOpen(false)
+          } } className="flex mr-auto mt-8" >
+            {t('submit')}
+          </Button>
+      </Modal>
     </>
   )
 }
