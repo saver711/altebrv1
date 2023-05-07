@@ -85,7 +85,7 @@ export const ViewKarats = () => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "id",
-        header: () => <span>{t("Sequence")} </span>,
+        header: () => <span>{t("Sequence ")} </span>,
       },
       {
         header: () => <span>{t("karats")} </span>,

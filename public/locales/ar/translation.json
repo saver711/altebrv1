@@ -250,7 +250,7 @@
   "stonesColors": "الوان الاحجار",
   "stonesShapes": "اشكال الاحجار",
   "stonesQualities": "جودة الاحجار",
-  "stonesPurities": "دقة الاحجار",
+  "stonesPurities": "نقاء الاحجار",
   "stonesNatures": "طبيعة الاحجار",
   "district name arabic": "اسم الحي  بالعربي",
   "district name english": "اسم الحي  بالانجليزي",
@@ -299,5 +299,6 @@
   "please enter a valid weight": "'برجاء إدخال وزن صحيح'",
   "please enter a valid stock": "'برجاء إدخال سهم صحيح'",
   "top stock value is 1": "اعلي قيمة للسهم هو 1",
-  "no bonds": "لا يوجد سندات"
+  "no bonds": "لا يوجد سندات",
+  "no items": "لا يوجد"
 }
