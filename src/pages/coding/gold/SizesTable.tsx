@@ -5,8 +5,8 @@ import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
 import { DeleteIcon } from "../../../components/atoms/icons"
 import { Table } from "../../../components/templates/reusableComponants/tantable/Table"
-import { useGetQueryData } from "../../../hooks/useGetQueryData"
-import { Category_TP, SetState_TP } from "../../../types"
+import { useFetch } from "../../../hooks"
+import { SetState_TP } from "../../../types"
 import { SizePopup_TP } from "../coding-types-and-helpers"
 
 ///
@@ -21,13 +21,19 @@ type SizesTableProps_TP = {
 
 ///
 export const SizesTable = ({ sizes, setSizes }: SizesTableProps_TP) => {
+  console.log("🚀 ~ file: SizesTable.tsx:24 ~ SizesTable ~ sizes:", sizes)
   /////////// VARIABLES
   ///
 
   ///
   /////////// CUSTOM HOOKS
   ///
-  const categories = useGetQueryData<Category_TP[]>(["categories"])
+  // const categories = useGetQueryData<Category_TP[]>(["categories"])
+    const {data:categories} = useFetch({
+      endpoint:"classification/api/v1/categories?type=all",
+      queryKey:['all_categories']
+    })
+
 
   const data = useMemo(
     () =>
@@ -43,7 +49,7 @@ export const SizesTable = ({ sizes, setSizes }: SizesTableProps_TP) => {
           ?.sizes?.find((oneSize) => oneSize.id === size.size_type)
           ?.units?.find((unit) => unit.id === size.size_unit_id)?.value,
       })),
-    [JSON.stringify(sizes), JSON.stringify(categories)]
+    [JSON.stringify(sizes), JSON.stringify(categories) , categories]
   )
 
   const columns: ColumnDef<typeof data>[] = [
@@ -67,6 +73,7 @@ export const SizesTable = ({ sizes, setSizes }: SizesTableProps_TP) => {
             const row = info.row.original as unknown as SizePopup_TP
             setSizes((curr) => curr.filter((size) => size.id !== row.id))
           }}
+          className="mx-auto"
         />
       ),
     },
