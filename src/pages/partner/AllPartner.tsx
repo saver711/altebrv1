@@ -192,7 +192,7 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
       {isSuccess && !isFetching && !!!dataSource?.length && (
         <EmptyDataView>
           {" "}
-          <AddPartners title={`${t("add patrner")}`} />{" "}
+          <AddPartners title={`${t("add partner")}`} />{" "}
         </EmptyDataView>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (

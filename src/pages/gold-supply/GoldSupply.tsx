@@ -12,9 +12,9 @@ import { Helmet } from "react-helmet-async"
 // } from "../../types"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
-import { BoxesTypes, GoldSupplySecondForm, OTableDataTypes } from "../../components/gold-supply/GoldSupplySecondForm"
 import { GoldSupplyFinalForm } from "../../components/gold-supply/GoldSupplyFinalForm"
 import { GoldSupplyFirstForm } from "../../components/gold-supply/GoldSupplyFirstForm"
+import { BoxesTypes, GoldSupplySecondForm, OTableDataTypes } from "../../components/gold-supply/GoldSupplySecondForm"
 import { GoldFirstFormInitValues_TP } from "../../components/gold-supply/formInitialValues_types"
 import { Loading } from "../../components/organisms/Loading"
 import { useFetch } from "../../hooks/useFetch"
@@ -78,7 +78,7 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
   /////////// FUNCTIONS
 
   ///
-  if (checkOperationsLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t('checking accounts operations')}`} />
+  if (checkOperationsLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t("checking accounts operations")}`} />
 
   //  should be (!checkOperations?.status) ↓↓↓
   if (!checkOperations?.status) return <div className="h-screen flex justify-center items-center  bg-flatWhite " >

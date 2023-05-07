@@ -80,3 +80,11 @@ input:-webkit-autofill:active {
 input::placeholder{
   padding-bottom: 2px;
 }
+/* .css-1h06qz8-control{
+  width: fit-content;   
+  min-width: 200px;
+}
+.css-b62m3t-container{
+width:fit-content;
+min-width: 200px;
+} */

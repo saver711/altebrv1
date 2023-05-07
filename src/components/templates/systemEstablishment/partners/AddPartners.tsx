@@ -135,7 +135,7 @@ export const AddPartners = ({
     return (
       <Loading
         mainTitle={`${t("loading")}`}
-        subTitle="checking accounts operations"
+        subTitle={`${t("checking accounts operations")}`}
       />
     )
 
