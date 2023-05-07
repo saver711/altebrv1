@@ -143,7 +143,7 @@ const AddSupplier = ({
     return (
       <Loading
         mainTitle={`${t("loading")}`}
-        subTitle="checking accounts operations"
+        subTitle={`${t("checking accounts operations")}`}
       />
     )
   if (!checkOperations?.status)

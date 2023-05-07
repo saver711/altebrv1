@@ -179,12 +179,12 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
             if (values.password === "")
               delete (editedValues.password)
             console.log(editedValues)
-            // mutate({
-            //   endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
-            //   values: editedValues,
-            //   dataType: "formData",
-            //   editWithFormData: true
-            // })
+            mutate({
+              endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
+              values: editedValues,
+              dataType: "formData",
+              editWithFormData: true
+            })
           }
           else {
             console.log("editedValues=>", editedValues)

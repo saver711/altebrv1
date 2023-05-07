@@ -321,6 +321,7 @@ const CreateCategory = ({
                     type="text"
                     placeholder={`${t("category name in english")}`}
                   />
+                </div>
                   {props.values.type == "multi" && (
                     <Select
                       label={`${t("choose categories")}`}
@@ -335,7 +336,6 @@ const CreateCategory = ({
                       loading={categoryLoading}
                     />
                   )}
-                </div>
                 <div className="flex justify-between mb-8">
                   <div className="flex gap-3">
                     <span className="flex items-center font-bold ">

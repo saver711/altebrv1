@@ -41,8 +41,6 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
   /////////// STATES
   ///
   const [editEmployeeData, setEditEmployeeData] = useState<InitialValues_TP>()
-    const [model, setModel] = useState(false)
-
   ///
   /////////// SIDE EFFECTS
   ///
@@ -50,7 +48,7 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  if (employeesLoading) return <Loading mainTitle={`${t('loading...')}`} subTitle={`${t('employees are loading')}`} />
+  if (employeesLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t('employees are loading')}`} />
 
 
   ///
@@ -64,10 +62,11 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
       <div className="flex justify-between mb-5">
         <h2 className="font-bold text-2xl">{t("employees data")}</h2>
         <Button
-          action={() => setModel(true)}
+          action={() => navigate(-1)}
           className="flex items-center gap-2"
+          bordered
         >
-          <AddIcon /> {t("add employee")}
+          {t('back')}
         </Button>
       </div>
       <div className="grid grid-cols-3">
@@ -92,13 +91,6 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
           {t("There ara no employees")}{" "}
         </h2>
       )}
-      <Modal
-        isOpen={model}
-        onClose={() => setModel(false)}
-        title={`${t("add employee")}`}
-      >
-        <AddEmployee title={t("add employee")} />
-      </Modal>
 
       {/* ERROR */}
       {/* {failureReason && <p>{failureReason}</p>} */}
