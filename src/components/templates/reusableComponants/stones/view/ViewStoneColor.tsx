@@ -18,6 +18,9 @@ import { Loading } from "../../../../organisms/Loading"
 import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { useQueryClient } from "@tanstack/react-query"
+import { Back } from "../../../../../utils/utils-components/Back"
 
 ///
 /////////// TYPES
@@ -51,23 +54,24 @@ export const ViewStoneColor = () => {
   const [model, setModel] = useState<boolean>(false)
   const [editData, setEditData] = useState<StonesColors>()
   const [deleteData, setDeleteData] = useState<StonesColors>()
+  const [page, setPage] = useState<number>(1)
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   const cols = useMemo<ColumnDef<StonesColors>[]>(
     () => [
       {
-        header: 'ID',
+        header: `${t('Sequence ')}`,
         cell: (info) => info.renderValue(),
-        accessorKey: 'id',
+        accessorKey: 'index',
       },
       {
-        header: 'Name',
+        header: `${t('Name')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: `${t('action')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -95,21 +99,32 @@ export const ViewStoneColor = () => {
   /////////// CUSTOM HOOKS
   ///
   const isRTL = useIsRTL()
-  const { isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesColors[]>({
+  const { data: colors, isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesColors[]>({
     endpoint: search === '' 
-    ? 'stones/api/v1/colors' 
-    : `stones/api/v1/colors?${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    ? `stones/api/v1/colors?page=${page}` 
+    : `stones/api/v1/colors?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_colors'],
-    onSuccess(data) {setDataSource(data)}
+    pagination: true,
+    onSuccess(data) {setDataSource(data.data)},
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
-
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isDeleting,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: StonesColors[]) => prev.filter(p => p.id !== deleteData?.id))
+      // setDataSource((prev: StonesColors[]) => prev.filter(p => p.id !== deleteData?.id))
+      queryClient.refetchQueries(['view_stones_colors'])
       setOpen(false)
       notify("success")
     }
@@ -125,6 +140,14 @@ export const ViewStoneColor = () => {
 
   useEffect(() => {
     refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
   }, [search])
 
   return (
@@ -145,7 +168,7 @@ export const ViewStoneColor = () => {
               type="text"
               placeholder={`${t("search")}`}
             />
-            <Button type="submit" loading={isRefetching}>
+            <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
             </Button>
           </Form>
@@ -159,6 +182,9 @@ export const ViewStoneColor = () => {
             }}
             addLabel={`${t('add')}`}
             />
+          <div className="ms-2">
+            <Back />
+          </div>
         </div>
       </div>
       {error && (
@@ -188,17 +214,46 @@ export const ViewStoneColor = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {isLoading && <Loading mainTitle={t("stones colors")} />}
-        {isSuccess && !!!dataSource?.length && (
+        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
+        {isSuccess && !!!dataSource?.length && !isLoading && !isRefetching && (
           <div className="mb-5 pr-5">
             <Header
-              header={t(`لا يوجد`)}
+              header={t('no items')}
               className="text-center text-2xl font-bold"
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !!dataSource.length && (
-          <Table data={dataSource} showNavigation columns={cols} />
+        {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <Table data={dataSource} columns={cols}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+              <div className="flex items-center gap-2 font-bold">
+                {t('page')}
+                <span className=" text-mainGreen">
+                  {colors.current_page}
+                </span>
+                {t('from')}
+                <span className=" text-mainGreen">
+                  {colors.pages}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 ">
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev - 1)}
+                  disabled={page == 1}
+                >
+                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                </Button>
+                <Button
+                  className=" rounded bg-mainGreen p-[.18rem] "
+                  action={() => setPage(prev => prev + 1)}
+                  disabled={page == colors.pages}
+                >
+                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                </Button>
+              </div>
+            </div>
+          </Table>
         )}
       </div>
     </>

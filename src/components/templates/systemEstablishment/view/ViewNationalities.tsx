@@ -22,6 +22,7 @@ import { Table } from "../../reusableComponants/tantable/Table"
 import { Modal } from "../../../molecules"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { CreateNationalities } from "../../CreateNationalities"
+import { Back } from "../../../../utils/utils-components/Back"
 
 ///
 export type ViewNationalities_TP = {
@@ -46,7 +47,7 @@ export const ViewNationalities = () => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "id",
-        header: () => <span>{t("Sequence ")} </span>,
+        header: () => <span>{t("Sequence")} </span>,
       },
       {
         header: () => <span>{t("Nationalities")} </span>,
@@ -147,6 +148,11 @@ export const ViewNationalities = () => {
         <EmptyDataView>
           <CreateNationalities />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

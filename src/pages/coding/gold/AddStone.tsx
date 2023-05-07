@@ -3,6 +3,7 @@
 
 import { useQueryClient } from "@tanstack/react-query"
 import { Formik } from "formik"
+import { t } from "i18next"
 import { useEffect, useState } from "react"
 import { AiFillDelete } from "react-icons/ai"
 import { Button } from "../../../components/atoms"
@@ -16,12 +17,14 @@ import NinjaTable from "../../../components/molecules/NinjaTable"
 import RadioGroup from "../../../components/molecules/RadioGroup"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import { Column } from "../../../components/molecules/table/types"
+import { Country_city_distract_markets } from "../../../components/templates/reusableComponants/Country_city_distract_markets"
 import SelectColor from "../../../components/templates/reusableComponants/SelectColor"
 import SelectStoneNature from "../../../components/templates/reusableComponants/stones/select/SelectStoneNature"
 import SelectStonePurity from "../../../components/templates/reusableComponants/stones/select/SelectStonePurity"
 import SelectStoneShape from "../../../components/templates/reusableComponants/stones/select/SelectStoneShape"
 import SelectStoneType from "../../../components/templates/reusableComponants/stones/select/SelectStoneType"
 import { SetState_TP } from "../../../types"
+import { notify } from "../../../utils/toast"
 import {
   GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
@@ -98,11 +101,11 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
     },
     {
       name: "certificate_number",
-      label: "certificate_number",
+      label: "certificate number",
     },
     {
       name: "certificate_source",
-      label: "certificate_source",
+      label: "source",
     },
     {
       name: "certificate_url",
@@ -119,6 +122,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newQueryData = [...queryData]
               newQueryData?.splice(props.rowIndex, 1)
               setQueryData(newQueryData)
+              const newStones = [...stones]
+              newStones?.splice(props.rowIndex, 1)
+              setStones(newStones)
             }}
           />
         )
@@ -136,6 +142,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
       const shapes = queryClient.getQueryData<Query_TP[]>(["stone_shape"])
       const purities = queryClient.getQueryData<Query_TP[]>(["stone_purity"])
       const natures = queryClient.getQueryData<Query_TP[]>(["stone_nature"])
+      const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = stones?.map((stone) => {
         const finaleStone = {
           stone: types?.find((type) => type.id == stone.stone_id)?.name!,
@@ -152,7 +159,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
           count: stone.count,
           nature: natures?.find((type) => type.id == stone.nature_id)?.name!,
           certificate_number: stone.certificate_number,
-          certificate_source: stone.certificate_source,
+          certificate_source: countries?.find(
+            (country) => country.id == stone.certificate_source
+          )?.name!,
           certificate_url: stone.certificate_url,
         }
         return finaleStone
@@ -173,30 +182,14 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
 
   ///
   return (
-    <Accordion className=" bg-lightGreen " title="تفاصيل الأحجار">
+    <Accordion className=" bg-lightGreen" title="تفاصيل الأحجار">
       <div className="  bg-lightGreen rounded-md p-4 mt-3">
-        <div className="bg-white shadows mt-6 rounded-md p-4">
-          {!!stones && !!stones.length && queryData?.length > 0 && (
-            <div className="flex flex-col">
-              <Header header="تفاصيل الأحجار المضافة" />
-              <div className=" my-6 shadows bg-lightGreen bg-opacity-50 rounded-lg p-[.10rem]">
-                {!!queryData && (
-                  <div className="subTable">
-                    <NinjaTable
-                      data={queryData}
-                      columns={columns}
-                      creatable={false}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+        <div className="bg-white shadows mt-6 rounded-md p-4 overflow-x-hidden">
           <Formik
             initialValues={goldCodingStoneValues}
             validationSchema={goldCodingStoneSchema}
             onSubmit={(values) => {
-              console.log("stones values", values)
+              notify("success", `${t("stone added successfully")}`)
               setStones((curr) => [
                 ...(curr || []),
                 { id: crypto.randomUUID(), ...values },
@@ -266,11 +259,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   type="text"
                   label="رقم شهادة الحجر"
                 />
-                <BaseInputField
-                  id="certificate_source"
-                  name="certificate_source"
-                  type="text"
-                  label="مصدر شهادة الحجر"
+                <Country_city_distract_markets
+                  countryName="certificate_source"
+                  countryLabel="مصدر شهادة الحجر"
                 />
                 <BaseInputField
                   id="certificate_url"
@@ -308,9 +299,25 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                 </div>
                 <div className="col-span-4 flex justify-end items-end">
                   <Button action={submitForm} bordered>
-                    إضافة حجر آخر
+                    {stones?.length > 0 ? "إضافة حجر آخر" : "إضافة حجر"}
                   </Button>
                 </div>
+                {!!stones && !!stones.length && queryData?.length > 0 && (
+                  <div className="flex flex-col col-span-4">
+                    <Header header="تفاصيل الأحجار المضافة" />
+                    <div className=" my-6 shadows bg-lightGreen bg-opacity-50 rounded-lg p-[.10rem]">
+                      {!!queryData && (
+                        <div className="subTable">
+                          <NinjaTable
+                            data={queryData}
+                            columns={columns}
+                            creatable={false}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </Formik>

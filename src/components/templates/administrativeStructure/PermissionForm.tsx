@@ -4,18 +4,19 @@
 /////////// Types
 ///
 import { useFormikContext } from "formik"
-import { BaseInputField, InnerFormLayout } from "../../molecules"
-import { PermissionGroup } from "./PermissionGroup"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
+import { BaseInputField, InnerFormLayout } from "../../molecules"
+import { PermissionGroup } from "./PermissionGroup"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 type PermissionProps_TP = {
   permissions: PermissionGroup_TP[]
+  editData?: PermissionGroup_TP | undefined
 }
 ///
-export const PermissionForm = ({ permissions }: PermissionProps_TP) => {
+export const PermissionForm = ({ permissions , editData }: PermissionProps_TP) => {
   /////////// VARIABLES
   ///
   ///
@@ -53,7 +54,7 @@ export const PermissionForm = ({ permissions }: PermissionProps_TP) => {
 
         <div className=" flex flex-col justify-center items-start gap-8">
           {permissions.map(({ id, name, permissions }: {id:string , name:string , permissions: Permission_TP[]}) => (
-            <PermissionGroup key={id} name={name} permissions={permissions} />
+            <PermissionGroup key={id} name={name} permissions={permissions} editData={editData}/>
           ))}
         </div>
       </div>

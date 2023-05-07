@@ -7,10 +7,10 @@ import { Button } from "../../../components/atoms"
 import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
 import {
   BaseInputField,
-  Checkbox,
   CheckBoxField,
+  Checkbox,
   Modal,
-  TextAreaField
+  TextAreaField,
 } from "../../../components/molecules"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import { SelectCategorySize } from "../../../components/templates/categories-sizes/SelectCategorySize"
@@ -20,10 +20,10 @@ import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import { prepareItemsToShowInCaseOfTa2m } from "../../../utils/helpers"
 import { notify } from "../../../utils/toast"
 import {
-  addTa2mSizesSchema,
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
-  SizePopup_TP
+  SizePopup_TP,
+  addTa2mSizesSchema,
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 
@@ -52,6 +52,7 @@ export const GoldItemCodingForm = ({
   setSizes,
   activeBand,
 }: ItemCodingFormProps_TP) => {
+  console.log(`itemsToShowInCaseOfTa2m:`, itemsToShowInCaseOfTa2m)
   /////////// VARIABLES
   ///
   const hasSizes = !!sizes.length
@@ -60,8 +61,9 @@ export const GoldItemCodingForm = ({
   const hasItemsWithSizes = activeBand.category.items?.some(
     (item) => item?.has_size
   )
+  const [awzanItems, setAwzanItems] = useState(activeBand.category.items)
 
-  const awzanItems = activeBand.category.items
+  // const awzanItems = activeBand.category.items
   const awzanItemsFormInitValues = awzanItems?.reduce(
     (acc, { id }) => ({
       ...acc,
@@ -111,6 +113,10 @@ export const GoldItemCodingForm = ({
       setDetailedWeight_total(undefined)
     }
   }, [activeBand])
+
+  useEffect(() => {
+    setAwzanItems(activeBand.category.items)
+  }, [activeBand])
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,20 +140,21 @@ export const GoldItemCodingForm = ({
   ///
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
-      <div className="col-span-4">
+      {/* <div className="col-span-4">
         <Checkbox
           onChange={(e) => handleFixAllPieceData(e)}
           name="fixPieceData"
           id="fixPieceData"
           label="تثبيت معلومات القطعة"
         />
-      </div>
+      </div> */}
       {/* غير محدد */}
       {/* {loadingCategories && activeBand.category?.id == 1 && <Spinner />} */}
       {activeBand.category?.id == 1 && (
         <SelectCategorySize
           sizes={sizes}
           setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+          setAwzanItems={setAwzanItems}
           categoryName="category_id"
           sizeTypeName="size_type"
           showNotDefinedType={false}
@@ -172,7 +179,7 @@ export const GoldItemCodingForm = ({
         !!!activeBand.category.has_size && (
           <div>
             <p>الصنف</p>
-            <p className="shadows py-1 rounded-md bg-white h-9 mt-1 px-3 cursor-default">
+            <p className="shadows py-1 rounded-md bg-gray-300 h-9 mt-1 px-3 cursor-default">
               {activeBand.category.name}
             </p>
           </div>
@@ -193,7 +200,7 @@ export const GoldItemCodingForm = ({
         <Button
           action={() => setAddSizesModal(true)}
           bordered
-          className="h-10 mt-7"
+          className="h-10 mt-7 whitespace-nowrap"
         >
           إضافة مقاسات الطقم
         </Button>
@@ -261,6 +268,9 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
+          className={`${
+            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+          }`}
         />
       </div>
 
@@ -289,7 +299,10 @@ export const GoldItemCodingForm = ({
       />
       {/* يحتوي علي حجر ام لا */}
       <div className=" col-span-1 flex items-center justify-center">
-        <CheckBoxField name="has_stones" label={`${!!!values.has_stones ? 'لا' : ''} يحتوي علي أحجار`} />
+        <CheckBoxField
+          name="has_stones"
+          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
+        />
         {/* <RadioGroup name="has_stones">
           <RadioGroup.RadioButton
             value={true}
@@ -305,7 +318,9 @@ export const GoldItemCodingForm = ({
       </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
-        <SizesTable sizes={sizes} setSizes={setSizes} />
+        <div className=" col-span-4">
+          <SizesTable sizes={sizes} setSizes={setSizes} />
+        </div>
       )}
       {/* صورة القطعة */}
       <div className=" col-span-4 flex flex-col gap-2">
@@ -369,7 +384,11 @@ export const GoldItemCodingForm = ({
                     theSizeName="size_unit_id"
                   />
                 </div>
-                <Button type="button" action={submitForm}>
+                <Button
+                  type="button"
+                  action={submitForm}
+                  className="mt-8 mr-auto flex"
+                >
                   حفظ
                 </Button>
               </>
@@ -422,21 +441,26 @@ export const GoldItemCodingForm = ({
           }}
         >
           {({ submitForm, values }) => (
-            <div>
-              {awzanItems?.map((item, i) => (
-                <BaseInputField
-                  key={item.id}
-                  label={item.name}
-                  id={`${item.name}_${i}`}
-                  name={item.id.toString()}
-                  type="number"
-                />
-              ))}
-
-              <Button type="button" action={submitForm}>
+            <>
+              <div className="grid grid-cols-4 gap-5 py-20">
+                {awzanItems?.map((item, i) => (
+                  <BaseInputField
+                    key={item.id}
+                    label={item.name}
+                    id={`${item.name}_${i}`}
+                    name={item.id.toString()}
+                    type="number"
+                  />
+                ))}
+              </div>
+              <Button
+                type="button"
+                action={submitForm}
+                className="mt-8 mr-auto flex"
+              >
                 تأكيد
               </Button>
-            </div>
+            </>
           )}
         </Formik>
       </Modal>

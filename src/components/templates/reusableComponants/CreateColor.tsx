@@ -50,8 +50,8 @@ const CreateColor = ({
   ///
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_en: !isRTL ? value! : "",
-    name_ar: isRTL ? value! : "",
+    name_en: item ? item.name_en: !isRTL ? value! : "",
+    name_ar: item ? item.name_ar: isRTL ? value! : "",
   }
   ///
   /////////// CUSTOM HOOKS
@@ -67,18 +67,21 @@ const CreateColor = ({
       notify("success")
       if(value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['colors'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['colors'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_colors'])
       } 
       if (setDataSource && setShow && !item) {
-        setDataSource((prev: StonesColors[])=> [...prev, data])
+        // setDataSource((prev: StonesColors[])=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_colors'])
         setShow(false)
       }
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesColors[]) => 
-          prev.map((p: StonesColors) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_colors'])
+        // setDataSource((prev: StonesColors[]) => 
+        //   prev.map((p: StonesColors) => p.id === data.id ? data : p))
       }
     }
   })

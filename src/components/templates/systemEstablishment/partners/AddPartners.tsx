@@ -1,8 +1,10 @@
 /////////// IMPORTS
 ///
+import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useFetch, useMutate } from "../../../../hooks"
 import { formatDate } from "../../../../utils/date"
 import { mutateData } from "../../../../utils/mutateData"
@@ -10,16 +12,14 @@ import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../atoms"
 import { OuterFormLayout } from "../../../molecules"
+import { Loading } from "../../../organisms/Loading"
+import { NationalAddress } from "../../NationalAddress"
+import { Documents } from "../../reusableComponants/documents/Documents"
 import { PartnerMainData } from "./PartnerMainData"
 import {
   InitialValues_TP,
   partnerValidatingSchema,
 } from "./validation-and-types-partner"
-import { Documents } from "../../reusableComponants/documents/Documents"
-import { useQueryClient } from "@tanstack/react-query"
-import { Loading } from "../../../organisms/Loading"
-import { useNavigate } from "react-router-dom"
-import { NationalAddress } from "../../NationalAddress"
 ///
 /////////// Types
 ///
@@ -35,6 +35,7 @@ type AddPartners_props = {
 ///
 export const AddPartners = ({
   title,
+  setModel,
   dataSource,
   editData,
 }: AddPartners_props) => {
@@ -46,17 +47,25 @@ export const AddPartners = ({
   /////////// VARIABLES
   ///
   const initialValues: InitialValues_TP = {
-    name: "" || editData?.name,
-    email: "" || editData?.email,
-    phone: "" || editData?.phone,
-    end_date: new Date() || editData?.end_date,
-    start_date: new Date() || editData?.start_date,
-    city_id: "" || editData?.city_id,
-    country_id: "" || editData?.country_id,
-    nationality_name: "" || editData?.nationality_name,
-    nationality_id: "" || editData?.nationality_id,
-    national_image: [],
-    address: "",
+    name: editData?.name || "",
+    email: editData?.email || "",
+    phone: editData?.phone || "",
+    end_date: editData ? new Date(editData?.end_date) : new Date(),
+    start_date: editData ? new Date(editData?.start_date) : new Date(),
+    x_city: editData?.city?.id || "",
+    // city_value: editData?.city?.name || "",
+    x_country: editData?.country?.id || "",
+    // country_value: editData?.country?.name || "",
+    nationality_name: editData?.nationality_name || "",
+    nationality_id: editData?.nationality_id || "",
+    national_image: !!editData?.national_image
+      ? [
+          {
+            path: editData?.national_image,
+            type: "image",
+          },
+        ]
+      : [],
     // document type
     docType: "",
     docName: "",
@@ -64,22 +73,30 @@ export const AddPartners = ({
     endDate: new Date(),
     reminder: "",
     files: [],
-
-    // national address
-    building_number: "",
-    district_id: "",
-    street_number: "",
-    sub_number: "",
-    zip_code: "",
+    //national Address
+    district_id: editData?.nationalAddress?.district.id || "",
+    building_number: editData?.nationalAddress?.building_number || "",
+    street_number: editData?.nationalAddress?.street_number || "",
+    sub_number: editData?.nationalAddress?.sub_number || "",
+    zip_code: editData?.nationalAddress?.zip_code || "",
+    address: editData?.nationalAddress?.address || "",
   }
   ///
   /////////// CUSTOM HOOKS
   ///
-
+  const incomingData = !!editData
+    ? editData!.document.map((item) => ({
+        ...item.data,
+        endDate: new Date(item.data.endDate),
+        files: item?.files || [],
+        id: item.id,
+      }))
+    : []
   ///
   /////////// STATES
   ///
-  const [docsFormValues, setDocsFormValues] = useState<InitialValues_TP[]>([])
+  const [docsFormValues, setDocsFormValues] =
+    useState<InitialValues_TP[]>(incomingData)
 
   const {
     data: checkOperations,
@@ -90,8 +107,6 @@ export const AddPartners = ({
     endpoint: "partner/api/v1/check",
     queryKey: ["checkSupplier"],
   })
-    console.log("🚀 ~ file: AddPartners.tsx:93 ~ checkOperations:", checkOperations)
-
 
   const navigate = useNavigate()
 
@@ -106,6 +121,8 @@ export const AddPartners = ({
     mutationFn: mutateData,
     onSuccess: () => {
       notify("success")
+      setModel(false)
+      queryClient.refetchQueries(["partner"])
     },
     onError: (error) => {
       console.log(error)
@@ -114,94 +131,11 @@ export const AddPartners = ({
 
   const queryClient = useQueryClient()
 
-  const { mutate: Edit, isLoading: editLoading } = useMutate({
-    mutationFn: mutateData,
-    onSuccess: (data) => {
-      queryClient.setQueryData([`partners`], () => {
-        return [data]
-      })
-      notify("success")
-    },
-    onError: (error) => {
-      console.log(
-        "🚀 ~ file: EmployeeCard.tsx:46 ~ EmployeeCard ~ error:",
-        error
-      )
-      notify("error")
-    },
-  })
-  ///
-  /////////// IF CASES
-  ///
-
-  ///
-  /////////// FUNCTIONS & EVENTS
-  ///
-  const updateHandler = (values: InitialValues_TP) => {
-    const editedValues = {
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
-      city_id: values.city_id,
-      country_id: values.country_id,
-      nationality_name: values.nationality_name,
-      nationality_id: values.nationality_id,
-      end_date: formatDate(values.end_date),
-      start_date: formatDate(values.start_date),
-      national_image: values.national_image[0],
-      building_number: values.building_number,
-
-      district_id: values.district_id,
-      street_number: values.street_number,
-      sub_number: values.sub_number,
-      zip_code: values.zip_code,
-      document: [docsFormValues],
-      _method: "put",
-    }
-    console.log(
-      "🚀 ~ file: EditCompany.tsx:107 ~ updateHandler ~ editedValues:",
-      editedValues
-    )
-
-    Edit({
-      endpointName: `partner/api/v1/partners/${editData.id}`,
-      values: editedValues,
-      method: "post",
-      dataType: "formData",
-    })
-  }
-
-  function PostNewValue(values: InitialValues_TP) {
-    mutate({
-      endpointName: "partner/api/v1/partners",
-      values: {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        city_id: values.city_id,
-        country_id: values.country_id,
-        nationality_name: values.nationality_name,
-        nationality_id: values.nationality_id,
-        end_date: formatDate(values.end_date),
-        start_date: formatDate(values.start_date),
-        national_image: values.national_image[0],
-        building_number: values.building_number,
-
-        address: values.address,
-        district_id: values.district_id,
-        street_number: values.street_number,
-        sub_number: values.sub_number,
-        zip_code: values.zip_code,
-        document: { document : docsFormValues },
-      },
-      dataType: "formData",
-    })
-  }
   if (checkOperationsLoading)
     return (
       <Loading
         mainTitle={`${t("loading")}`}
-        subTitle="checking accounts operations"
+        subTitle={`${t("checking accounts operations")}`}
       />
     )
 
@@ -222,36 +156,94 @@ export const AddPartners = ({
     <>
       <Formik
         initialValues={initialValues}
-        // validationSchema={partnerValidatingSchema}
+        validationSchema={partnerValidatingSchema}
         onSubmit={(values: InitialValues_TP) => {
-          console.log("partners values ", { ...values, ...[docsFormValues] })
-          PostNewValue(values)
+          let editedValues = {
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
+            end_date: formatDate(values.end_date),
+            start_date: formatDate(values.start_date),
+            city_id: values.x_city,
+            country_id: values.x_country,
+            nationality_name: values.nationality_name,
+            national_image: values.national_image[0],
+            nationality_id: values.nationality_id,
+            // district_id: values.district_id,
+            nationalAddress: {
+              address: values.address,
+              country_id: values.country_id,
+              city_id: values.city_id,
+              district_id: values.district_id,
+              building_number: values.building_number,
+              street_number: values.street_number,
+              sub_number: values.sub_number,
+              zip_code: values.zip_code,
+            },
+            document: docsFormValues,
+          }
+          console.log("🚀 ~ file: AddPartners.tsx:262 ~ values:", values)
+          if (!!editData) {
+            console.log(
+              "🚀 ~ file: AddPartners.tsx:262 ~ editedValues:",
+              editedValues
+            )
+
+            let { document, ...editedValuesWithoutDocument } = editedValues
+            if (docsFormValues.length > editData.document.length)
+              editedValues = {
+                ...editedValues,
+                document: editedValues.document.slice(editData.document.length),
+              }
+            if (docsFormValues.length === editData.document.length)
+              editedValues = editedValuesWithoutDocument
+            if (
+              JSON.stringify(values.national_image[0].path) ===
+              JSON.stringify(editData.national_image)
+            )
+              delete editedValues.national_image
+            mutate({
+              endpointName: `partner/api/v1/partners/${editData.id}`,
+              values: editedValues,
+              dataType: "formData",
+              editWithFormData: true,
+            })
+          } else {
+            console.log("editedValues=>", editedValues)
+            mutate({
+              endpointName: "partner/api/v1/partners",
+              values: editedValues,
+              dataType: "formData",
+            })
+          }
+
+          // console.log("partners values ", { ...values, ...[docsFormValues] })
         }}
       >
         <Form>
-          <HandleBackErrors errors={errorQuery?.response.data.errors}>
+          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
             <OuterFormLayout
               header={title}
               submitComponent={
                 <Button
                   type="submit"
                   className="mr-auto mt-8"
-                  loading={isLoading || editLoading}
+                  loading={isLoading}
                 >
                   {t("submit")}
                 </Button>
               }
             >
-              <PartnerMainData />
+              <PartnerMainData editData={editData} />
               <Documents
                 setDocsFormValues={setDocsFormValues}
                 docsFormValues={docsFormValues}
               />
-              <NationalAddress />
+              <NationalAddress editData={editData} />
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
-      </Formik>
+      </Formik>      
     </>
   )
 }

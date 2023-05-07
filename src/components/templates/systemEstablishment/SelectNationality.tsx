@@ -1,12 +1,14 @@
 /////////// IMPORTS
 ///
+import { useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect, useState } from "react"
+import { SingleValue } from "react-select"
 import { useFetch } from "../../../hooks"
 import { SelectOption_TP } from "../../../types"
 import { Select } from "../../molecules"
 import { RefetchErrorHandler } from "../../molecules/RefetchErrorHandler"
 import { CreateNationalities } from "../CreateNationalities"
-import { useFormikContext } from "formik"
 ///
 /////////// Types
 
@@ -14,12 +16,9 @@ import { useFormikContext } from "formik"
 ///
 
 ///
-export const SelectNationality = ({ name }:{ name:string}) => {
+export const SelectNationality = ({ name, editData }: { name: string , editData?:any }) => {
   /////////// VARIABLES
   ///
-
-
-
 
   ///
   /////////// CUSTOM HOOKS
@@ -46,10 +45,19 @@ export const SelectNationality = ({ name }:{ name:string}) => {
   ///
   /////////// STATES
   ///
-
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// SIDE EFFECTS
   ///
+    useEffect(() => {
+      setNewValue({
+        id: editData?.nationality.id,
+        value: editData?.nationality.name,
+        label: editData?.nationality.name || "اختر جنسية",
+      })
+    }, [])
 
   ///
   /////////// IF CASES
@@ -73,8 +81,17 @@ export const SelectNationality = ({ name }:{ name:string}) => {
         creatable
         CreateComponent={CreateNationalities}
         fieldKey="id"
-        isDisabled={!nationalityLoading && !!nationalityErrorReason} />
-      <RefetchErrorHandler failureReason={nationalityErrorReason} isLoading={nationalityLoading} refetch={refetchNationality} />
+        value={newValue}
+        isDisabled={!nationalityLoading && !!nationalityErrorReason}
+        onChange={(option) => {
+          setNewValue(option)
+        }}
+      />
+      <RefetchErrorHandler
+        failureReason={nationalityErrorReason}
+        isLoading={nationalityLoading}
+        refetch={refetchNationality}
+      />
     </div>
   )
 }

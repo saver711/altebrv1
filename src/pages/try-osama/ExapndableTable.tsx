@@ -1,28 +1,23 @@
 //@ts-noCheck
-import React, { HTMLProps } from 'react'
+import React from 'react'
 
 
+import { useQueryClient } from '@tanstack/react-query'
 import {
-  Column,
-  Table,
   ExpandedState,
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getExpandedRowModel,
-  ColumnDef,
-  flexRender,
   createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import CreateCategory from '../../components/templates/reusableComponants/categories/create/CreateCategory'
-import { GrFormView } from 'react-icons/gr'
+import { t } from 'i18next'
+import { useEffect, useMemo, useState } from 'react'
 import { ViewIcon } from '../../components/atoms/icons'
 import { Modal } from '../../components/molecules'
-import { useState, useMemo, useReducer, useEffect } from 'react'
 import { SubTables } from './SubTables'
-import { t } from 'i18next'
-import { useQueryClient } from '@tanstack/react-query'
 
 // types 
 type Categories_TP = {
@@ -35,18 +30,16 @@ type Categories_TP = {
   selling_type: string
   type: string
 }
-export function ExpandableTable({tableData}:any) {
-// variables
+export function ExpandableTable({ addedPieces }: any) {
+  // variables
   let count = 0
 
-  //  select states
-  const [categoriesOptions, setCategoriesOptions] = useState<Categories_TP>()
 
-  const rerender = useReducer(() => ({}), {})[1]
   const columnHelper = createColumnHelper<any>()
   // عشان احط الداتا اللي ناقصه ستاتيك حاليا لحد ما نشوف بعدين
-  const modifiedData = tableData.map(item => ({ ...item, classification: 'ذهب', id_code: crypto.randomUUID().slice(0, 5), karat_id: crypto.randomUUID().slice(0, 2), index: ++count
-}))
+  const modifiedData = addedPieces.map(item => ({
+    ...item, classification: 'ذهب', id_code: crypto.randomUUID().slice(0, 5), karat_id: crypto.randomUUID().slice(0, 2), index: ++count, sizes: item?.sizes || []
+  }))
 
   //states
   const [data, setData] = useState(modifiedData)
@@ -55,22 +48,21 @@ export function ExpandableTable({tableData}:any) {
   const [expanded, setExpanded] = React.useState<ExpandedState>({})
   const [modalOpen, setModalOpen] = useState(false)
   const [subTableData, setSubTableData] = useState<{ index: string, data: typeof data }>()
+  const [queryData, setQueryData] = useState<any[] | undefined>()
+
   const columns = useMemo<any>(
     () => [
       columnHelper.accessor('index', {
         header: `${t('index')}`
       }),
-      columnHelper.accessor('id_code', {
-        header: `${t('identification code')}`
-      }),
+      // columnHelper.accessor('id_code', {
+      //   header: `${t('identification code')}`
+      // }),
       columnHelper.accessor('classification', {
         header: `${t('classification')}`
       }),
-      columnHelper.accessor('category_value', {
+      columnHelper.accessor('category', {
         header: `${t('category')}`
-      }),
-      columnHelper.accessor('karat_id', {
-        header: `${t('karat')}`
       }),
       columnHelper.accessor('model_number', {
         header: `${t('model number')}`
@@ -81,8 +73,8 @@ export function ExpandableTable({tableData}:any) {
       columnHelper.accessor('wage', {
         header: `${t('wage')}`
       }),
-      columnHelper.accessor('color_value', {
-        header: `${t('wage tax')}`
+      columnHelper.accessor('value', {
+        header: `${t('value')}`
       }),
       columnHelper.accessor('view', {
         header: `${t('view')}`,
@@ -90,7 +82,7 @@ export function ExpandableTable({tableData}:any) {
           setSubTableData({ index: info.row.original.index, data: modifiedData })
           setModalOpen(true)
         }
-        } className='ms-5' />
+        } className='mx-auto text-mainGreen text-2xl' />
       }),
     ],
     []
@@ -110,26 +102,38 @@ export function ExpandableTable({tableData}:any) {
 
   // custom hooks 
   const queryClient = useQueryClient()
-  const categories = queryClient.getQueryData(['categories'])
 
-  // side effects
   useEffect(() => {
-    if (categories) {
-      setCategoriesOptions(categories as Categories_TP)
+    if (queryClient) {
+      const categories = queryClient.getQueryData(['categories'])
+      const allQueries = modifiedData?.map((item) => {
+        const finaleItem = {
+          category: categories?.find((category) => category.id == item.category_id)?.name,
+        }
+        return finaleItem
+      })
+      setQueryData(allQueries)
     }
-  }, [categories])
+  }, [queryClient])
+
+  useEffect(() => {
+    if (queryData) {
+      setData(modifiedData.map(item => ({ ...item, category: queryData[0]?.category, view: 'icon' })))
+    }
+  }, [queryData])
 
   return (
-    <>
-      <div>
-        <div />
-        <table className='mt-2 border-mainGreen shadow-lg mb-2'>
+    <div className='flex flex-col justify-center items-center w-full'>
+      <h2 className='font-bold text-2xl' >{t('final review')}</h2>
+      <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
+      <div className='w-full'>
+        <table className='mt-2 border-mainGreen shadow-lg mb-2 w-full'>
           <thead className='bg-mainGreen text-white'>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none  whitespace-nowrap'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -147,14 +151,16 @@ export function ExpandableTable({tableData}:any) {
           <tbody>
             {table.getRowModel().rows.map(row => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
+                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id} className="border-l-[#b9b7b7]-500 border">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed'}`} >
+                        {
+                          !!cell.getContext().getValue() ?
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            ) : '---'}
                       </td>
                     )
                   })}
@@ -234,7 +240,7 @@ export function ExpandableTable({tableData}:any) {
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <SubTables subTableData={subTableData} />
       </Modal>
-    </>
+    </div>
   )
 }
 

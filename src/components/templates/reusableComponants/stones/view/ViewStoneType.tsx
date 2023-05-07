@@ -18,6 +18,9 @@ import CreateStoneType from "../create/CreateStoneType"
 import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { Back } from "../../../../../utils/utils-components/Back"
+import { useQueryClient } from "@tanstack/react-query"
 
 ///
 /////////// TYPES
@@ -51,23 +54,24 @@ export const ViewStoneType = () => {
   const [model, setModel] = useState<boolean>(false)
   const [editData, setEditData] = useState<StonesTypes>()
   const [deleteData, setDeleteData] = useState<StonesTypes>()
+  const [page, setPage] = useState<number>(1)
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   const cols = useMemo<ColumnDef<StonesTypes>[]>(
     () => [
       {
-        header: 'ID',
+        header: `${t('Sequence ')}`,
         cell: (info) => info.renderValue(),
-        accessorKey: 'id',
+        accessorKey: 'index',
       },
       {
-        header: 'Name',
+        header: `${t('Name')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: `${t('action')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -95,21 +99,32 @@ export const ViewStoneType = () => {
   /////////// CUSTOM HOOKS
   ///
   const isRTL = useIsRTL()
-  const { isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesTypes[]>({
+  const { data: types, isLoading, isSuccess, refetch, isRefetching, error } = useFetch<StonesTypes[]>({
     endpoint: search === '' 
-    ? 'stones/api/v1/stones' 
-    : `stones/api/v1/stones?${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    ? `stones/api/v1/stones?page=${page}`
+    : `stones/api/v1/stones?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_types'],
-    onSuccess(data) {setDataSource(data)}
+    pagination: true,
+    onSuccess(data) {setDataSource(data.data)},
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
-
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isDeleting,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: StonesTypes[]) => prev.filter(p => p.id !== deleteData?.id))
+      // setDataSource((prev: StonesTypes[]) => prev.filter(p => p.id !== deleteData?.id))
+      queryClient.refetchQueries(['view_stones_types'])
       setOpen(false)
       notify("success")
     }
@@ -125,17 +140,27 @@ export const ViewStoneType = () => {
 
   useEffect(() => {
     refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
   }, [search])
 
   return (
     <>
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('stones types')}`}
+          {`${t("system establishment")} / ${t("stones types")}`}
         </h3>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {setSearch(values.search)}}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
           validationSchema={validationSchema}
         >
           <Form className="flex align-middle gap-2">
@@ -145,8 +170,10 @@ export const ViewStoneType = () => {
               type="text"
               placeholder={`${t("search")}`}
             />
-            <Button type="submit" loading={isRefetching}>
-              <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
+            <Button type="submit" disabled={isRefetching}>
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
             </Button>
           </Form>
         </Formik>
@@ -157,8 +184,13 @@ export const ViewStoneType = () => {
               setModel(true)
               setOpen(true)
             }}
-            addLabel={`${t('add')}`}
-            />
+            addLabel={`${t("add")}`}
+          />
+          {!isLoading && (
+            <div className="flex justify-end ms-2">
+              <Back />
+            </div>
+          )}
         </div>
       </div>
       {error && (
@@ -169,37 +201,74 @@ export const ViewStoneType = () => {
           />
         </div>
       )}
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-      >
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
-          <CreateStoneType value={editData?.name} item={editData} setDataSource={setDataSource} setShow={setOpen} />
-          ) : (
+          <CreateStoneType
+            value={editData?.name}
+            item={editData}
+            setDataSource={setDataSource}
+            setShow={setOpen}
+          />
+        ) : (
           <div className="flex flex-col gap-8 justify-center items-center">
             <Header header={` حذف : ${deleteData?.name}`} />
             <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} loading={isDeleting} variant="danger">
-                {`${t('confirm')}`}
+              <Button
+                action={handleSubmit}
+                loading={isDeleting}
+                variant="danger"
+              >
+                {`${t("confirm")}`}
               </Button>
-              <Button action={() => setOpen(false)}>{`${t('close')}`}</Button>
+              <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
             </div>
           </div>
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {isLoading && <Loading mainTitle={t("stones colors")} />}
-        {isSuccess && !!!dataSource?.length && (
+        {(isLoading || isRefetching) && (
+          <Loading mainTitle={t("stones types")} />
+        )}
+        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
           <div className="mb-5 pr-5">
             <Header
-              header={t(`لا يوجد`)}
+              header={t('no items')}
               className="text-center text-2xl font-bold"
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !!dataSource.length && (
-          <Table data={dataSource} showNavigation columns={cols} />
-        )}
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <Table data={dataSource} columns={cols}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t('page')}
+                  <span className=" text-mainGreen">{types.current_page}</span>
+                  {t('from')}
+                  <span className=" text-mainGreen">{types.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == types.pages}
+                  >
+                    <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  </Button>
+                </div>
+              </div>
+            </Table>
+          )}
       </div>
     </>
   )

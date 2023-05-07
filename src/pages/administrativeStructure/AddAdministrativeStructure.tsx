@@ -1,6 +1,5 @@
 /////////// IMPORTS
 ///
-import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik, FormikValues } from "formik"
 import { t } from "i18next"
 import { Helmet } from "react-helmet-async"
@@ -17,6 +16,7 @@ import {
     PermissionGroup_TP,
     Permission_TP
 } from "./types-and-schemas"
+import { useQueryClient } from "@tanstack/react-query"
 ///
 /////////// Types
 ///
@@ -33,7 +33,6 @@ type AddAdministrativeStructureProps_TP = {
 export const AddAdministrativeStructure = ({
   title,value,onAdd , editData
 }: AddAdministrativeStructureProps_TP) => {
-  console.log("🚀 ~ file: AddAdministrativeStructure.tsx:36 ~ editData:", editData)
   /////////// VARIABLES
   ///
 
@@ -70,7 +69,7 @@ export const AddAdministrativeStructure = ({
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
-      notify('success')
+      notify('success') 
       if(value && onAdd) {
         onAdd(value)
         queryClient.setQueryData(['allRoles'], (old: any) => {
@@ -118,7 +117,7 @@ export const AddAdministrativeStructure = ({
           validationSchema={addAdministrativeSchema()}
         >
           {({ values, touched }) => (
-            <HandleBackErrors errors={rulePosterror?.response?.data?.errors}>
+            <HandleBackErrors errors={rulePostError?.response.data.errors}>
               <Form>
                 <OuterFormLayout
                   submitComponent={
@@ -133,7 +132,7 @@ export const AddAdministrativeStructure = ({
                   }
                   header={t("add-administrative-structure")}
                 >
-                  <PermissionForm permissions={permissions} />
+                  <PermissionForm permissions={permissions} editData={editData} />
                 </OuterFormLayout>
               </Form>
             </HandleBackErrors>

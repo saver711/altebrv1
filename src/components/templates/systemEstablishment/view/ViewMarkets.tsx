@@ -20,6 +20,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Modal } from "../../../molecules"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { AddMarket } from "../markets/AddMarket"
+import { Back } from "../../../../utils/utils-components/Back"
 
 ///
 export type ViewMarkets_TP = {
@@ -155,6 +156,11 @@ export const ViewMarkets = () => {
         <EmptyDataView>
           <AddMarket />
         </EmptyDataView>
+      )}
+      {!isLoading && (
+        <div className="flex justify-end mb-2">
+          <Back />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />

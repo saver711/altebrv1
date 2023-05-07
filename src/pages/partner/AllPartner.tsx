@@ -58,47 +58,47 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
   const [dataSource, setDataSource] = useState<partner[]>([])
 
   const navigate = useNavigate()
-  const columns = (
-    () => [
-      {
-        cell: (info) => info.getValue(),
-        accessorKey: "index",
-        header: () => <span>{t(" Sequence")} </span>,
-      },
-      {
-        header: () => <span>{t("partner")} </span>,
-        accessorKey: "name",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("action")}</span>,
-        accessorKey: "action",
-        cell: (info) => {
-          return (
-            <div className="flex items-center justify-center gap-4">
-              <EditIcon
-                action={() => {
-                  setOpen((prev) => !prev)
-                  setEditData(info.row.original)
-                  setModel(true)
-                }}
-              />
-              <SvgDelete
-                action={() => {
-                  setOpen((prev) => !prev)
-                  setDeleteData(info.row.original)
-                  setModel(false)
-                }}
-                stroke="#ef4444"
-              />
-              <ViewIcon action={() => navigate(`${info.row.original.id}`)} />
-            </div>
-          )
+    const columns = useMemo<ColumnDef<partner>[]>(
+      () => [
+        {
+          cell: (info) => info.getValue(),
+          accessorKey: "index",
+          header: () => <span>{t("Sequence")} </span>,
         },
-      },
-    ]
-  
-  )
+        {
+          header: () => <span>{t("partners")} </span>,
+          accessorKey: "name",
+          cell: (info) => info.getValue(),
+        },
+        {
+          header: () => <span>{t("action")}</span>,
+          accessorKey: "action",
+          cell: (info) => {
+            return (
+              <div className="flex items-center justify-center gap-4">
+                <EditIcon
+                  action={() => {
+                    setOpen((prev) => !prev)
+                    setEditData(info.row.original)
+                    setModel(true)
+                  }}
+                />
+                <SvgDelete
+                  action={() => {
+                    setOpen((prev) => !prev)
+                    setDeleteData(info.row.original)
+                    setModel(false)
+                  }}
+                  stroke="#ef4444"
+                />
+                <ViewIcon action={() => navigate(`${info.row.original.id}`)} />
+              </div>
+            )
+          },
+        },
+      ],
+      []
+    )
   ///
   let count = 1
 
@@ -106,11 +106,12 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
     data: partners,
     isError,
     isSuccess,
+    isFetching,
     error,
     isLoading: partnersLoading,
   } = useFetch<partner[]>({
     endpoint: "/partner/api/v1/partners",
-    queryKey: ["partners"],
+    queryKey: ["partner"],
     select: (partners) =>
       partners.map((partner) => ({
         ...partner,
@@ -121,10 +122,9 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
     },
     onError: (err) => console.log(err),
   })
-  console.log(
-    "🚀 ~ file: AllPartner.tsx:121 ~ AllPartner ~ partners:",
-    partners
-  )
+
+
+
   /////////// CUSTOM HOOKS
   ///
   const {
@@ -188,9 +188,12 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
           />
         </div>
       )}
-      {partnersLoading && <Loading mainTitle={t("View partner")} />}
-      {isSuccess && !!!dataSource?.length && (
-        <EmptyDataView>{/* <AddPartners /> */}</EmptyDataView>
+      {isFetching && <Loading mainTitle={t("View partner")} />}
+      {isSuccess && !isFetching && !!!dataSource?.length && (
+        <EmptyDataView>
+          {" "}
+          <AddPartners title={`${t("add partner")}`} />{" "}
+        </EmptyDataView>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <>
@@ -221,6 +224,7 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
             title={`${t("Edit Partner")}`}
             dataSource={dataSource}
             editData={editData}
+            setModel={setModel}
           />
         ) : (
           <div className="flex flex-col gap-8 justify-center items-center">

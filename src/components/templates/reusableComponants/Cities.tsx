@@ -115,7 +115,7 @@ const NewCitiesOptionComponent = ({
         }}
         validationSchema={validationSchema}
       >
-        <HandleBackErrors errors={error?.response?.data?.errors}>
+        <HandleBackErrors errors={error?.response.data.errors}>
           <Form className="w-full">
             <div className="flex gap-x-8 items-center">
               <BaseInputField
@@ -174,6 +174,13 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
+  useEffect(() => {
+    setNewValue({
+      id: editData?.nationalAddress.city.id,
+      value: editData?.nationalAddress.city.name,
+      label: editData?.nationalAddress.city.name || "اختر مدينة",
+    })
+  }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -204,6 +211,11 @@ export const Cities = ({
       setFieldValue(cityName, null)
     }
   }, [JSON.stringify(cities)])
+
+  useEffect(() => {
+    setFieldValue("city_value", "")
+  }, [country?.id])
+
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -228,7 +240,7 @@ export const Cities = ({
         onChange={(option: SingleValue<SelectOption_TP>) => {
           if (cityName) {
             setFieldValue(cityName, option?.id)
-            setFieldValue('city_value', option!.value)
+            // setFieldValue('city_value', option!.value)
           }
           if (distractName && editData) {
             setFieldValue(distractName, editData?.district_id)
@@ -255,6 +267,10 @@ export const Cities = ({
             ? "لا يوجد "
             : "اختر الدوله اولا ",
         }}
+        // {...{...(values?.city_value && { value:{
+        //   value: values?.city_value || "",
+        //   label: values?.city_value || ""
+        // }})}}
       />
       <RefetchErrorHandler
         failureReason={failureReason}

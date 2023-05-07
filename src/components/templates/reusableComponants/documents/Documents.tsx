@@ -7,14 +7,15 @@ import { Button } from "../../../atoms"
 import { Delete } from "../../../atoms/icons/Delete"
 import { Edit } from "../../../atoms/icons/Edit"
 import { InnerFormLayout, Modal } from "../../../molecules"
-import { DocumentForm } from "./DocumentForm"
 import { DocsData } from "./DocsData"
+import { DocumentForm } from "./DocumentForm"
 ///
 /////////// Types
 ///
 type DocumentsProps_TP = {
   docsFormValues: any
   setDocsFormValues: Dispatch<SetStateAction<any[]>>
+  editable?:boolean
 }
 export type DocType_TP = {
   id: string
@@ -22,21 +23,20 @@ export type DocType_TP = {
   label: string
 }
 export type allDocs_TP = {
-  docName: string,
-  docNumber: string,
-  files: any,
-  docType: DocType_TP,
-  endDate: Date,
-  reminder: string,
+  docName: string
+  docNumber: string
+  files: any
+  docType: DocType_TP
+  endDate: Date
+  reminder: string
   id: string
 }
 
 export const Documents = ({
   setDocsFormValues,
   docsFormValues,
+  editable=false
 }: DocumentsProps_TP) => {
-    console.log("🚀 ~ file: Documents.tsx:19 ~ docsFormValues:", docsFormValues)
-
   ///
   /////////// STATES
   ///
@@ -55,9 +55,9 @@ export const Documents = ({
   }
 
   function deleteDocHandler(id: string) {
-    setDocsFormValues((prev: any) => {
-      return prev.filter((doc: allDocs_TP) => doc.id !== id)
-    })
+    setDocsFormValues((prev: any) =>
+      prev.filter((doc: allDocs_TP) => doc.id !== id)
+    )
   }
 
   return (
@@ -82,16 +82,19 @@ export const Documents = ({
               {docsFormValues.map((item: any) => (
                 <div
                   className="w-1/4  flex justify-center items-center flex-col my-5"
-                  key={item?.data?.id}
+                  key={item.id}
                 >
                   <div className="flex gap-x-4 items-center">
+                    {
+                      !editable &&
                     <Edit
                       action={() => {
                         setAddDocPopup(true)
-                        setEditableData(item?.data)
+                        setEditableData(item)
                       }}
                     />
-                    <Delete action={() => deleteDocHandler(item?.id)} />
+                    }
+                    <Delete action={() => deleteDocHandler(item.id)} />
                   </div>
                   <CiFolderOn
                     className="text-[4rem] text-mainGreen cursor-pointer mx-5"
@@ -100,7 +103,7 @@ export const Documents = ({
                       setShow(true)
                     }}
                   />
-                  <span>{item?.data?.docName}</span>
+                  <span>{item?.docName}</span>
                 </div>
               ))}
             </div>

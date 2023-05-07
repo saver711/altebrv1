@@ -120,7 +120,7 @@ const NewDistrictOptionComponent = ({
         }}
         validationSchema={validationSchema}
       >
-        <HandleBackErrors errors={error?.response?.data?.errors}>
+        <HandleBackErrors errors={error?.response.data.errors}>
           <Form className="w-full">
             <div className="flex gap-x-8 items-center">
               <BaseInputField
@@ -175,11 +175,18 @@ export const Districts = ({
   ///
   const [newValue, setNewValue] =
     useState<SingleValue<SelectOption_TP> | null>()
-  const { setFieldValue } = useFormikContext()
+  const { setFieldValue , values } = useFormikContext()
 
   ///
   /////////// SIDE EFFECTS
   ///
+   useEffect(() => {
+     setNewValue({
+       id: editData?.nationalAddress?.district.id || "",
+       value: editData?.nationalAddress?.district.name || "",
+       label: editData?.nationalAddress?.district.name || "",
+     })
+   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -214,6 +221,13 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
+   useEffect(() => {
+     setNewValue({
+       id: editData?.nationalAddress.district.id,
+       value: editData?.nationalAddress.district.name,
+       label: editData?.nationalAddress.district.name || "اختر الحي",
+     })
+   }, [])
   // console.log("distractNameeditData", editData)
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -260,6 +274,10 @@ export const Districts = ({
             ? "لا يوجد "
             : "اختر المدينه اولا",
         }}
+        // {...{...(values?.district_value && { value:{
+        //   value: values?.district_value || "",
+        //   label: values?.district_value || ""
+        // }})}}
       />
       <RefetchErrorHandler
         failureReason={failureReason}

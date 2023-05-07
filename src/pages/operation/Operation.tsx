@@ -8,6 +8,7 @@ import { ShowButton } from "../../components/molecules/ViewButton"
 import { Loading } from "../../components/organisms/Loading"
 import { OperationDetails } from "../../components/templates/systemEstablishment/operation/OperationDetails"
 import { useFetch } from "../../hooks"
+import { Back } from "../../utils/utils-components/Back"
 ///
 /////////// Types
 ///
@@ -66,8 +67,11 @@ export const Operation = ({ title }: Operation_Props_TP) => {
       {isLoading && <Loading mainTitle="العمليات" subTitle="جاري التحميل" />}
       {isSuccess && (
         <div className="p-4">
-          <div className="mb-5 pr-5">
+          <div className="mb-5 pr-5 flex justify-between">
             <h1 className="text-2xl font-bold">العمليات</h1>
+            <div>
+              <Back/>
+            </div>
           </div>
           <div className="grid grid-cols-4 gap-4 gap-y-6">
             {operations?.map((operation) => {

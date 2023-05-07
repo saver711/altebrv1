@@ -1,6 +1,8 @@
 /////////// IMPORTS
 ///
 import { useQueryClient } from "@tanstack/react-query"
+import { t } from "i18next"
+import { Dispatch, SetStateAction, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import blankPerson from "../../../assets/blank-person-image.png"
 import { useMutate } from "../../../hooks"
@@ -9,11 +11,9 @@ import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { Button } from "../../atoms"
 import { DeleteIcon, EditIcon, ViewIcon } from "../../atoms/icons"
-import { InitialValues_TP } from "./validation-and-types"
-import { t } from "i18next"
-import { Dispatch , SetStateAction , useState } from "react"
 import { Modal } from "../../molecules"
 import { AddEmployee } from "./AddEmployee"
+import { InitialValues_TP } from "./validation-and-types"
 
 
 ///
@@ -89,7 +89,7 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
           className="flex items-center mx-1"
         >
           <ViewIcon />
-          عرض
+          {/* عرض */}
         </Button>
         <Button bordered className="flex items-center mx-1" action={()=>{
             setEditEmployeeData({
@@ -98,11 +98,11 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
            setOpen(true)
           }} >
           <EditIcon/>
-          تعديل
+          {/* تعديل */}
         </Button>
         <Button variant="danger"  className="flex items-center mx-1" action={()=>deleteHandler(id)} loading={deleteLoading}>
           <DeleteIcon/>
-          حذف
+          {/* حذف */}
         </Button>
       </div>
       <Modal 

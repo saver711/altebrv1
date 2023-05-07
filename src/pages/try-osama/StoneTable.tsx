@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-table'
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
+import { BiLinkExternal } from 'react-icons/bi'
 import { Query_TP, StoneRow_TP } from '../coding/gold/AddStone'
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -20,16 +21,16 @@ export const StoneTable = ({ subTableData }: any) => {
 
   const columns = useMemo<any>(
     () => [
-      columnHelper.accessor('stoneType_value', {
+      columnHelper.accessor('types', {
         header: `${t('stone type')}`
       }),
-      columnHelper.accessor('color_value', {
+      columnHelper.accessor('colors', {
         header: `${t('stone color')}`
       }),
-      columnHelper.accessor('shape_value', {
+      columnHelper.accessor('shapes', {
         header: `${t('stone shape')}`
       }),
-      columnHelper.accessor('stonePurity_value', {
+      columnHelper.accessor('purities', {
         header: `${t('purity degree')}`
       }),
       columnHelper.accessor('weight', {
@@ -38,7 +39,7 @@ export const StoneTable = ({ subTableData }: any) => {
       columnHelper.accessor('count', {
         header: `${t('stone count')}`
       }),
-      columnHelper.accessor('stoneNature_value', {
+      columnHelper.accessor('natures', {
         header: `${t('stone nature')}`
       }),
       columnHelper.accessor('certificate_number', {
@@ -48,15 +49,12 @@ export const StoneTable = ({ subTableData }: any) => {
         header: `${t('certificate source')}`
       }),
       columnHelper.accessor('certificate_url', {
-        header: `${t('stone certificate url')}`
+        header: `${t('certificate url')}`
       }),
     ],
     []
   )
   /////////// STATES
-
-
-
 
 
   ///
@@ -68,6 +66,7 @@ export const StoneTable = ({ subTableData }: any) => {
     if (queryClient) {
       const types = queryClient.getQueryData<Query_TP[]>(["stone_type"])
       const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
+      const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const shapes = queryClient.getQueryData<Query_TP[]>(["stone_shape"])
       const purities = queryClient.getQueryData<Query_TP[]>(["stone_purity"])
       const natures = queryClient.getQueryData<Query_TP[]>(["stone_nature"])
@@ -84,6 +83,7 @@ export const StoneTable = ({ subTableData }: any) => {
             .join(" & ")!,
           purity: purities?.find((type) => type.id == stone.stones[0].purity_id)?.name!,
           nature: natures?.find((type) => type.id == stone.stones[0].nature_id)?.name!,
+          country: countries?.find((country) => country.id == stone.stones[0].certificate_source)?.name!,
         }
         return finaleStone
       })
@@ -93,11 +93,11 @@ export const StoneTable = ({ subTableData }: any) => {
   //@ts-ignore
   const StonesData = selectedRow.filter(item => item?.stones)
   const [data, setData] = useState([])
-  console.log("🚀 ~ file: StoneTable.tsx:101 ~ StoneTable ~ data:", data)
   //@ts-ignore
   useEffect(() => {
     if(queryData){
-      setData(StonesData.map(item => ({ ...item?.stones[0],stoneType_value:queryData[0]?.stone,  color_value:queryData[0]?.color ,shape_value:queryData[0]?.shape ,stonePurity_value:queryData[0]?.purity ,stoneNature_value:queryData[0]?.nature})))
+      console.log("===>",queryData[0]?.country)
+      setData(StonesData.map(item => ({ ...item?.stones[0],types:queryData[0]?.stone,  colors:queryData[0]?.color ,shapes:queryData[0]?.shape ,purities:queryData[0]?.purity ,natures:queryData[0]?.nature , certificate_source:queryData[0]?.country})))
     }
   }, [queryData])
   
@@ -127,15 +127,14 @@ export const StoneTable = ({ subTableData }: any) => {
     <div className='flex justify-center items-center' >
       <span className="text-center bg-lightGreen p-2 rounded-lg  text-mainGreen inline-block" > {t('stone details')} </span>
     </div>
-      <div className="p-2">
-        <div/>
-        <table className='border-mainGreen shadow-lg mb-2 text-center text-[.8rem] font-light'>
+      <div className="p-2 w-full">
+        <table className='border-mainGreen shadow-lg mb-2 text-center text-[.8rem] font-light w-full'>
           <thead className='bg-mainGreen text-white'>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none whitespace-nowrap items-start pe-2'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -153,14 +152,19 @@ export const StoneTable = ({ subTableData }: any) => {
           <tbody>
             {table.getRowModel().rows.map(row => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
+                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
+                    cell.getContext().column.id === 'certificate_url' &&
+                    console.log("------>>",cell.getContext().row.original?.certificate_url )
                     return (
-                      <td key={cell.id} className="border-l-[#b9b7b7]-500 border">
-                        {flexRender(
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
+                        {
+                          !!cell.getContext().getValue() ?
+                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('visit link')}</span> <BiLinkExternal/> </a> :
+                        flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )}
+                        ) :'---'}
                       </td>
                     )
                   })}
@@ -168,10 +172,10 @@ export const StoneTable = ({ subTableData }: any) => {
               )
             })}
           </tbody>
-          <tfoot className='h-8' >
+          <tfoot className='h-[40px]' >
             {table.getRowModel().rows.map(row => {
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-                   <span className="text-l font-bold">{t('piece description')} </span> :{row.original.details}
+                   {row.original.details} :<span className="text-l font-bold">{t('stone description')} </span> 
                 </td>
             }).slice(0, 1)}
           </tfoot>

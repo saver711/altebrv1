@@ -9,18 +9,24 @@ import {
 import type { ColumnDef } from "@tanstack/react-table"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { Button } from "../../../atoms"
+import { ReactNode } from "react"
+import { t } from "i18next"
 interface ReactTableProps<T extends object> {
   data: T[]
   columns: ColumnDef<T>[]
   showNavigation?: boolean
   showGlobalFilter?: boolean
   filterFn?: FilterFn<T>
+  footered?: boolean
+  children?: ReactNode
 }
 
 export const Table = <T extends object>({
   data,
   columns,
   showNavigation,
+  footered = false,
+  children
 }: ReactTableProps<T>) => {
   const table = useReactTable({
     data,
@@ -32,7 +38,7 @@ export const Table = <T extends object>({
 
   return (
     <>
-      <div className="overflow-hidden GlobalTable w-full flex flex-col gap-4">
+      <div className={`overflow-hidden ${footered ? '' : 'GlobalTable'}  w-full flex flex-col gap-4`}>
         <table className="min-w-full text-center">
           <thead className="border-b bg-mainGreen">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -54,11 +60,11 @@ export const Table = <T extends object>({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className='border-b" bg-white'>
+            {table.getRowModel().rows.map((row, i) => (
+              <tr key={row.id} className="border-b">
                 {row.getVisibleCells().map((cell) => (
                   <td
-                    className="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                    className={`whitespace-nowrap px-6 py-4 text-sm font-light ${(footered && i == table.getRowModel().rows.length - 1) ? 'bg-mainGreen text-white' : 'bg-lightGreen text-gray-900' } `}
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -71,11 +77,11 @@ export const Table = <T extends object>({
         {showNavigation ? (
           <div className="mt-3 flex items-center justify-end gap-5 p-2">
             <div className="flex items-center gap-2 font-bold">
-              عدد الصفحات
+              {t('page')}
               <span className=" text-mainGreen">
                 {table.getState().pagination.pageIndex + 1}
               </span>
-              من
+              {t('from')}
               <span className=" text-mainGreen">{table.getPageCount()} </span>
             </div>
             <div className="flex items-center gap-2 ">
@@ -96,6 +102,7 @@ export const Table = <T extends object>({
             </div>
           </div>
         ) : null}
+        {children && children}
       </div>
     </>
   )

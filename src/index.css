@@ -32,13 +32,13 @@ input[type="radio"] {
     @apply scrollbar-thin scrollbar-thumb-mainGreen scrollbar-track-green hover:scrollbar-thumb-mainOrange;
   }
   .GlobalTable th {
-    @apply border-b-2 border-l-2 bg-mainGreen  p-2  text-center  text-white first:!rounded-tr-lg last:!rounded-tl-lg;
+    @apply border-b-2 border-l-2 bg-mainGreen  p-2  text-center  text-white;
   }
   .GlobalTable td {
     @apply border-b-2 border-l-2  bg-lightGreen p-2  text-center  text-mainGreen;
   }
   .subTable th {
-    @apply border-l-2 bg-lightGreen  p-2  text-center  text-mainGreen ;
+    @apply border-l-2 bg-lightGreen  p-2  text-center  text-mainGreen;
   }
   .subTable td {
     @apply border-l-2  bg-white p-2  text-center   text-black;
@@ -77,3 +77,14 @@ input:-webkit-autofill:active {
 .pdf-no-scroll .rpv-core__inner-pages--vertical {
   overflow-y: hidden;
 }
+input::placeholder{
+  padding-bottom: 2px;
+}
+/* .css-1h06qz8-control{
+  width: fit-content;   
+  min-width: 200px;
+}
+.css-b62m3t-container{
+width:fit-content;
+min-width: 200px;
+} */

@@ -8,11 +8,11 @@ import { ViewStoneType } from "../../reusableComponants/stones/view/ViewStoneTyp
 const View_test = () => {
   return (
     <div>
-      <ViewStonePurity />
-      <ViewStoneQuality />
-      <ViewStoneNature />
-      <ViewStoneShape />
-      <ViewStoneColor />
+      {/* <ViewStonePurity /> */}
+      {/* <ViewStoneQuality /> */}
+      {/* <ViewStoneNature /> */}
+      {/* <ViewStoneShape /> */}
+      {/* <ViewStoneColor /> */}
       <ViewStoneType />
     </div>
   )

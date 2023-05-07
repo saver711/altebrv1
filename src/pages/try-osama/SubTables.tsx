@@ -7,10 +7,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable
-} from '@tanstack/react-table'
+} from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { FilesPreview } from "../../components/molecules/files/FilesPreview"
+import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 import { Query_TP } from "../coding/gold/AddStone"
 import { StoneTable } from "./StoneTable"
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -20,47 +20,86 @@ import { StoneTable } from "./StoneTable"
 const columnHelper = createColumnHelper<any>()
 
 export const SubTables = ({ subTableData }: any) => {
-
+  /// variables
+  const selectedRow = subTableData.data.filter(
+    (item) => item.index === subTableData.index
+  )
   const columns = useMemo<any>(
     () => [
-      columnHelper.accessor('supply_date', {
-        header: `${t('supply date')}`
+      columnHelper.accessor("bond_date", {
+        header: `${t("supply date")}`,
       }),
-      columnHelper.accessor('size_type', {
-        header: `${t('size type')}`
+      columnHelper.accessor("karat_value", {
+        header: `${t("karat value")}`,
       }),
-      columnHelper.accessor('sizeNumber_id', {
-        header: `${t('size number')}`
+      columnHelper.accessor("size_type", {
+        header: `${t("size type")}`,
       }),
-      columnHelper.accessor('country_value', {
-        header: `${t('country')}`
+      columnHelper.accessor("size_unit_id", {
+        header: `${t("size number")}`,
       }),
-      //   columnHelper.accessor('selling_price', {
-      //     header: `${t('selling price')}`
-      // }),
+      columnHelper.accessor("color", {
+        header: `${t("color")}`,
+      }),
+      columnHelper.accessor("country", {
+        header: `${t("country")}`,
+      }),
+      columnHelper.accessor("sellingPrice", {
+        header: `${t("selling price")}`,
+      }),
     ],
     []
   )
   ////////// STATES
-  const [sizeType, setSizeType] = useState([])
-  console.log("🚀 ~ file: SubTables.tsx:51 ~ SubTables ~ sizeType:", sizeType)
+  const [queryData, setQueryData] = useState<any[] | undefined>()
+
   const queryClient = useQueryClient()
 
+  //@ts-ignore
+  const modifiedData = selectedRow.map((item) => ({
+    ...item,
+    size_type: !!item?.sizes[0] ? item?.sizes[0].size_type : "",
+    size_number: item?.sizes[0] ? item?.sizes[0].size_unit_id : "",
+  }))
+
   useEffect(() => {
-    if(queryClient){
-      const types = queryClient.getQueryData<Query_TP[]>(["sizeType"])
-      setSizeType(types)
+    if (queryClient) {
+      const types = queryClient.getQueryData<Query_TP[]>(["sizes"])
+      const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
+      const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
+      const allQueries = modifiedData?.map((item) => {
+        const finaleItem = {
+          types: types?.find((type) => type.id == item.stones[0].stone_id)
+            ?.name,
+          country: countries?.find((country) => country.id == item.country_id)
+            ?.name,
+          color: colors?.find((color) => color.id == item.color_id)?.name,
+        }
+        return finaleItem
+      })
+      setQueryData(allQueries)
     }
-  }, [])
-  
+  }, [queryClient])
+
   ///
   //@ts-ignore
-  const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
 
-
-  //@ts-ignore
-  const modifiedData = selectedRow.map(item => ({ ...item, supply_date: '1-10-95', size_type: item!.sizes[0].sizeNumber_id, sizeNumber_id: item!.sizes[0].size_type }))
   const [data, setData] = useState(modifiedData)
+
+  useEffect(() => {
+    if (queryData) {
+      setData(
+        modifiedData.map((item) => ({
+          ...item?.sizes[0],
+          types: queryData[0]?.types,
+          country: queryData[0]?.country,
+          color: queryData[0]?.color,
+          karat_value: item.karat_value,
+          bond_date: item.bond_date,
+        }))
+      )
+    }
+  }, [queryData])
 
   const table = useReactTable({
     data,
@@ -81,19 +120,27 @@ export const SubTables = ({ subTableData }: any) => {
   ///
   return (
     <>
-      <div className='flex justify-center items-center'>
-        <span className="text-center font-bold text-2xl mb-12" >باقي تفاصيل القطعه</span>
+      <div className="flex justify-center items-center">
+        <span className="text-center font-bold text-2xl mb-12">
+          باقي تفاصيل القطعه
+        </span>
       </div>
-      <p className="text-center mx-auto bg-lightGreen p-2 rounded-lg w-[150px] text-mainGreen" > {t('piece details')} </p>
-      <div className="p-2 flex justify-center ms-40">
-        <div />
-        <table className='border-mainGreen shadow-lg mb-7 text-center text-sm font-light'>
-          <thead className='bg-mainGreen text-white'>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} >
-                {headerGroup.headers.map(header => {
+      <p className="text-center mx-auto bg-lightGreen p-2 rounded-lg w-[150px] text-mainGreen">
+        {" "}
+        {t("piece details")}{" "}
+      </p>
+      <div className="p-2 flex justify-center ms-10 w-full ">
+        <table className="border-mainGreen shadow-lg mb-7 text-center text-sm font-light w-full">
+          <thead className="bg-mainGreen text-white">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none'>
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none "
+                    >
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -109,16 +156,27 @@ export const SubTables = ({ subTableData }: any) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => {
+            {table.getRowModel().rows.map((row) => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center'>
-                  {row.getVisibleCells().map(cell => {
+                <tr
+                  key={row.id}
+                  className="border-l-2 border-l-flatWhite text-center h-[40px]"
+                >
+                  {row.getVisibleCells().map((cell) => {
                     return (
-                      <td key={cell.id} className="border-l-[#b9b7b7]-500 border" >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <td
+                        key={cell.id}
+                        className={`border-l-[#b9b7b7]-500 border  ${
+                          !!!cell.getContext().getValue() &&
+                          "bg-gray-300 cursor-not-allowed"
+                        }`}
+                      >
+                        {!!cell.getContext().getValue()
+                          ? flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )
+                          : "---"}
                       </td>
                     )
                   })}
@@ -126,86 +184,32 @@ export const SubTables = ({ subTableData }: any) => {
               )
             })}
           </tbody>
-          <tfoot className='h-8' >
-            {table.getRowModel().rows.map(row => {
-              return <td colSpan={10} className='text-start px-4' key={row.id}>
-               <span className="text-l font-bold">{t('piece description')} </span> :{row.original.details}
-              </td>
-            }).slice(0, 1)}
+          <tfoot className="h-[40px]">
+            {table
+              .getRowModel()
+              .rows.map((row) => {
+                return (
+                  <td colSpan={10} className="text-start px-4" key={row.id}>
+                    <span>{selectedRow[0].details} :</span>{" "}
+                    <span className="text-l font-bold">
+                      {t("piece description")}{" "}
+                    </span>
+                  </td>
+                )
+              })
+              .slice(0, 1)}
           </tfoot>
         </table>
-        <div className="h-2" />
-        {/* <div className="flex items-center gap-2">
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                table.setPageIndex(page)
-              }}
-              className="border p-1 rounded w-16"
+        <div />
+
+        <div className="p-2 flex flex-col justify-center items-center gap-x-4">
+          {!!selectedRow[0].media && selectedRow[0].media.length >= 0 && (
+            <FilesPreviewOutFormik
+              images={selectedRow[0].media}
+              pdfs={[]}
+              preview
             />
-          </span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={e => {
-              table.setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 20, 30, 40, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>{table.getRowModel().rows.length} Rows</div>
-        <div>
-          <button onClick={() => rerender()}>Force Rerender</button>
-        </div> */}
-        <div className="p-2 flex flex-col justify-center items-center gap-x-4" >
-          {
-            !!selectedRow[0].media &&
-            selectedRow[0].media.length >=0 &&
-          <FilesPreview images={selectedRow[0].media} pdfs={[]} preview />
-          }
+          )}
         </div>
       </div>
       <StoneTable subTableData={subTableData} />
