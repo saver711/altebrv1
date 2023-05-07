@@ -10,7 +10,7 @@ import {
   CheckBoxField,
   Checkbox,
   Modal,
-  TextAreaField
+  TextAreaField,
 } from "../../../components/molecules"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import { SelectCategorySize } from "../../../components/templates/categories-sizes/SelectCategorySize"
@@ -23,7 +23,7 @@ import {
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
   SizePopup_TP,
-  addTa2mSizesSchema
+  addTa2mSizesSchema,
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 
@@ -52,6 +52,7 @@ export const GoldItemCodingForm = ({
   setSizes,
   activeBand,
 }: ItemCodingFormProps_TP) => {
+  console.log(`itemsToShowInCaseOfTa2m:`, itemsToShowInCaseOfTa2m)
   /////////// VARIABLES
   ///
   const hasSizes = !!sizes.length
@@ -60,8 +61,9 @@ export const GoldItemCodingForm = ({
   const hasItemsWithSizes = activeBand.category.items?.some(
     (item) => item?.has_size
   )
+  const [awzanItems, setAwzanItems] = useState(activeBand.category.items)
 
-  const awzanItems = activeBand.category.items
+  // const awzanItems = activeBand.category.items
   const awzanItemsFormInitValues = awzanItems?.reduce(
     (acc, { id }) => ({
       ...acc,
@@ -111,6 +113,10 @@ export const GoldItemCodingForm = ({
       setDetailedWeight_total(undefined)
     }
   }, [activeBand])
+
+  useEffect(() => {
+    setAwzanItems(activeBand.category.items)
+  }, [activeBand])
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,20 +140,21 @@ export const GoldItemCodingForm = ({
   ///
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
-      <div className="col-span-4">
+      {/* <div className="col-span-4">
         <Checkbox
           onChange={(e) => handleFixAllPieceData(e)}
           name="fixPieceData"
           id="fixPieceData"
           label="تثبيت معلومات القطعة"
         />
-      </div>
+      </div> */}
       {/* غير محدد */}
       {/* {loadingCategories && activeBand.category?.id == 1 && <Spinner />} */}
       {activeBand.category?.id == 1 && (
         <SelectCategorySize
           sizes={sizes}
           setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+          setAwzanItems={setAwzanItems}
           categoryName="category_id"
           sizeTypeName="size_type"
           showNotDefinedType={false}
@@ -249,10 +256,10 @@ export const GoldItemCodingForm = ({
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
-              value: detailedWeight_total,
-              onChange: (e) => setDetailedWeight_total(+e.target.value),
-              disabled: true,
-            }),
+                value: detailedWeight_total,
+                onChange: (e) => setDetailedWeight_total(+e.target.value),
+                disabled: true,
+              }),
           }}
           // value={detailedWeight_total !== 0 && detailedWeight_total ? detailedWeight_total : undefined}
           // onChange={(e) => setDetailedWeight_total(+e.target.value)}
@@ -261,8 +268,9 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-            }`}
+          className={`${
+            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+          }`}
         />
       </div>
 
@@ -277,9 +285,9 @@ export const GoldItemCodingForm = ({
         modalTitle="إضافة لون ذهب"
         name="color_id"
         label="لون الذهب"
-      // onChange={(option) => {
-      //   setFieldValue("color_value", option.value)
-      // }}
+        // onChange={(option) => {
+        //   setFieldValue("color_value", option.value)
+        // }}
       />
       {/* الاجرة */}
       <BaseInputField
@@ -310,7 +318,7 @@ export const GoldItemCodingForm = ({
       </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
-        <div className=" col-span-4" >
+        <div className=" col-span-4">
           <SizesTable sizes={sizes} setSizes={setSizes} />
         </div>
       )}
@@ -385,13 +393,13 @@ export const GoldItemCodingForm = ({
                 </Button>
               </>
             )}
-              </Formik>
+          </Formik>
         ))}
-          </Modal>
+      </Modal>
 
-      {/* تفاصيل الاوزان */ }
-          <Modal
-        isOpen = {
+      {/* تفاصيل الاوزان */}
+      <Modal
+        isOpen={
           !!awzanItems &&
           !!awzanItems.length &&
           weightItemsModal &&
@@ -454,7 +462,7 @@ export const GoldItemCodingForm = ({
               </Button>
             </>
           )}
-            </Formik>
+        </Formik>
       </Modal>
     </div>
   )

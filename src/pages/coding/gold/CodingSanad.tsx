@@ -146,7 +146,7 @@ export const CodingSanad = ({
               const selectedCateg = categories?.find(
                 (categ) => categ.id === values.category_id
               )
-              const hasSize = selectedCateg?.has_sizee
+              const hasSize = selectedCateg?.has_size
               const isTa2m = selectedCateg?.type === "multi"
               const thereAreSizes = !!sizes.length
               const thereAreWeightItems = !!values.weightitems?.length
@@ -176,7 +176,7 @@ export const CodingSanad = ({
                 return
               }
 
-              // ---> غير محدد - طقم - يوجد مقاسات مفصة
+              // ---> غير محدد - طقم - يوجد مقاسات مفصلة
               if (isTa2m) {
                 const vals = {
                   ...baseValues,
