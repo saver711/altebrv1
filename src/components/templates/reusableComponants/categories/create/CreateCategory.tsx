@@ -170,14 +170,16 @@ const CreateCategory = ({
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllCategory'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: any) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllCategory'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: any) => (p.id === data?.id ? data : p))
+        // )
       }
     },
   })

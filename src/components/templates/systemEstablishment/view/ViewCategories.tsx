@@ -4,6 +4,7 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
@@ -135,6 +136,8 @@ export const ViewCategories = () => {
       }
     }
   })
+
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -142,9 +145,10 @@ export const ViewCategories = () => {
   } = useMutate<ViewCategories_TP>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: ViewCategories_TP[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: ViewCategories_TP[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(['AllCategory'])
       setOpen(false)
       notify("success")
     },
@@ -229,11 +233,11 @@ export const ViewCategories = () => {
           <Table data={dataSource} columns={columns}>
             <div className="mt-3 flex items-center justify-end gap-5 p-2">
               <div className="flex items-center gap-2 font-bold">
-                عدد الصفحات
+                {t('page')}
                 <span className=" text-mainGreen">
                   {categories.current_page}
                 </span>
-                من
+                {t('from')}
                 <span className=" text-mainGreen">{categories.pages}</span>
               </div>
               <div className="flex items-center gap-2 ">

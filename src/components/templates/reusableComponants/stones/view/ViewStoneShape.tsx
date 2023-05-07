@@ -20,6 +20,7 @@ import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { Back } from "../../../../../utils/utils-components/Back"
+import { useQueryClient } from "@tanstack/react-query"
 
 ///
 /////////// TYPES
@@ -60,17 +61,17 @@ export const ViewStoneShape = () => {
   const cols = useMemo<ColumnDef<StonesShapes>[]>(
     () => [
       {
-        header: 'ID',
+        header: `${t('Sequence ')}`,
         cell: (info) => info.renderValue(),
-        accessorKey: 'id',
+        accessorKey: 'index',
       },
       {
-        header: 'Name',
+        header: `${t('Name')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: `${t('action')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -104,16 +105,26 @@ export const ViewStoneShape = () => {
     : `stones/api/v1/shapes?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_shapes'],
     pagination: true,
-    onSuccess(data) {setDataSource(data.data)}
+    onSuccess(data) {setDataSource(data.data)},
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
-
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isDeleting,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: StonesShapes[]) => prev.filter(p => p.id !== deleteData?.id))
+      // setDataSource((prev: StonesShapes[]) => prev.filter(p => p.id !== deleteData?.id))
+      queryClient.refetchQueries(['view_stones_shapes'])
       setOpen(false)
       notify("success")
     }
@@ -215,12 +226,12 @@ export const ViewStoneShape = () => {
       </Modal>
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && (
-          <Loading mainTitle={t("stones colors")} />
+          <Loading mainTitle={t("stones shapes")} />
         )}
-        {isSuccess && !!!dataSource?.length && (
+        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
           <div className="mb-5 pr-5">
             <Header
-              header={t(`لا يوجد`)}
+              header={t('no items')}
               className="text-center text-2xl font-bold"
             />
           </div>
@@ -233,9 +244,9 @@ export const ViewStoneShape = () => {
             <Table data={dataSource} columns={cols}>
               <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  عدد الصفحات
+                  {t('page')}
                   <span className=" text-mainGreen">{shapes.current_page}</span>
-                  من
+                  {t('from')}
                   <span className=" text-mainGreen">{shapes.pages}</span>
                 </div>
                 <div className="flex items-center gap-2 ">

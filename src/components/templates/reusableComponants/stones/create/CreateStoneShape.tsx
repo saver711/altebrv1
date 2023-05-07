@@ -67,18 +67,21 @@ const CreateStoneShape = ({
       notify("success")
       if(value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['stone_shape'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['stone_shape'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_shapes'])
       } 
       if (setDataSource && setShow) {
-        setDataSource((prev: any)=> [...prev, data])
+        // setDataSource((prev: any)=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_shapes'])
         setShow(false)
       }
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesShapes[]) => 
-          prev.map((p: StonesShapes) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_shapes'])
+        // setDataSource((prev: StonesShapes[]) => 
+        //   prev.map((p: StonesShapes) => p.id === data.id ? data : p))
       }
     }
   })
