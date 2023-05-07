@@ -83,9 +83,9 @@ export const GoldSupplyFirstForm = ({
         employee_value:formValues?.employee_value || '',
         supplier_value:formValues?.supplier_value || '',
         bond_number: formValues?.bond_number || "",
-        api_gold_price: formValues?.api_gold_price || "20", // comes from api gold price 
+        api_gold_price: formValues?.api_gold_price || 20, // comes from api gold price 
         entity_gold_price: formValues?.entity_gold_price || "" || "20", // should be api gold price value from api if no entered data
-        notes: formValues?.notes || "osama",
+        notes: formValues?.notes || "",
         out_goods_value: formValues?.out_goods_value || "",
         media: formValues?.media || [],
         goods_media: formValues?.goods_media || [],
@@ -104,6 +104,19 @@ export const GoldSupplyFirstForm = ({
           onSubmit={(values) => {
             setStage((prev) => prev + 1)
             setFormValues(values)
+            values.twred_type === "global" ? setFormValues(values) : setFormValues({
+              twred_type: values.twred_type,
+              bond_date: values.bond_date,
+              employee_id: values.employee_id,
+              supplier_id: values.supplier_id,
+              employee_value: values.employee_value,
+              supplier_value: values.supplier_value,
+              bond_number: values.bond_number,
+              api_gold_price: values.api_gold_price,
+              entity_gold_price: values.entity_gold_price,
+              notes: values.notes,
+              media: values.media
+            })
             console.log({ ...values, bond_date: formatDate(values.bond_date) })
           }}
           initialValues={GoldFirstFormInitValues}
@@ -153,7 +166,7 @@ export const GoldSupplyFirstForm = ({
 
                   {/* document date start */}
                   <DateInputField
-                    label={`${t("document date")}`}
+                    label={`${t("bond date")}`}
                     name="bond_date"
                     maxDate={new Date()}
                   />
@@ -253,18 +266,18 @@ export const GoldSupplyFirstForm = ({
                   {values.twred_type === "global" && (
                     <BaseInputField
                       id="out_goods_value"
-                      label={`${t("oute goods amount")}`}
+                      label={`${t("out goods value")}`}
                       name="out_goods_value"
                       type="text"
-                      placeholder={`${t("oute goods amount")}`}
+                      placeholder={`${t("out goods value")}`}
                       required
                     />
                   )}
                   {/* outer goods amount end */}
                   <div className="col-span-4 flex justify-between gap-x-4">
                     {/*doc file start */}
-                    <div className="w-full">
-                      <h2>{t("attach supplier document file")}</h2>
+                    <div className={values.twred_type === "global" ? "w-1/2" : "w-full"}>
+                      <h2>{t("attach supplier bond file")}</h2>
                       <DropFile name="media" />
                     </div>
                     {/*doc file end */}
@@ -272,7 +285,7 @@ export const GoldSupplyFirstForm = ({
                     {/*doc goods file start */}
                     {values.twred_type === "global" && (
                       <div className="w-1/2">
-                        <h2>{t("attach goods document file")}</h2>
+                        <h2>{t("attach goods bond file")}</h2>
                         <DropFile name="goods_media" />
                       </div>
                     )}
@@ -288,6 +301,7 @@ export const GoldSupplyFirstForm = ({
                       placeholder={`${t("notes")}`}
                       id="notes"
                       label={`${t("notes")}`}
+                      defaultValue={formValues?.notes || ""}
                     />
                   </div>
                   {/* gold price end */}
