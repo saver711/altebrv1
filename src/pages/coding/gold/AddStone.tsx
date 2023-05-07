@@ -206,25 +206,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   //   setFieldValue("stoneType_value", option.value)
                   // }}
                 />
-                <SelectColor
-                  field="id"
-                  multi
-                  label="لون الحجر"
-                  name="color_id"
-                  modalTitle="إضافة لون حجر"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneColor_value', option.value)
-                  // })}
-                />
-                <SelectStoneShape
-                  multi
-                  field="id"
-                  label="قطع شكل الحجر"
-                  name="shape_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneShape_value', option.value)
-                  // })}
-                />
+
                 <SelectStonePurity
                   field="id"
                   label="نقاء الحجر"
@@ -269,6 +251,27 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   type="text"
                   label="رابط شهادة الحجر"
                 />
+                <div className="col-span-4 flex gap-x-5" >
+                <SelectStoneShape
+                  multi
+                  field="id"
+                  label="قطع شكل الحجر"
+                  name="shape_id"
+                  // onChange={(option => {
+                  //   setFieldValue('stoneShape_value', option.value)
+                  // })}
+                />
+                <SelectColor
+                  field="id"
+                  multi
+                  label="لون الحجر"
+                  name="color_id"
+                  modalTitle="إضافة لون حجر"
+                  // onChange={(option => {
+                  //   setFieldValue('stoneColor_value', option.value)
+                  // })}
+                />
+                </div>
                 <div className=" col-span-4 flex flex-col gap-2 ">
                   <label htmlFor="certificate_files">إرفاق شهادة الحجر</label>
                   <DropFile name="certificate_files" />
