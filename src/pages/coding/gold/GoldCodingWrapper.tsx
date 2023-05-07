@@ -32,8 +32,9 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   /////////// CUSTOM HOOKS
   ///
   const [addedPieces, setAddedPieces] = useState<
-    GoldCodingSanad_initialValues_TP[]
+  GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
+  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
 
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
