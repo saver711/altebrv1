@@ -47,12 +47,60 @@ type Contract_TP = {
   bond_date: string
   classification: "gold"
   supplier_name: string
+  entity_gold_price: number
   items: TableRow_TP[]
   boxes: Box_TP[]
 }
 
 export const Bond = ({ title }: BondProps_TP) => {
   const { bondID } = useParams()
+
+  const { 
+    data: contract, 
+    isError,
+    isLoading,
+    isSuccess,
+    isFetching,
+    failureReason
+  } = useFetch<Contract_TP>({
+    endpoint: `twredGold/api/v1/bond/${bondID}`,
+    queryKey: ['one_bond'],
+    onSuccess: (data) => {
+      console.log('dsdsd')
+      console.log(data)
+    },
+    select: (contract) => ({
+      id: contract.id,
+      bond_number: contract.bond_number,
+      // entity_gold_price: contract.entity_gold_price,
+      bond_date: contract.bond_date,
+      classification: contract.classification,
+      supplier_name: contract.supplier_name,
+      items: contract.items.map(item => {
+        return {
+          itemType: item.category.name,
+          itemStock: item.stocks,
+          itemTaxes: item.totalWage,
+          payoffTaxes: item.totalWage,
+          entity_gold_price: contract.entity_gold_price,
+          id: item.id,
+          goldKarat: item.goldKarat.name,
+          goldWeight: item.goldWeight,
+          wage: item.wage,
+          totalWage: item.totalWage,
+        }
+      }),
+      boxes: contract.boxes.map(box => {
+        return {
+          id: box.id,
+          account: box.account,
+          value: box.value,
+          unit_id: box.unit_id,
+          computational_movement: box.computational_movement
+        }
+      })
+    }),
+  })
 
   const cols1 = useMemo<ColumnDef<TableRow_TP>[]>(
     () => [
@@ -82,6 +130,11 @@ export const Bond = ({ title }: BondProps_TP) => {
         accessorKey: 'wage',
       },
       {
+        header: `${t('gold price')}`,
+        cell: (info) => info.row.original.entity_gold_price,
+        accessorKey: 'entity_gold_price',
+      },
+      {
         header: `${t('total wages')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'totalWage',
@@ -93,12 +146,12 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('gold tax')}`,
-        cell: (info) => info.row.original.goldWeight * 15/100 * 20,
-        accessorKey: 'itemTaxes',
+        cell: (info) => (Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100,
+        accessorKey: 'goldTaxes',
       },
       {
         header: `${t('total tax')}`,
-        cell: (info) => (info.row.original.goldWeight * 15/100 * 20) + parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3)),
+        cell: (info) => ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3))),
         accessorKey: 'itemTaxes',
       },
     ],
@@ -135,51 +188,6 @@ export const Bond = ({ title }: BondProps_TP) => {
     ],
     []
   );
-
-  const { 
-    data: contract, 
-    isError,
-    isLoading,
-    isSuccess,
-    isFetching,
-    failureReason
-  } = useFetch<Contract_TP>({
-    endpoint: `twredGold/api/v1/bond/${bondID}`,
-    queryKey: ['one_bond'],
-    onSuccess: (data) => {
-      console.log('dsdsd')
-      console.log(data)
-    },
-    select: (contract) => ({
-      id: contract.id,
-      bond_number: contract.bond_number,
-      bond_date: contract.bond_date,
-      classification: contract.classification,
-      supplier_name: contract.supplier_name,
-      items: contract.items.map(item => {
-        return {
-          itemType: item.category.name,
-          itemStock: item.stocks,
-          itemTaxes: item.totalWage,
-          payoffTaxes: item.totalWage,
-          id: item.id,
-          goldKarat: item.goldKarat.name,
-          goldWeight: item.goldWeight,
-          wage: item.wage,
-          totalWage: item.totalWage,
-        }
-      }),
-      boxes: contract.boxes.map(box => {
-        return {
-          id: box.id,
-          account: box.account,
-          value: box.value,
-          unit_id: box.unit_id,
-          computational_movement: box.computational_movement
-        }
-      })
-    }),
-  })
 
   let restrictions = contract?.boxes?.map(
     ({ account, computational_movement, unit_id, value }) => ({
