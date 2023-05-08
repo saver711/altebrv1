@@ -1,6 +1,7 @@
 /////////// IMPORTS
 ///
 //import classes from './AddEmployee.module.css'
+import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { Dispatch, SetStateAction, useState } from "react"
@@ -106,20 +107,22 @@ const AddSupplier = ({
     endpoint: "/supplier/api/v1/check",
     queryKey: ["checkOperations"],
   })
-
+  const queryClient = useQueryClient()
   const { mutate, isLoading, error } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['suppliers'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: supplier) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['suppliers'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: supplier) => (p.id === data?.id ? data : p))
+        // )
       }
     },
     onError: (error) => {
@@ -153,8 +156,7 @@ const AddSupplier = ({
           className="font-bold text-2xl p-8 rounded-lg bg-mainGreen text-white cursor-pointer"
           onClick={() => navigate("/operation")}
         >
-          please complete accounts operations first click to complete the
-          operation
+          {t('please complete accounts operations first click to complete the operation')}
         </h2>
       </div>
     )

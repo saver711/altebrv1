@@ -1,22 +1,29 @@
 /////////// IMPORTS
 ///
 import { Helmet } from "react-helmet-async"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
 import { EditIcon, ViewIcon } from "../../components/atoms/icons"
 import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
-import { useFetch, useMutate } from "../../hooks"
+import { useFetch, useIsRTL, useMutate } from "../../hooks"
 import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
 import { AddPartners } from "../../components/templates/systemEstablishment/partners/AddPartners"
 import { Loading } from "../../components/organisms/Loading"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms/buttons/Button"
 import { Header } from "../../components/atoms/Header"
-import { Modal } from "../../components/molecules"
+import { BaseInputField, Modal } from "../../components/molecules"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
+import * as Yup from 'yup'
+import { useQueryClient } from "@tanstack/react-query"
+import { Form, Formik } from "formik"
+import { BiSearchAlt } from "react-icons/bi"
+import { AddButton } from "../../components/molecules/AddButton"
+import { Back } from "../../utils/utils-components/Back"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 
 ///
 /////////// Types
@@ -24,6 +31,19 @@ import { notify } from "../../utils/toast"
 type AllPartnerProps_TP = {
   title: string
 }
+
+type Search_TP = {
+  search: string
+}
+
+const initialValues: Search_TP = {
+  search: ''
+}
+
+const validationSchema = Yup.object({
+  search: Yup.string().trim()
+})
+
 type partner = {
   id: string
   name: string
@@ -51,11 +71,14 @@ type partner = {
 export const AllPartner = ({ title }: AllPartnerProps_TP) => {
   /////////// VARIABLES
   ///
+  const isRTL = useIsRTL()
   const [open, setOpen] = useState(false)
   const [model, setModel] = useState(false)
   const [editData, setEditData] = useState<partner>()
   const [deleteData, setDeleteData] = useState<partner>()
   const [dataSource, setDataSource] = useState<partner[]>([])
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState<number>(1)
 
   const navigate = useNavigate()
     const columns = useMemo<ColumnDef<partner>[]>(
@@ -63,7 +86,7 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
         {
           cell: (info) => info.getValue(),
           accessorKey: "index",
-          header: () => <span>{t("Sequence")} </span>,
+          header: () => <span>{t("Sequence ")} </span>,
         },
         {
           header: () => <span>{t("partners")} </span>,
@@ -108,17 +131,26 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
     isSuccess,
     isFetching,
     error,
+    refetch,
+    isRefetching,
     isLoading: partnersLoading,
   } = useFetch<partner[]>({
-    endpoint: "/partner/api/v1/partners",
+    endpoint: search === '' 
+    ? `partner/api/v1/partners?page=${page}`
+    : `partner/api/v1/partners?page=${page}&name[lk]=${search}`,
     queryKey: ["partner"],
-    select: (partners) =>
-      partners.map((partner) => ({
-        ...partner,
-        index: count++,
-      })),
+    pagination: true,
     onSuccess(data) {
-      setDataSource(data)
+      setDataSource(data.data)
+    },
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
     },
     onError: (err) => console.log(err),
   })
@@ -127,6 +159,7 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
 
   /////////// CUSTOM HOOKS
   ///
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -134,9 +167,10 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
   } = useMutate<partner[]>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: partner[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: partner[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(['partner'])
       setModel(true)
       notify("success")
     },
@@ -173,75 +207,140 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
   ///
   /////////// FUNCTIONS
   ///
+  useEffect(() => {
+    refetch()
+  }, [page])
 
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
+  }, [search])
   ///
   return (
-    <div className="p-4">
+    <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
+      <div className="flex justify-between align-middle mb-8">
+        <h3 className="font-bold">
+          {`${t("system establishment")} / ${t("partners")}`}
+        </h3>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
+          validationSchema={validationSchema}
+        >
+          <Form className="flex align-middle gap-2">
+            <BaseInputField
+              id="search"
+              name="search"
+              type="text"
+              placeholder={`${t("search")}`}
+            />
+            <Button type="submit" disabled={isRefetching}>
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
+            </Button>
+          </Form>
+        </Formik>
+        <div className="flex">
+          <AddButton
+            action={() => {
+              setEditData(undefined)
+              setModel(true)
+              setOpen(true)
+            }}
+            addLabel={`${t("add")}`}
+          />
+          <div className="ms-2">
+            <Back />
+          </div>
+        </div>
+      </div>
       {isError && (
         <div className=" m-auto">
           <Header
             className="text-center text-2xl font-bold"
-            header={t(`some thing went wrong ${error?.message}`)}
+            header={t(`some thing went wrong ${error.message}`)}
           />
         </div>
       )}
-      {isFetching && <Loading mainTitle={t("View partner")} />}
-      {isSuccess && !isFetching && !!!dataSource?.length && (
-        <EmptyDataView>
-          {" "}
-          <AddPartners title={`${t("add partner")}`} />{" "}
-        </EmptyDataView>
-      )}
-      {isSuccess && !!dataSource && !!dataSource.length && (
-        <>
-          <div className="flex justify-between my-3">
-            <h2 className="font-bold text-2xl">{t("show partner")}</h2>
-
-            <Button action={() => navigate(-1)} bordered>
-              {t("Back")}
-            </Button>
-          </div>
-
-          {isSuccess && !!dataSource && !!dataSource.length && (
-            <>
-              <Table data={dataSource} showNavigation columns={columns} />
-              {/* <button onClick={()=>render()}>rerender</button> */}
-            </>
-          )}
-        </>
-      )}
-      <Modal
-        isOpen={open}
-        onClose={() => {
-          setOpen(false)
-        }}
-      >
-        {model ? (
-          <AddPartners
-            title={`${t("Edit Partner")}`}
-            dataSource={dataSource}
-            editData={editData}
-            setModel={setModel}
-          />
-        ) : (
-          <div className="flex flex-col gap-8 justify-center items-center">
-            <Header header={` حذف : ${deleteData?.name}`} />
-            <div className="flex gap-4 justify-center items-cent">
-              <Button
-                action={handleSubmit}
-                variant="danger"
-                loading={mutateLoading}
-              >
-                تاكيد
-              </Button>
-              <Button>اغلاق</Button>
-            </div>
+      <div className="flex flex-col gap-6 items-center">
+        {(partnersLoading || isRefetching) && <Loading mainTitle={t("partners")} />}
+        {isSuccess && !!!dataSource && !partnersLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
           </div>
         )}
-      </Modal>
-    </div>
+        {isSuccess &&
+          !!dataSource &&
+          !partnersLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+          <Table data={dataSource} columns={columns}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t('page')}
+                  <span className=" text-mainGreen">
+                    {partners.current_page}
+                  </span>
+                  {t('from')}
+                  <span className=" text-mainGreen">{partners.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == partners.pages}
+                  >
+                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                  </Button>
+                </div>
+              </div>
+          </Table>
+        )}
+        <Modal
+          isOpen={open}
+          onClose={() => {
+            setOpen(false)
+          }}
+        >
+          {model ? (
+            <AddPartners
+              title={`${t("Edit Partner")}`}
+              dataSource={dataSource}
+              editData={editData}
+              setModel={setModel}
+            />
+          ) : (
+            <div className="flex flex-col gap-8 justify-center items-center">
+              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <div className="flex gap-4 justify-center items-cent">
+                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                  {`${t("confirm")}`}
+                </Button>
+                <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
+              </div>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </>
   )
 }

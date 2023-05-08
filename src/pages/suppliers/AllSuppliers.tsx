@@ -1,27 +1,44 @@
 /////////// IMPORTS
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { Header } from "../../components/atoms/Header"
 import { EditIcon, ViewIcon } from "../../components/atoms/icons"
 import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
-import { Modal } from "../../components/molecules"
+import { BaseInputField, Modal } from "../../components/molecules"
 import { Loading } from "../../components/organisms/Loading"
 import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import AddSupplier from "../../components/templates/systemEstablishment/supplier/AddSupplier"
-import { useFetch, useMutate } from "../../hooks"
+import { useFetch, useIsRTL, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { Back } from "../../utils/utils-components/Back"
-
+import * as Yup from 'yup'
+import { useQueryClient } from "@tanstack/react-query"
+import { Form, Formik } from "formik"
+import { BiSearchAlt } from "react-icons/bi"
+import { AddButton } from "../../components/molecules/AddButton"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 ///
 ///
 /////////// Types
 ///
+
+type Search_TP = {
+  search: string
+}
+
+const initialValues: Search_TP = {
+  search: ''
+}
+
+const validationSchema = Yup.object({
+  search: Yup.string().trim()
+})
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -73,19 +90,22 @@ export type supplier = {
 ///
 export const AllSuppliers = ({ title }: SupplierProps_TP) => {
   /////////// VARIABLES
+  const isRTL = useIsRTL()
   const [open, setOpen] = useState(false)
   const [model, setModel] = useState(false)
   const [editData, setEditData] = useState<supplier>()
   const [deleteData, setDeleteData] = useState<supplier>()
   const [dataSource, setDataSource] = useState<supplier[]>([])
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState<number>(1)
   const navigate = useNavigate()
 
   const columns = useMemo<ColumnDef<supplier>[]>(
     () => [
       {
         cell: (info) => info.getValue(),
-        accessorKey: "id",
-        header: () => <span>{t("Sequence")} </span>,
+        accessorKey: "index",
+        header: () => <span>{t("Sequence ")} </span>,
       },
       {
         header: () => <span>{t("supplier")} </span>,
@@ -132,20 +152,30 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
 
   const {
     data: suppliers,
+    isLoading,
     isError,
     isSuccess,
     error,
+    refetch,
+    isRefetching,
     isFetching
   } = useFetch<supplier[]>({
-    endpoint: "/supplier/api/v1/suppliers",
+    endpoint: search === '' 
+    ? `supplier/api/v1/suppliers?page=${page}`
+    : `supplier/api/v1/suppliers?page=${page}&name[lk]=${search}`,
     queryKey: ["suppliers"],
-    select: (suppliers) =>
-      suppliers.map((supplier) => ({
-        ...supplier,
-        index: count++,
-      })),
+    pagination: true,
     onSuccess(data) {
-      setDataSource(data)
+      setDataSource(data.data)
+    },
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
     },
     onError: (err) => console.log(err),
   })
@@ -174,6 +204,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
   ///
   /////////// FUNCTIONS & EVENTS
   ///
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -181,9 +212,10 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
   } = useMutate<supplier>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: supplier[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: supplier[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(['suppliers'])
       setOpen(false)
       notify("success")
     },
@@ -194,69 +226,140 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
       method: "delete",
     })
   }
+  useEffect(() => {
+    refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
+  }, [search])
   ///
   return (
-    <div className="p-4">
+    <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
+      <div className="flex justify-between align-middle mb-8">
+        <h3 className="font-bold">
+          {`${t("system establishment")} / ${t("suppliers")}`}
+        </h3>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
+          validationSchema={validationSchema}
+        >
+          <Form className="flex align-middle gap-2">
+            <BaseInputField
+              id="search"
+              name="search"
+              type="text"
+              placeholder={`${t("search")}`}
+            />
+            <Button type="submit" disabled={isRefetching}>
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
+            </Button>
+          </Form>
+        </Formik>
+        <div className="flex">
+          <AddButton
+            action={() => {
+              setEditData(undefined)
+              setModel(true)
+              setOpen(true)
+            }}
+            addLabel={`${t("add")}`}
+          />
+          <div className="ms-2">
+            <Back />
+          </div>
+        </div>
+      </div>
       {isError && (
         <div className=" m-auto">
           <Header
             className="text-center text-2xl font-bold"
-            header={t(`some thing went wrong ${error?.message}`)}
+            header={t(`some thing went wrong ${error.message}`)}
           />
         </div>
       )}
-      {isFetching && <Loading mainTitle={t("View Suppliers")} />}
-      { (!isFetching && isSuccess && !!!dataSource?.length) && (
-        <EmptyDataView>
-          <AddSupplier title={"اضافة مورد"} />
-        </EmptyDataView>
-      )}
-      {isSuccess && !!dataSource && !!dataSource.length && (
-        <>
-          {/* <div className="flex justify-between my-3">
-            <h2 className="font-bold text-2xl">{t("show suppliers")}</h2>
-
-            <Button action={() => navigate(-1)} bordered>
-              {t("Back")}
-            </Button>
-          </div> */}
-          <div className="flex justify-end mb-2">
-            <Back/>
-          </div>
-
-          {isSuccess && !!dataSource && !!dataSource.length && (
-            <Table data={dataSource} showNavigation columns={columns} />
-          )}
-        </>
-      )}
-      <Modal
-        isOpen={open}
-        onClose={() => {
-          setOpen(false)
-        }}
-      >
-        {model ? (
-          <AddSupplier
-            title={"اضافة مورد"}
-            editData={editData}
-            setDataSource={setDataSource}
-            setShow={setOpen}
-          />
-        ) : (
-          <div className="flex flex-col gap-8 justify-center items-center">
-            <Header header={` حذف : ${deleteData?.name}`} />
-            <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} variant="danger">
-                تاكيد
-              </Button>
-              <Button>اغلاق</Button>
-            </div>
+      <div className="flex flex-col gap-6 items-center">
+        {(isLoading || isRefetching) && <Loading mainTitle={t("suppliers")} />}
+        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
           </div>
         )}
-      </Modal>
-    </div>
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+          <Table data={dataSource} columns={columns}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t('page')}
+                  <span className=" text-mainGreen">
+                    {suppliers.current_page}
+                  </span>
+                  {t('from')}
+                  <span className=" text-mainGreen">{suppliers.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == suppliers.pages}
+                  >
+                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                  </Button>
+                </div>
+              </div>
+          </Table>
+        )}
+        <Modal
+          isOpen={open}
+          onClose={() => {
+            setOpen(false)
+          }}
+        >
+          {model ? (
+            <AddSupplier
+              title={"اضافة مورد"}
+              editData={editData}
+              setDataSource={setDataSource}
+              setShow={setOpen}
+            />
+          ) : (
+            <div className="flex flex-col gap-8 justify-center items-center">
+              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <div className="flex gap-4 justify-center items-cent">
+                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                  {`${t("confirm")}`}
+                </Button>
+                <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
+              </div>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </>
   )
 }
