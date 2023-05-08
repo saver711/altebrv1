@@ -69,11 +69,11 @@ export const SubTables = ({ subTableData }: any) => {
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = modifiedData?.map((item) => {
         const finaleItem = {
-          types: types?.find((type) => type.id == item.stones[0].stone_id)
+          types: types?.find((type) => type?.id == item?.stones[0].stone_id)
             ?.name,
-          country: countries?.find((country) => country.id == item.country_id)
+          country: countries?.find((country) => country?.id == item?.country_id)
             ?.name,
-          color: colors?.find((color) => color.id == item.color_id)?.name,
+          color: colors?.find((color) => color?.id == item?.color_id)?.name,
         }
         return finaleItem
       })

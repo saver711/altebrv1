@@ -23,9 +23,6 @@ export const Back = ({ path }: BackProps_TP) => {
   /////////// CUSTOM HOOKS
   ///
   const navigate = useNavigate()
-  console.log(`Back ~ navigate:`, navigate)
-  // const navigation = useNavigation()
-  // console.log(`Back ~ navigation:`, navigation)
   ///
   /////////// STATES
   ///

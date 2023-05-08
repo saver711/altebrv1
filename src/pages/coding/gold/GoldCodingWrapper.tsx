@@ -34,7 +34,6 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const [addedPieces, setAddedPieces] = useState<
   GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
-  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
 
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
