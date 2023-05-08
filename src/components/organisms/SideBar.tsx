@@ -99,7 +99,7 @@ export const SideBar = () => {
             : "font-bold text-mainBlack"
         }
         key={Item.id}
-        label={Item.label}
+        label={t(Item.label)}
         icon={<Item.icon size={20} />}
       >
         {Item.items.map((innerItem) => generateItem(innerItem))}
@@ -149,7 +149,7 @@ export const SideBar = () => {
                   : "font-bold text-mainBlack"
               }
               key={Item.id}
-              label={Item.label}
+              label={t(Item.label)}
               icon={<Item.icon size={20} />}
               active={location.pathname === Item.link}
             >
