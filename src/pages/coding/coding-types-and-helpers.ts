@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { Category_TP, KaratValues_TP } from '../../types'
+import { requiredTranslation } from '../../utils/helpers'
 
 // فورم الترقيم
 export type GoldCodingSanad_initialValues_TP = {
@@ -42,28 +43,32 @@ export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
 }
 
 export const codingSanad_schema = yup.object().shape({
-    bond_id: yup.string().trim().required(),
-    mezan_type: yup.string().trim().oneOf(["manual", "mezan"]).required(),
-    color_id: yup.string().trim().required(),
-    country_id: yup.string().trim().required(),
-    model_number: yup.string().trim().required(),
-    weight: yup.number().required().min(1).max(yup.ref("left_weight")),
-    wage: yup.number().required().min(1),
-    has_stones: yup.boolean(),
-    // media: yup.array().required().min(1),
-    category_id: yup.string().trim().required(),
-    // size_type: yup.string()
-    //     .trim()
-    //     .when("sizeIsRequired", {
-    //         is: (val: boolean) => val === true,
-    //         then: (schema) => schema.required(),
-    //     }),
-    // size_unit_id: yup.string()
-    //     .trim()
-    //     .when("sizeIsRequired", {
-    //         is: (val: boolean) => val === true,
-    //         then: (schema) => schema.required(),
-    //     }),
+  bond_id: yup.string().trim().required(requiredTranslation),
+  mezan_type: yup
+    .string()
+    .trim()
+    .oneOf(["manual", "mezan"])
+    .required(requiredTranslation),
+  color_id: yup.string().trim().required(requiredTranslation),
+  country_id: yup.string().trim().required(requiredTranslation),
+  model_number: yup.string().trim().required(requiredTranslation),
+  weight: yup.number().required().min(1).max(yup.ref("left_weight")),
+  wage: yup.number().required().min(1),
+  has_stones: yup.boolean(),
+  // media: yup.array().required().min(1),
+  category_id: yup.string().trim().required(),
+  // size_type: yup.string()
+  //     .trim()
+  //     .when("sizeIsRequired", {
+  //         is: (val: boolean) => val === true,
+  //         then: (schema) => schema.required(),
+  //     }),
+  // size_unit_id: yup.string()
+  //     .trim()
+  //     .when("sizeIsRequired", {
+  //         is: (val: boolean) => val === true,
+  //         then: (schema) => schema.required(),
+  //     }),
 })
 
 export const addTa2mSizesSchema = yup.object().shape({
