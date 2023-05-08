@@ -103,7 +103,6 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                     />
                   )}
                 </div>
-
                 {/* The rest */}
                 <div className="flex gap-4 flex-col mb-8 ">
                   {employee.address && (

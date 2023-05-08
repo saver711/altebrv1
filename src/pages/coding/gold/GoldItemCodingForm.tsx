@@ -7,10 +7,10 @@ import { Button } from "../../../components/atoms"
 import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
 import {
   BaseInputField,
-  Checkbox,
   CheckBoxField,
+  Checkbox,
   Modal,
-  TextAreaField
+  TextAreaField,
 } from "../../../components/molecules"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import { SelectCategorySize } from "../../../components/templates/categories-sizes/SelectCategorySize"
@@ -20,10 +20,10 @@ import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import { prepareItemsToShowInCaseOfTa2m } from "../../../utils/helpers"
 import { notify } from "../../../utils/toast"
 import {
-  addTa2mSizesSchema,
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
-  SizePopup_TP
+  SizePopup_TP,
+  addTa2mSizesSchema,
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 
@@ -52,6 +52,7 @@ export const GoldItemCodingForm = ({
   setSizes,
   activeBand,
 }: ItemCodingFormProps_TP) => {
+  console.log(`itemsToShowInCaseOfTa2m:`, itemsToShowInCaseOfTa2m)
   /////////// VARIABLES
   ///
   const hasSizes = !!sizes.length
@@ -60,8 +61,9 @@ export const GoldItemCodingForm = ({
   const hasItemsWithSizes = activeBand.category.items?.some(
     (item) => item?.has_size
   )
+  const [awzanItems, setAwzanItems] = useState(activeBand.category.items)
 
-  const awzanItems = activeBand.category.items
+  // const awzanItems = activeBand.category.items
   const awzanItemsFormInitValues = awzanItems?.reduce(
     (acc, { id }) => ({
       ...acc,
@@ -111,6 +113,10 @@ export const GoldItemCodingForm = ({
       setDetailedWeight_total(undefined)
     }
   }, [activeBand])
+
+  useEffect(() => {
+    setAwzanItems(activeBand.category.items)
+  }, [activeBand])
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,20 +140,21 @@ export const GoldItemCodingForm = ({
   ///
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
-      <div className="col-span-4">
+      {/* <div className="col-span-4">
         <Checkbox
           onChange={(e) => handleFixAllPieceData(e)}
           name="fixPieceData"
           id="fixPieceData"
           label="تثبيت معلومات القطعة"
         />
-      </div>
+      </div> */}
       {/* غير محدد */}
       {/* {loadingCategories && activeBand.category?.id == 1 && <Spinner />} */}
       {activeBand.category?.id == 1 && (
         <SelectCategorySize
           sizes={sizes}
           setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+          setAwzanItems={setAwzanItems}
           categoryName="category_id"
           sizeTypeName="size_type"
           showNotDefinedType={false}
@@ -193,7 +200,7 @@ export const GoldItemCodingForm = ({
         <Button
           action={() => setAddSizesModal(true)}
           bordered
-          className="h-10 mt-7"
+          className="h-10 mt-7 whitespace-nowrap"
         >
           إضافة مقاسات الطقم
         </Button>
@@ -311,7 +318,9 @@ export const GoldItemCodingForm = ({
       </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
-        <SizesTable sizes={sizes} setSizes={setSizes} />
+        <div className=" col-span-4">
+          <SizesTable sizes={sizes} setSizes={setSizes} />
+        </div>
       )}
       {/* صورة القطعة */}
       <div className=" col-span-4 flex flex-col gap-2">

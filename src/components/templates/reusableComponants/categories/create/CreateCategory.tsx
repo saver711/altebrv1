@@ -146,7 +146,7 @@ const CreateCategory = ({
     refetch: categoryRefetch,
     isLoading: categoryLoading,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "classification/api/v1/categories",
+    endpoint: "classification/api/v1/categories?type=single",
     queryKey: ["categories"],
     select: (categories) => {
       return categories.map((category: any) => ({
@@ -170,14 +170,16 @@ const CreateCategory = ({
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllCategory'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: any) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllCategory'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: any) => (p.id === data?.id ? data : p))
+        // )
       }
     },
   })
@@ -321,6 +323,7 @@ const CreateCategory = ({
                     type="text"
                     placeholder={`${t("category name in english")}`}
                   />
+                </div>
                   {props.values.type == "multi" && (
                     <Select
                       label={`${t("choose categories")}`}
@@ -335,7 +338,6 @@ const CreateCategory = ({
                       loading={categoryLoading}
                     />
                   )}
-                </div>
                 <div className="flex justify-between mb-8">
                   <div className="flex gap-3">
                     <span className="flex items-center font-bold ">

@@ -13,7 +13,7 @@ import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types
 type PermissionGroupProps_TP = {
   permissions: Permission_TP[]
   name: string
-  editData: PermissionGroup_TP | undefined
+  editData?: PermissionGroup_TP | undefined
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///

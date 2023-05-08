@@ -62,18 +62,21 @@ const CreateStonePurity = ({
       notify("success")
       if (value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['stone_purity'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['stone_purity'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_purities'])
       }
       if (setDataSource && setShow) {
-        setDataSource((prev: StonesPurities[])=> [...prev, data])
+        // setDataSource((prev: StonesPurities[])=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_purities'])
         setShow(false)
       } 
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesPurities[]) => 
-          prev.map((p: StonesPurities) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_purities'])
+        // setDataSource((prev: StonesPurities[]) => 
+        //   prev.map((p: StonesPurities) => p.id === data.id ? data : p))
       }
     }
   })

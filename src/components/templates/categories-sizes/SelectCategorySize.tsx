@@ -44,6 +44,7 @@ type SelectCategorySizeProps_TP = {
   sizeTypeFieldKey?: "id" | "value"
   theSizeFieldKey?: "id" | "value"
   setItemsToShowInCaseOfTa2m?: SetState_TP<CategoryMainData_TP[]>
+  setAwzanItems?: SetState_TP<CategoryMainData_TP[] | undefined>
   sizes?: SizePopup_TP[]
 }
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -59,6 +60,7 @@ export const SelectCategorySize = ({
   sizeTypeFieldKey = "id",
   theSizeFieldKey = "id",
   setItemsToShowInCaseOfTa2m,
+  setAwzanItems,
   sizes,
 }: SelectCategorySizeProps_TP) => {
   /////////// VARIABLES
@@ -114,14 +116,22 @@ export const SelectCategorySize = ({
                 setItemsToShowInCaseOfTa2m([])
               }
             }
-            if (selectedCategory?.id !== option.id) {
-              setSelectedSizeTypeOption(null)
-              setFieldValue(sizeTypeName, "")
-              setTheSelectedSize(null)
-              setFieldValue(theSizeName, "")
-              // setFieldValue("category_value", option.value)
-              setSelectedCategory(option)
+
+            if (setAwzanItems) {
+              if (option.type === "multi") {
+                setAwzanItems(option.items)
+              } else {
+                setAwzanItems(undefined)
+              }
             }
+              if (selectedCategory?.id !== option.id) {
+                setSelectedSizeTypeOption(null)
+                setFieldValue(sizeTypeName, "")
+                setTheSelectedSize(null)
+                setFieldValue(theSizeName, "")
+                // setFieldValue("category_value", option.value)
+                setSelectedCategory(option)
+              }
             if (!!option.has_size) {
               setFieldValue("sizeIsRequired", true)
               // setFieldValue("category_value", option.value)

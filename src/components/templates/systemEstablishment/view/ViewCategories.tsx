@@ -4,26 +4,27 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { Button } from "../../../atoms"
-import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
-import { AddButton } from "../../../molecules/AddButton"
-import { Form, Formik } from "formik"
-import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import * as Yup from 'yup'
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
 import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
+import { AddButton } from "../../../molecules/AddButton"
+import { Loading } from "../../../organisms/Loading"
+import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
+import { Table } from "../../reusableComponants/tantable/Table"
 
 ///
 type ViewCategories_TP = {
@@ -135,6 +136,8 @@ export const ViewCategories = () => {
       }
     }
   })
+
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -142,9 +145,10 @@ export const ViewCategories = () => {
   } = useMutate<ViewCategories_TP>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: ViewCategories_TP[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: ViewCategories_TP[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(['AllCategory'])
       setOpen(false)
       notify("success")
     },
@@ -229,11 +233,11 @@ export const ViewCategories = () => {
           <Table data={dataSource} columns={columns}>
             <div className="mt-3 flex items-center justify-end gap-5 p-2">
               <div className="flex items-center gap-2 font-bold">
-                عدد الصفحات
+                {t('page')}
                 <span className=" text-mainGreen">
                   {categories.current_page}
                 </span>
-                من
+                {t('from')}
                 <span className=" text-mainGreen">{categories.pages}</span>
               </div>
               <div className="flex items-center gap-2 ">

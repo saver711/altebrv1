@@ -77,3 +77,17 @@ input:-webkit-autofill:active {
 .pdf-no-scroll .rpv-core__inner-pages--vertical {
   overflow-y: hidden;
 }
+input::placeholder {
+  padding-bottom: 2px;
+}
+.css-b62m3t-container{
+  position: relative;
+}
+.css-1i837h3-ValueContainer2{
+  display: flex;
+  position: absolute;
+  top: 38px;
+}
+.css-5htak9-MultiValueGeneric2{
+  font-size: 70% !important;
+}

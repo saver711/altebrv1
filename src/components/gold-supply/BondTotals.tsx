@@ -2,6 +2,7 @@
 ///
 import { t } from "i18next"
 import { Box_TP } from "../../pages/gold-supply/Bond"
+import { Back } from "../../utils/utils-components/Back"
 ///
 /////////// Types
 ///
@@ -20,7 +21,12 @@ export const BondTotals = ({
 }: BondTotalsProps_TP) => {
   return (
     <div className="flex flex-col gap-4 py-4">
-      <h2 className="text-xl font-bold">{title ? title : t('document total')}</h2>
+      <div className="flex justify-between">
+        <h2 className="text-xl font-bold">{title ? title : t('bond total')}</h2>
+        <div>
+          <Back />
+        </div>
+      </div>
       <ul
         className={
           balance

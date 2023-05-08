@@ -67,18 +67,21 @@ const CreateStoneQuality = ({
       notify("success")
       if(value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['stone_quality'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['stone_quality'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_qualities'])
       }
       if (setDataSource && setShow) {
-        setDataSource((prev: any)=> [...prev, data])
+        // setDataSource((prev: any)=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_qualities'])
         setShow(false)
       }
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesQualities[]) => 
-          prev.map((p: StonesQualities) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_qualities'])
+        // setDataSource((prev: StonesQualities[]) => 
+        //   prev.map((p: StonesQualities) => p.id === data.id ? data : p))
       }
     }
   })

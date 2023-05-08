@@ -21,6 +21,7 @@ type SelectCategory_TP = {
   onChange?: (option: ExtendedCategory_TP) => void
   field?: "id" | "value"
   value?:{[x:string]:string}
+  all?: boolean
 }
 
 const SelectCategory = ({
@@ -29,7 +30,8 @@ const SelectCategory = ({
   field = "id",
   onChange,
   showNotDefinedType = true,
-  value
+  value,
+  all = false
 }: SelectCategory_TP) => {
   ///
   /////////// CUSTOM HOOKS
@@ -37,7 +39,9 @@ const SelectCategory = ({
   const { data: categories, isLoading: categoryLoading} = useFetch<
     ExtendedCategory_TP[]
   >({
-    endpoint: "classification/api/v1/categories",
+    endpoint: all 
+    ? "classification/api/v1/categories?type=all"
+    : "classification/api/v1/categories",
     queryKey: ["categories"],
     select: (categories) => {
       if (showNotDefinedType) {

@@ -44,11 +44,7 @@ export const AdministrativeStructure = ({
   /////////// VARIABLES
   ///
   const navigate = useNavigate()
-  const AddAdministrative = (
-    <Button action={() => navigate("/add-administrative-structure")}>
-      {t("add")}
-    </Button>
-  )
+
 
   // states
   const [dataSource, setDataSource] = useState<PermissionGroup_TP[]>([])
@@ -58,6 +54,13 @@ export const AdministrativeStructure = ({
   const [deleteData, setDeleteData] = useState<any>()
 
   ///
+  const AddAdministrative = (
+    <Button bordered action={() =>{
+      navigate(-1)
+    } }>
+      {t("back")}
+    </Button>
+  )
   /////////// CUSTOM HOOKS
   ///
   const { isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
@@ -143,37 +146,39 @@ export const AdministrativeStructure = ({
         header="الهيكل الإداري"
       >
         <div className="flex justify-between mb-8">
-          <h3 className="font-bold">
-            {`${t('administrative structure')}`}
-          </h3>
+          <h3 className="font-bold">{`${t("administrative structure")}`}</h3>
         </div>
-        <Modal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-        >
+        <Modal isOpen={open} onClose={() => setOpen(false)}>
           {model ? (
-            <AddAdministrativeStructure title={t("add-administrative-structure")} editData={editData} />
+            <AddAdministrativeStructure
+              title={t("add-administrative-structure")}
+              editData={editData}
+            />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
               <Header header={` حذف : ${deleteData?.name}`} />
               <div className="flex gap-4 justify-center items-cent">
-                <Button action={handleSubmit} loading={isDeleting} variant="danger">
-                  {`${t('confirm')}`}
+                <Button
+                  action={handleSubmit}
+                  loading={isDeleting}
+                  variant="danger"
+                >
+                  {`${t("confirm")}`}
                 </Button>
-                <Button action={() => setOpen(false)}>{`${t('close')}`}</Button>
+                <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
               </div>
             </div>
           )}
         </Modal>
         <div className="flex flex-col gap-6 items-center">
-          {
-            dataSource.length <= 0 && <div className="mb-5 pr-5">
-            <Header
-              header={t(`add administrative structure`)}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-          }
+          {dataSource.length <= 0 && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t(`add administrative structure`)}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
           {isSuccess && !!dataSource && !!dataSource.length && (
             <Table data={dataSource} showNavigation columns={cols} />
           )}

@@ -9,7 +9,6 @@ import { PermissionCtxProvider } from "../context/auth-and-perm/permissions"
 import { Home } from "../pages/Home"
 import { Login } from "../pages/Login"
 import { Settings } from "../pages/Settings"
-import { AddAdministrativeStructure } from "../pages/administrativeStructure/AddAdministrativeStructure"
 import { AdministrativeStructure } from "../pages/administrativeStructure/AdministrativeStructure"
 import { Coding } from "../pages/coding/Coding"
 import { GoldCoding } from "../pages/coding/gold/GoldCoding"
@@ -42,6 +41,7 @@ import { ViewStoneQuality } from "../components/templates/reusableComponants/sto
 import { ViewStonePurity } from "../components/templates/reusableComponants/stones/view/ViewStonePurity"
 import { ViewStoneNature } from "../components/templates/reusableComponants/stones/view/ViewStoneNature"
 import { OneSupplier } from "../pages/suppliers/OneSupplier"
+import { ViewStoneColor } from "../components/templates/reusableComponants/stones/view/ViewStoneColor"
 export const AllRoutesProvider = () => {
   const { permissions, userData } = useContext(authCtx)
   
@@ -65,8 +65,6 @@ export const AllRoutesProvider = () => {
             element={<GoldCodingWrapper title="ترقيم سند ذهب" />}
           />
           {/* ./CODING */}
-
-          {/* SYSTEM */}
           <Route path="/system" element={<System title={t("system")} />} />
           <Route
             path="/system/company-profile"
@@ -114,7 +112,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/global-and-stones/colors"
-            element={<ViewColors />}
+            element={<ViewStoneColor />}
           />
           <Route
             path="/system/global-and-stones/classifications"
@@ -144,7 +142,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/global-and-stones/stones-colors"
-            element={<ViewColors />}
+            element={<ViewStoneColor />}
           />
 
           <Route
@@ -165,28 +163,16 @@ export const AllRoutesProvider = () => {
           />
           {/* ./SYSTEM */}
           <Route
-            path="/administrative-structure"
+            path="system/administrative-structure"
             element={
               <AdministrativeStructure title={t("administrative-structure")} />
             }
           />
           <Route
-            path="/add-administrative-structure"
-            element={
-              <AddAdministrativeStructure
-                title={t("add-administrative-structure")}
-              />
-            }
-          />
-          <Route
-            path="/add-employee"
-            element={<AddEmployee title={t("add-employee")} />}
-          />
-          <Route
-            path="/employees"
+            path="system/employees"
             element={<Employees title={t("employees")} />}
           />
-          <Route path="/employees/:employeeID" element={<OneEmployee />} />
+          <Route path="system/employees/:employeeID" element={<OneEmployee />} />
           <Route
             path="/bonds/gold"
             element={<GoldSupply title={t("gold supply")} />}

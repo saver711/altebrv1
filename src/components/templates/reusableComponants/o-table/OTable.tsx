@@ -9,8 +9,10 @@ import {
 import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
 import { OTableForm } from "./OTableForm"
 import * as Yup from "yup"
+import { t } from "i18next"
 
 type OTableProps_TP = {
+  setDirty: Dispatch<SetStateAction<boolean>>
   data: OTableDataTypes[]
   setData: Dispatch<SetStateAction<OTableDataTypes[]>>
   defaultValues: GoldTableProperties_TP & TableHelperValues_TP
@@ -20,15 +22,18 @@ type OTableProps_TP = {
   setBoxValues: Dispatch<SetStateAction<OTableDataTypes[]>>
 }
 
+const requiredTranslation = () => `${t("required")}`
+
 const validationSchema = Yup.object({
-  category_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-  weight: Yup.number().positive('برجاء إدخال وزن صحيح').required("برجاء ملئ هذا الحقل"),
-  karat_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-  stock: Yup.number().positive('برجاء إدخال سهم صحيح').max(1, 'اعلي قيمة للسهم هو 1').required("برجاء ملئ هذا الحقل"),
-  wage: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+  category_id: Yup.string().trim().required(requiredTranslation),
+  weight: Yup.number().positive(`${t('please enter a valid weight')}`).required(requiredTranslation),
+  karat_id: Yup.string().trim().required(requiredTranslation),
+  stock: Yup.number().positive(`${t('please enter a valid stock')}`).max(1, `${t('top stock value is 1')}`).required(requiredTranslation),
+  wage: Yup.string().trim().required(requiredTranslation),
 })
 
 export function OTable({
+  setDirty,
   data,
   setData,
   defaultValues,
@@ -92,6 +97,7 @@ export function OTable({
       >
         {({}) => (
           <OTableForm
+            setDirty={setDirty}
             editRow={editRow}
             categoriesOptions={categoriesOptions}
             karatsOptions={karatsOptions}

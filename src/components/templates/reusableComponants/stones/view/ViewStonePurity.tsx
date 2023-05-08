@@ -20,6 +20,7 @@ import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { Back } from "../../../../../utils/utils-components/Back"
+import { useQueryClient } from "@tanstack/react-query"
 ///
 /////////// TYPES
 ///
@@ -57,17 +58,17 @@ export const ViewStonePurity = () => {
   const cols = useMemo<ColumnDef<StonesPurities>[]>(
     () => [
       {
-        header: 'ID',
+        header: `${t('Sequence ')}`,
         cell: (info) => info.renderValue(),
-        accessorKey: 'id',
+        accessorKey: 'index',
       },
       {
-        header: 'Name',
+        header: `${t('Name')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: `${t('action')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -100,16 +101,26 @@ export const ViewStonePurity = () => {
     : `stones/api/v1/purities?page=${page}&name[lk]=${search}`,
     queryKey: ['view_stones_purities'],
     pagination: true,
-    onSuccess(data) {setDataSource(data.data)}
+    onSuccess(data) {setDataSource(data.data)},
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
-
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isDeleting,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: StonesPurities[]) => prev.filter(p => p.id !== deleteData?.id))
+      // setDataSource((prev: StonesPurities[]) => prev.filter(p => p.id !== deleteData?.id))
+      queryClient.refetchQueries(['view_stones_purities'])
       setOpen(false)
       notify("success")
     }
@@ -210,12 +221,12 @@ export const ViewStonePurity = () => {
       </Modal>
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && (
-          <Loading mainTitle={t("stones colors")} />
+          <Loading mainTitle={t("stones purities")} />
         )}
-        {isSuccess && !!!dataSource?.length && (
+        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
           <div className="mb-5 pr-5">
             <Header
-              header={t(`لا يوجد`)}
+              header={t('no items')}
               className="text-center text-2xl font-bold"
             />
           </div>
@@ -228,11 +239,11 @@ export const ViewStonePurity = () => {
             <Table data={dataSource} columns={cols}>
               <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  عدد الصفحات
+                  {t('page')}
                   <span className=" text-mainGreen">
                     {purities.current_page}
                   </span>
-                  من
+                  {t('from')}
                   <span className=" text-mainGreen">{purities.pages}</span>
                 </div>
                 <div className="flex items-center gap-2 ">

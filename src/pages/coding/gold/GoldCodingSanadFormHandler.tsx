@@ -158,7 +158,6 @@ export const GoldCodingSanadFormHandler = ({
   ///
   const { values, setFieldValue, setFieldError, submitForm, isSubmitting } =
   useFormikContext<GoldCodingSanad_initialValues_TP>()
-  console.log(`values:`, values)
 
   /* FETCH SANAD */
   const {
@@ -239,7 +238,6 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("karat_value", activeBand.goldKarat)
 
       setItemsToShowInCaseOfTa2m([])
-      console.log('empty sizes ---------------------')
       
       setSizes([])
     }
