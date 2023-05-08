@@ -57,9 +57,10 @@ export const AddDistrict = ({
 }: AddDistrictProps_TP) => {
   /////////// VARIABLES
   ///
+  const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_ar: editData ? editData.name : "",
-    name_en: editData ? "" : "",
+    name_ar: editData ? editData?.name_ar : "",
+    name_en: editData ? editData?.name_en : "",
     country_id: editData ? editData.country_name : "",
     city_id: editData ? editData.city_id : "",
   }
@@ -68,7 +69,6 @@ export const AddDistrict = ({
     name_en: Yup.string().trim().required(requiredTranslation),
     city_id: Yup.string().trim().required(requiredTranslation),
   })
-  const isRTL = useIsRTL()
 
   ///
   /////////// CUSTOM HOOKS
@@ -99,14 +99,16 @@ export const AddDistrict = ({
         })
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllDistricts'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewDistricts_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllDistricts'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewDistricts_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
     onError: (error) => {

@@ -46,8 +46,8 @@ export const CreateClassification = ({
   ///
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_ar: editData ? editData.name : !isRTL ? value! : "",
-    name_en: editData ? "" : !isRTL ? value! : "",
+    name_en: editData ? editData.name_en: !isRTL ? value! : "",
+    name_ar: editData ? editData.name_ar: isRTL ? value! : "",
   }
   ///
   /////////// CUSTOM HOOKS
@@ -59,21 +59,24 @@ export const CreateClassification = ({
       notify("success")
       if (value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(["classifications"], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(["classifications"], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['AllClassifications'])
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllClassifications'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewClassifications_TP) =>
-            p.id === data?.id ? data : p
-          )
-        )
+        queryClient.refetchQueries(['AllClassifications'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewClassifications_TP) =>
+        //     p.id === data?.id ? data : p
+        //   )
+        // )
       }
     },
     onError: (error) => {

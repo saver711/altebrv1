@@ -1,13 +1,15 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { AddIcon, ViewIcon } from "../../components/atoms/icons"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
-import { useFetch } from "../../hooks"
+import { useFetch, useIsRTL } from "../../hooks"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { Header } from "../../components/atoms/Header"
 
 type BondsProps_TP = {
   title: string
@@ -26,17 +28,28 @@ export type Bond_TP = {
 }
 
 export const Bonds = ({ title }: BondsProps_TP) => {
+  const isRTL = useIsRTL()
   const navigate = useNavigate()
+  const [dataSource, setDataSource] = useState<Bond_TP[]>([])
+  const [page, setPage] = useState<number>(1)
 
   let count = 1
-  const { data, isError, isSuccess, error, isLoading } = useFetch<Bond_TP[]>({
-    endpoint: "/twredGold/api/v1/bond",
+  const { data, isError, isSuccess, error, refetch, isRefetching, isLoading } = useFetch<Bond_TP[]>({
+    endpoint: `twredGold/api/v1/bond?page=${page}`,
     queryKey: ["bonds"],
-    select: (data) =>
-      data.map((item) => ({
-        ...item,
-        index: count++,
-      })),
+    pagination: true,
+    onSuccess(data) {
+      setDataSource(data.data)
+    },
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
 
   const columns = useMemo<ColumnDef<Bond_TP>[]>(
@@ -44,7 +57,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         cell: (info) => info.getValue(),
         accessorKey: "index",
-        header: () => <span>{t("Sequence")}</span>,
+        header: () => <span>{t("Sequence ")}</span>,
       },
       {
         header: () => <span>{t("classifications")} </span>,
@@ -106,6 +119,10 @@ export const Bonds = ({ title }: BondsProps_TP) => {
     []
   )
 
+  useEffect(() => {
+    refetch()
+  }, [page])
+
   return (
     <div className="p-4">
       <Helmet>
@@ -120,24 +137,51 @@ export const Bonds = ({ title }: BondsProps_TP) => {
           <AddIcon /> {t("add bond")}
         </Button>
       </div>
-      {isLoading && <Loading mainTitle={t("Bonds")} />}
+      {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
       <div className="" >
-        {isSuccess &&
-          data.length > 0 &&
-          <Table data={data} showNavigation columns={columns} />
-        }
+      {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <Table data={dataSource} columns={columns}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t('page')}
+                  <span className=" text-mainGreen">
+                    {data.current_page}
+                  </span>
+                  {t('from')}
+                  <span className=" text-mainGreen">{data.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == data.pages}
+                  >
+                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                  </Button>
+                </div>
+              </div>
+            </Table>
+          )}
       </div>
-      {isSuccess && data.length === 0 && (
-        <div>
-          <p>{t('no bonds')}</p>
-          <Button
-            action={() => navigate(`/bonds/gold`)}
-            className="flex items-center gap-2"
-          >
-            <AddIcon /> {t("Add bond")}
-          </Button>
-        </div>
-      )}
+      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+        )}
     </div>
   )
 }

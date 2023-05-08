@@ -154,7 +154,7 @@ export const ViewStoneColor = () => {
     <>
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('stones colors')}`}
+          {`${t('system establishment')} / ${t('color')}`}
         </h3>
         <Formik
           initialValues={initialValues}
@@ -214,7 +214,7 @@ export const ViewStoneColor = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
+        {(isLoading || isRefetching) && <Loading mainTitle={t("color")} />}
         {isSuccess && !!!dataSource?.length && !isLoading && !isRefetching && (
           <div className="mb-5 pr-5">
             <Header
@@ -242,14 +242,14 @@ export const ViewStoneColor = () => {
                   action={() => setPage(prev => prev - 1)}
                   disabled={page == 1}
                 >
-                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
                 </Button>
                 <Button
                   className=" rounded bg-mainGreen p-[.18rem] "
                   action={() => setPage(prev => prev + 1)}
                   disabled={page == colors.pages}
                 >
-                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
                 </Button>
               </div>
             </div>
