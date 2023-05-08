@@ -112,7 +112,6 @@ export const ViewDistricts = () => {
   const { data, isLoading, isError, error, refetch, isRefetching, isSuccess } = useFetch<
     ViewDistricts_TP[]
   >({
-    endpoint: `/governorate/api/v1/districts`,
     endpoint: search === '' 
     ? `governorate/api/v1/districts?page=${page}`
     : `governorate/api/v1/districts?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
