@@ -50,81 +50,81 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       id: crypto.randomUUID(),
       title: t("countries"),
       name: "countries",
-      addLabel: "إضافة دولة",
+      addLabel: `${t('add Country')}`,
       addComponent: <AddCountry />,
-      viewLabel: "عرض الدول",
+      viewLabel: `${t('view countries')}`,
       viewHandler: () => navigate("countries"),
     },
     {
       id: crypto.randomUUID(),
       title: t("cities"),
       name: "cities",
-      addLabel: "إضافة مدينة",
+      addLabel: `${t('add city')}`,
       addComponent: <AddCities />,
-      viewLabel: "عرض المدن",
+      viewLabel: `${t('view cities')}`,
       viewHandler: () => navigate("cities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("districts"),
       name: "districts",
-      addLabel: "إضافة حي",
+      addLabel: `${t('add district')}`,
       addComponent: <AddDistrict />,
-      viewLabel: "عرض الأحياء",
+      viewLabel: `${t('view districs')}`,
       viewHandler: () => navigate("districts"),
     },
     {
       id: crypto.randomUUID(),
       title: t("nationalities"),
       name: "nationalities",
-      addLabel: "إضافة جنسية",
+      addLabel: `${t('add nationality')}`,
       addComponent: <CreateNationalities />,
-      viewLabel: "عرض الجنسيات",
+      viewLabel: `${t('view nationalities')}`,
       viewHandler: () => navigate("nationalities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("gold colors"),
       name: "colors",
-      addLabel: "إضافة لون",
+      addLabel: `${t('add color"')}`,
       addComponent: <CreateColor />,
-      viewLabel: "عرض الألوان",
+      viewLabel: `${t('view colors')}`,
       viewHandler: () => navigate("colors"),
     },
     {
       id: crypto.randomUUID(),
       title: t("classifications"),
       name: "classifications",
-      addLabel: "إضافة فئة",
+      addLabel: `${t('add classification')}`,
       addComponent: <CreateClassification />,
-      viewLabel: "عرض الفئات",
+      viewLabel: `${t('view classifications')}`,
       viewHandler: () => navigate("classifications"),
     },
     {
       id: crypto.randomUUID(),
       title: t("karats"),
       name: "karats",
-      addLabel: "إضافة عيار",
+      addLabel: `${t('add karat')}`,
       addComponent: <CreateKarat />,
-      viewLabel: "عرض العيارات",
+      viewLabel: `${t('view karats')}`,
       viewHandler: () => navigate("karats"),
     },
     {
       id: crypto.randomUUID(),
       title: t("categories"),
       name: "categories",
-      addLabel: "إضافة صنف",
+      addLabel: `${t('add category')}`,
       addComponent: <CreateCategory />,
-      viewLabel: "عرض الاصناف",
+      viewLabel: `${t('view categories')}`,
       viewHandler: () => navigate("categories"),
     },
     {
       id: crypto.randomUUID(),
       title: t("markets"),
       name: "markets",
-      addLabel: "إضافة سوق",
+      addLabel: `${t('add market')}`,
       addComponent: <AddMarket />,
-      viewLabel: "عرض الأسواق",
+      viewLabel: `${t('view markets')}`,
       viewHandler: () => navigate("markets"),
     },
   ]
@@ -231,7 +231,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-lg font-bold">تأسيس عام وأحجار</h1>
+        <h1 className="text-lg font-bold">{t('system establishment')}</h1>
         <Back path="/system" />
       </div>
 
@@ -265,7 +265,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       <div className="mt-12 grid grid-cols-4 gap-6">
         <div className="col-span-1 flex w-full flex-col items-center gap-4">
           <div className="flex w-full items-center justify-center gap-2  rounded-lg  bg-mainGreen p-3 text-white">
-            <h2>إدارة الأحجار</h2>
+            <h2>{t('stones management')}</h2>
           </div>
           {stonesCards.map(
             ({
