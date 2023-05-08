@@ -153,9 +153,9 @@ export const Countries = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress?.city.country_id || "",
-      value: editData?.nationalAddress?.district.country_name || "",
-      label: editData?.nationalAddress?.district.country_name || "اختر دولة",
+      id: editData?.nationalAddress?.country?.id || "",
+      value: editData?.nationalAddress?.country?.name || "",
+      label: editData?.nationalAddress?.country?.name || "اختر دولة",
     })
   }, [])
 
