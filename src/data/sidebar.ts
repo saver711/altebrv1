@@ -29,29 +29,29 @@ export const sideBarItems: MenuItem_TP[] = [
   {
     id: crypto.randomUUID(),
     icon: TbSmartHome,
-    label: "الرئيسيه",
+    label: 'home',
     link: "/",
   },
   {
     id: crypto.randomUUID(),
-    label: "اعدادات النظام ",
+    label: 'system establishment',
     link: "system",
     icon: CiSettings,
   },
   {
     id: crypto.randomUUID(),
-    label: "الترقيم",
+    label: 'coding',
     icon: CiExport,
     items: [
       {
         id: crypto.randomUUID(),
-        label: "الهويات المرقمة",
+        label: 'coded identities',
         link: "/coding",
         icon: RiVipCrownLine,
       },
       {
         id: crypto.randomUUID(),
-        label: "ترقيم الذهب",
+        label: 'gold coding',
         link: "/coding/gold",
         icon: RiVipCrownLine,
       },
@@ -59,35 +59,35 @@ export const sideBarItems: MenuItem_TP[] = [
   },
   {
     id: crypto.randomUUID(),
-    label: "السندات",
+    label: 'bonds',
     icon: IoDocumentsOutline,
     items: [
       {
         id: crypto.randomUUID(),
-        label: "التوريد",
+        label: 'supply',
         icon: CiExport,
         items: [
           {
             id: crypto.randomUUID(),
-            label: "السندات",
+            label: 'bonds',
             link: "/bonds",
             icon: RiVipCrownLine,
           },
           {
             id: crypto.randomUUID(),
-            label: "سند توريد ذهب ",
+            label: 'gold bond supply',
             link: "/bonds/gold",
             icon: AiFillGolden,
           },
           {
             id: crypto.randomUUID(),
-            label: "سند توريد الماس  ",
+            label: 'diamond bond supply',
             link: "/bonds/diamond",
             icon: GiCutDiamond,
           },
           {
             id: crypto.randomUUID(),
-            label: "سند توريد متفرقات ",
+            label: 'accessories bond supply',
             link: "accessories",
             icon: BiDiamond,
           },
@@ -95,13 +95,13 @@ export const sideBarItems: MenuItem_TP[] = [
       },
       {
         id: crypto.randomUUID(),
-        label: "السداد ",
+        label: 'payment',
         icon: MdOutlineAttachMoney,
 
         items: [
           {
             id: crypto.randomUUID(),
-            label: "سند السداد ",
+            label: 'bond payment',
             link: "/return-payment",
             icon: CiImport,
           },
@@ -109,31 +109,31 @@ export const sideBarItems: MenuItem_TP[] = [
       },
       {
         id: crypto.randomUUID(),
-        label: "المردود",
+        label: 'payoff',
         link: "Return",
         icon: MdOutlinePayments,
         items: [
           {
             id: crypto.randomUUID(),
-            label: " مردود توريد",
+            label: 'supply payoff',
             link: "return-table",
             icon: MdOutlinePayments,
           },
           {
             id: crypto.randomUUID(),
-            label: " مردود ذهب",
+            label: 'gold payoff',
             link: "return-gold",
             icon: AiFillGolden,
           },
           {
             id: crypto.randomUUID(),
-            label: " مردود الماس",
+            label: 'diamond payoff',
             link: "return-diamond",
             icon: AiFillGolden,
           },
           {
             id: crypto.randomUUID(),
-            label: " مردود متفرقات",
+            label: 'accessories payoff',
             link: "return-accessories",
             icon: AiFillGolden,
           },
@@ -141,12 +141,12 @@ export const sideBarItems: MenuItem_TP[] = [
       },
       {
         id: crypto.randomUUID(),
-        label: t("employees"),
+        label: "employees",
         link: "/employees",
         icon: GrGroup,
       }, {
         id: crypto.randomUUID(),
-        label: "حجز الذهب ",
+        label: 'reserve gold',
         link: "accessories",
         icon: MdOutlinePayments,
       },
@@ -154,7 +154,7 @@ export const sideBarItems: MenuItem_TP[] = [
   },
   {
     id: crypto.randomUUID(),
-    label: "الاعدادات ",
+    label: 'settings',
     link: "settings",
     icon: CiSettings,
   },
