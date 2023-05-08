@@ -104,7 +104,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       {stage === 2 && (
           <div className="flex flex-col mx-auto relative" >
             <ExpandableTable addedPieces={addedPieces} />
-            <div className=" flex item-center gap-x-2 left-24 absolute -bottom-10">
+            <div className=" flex item-center gap-x-2 left-48 absolute -bottom-10">
               <Button action={() => setStage(1)} bordered>رجوع</Button>
               <Button loading={isLoading} action={() => sendPieces(addedPieces)} className="">ارسال</Button>
             </div>

@@ -155,7 +155,7 @@ export const Countries = ({
     setNewValue({
       id: editData?.nationalAddress?.city.country_id || "",
       value: editData?.nationalAddress?.district.country_name || "",
-      label: editData?.nationalAddress?.district.country_name || "",
+      label: editData?.nationalAddress?.district.country_name || "اختر دولة",
     })
   }, [])
 
