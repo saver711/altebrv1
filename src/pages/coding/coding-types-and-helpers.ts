@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 import { Category_TP, KaratValues_TP } from '../../types'
 import { requiredTranslation } from '../../utils/helpers'
+import { t } from 'i18next'
 
 // فورم الترقيم
 export type GoldCodingSanad_initialValues_TP = {
@@ -41,6 +42,13 @@ export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
     size_unit_id: '',
     media: [],
 }
+const validate = () => `${t("color_id field must have at least 1 items")}`
+const whightValidate = () => `${t("weight must be greater than or equal to 1")}`
+const wageValidate = () => `${t("wage must be greater than or equal to 1")}`
+const countValidate = () => `${t("count must be greater than or equal to 1")}`
+const shape_idValidate = () =>`${t("shape_id field must have at least 1 items")}`
+
+
 
 export const codingSanad_schema = yup.object().shape({
   bond_id: yup.string().trim().required(requiredTranslation),
@@ -52,11 +60,15 @@ export const codingSanad_schema = yup.object().shape({
   color_id: yup.string().trim().required(requiredTranslation),
   country_id: yup.string().trim().required(requiredTranslation),
   model_number: yup.string().trim().required(requiredTranslation),
-  weight: yup.number().required().min(1).max(yup.ref("left_weight")),
-  wage: yup.number().required().min(1),
+  weight: yup
+    .number()
+    .required()
+    .min(1, whightValidate)
+    .max(yup.ref("left_weight")),
+  wage: yup.number().required().min(1, wageValidate),
   has_stones: yup.boolean(),
   // media: yup.array().required().min(1),
-  category_id: yup.string().trim().required(),
+  category_id: yup.string().trim().required(requiredTranslation),
   // size_type: yup.string()
   //     .trim()
   //     .when("sizeIsRequired", {
@@ -163,19 +175,19 @@ export const goldCodingStoneValues: GoldCodingStoneValues_TP = {
 }
 
 export const goldCodingStoneSchema = yup.object().shape({
-    stone_id: yup.string().trim().required(),
-    color_id: yup.array().required().min(1),
-    shape_id: yup.array().required().min(1),
-    purity_id: yup.string().trim().required(),
-    weight: yup.number().min(1).required(),
-    count: yup.number().min(1).required(),
-    nature_id: yup.string().trim().required(),
-    certificate_number: yup.string().trim().required(),
-    certificate_source: yup.string().trim().required(),
-    certificate_url: yup.string().trim().required(),
-    // certificate_files: yup.array().required().min(1),
-    not_added_stone: yup.boolean(),
-    stone_type: yup.string().matches(/^(added|not_added)$/),
+  stone_id: yup.string().trim().required(requiredTranslation),
+  color_id: yup.array().required(requiredTranslation).min(1, validate),
+  shape_id: yup.array().required().min(1, shape_idValidate),
+  purity_id: yup.string().trim().required(requiredTranslation),
+  weight: yup.number().min(1, whightValidate).required(),
+  count: yup.number().min(1, countValidate).required(),
+  nature_id: yup.string().trim().required(requiredTranslation),
+  certificate_number: yup.string().trim().required(requiredTranslation),
+  certificate_source: yup.string().trim().required(requiredTranslation),
+  certificate_url: yup.string().trim().required(requiredTranslation),
+  // certificate_files: yup.array().required().min(1),
+  not_added_stone: yup.boolean(),
+  stone_type: yup.string().matches(/^(added|not_added)$/),
 })
 // .test(
 //     'myCustomTest',

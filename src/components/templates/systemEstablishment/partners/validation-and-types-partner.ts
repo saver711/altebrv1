@@ -3,6 +3,7 @@ import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
 
 export type InitialValues_TP = {
+  [ x: string ]: any
   name: string
   email: string
   phone: string

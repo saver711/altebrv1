@@ -71,11 +71,13 @@ export const PartnerMainData = ({ editData }: { editData?: any }) => {
         />
 
         {/* رقم الجوال */}
-        <PhoneInput
-          label={`${t("mobile number")}`}
-          name="phone"
-          placeholder={`${t("mobile number")}`}
-        />
+        {!!!editData && (
+          <PhoneInput
+            label={`${t("mobile number")}`}
+            name="phone"
+            placeholder={`${t("mobile number")}`}
+          />
+        )}
 
         {/* <BaseInputField
           id="address"
@@ -88,23 +90,23 @@ export const PartnerMainData = ({ editData }: { editData?: any }) => {
         /> */}
 
         <Country_city_distract_markets
-          countryName="x_country"
+          countryName="country_id"
           countryLabel={`${t("country")}`}
-          cityName="x_city"
+          cityName="city_id"
           cityLabel={`${t("city")}`}
           editData={{
             nationalAddress: {
               country: {
-                country_id: editData?.country.id,
-                country_name: editData?.country.name,
+                id: editData?.country.id,
+                name: editData?.country.name,
               },
               city: {
                 id: editData?.city.id,
                 name: editData?.city.name,
               },
               district: {
-                country_id: editData?.country.id,
-                country_name: editData?.country.name,
+                id: editData?.nationalAddress?.district.id,
+                name: editData?.nationalAddress?.district.name,
               },
             },
           }}
