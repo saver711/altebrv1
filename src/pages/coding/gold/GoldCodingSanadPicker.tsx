@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/atoms'
 import { Header } from '../../../components/atoms/Header'
@@ -9,7 +10,7 @@ import NinjaTable from '../../../components/molecules/NinjaTable'
 import RadioGroup from '../../../components/molecules/RadioGroup'
 import { Column } from '../../../components/molecules/table/types'
 import { Loading } from '../../../components/organisms/Loading'
-import { useFetch } from '../../../hooks'
+import { useFetch, useIsRTL } from '../../../hooks'
 import { formatDate, getDayBefore } from "../../../utils/date"
 import { notify } from '../../../utils/toast'
 import { GoldSanad_TP } from '../coding-types-and-helpers'
@@ -37,9 +38,12 @@ const searchValues: SearchValues_TP = {
 }
 
 export const GoldCodingSanadPicker = () => {
+  const isRTL = useIsRTL()
   const navigate = useNavigate()
   const [activeBond, setActiveBond] = useState<GoldSanad_TP | undefined>()
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState<number>(1)
+  const [dataSource, setDataSource] = useState<GoldSanad_TP[]>([])
 
   const searchValues: SearchValues_TP = {
     id: '',
@@ -50,36 +54,36 @@ export const GoldCodingSanadPicker = () => {
 
   const columns: Column[] = [
     {
-      name: "id",
-      label: "رقم السند",
+      name: "index",
+      label: t('bond number'),
     },
     {
       name: "classification",
-      label: "الفئة",
+      label: t('classification'),
     },
     {
       name: "supplier_name",
-      label: "اسم المورد",
+      label: t('supplier name'),
     },
     {
       name: "bond_date",
-      label: "تاريخ السند",
+      label: t('bond date'),
     },
     {
       name: "total_gold_by_24",
-      label: "اجمالي ذهب 24",
+      label: t('total gold by 24'),
     },
     {
       name: "total_money",
-      label: "اجمالي النقدية",
+      label: t('total money'),
     },
     {
       name: "item_count",
-      label: "العدد",
+      label: t('item count'),
     },
     {
       name: "bond_number",
-      label: "رقم المرفق",
+      label: t('attachment number'),
     },
   ]
 
@@ -92,11 +96,21 @@ export const GoldCodingSanadPicker = () => {
     isRefetching
   } = useFetch<GoldSanad_TP[]>({
     endpoint: search === '' 
-    ? 'tarqimGold/api/v1/open-bonds' 
+    ? `tarqimGold/api/v1/open-bonds?page=${page}`
     : `${search}`,
     queryKey: ["goldCodingSanads"],
+    pagination: true,
     onSuccess: (data) => {
-      setActiveBond(data[0])
+      setDataSource(data.data)
+    },
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
     },
   })
 
@@ -109,8 +123,8 @@ export const GoldCodingSanadPicker = () => {
   }
 
   const getSearchResults = async (req: any) => {
-    let uri = 'tarqimGold/api/v1/open-bonds'
-    let first = true
+    let uri = `tarqimGold/api/v1/open-bonds?page=${page}`
+    let first = false
     Object.keys(req).forEach(key => {
       if (req[key] !== '') {
         if (first) {
@@ -126,120 +140,157 @@ export const GoldCodingSanadPicker = () => {
 
   useEffect(() => {
     refetch()
+  }, [page])
+
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
   }, [search])
+
+  useEffect(() => {
+    if (dataSource.length) {
+      setActiveBond(dataSource[0])
+    }
+  }, [dataSource])
 
   return (
     <>
-      {!!!isLoading && failureReason && <p>{failureReason.response.data.message}</p>}
-      {isLoading && <Loading mainTitle="تحميل السندات" />}
-      {!isLoading && data && (
-        <>
-          <div className="flex flex-col gap-4 rounded-lg bg-opacity-50 mb-5">
-            <div className="flex flex-col">
-              <Header header="ترقيم الذهب" className="text-lg mb-5" />
-              <div className="flex items-center gap-4 rounded-lg mb-5">
-                <h3>الترقيم من</h3>
-                <Formik initialValues={initialValues} onSubmit={values => console.log(values)}>
-                  <Form>
-                    <RadioGroup name="sanad_type">
-                      <RadioGroup.RadioButton
-                        value="tawrid"
-                        label="سند توريد"
-                        id="tawrid"
-                      />
-                      <RadioGroup.RadioButton
-                        value="talme3"
-                        label="سند تلميع"
-                        id="talme3"
-                      />
-                    </RadioGroup>
-                  </Form>
-                </Formik>
-              </div>
-            </div>
-            <Formik initialValues={searchValues} onSubmit={values => {
-                getSearchResults({
-                  ...values, 
-                  bond_date: values.bond_date ? formatDate(values.bond_date) : '',
-                })
-              }}>
+      <div className="flex flex-col gap-4 rounded-lg bg-opacity-50 mb-5">
+        <div className="flex flex-col">
+          <Header header={`${t('gold coding')}`} className="text-lg mb-5" />
+          <div className="flex items-center gap-4 rounded-lg mb-5">
+            <h3>{t('coding from')}</h3>
+            <Formik initialValues={initialValues} onSubmit={values => console.log(values)}>
               <Form>
-                <div className="flex gap-3">
-                  <BaseInputField 
-                    id="id"
-                    name="id"
-                    label="رقم السند"
-                    placeholder="رقم السند"
-                    className="shadow-xs"
-                    type="text"
+                <RadioGroup name="sanad_type">
+                  <RadioGroup.RadioButton
+                    value="tawrid"
+                    label={`${t('supply bond')}`}
+                    id="tawrid"
                   />
-                  <DateInputField
-                    label="تاريخ التوريد"
-                    name="bond_date"
-                    labelProps={{ className: "mt--10" }}
+                  <RadioGroup.RadioButton
+                    value="talme3"
+                    label={`${t('polishing bond')}`}
+                    id="talme3"
                   />
-                  <BaseInputField 
-                    label="وزن السند"
-                    id="total_weight"
-                    name="total_weight"
-                    placeholder="وزن السند"
-                    className="shadow-xs"
-                    type="text"
-                  />    
-                  <BaseInputField 
-                    label="رقم المرفق"
-                    id="bond_number"
-                    name="bond_number"
-                    placeholder="رقم المرفق"
-                    className="shadow-xs"
-                    type="text"
-                  />
-                  <Button type="submit" loading={isRefetching} className="flex h-[40px] mt-7" bordered>
-                    {t('search')}
-                  </Button>
-                </div>
+                </RadioGroup>
               </Form>
             </Formik>
-            <div className=" flex flex-col gap-1">
-              <Header header="قم باختيار سند توريد الذهب" className="mb-3 text-lg" />
-              <div className="GlobalTable">
-                <NinjaTable<GoldSanad_TP>
-                  data={data}
-                  columns={columns}
-                  selection="single"
-                  selected={activeBond}
-                  // @ts-ignore
-                  setSelected={setActiveBond}
-                  creatable={false}
-                  />
-              </div>
-            </div>
           </div>
-          {isSuccess && !!!data?.length && (
-            <div className="mb-5 pr-5">
-              <Header
-                header={t(`لا يوجد`)}
-                className="text-center text-2xl font-bold"
+        </div>
+        <Formik initialValues={searchValues} onSubmit={values => {
+            getSearchResults({
+              ...values, 
+              bond_date: values.bond_date ? formatDate(values.bond_date) : '',
+            })
+          }}>
+          <Form>
+            <div className="flex gap-3">
+              <BaseInputField 
+                id="id"
+                name="id"
+                label={`${t('bond number')}`}
+                placeholder={`${t('bond number')}`}
+                className="shadow-xs"
+                type="text"
               />
+              <DateInputField
+                label={`${t('supply date')}`}
+                name="bond_date"
+                labelProps={{ className: "mt--10" }}
+              />
+              <BaseInputField 
+                label={`${t('supply weight')}`}
+                id="total_weight"
+                name="total_weight"
+                placeholder={`${t('supply weight')}`}
+                className="shadow-xs"
+                type="text"
+              />    
+              <BaseInputField 
+                label={`${t('attachment number')}`}
+                id="bond_number"
+                name="bond_number"
+                placeholder={`${t('attachment number')}`}
+                className="shadow-xs"
+                type="text"
+              />
+              <Button type="submit" disabled={isRefetching} className="flex h-[40px] mt-7" bordered>
+                {t('search')}
+              </Button>
             </div>
-          )}
-          <div className="flex items-end justify-end gap-5">
-            <Button 
-              type="button" 
-              className="bg-mainGray border-mainGreen text-mainGreen"
-              action={() => navigate('/coding')}
-            >
-              {t("cancel")}
-            </Button>
-            <Button 
-              type="button"
-              action={() => forward()}
-            >
-              {t("next")}
-            </Button>
+          </Form>
+        </Formik>
+        {(isLoading || isRefetching) && (
+          <Loading mainTitle={t("loading bonds")} />
+        )}
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!activeBond &&
+          !!dataSource.length && (
+          <div className=" flex flex-col gap-1" key={activeBond.id}>
+            <Header header={`${t('choose gold bond supply')}`} className="mb-3 text-lg" />
+            <div className="GlobalTable">
+              <NinjaTable<GoldSanad_TP>
+                data={dataSource}
+                columns={columns}
+                selection="single"
+                selected={activeBond}
+                // @ts-ignore
+                setSelected={setActiveBond}
+                creatable={false}
+                />
+                <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                  <div className="flex items-center gap-2 font-bold">
+                    {t('page')}
+                    <span className=" text-mainGreen">
+                      {data.current_page}
+                    </span>
+                    {t('from')}
+                    <span className=" text-mainGreen">{data.pages}</span>
+                  </div>
+                  <div className="flex items-center gap-2 ">
+                    <Button
+                      className=" rounded bg-mainGreen p-[.18rem] "
+                      action={() => setPage((prev) => prev - 1)}
+                      disabled={page == 1}
+                    >
+                      {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    </Button>
+                    <Button
+                      className=" rounded bg-mainGreen p-[.18rem] "
+                      action={() => setPage((prev) => prev + 1)}
+                      disabled={page == data.pages}
+                    >
+                      {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    </Button>
+                  </div>
+                </div>
+            </div>
           </div>
-        </>
+        )}
+      </div>
+      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+      <div className="mb-5 pr-5">
+        <Header
+          header={t('no items')}
+          className="text-center text-2xl font-bold"
+        />
+      </div>
       )}
+      <div className="flex items-end justify-end gap-5">
+        <Button 
+          type="button"
+          action={() => forward()}
+        >
+          {t("next")}
+        </Button>
+      </div>
     </>
   )
 }

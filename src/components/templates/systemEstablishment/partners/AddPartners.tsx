@@ -146,8 +146,7 @@ export const AddPartners = ({
           className="font-bold text-2xl p-8 rounded-lg bg-mainGreen text-white cursor-pointer"
           onClick={() => navigate("/testSystem")}
         >
-          please complete accounts operations first click to complete the
-          operation{" "}
+          {t('please complete accounts operations first click to complete the operation')}
         </h2>
       </div>
     )

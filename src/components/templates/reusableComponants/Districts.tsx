@@ -223,9 +223,9 @@ export const Districts = ({
   }, [JSON.stringify(districts)])
    useEffect(() => {
      setNewValue({
-       id: editData?.nationalAddress.district.id,
-       value: editData?.nationalAddress.district.name,
-       label: editData?.nationalAddress.district.name || "اختر الحي",
+       id: editData?.district_id,
+       value: editData?.district_name,
+       label: editData?.district_name || "اختر الحي",
      })
    }, [])
   // console.log("distractNameeditData", editData)

@@ -246,14 +246,14 @@ export const ViewCategories = () => {
                   action={() => setPage((prev) => prev - 1)}
                   disabled={page == 1}
                 >
-                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
                 </Button>
                 <Button
                   className=" rounded bg-mainGreen p-[.18rem] "
                   action={() => setPage((prev) => prev + 1)}
                   disabled={page == categories.pages}
                 >
-                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
                 </Button>
               </div>
             </div>

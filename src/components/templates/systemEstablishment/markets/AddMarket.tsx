@@ -58,7 +58,7 @@ export const AddMarket = ({
   const isRTL = useIsRTL()
 
   const initialValues = {
-    name_ar: editData ? editData?.name : "",
+    name_ar: editData ? editData?.name_ar : "",
     name_en: editData ? editData?.name_en : "",
     country_id: editData ? editData?.country_name : "",
     city_id: editData ? editData?.city_name : "",
@@ -99,14 +99,16 @@ export const AddMarket = ({
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllMarkets'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewMarkets_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllMarkets'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewMarkets_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
     onError: (error) => {

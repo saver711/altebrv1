@@ -176,9 +176,9 @@ export const Cities = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress.city.id,
-      value: editData?.nationalAddress.city.name,
-      label: editData?.nationalAddress.city.name || "اختر مدينة",
+      id: editData?.city_id,
+      value: editData?.city_name,
+      label: editData?.city_name || "اختر مدينة",
     })
   }, [])
 
