@@ -14,6 +14,7 @@ import {
   import { BaseInputField, Select } from "../../../molecules"
   import SelectCategory from "../categories/select/SelectCategory"
   import SelectKarat from "../karats/select/SelectKarat"
+import { useFetch } from "../../../../hooks"
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
@@ -28,6 +29,12 @@ import {
     editData: OTableDataTypes
     setEditRow: Dispatch<SetStateAction<boolean>>
     setEditData: Dispatch<SetStateAction<OTableDataTypes>>
+  }
+
+  export type KaratValues_TP = {
+    id: number
+    karat: string
+    value: string
   }
   
   ///
@@ -118,12 +125,17 @@ import {
     console.log("🚀 ~ file: OTableForm.tsx:82 ~ OTableForm ~ data:", data)
   
     // variables
-    const karatValues = [
-      { karat: "24", value: "1", id: 1 },
-      { karat: "22", value: "0.91667", id: 2 },
-      { karat: "21", value: "0.87500", id: 3 },
-      { karat: "18", value: "0.75000", id: 4 },
-    ]
+    // const karatValues = [
+    //   { karat: "24", value: "1", id: 1 },
+    //   { karat: "22", value: "0.91667", id: 2 },
+    //   { karat: "21", value: "0.87500", id: 3 },
+    //   { karat: "18", value: "0.75000", id: 4 },
+    // ]
+
+    const { data: karatValues } = useFetch<KaratValues_TP[]>({
+      endpoint: 'classification/api/v1/allkarats',
+      queryKey: ['karat_bond_select'],
+    })
   
     // functions
     function deleteRowHandler(id: string) {
@@ -138,10 +150,13 @@ import {
     }
     //side effects
     useEffect(() => {
-      setFieldValue(
-        "stock",
-        karatValues.find((item) => item.karat === values.karat_value)?.value
-      )
+      if (karatValues) {
+
+        setFieldValue(
+          "stock",
+          karatValues.find((item) => item.karat === values.karat_value)?.value
+        )
+      }
     }, [values.karat_id])
   
     return (
