@@ -73,25 +73,26 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
     ///
 
     ///
-    return <>
+    return (
+      <>
         <Select
-            id="size"
-            label={`${t('size type')}`}
-            name='sizes'
-            placeholder={`${t('sizes')}`}
-            loadingPlaceholder={`${t('loading')}`}
-            options={sizes}
-            fieldKey="id"
-            value={newValue}
-            onChange={(option) => {
-                //@ts-ignore
-                setNewValue(option)
-            }}
-            loading={isLoading}
-            creatable
+          id="category_sizes"
+          label={`${t("size type")}`}
+          name="category_sizes"
+          placeholder={`${t("sizes")}`}
+          loadingPlaceholder={`${t("loading")}`}
+          options={sizes}
+          fieldKey="id"
+          value={newValue}
+          onChange={(option) => {
             //@ts-ignore
-            CreateComponent={CreateSizes}
-            isMulti={true}
+            setNewValue(option)
+          }}
+          loading={isLoading}
+          creatable
+          //@ts-ignore
+          CreateComponent={CreateSizes}
+          isMulti={true}
         />
         {/* <Select
               onChange={(option) => {
@@ -108,5 +109,6 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
               id="select-size-number"
               options={sizeValues}
             /> */}
-    </>
+      </>
+    )
 }

@@ -124,14 +124,14 @@ export const SelectCategorySize = ({
                 setAwzanItems(undefined)
               }
             }
-              if (selectedCategory?.id !== option.id) {
-                setSelectedSizeTypeOption(null)
-                setFieldValue(sizeTypeName, "")
-                setTheSelectedSize(null)
-                setFieldValue(theSizeName, "")
-                // setFieldValue("category_value", option.value)
-                setSelectedCategory(option)
-              }
+            if (selectedCategory?.id !== option.id) {
+              setSelectedSizeTypeOption(null)
+              setFieldValue(sizeTypeName, "")
+              setTheSelectedSize(null)
+              setFieldValue(theSizeName, "")
+              // setFieldValue("category_value", option.value)
+              setSelectedCategory(option)
+            }
             if (!!option.has_size) {
               setFieldValue("sizeIsRequired", true)
               // setFieldValue("category_value", option.value)
@@ -146,7 +146,7 @@ export const SelectCategorySize = ({
       {/* ---------------------------------- */}
       {!!values.sizeIsRequired &&
         !!selectedCategory &&
-        !!selectedCategory.sizes?.length && (
+        !!selectedCategory.category_sizes?.length && (
           <>
             <Select
               onChange={(option) => {
@@ -165,7 +165,7 @@ export const SelectCategorySize = ({
               label="نوع المقاس"
               placeholder="نوع المقاس"
               id="select-size-type"
-              options={selectedCategory.sizes?.map((size) => ({
+              options={selectedCategory.category_sizes?.map((size) => ({
                 ...size,
                 value: size.type,
                 label: size.type,
@@ -185,7 +185,7 @@ export const SelectCategorySize = ({
               label="المقاس"
               placeholder="المقاس"
               id="select-size-number"
-              options={selectedCategory.sizes
+              options={selectedCategory.category_sizes
                 ?.find((size) => size.id === selectedSizeTypeOption?.id)
                 ?.units.map((unit) => ({
                   ...unit,

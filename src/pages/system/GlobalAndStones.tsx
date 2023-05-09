@@ -125,7 +125,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       name: "sizes",
       addLabel: "إضافة مقاس",
       addComponent: <CreateSizes/>,
-      viewLabel: "عرض مقاس",
+      viewLabel: "عرض المقاسات",
       viewHandler: () => navigate("sizes"),
     },
     {

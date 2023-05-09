@@ -15,6 +15,7 @@ import { useFetch, useIsRTL, useMutate } from '../../../../hooks'
 import { mutateData } from '../../../../utils/mutateData'
 import { notify } from '../../../../utils/toast'
 import { Back } from '../../../../utils/utils-components/Back'
+import { CreateSizes } from '../../../CreateSizes'
 import { Button } from '../../../atoms'
 import { Header } from '../../../atoms/Header'
 import { EditIcon, ViewIcon } from '../../../atoms/icons'
@@ -23,7 +24,6 @@ import { BaseInputField, Modal } from '../../../molecules'
 import { AddButton } from '../../../molecules/AddButton'
 import { Loading } from '../../../organisms/Loading'
 import { Table } from '../../reusableComponants/tantable/Table'
-import { CreateSizes } from '../../../CreateSizes'
 ///
 ///
 /////////// Types
