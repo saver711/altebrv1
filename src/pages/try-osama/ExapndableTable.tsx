@@ -43,7 +43,7 @@ export function ExpandableTable({ addedPieces }: any) {
     id_code: crypto.randomUUID().slice(0, 5),
     karat_id: crypto.randomUUID().slice(0, 2),
     index: ++count,
-    sizes: item?.category_sizes || [],
+    sizes: item?.sizes || [],
   }))
 
   //states
