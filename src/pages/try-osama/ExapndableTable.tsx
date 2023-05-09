@@ -123,7 +123,7 @@ export function ExpandableTable({ addedPieces }: any) {
 
   useEffect(() => {
     if (queryData) {
-      setData(modifiedData.map(item => ({ ...item, category: queryData[0]?.category, view: 'icon' })))
+      setData(modifiedData.map((item,index) => ({ ...item, category: queryData[index]?.category, view: 'icon' })))
     }
   }, [queryData])
 
