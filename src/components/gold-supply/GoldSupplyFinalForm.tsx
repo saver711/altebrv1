@@ -14,6 +14,7 @@ import { Button } from "../atoms"
 import { t } from "i18next"
 import { formatDate } from "../../utils/date"
 import { useNavigate } from "react-router-dom"
+import { KaratValues_TP } from "../../types"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -70,13 +71,13 @@ export const GoldSupplyFinalForm = ({
       {
         header: `${t("total wages")}`,
         cell: (info: any) =>
-          (info.row.original.weight * info.row.original.wage).toFixed(3),
+          (info.row.original.weight * info.row.original.wage),
         accessorKey: "total_wages",
       },
       {
         header: `${t("wage tax")}`,
         cell: (info: any) =>
-          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3),
+          (info.row.original.weight * info.row.original.wage * 0.15),
         accessorKey: "wage_tax",
       },
       {
@@ -86,7 +87,7 @@ export const GoldSupplyFinalForm = ({
             info.row.original.weight *
             Number(formValues?.api_gold_price) *
             0.15
-          ).toFixed(3),
+          ),
         accessorKey: "gold_tax",
       },
     ],
@@ -109,11 +110,19 @@ export const GoldSupplyFinalForm = ({
   ///
   /////////// SIDE EFFECTS
   ///
-
+  const { data: karatValues } = useFetch<KaratValues_TP[]>({
+    endpoint: 'classification/api/v1/allkarats',
+    queryKey: ['karat_bond_select'],
+  })
   const { data: boxesResponse, isLoading: boxesLoading } = useFetch<any>({
     endpoint: `twredGold/api/v1/boxes/${formValues?.supplier_id}`,
     queryKey: ["boxes_response"],
   })
+
+  const getMyKarat = (value: string) => {
+    const myKarat = karatValues!.find(item => item.karat === value)
+    return myKarat.value
+  }
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -167,7 +176,7 @@ export const GoldSupplyFinalForm = ({
         finalData!.table.forEach((row) => {
           total_24_gold_by_karat =
             total_24_gold_by_karat +
-            Number(row.weight) * (Number(row.karat_value) / 24)
+            Number(row.weight) * Number(getMyKarat(row.karat_value))
         })
         let val = total_24_gold_by_stock - total_24_gold_by_karat
         if (val < 0) {
@@ -190,7 +199,7 @@ export const GoldSupplyFinalForm = ({
         finalData!.table.forEach((row) => {
           total_24_gold_by_karat2 =
             total_24_gold_by_karat2 +
-            Number(row.weight) * (Number(row.karat_value) / 24)
+            Number(row.weight) * Number(getMyKarat(row.karat_value))
         })
         let value = finalData!.boxes.total_weight - total_24_gold_by_karat2
         if (value < 0) {
