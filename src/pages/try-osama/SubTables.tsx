@@ -58,8 +58,8 @@ export const SubTables = ({ subTableData }: any) => {
   //@ts-ignore
   const modifiedData = selectedRow.map((item) => ({
     ...item,
-    size_type: !!item?.category_sizes[0] ? item?.category_sizes[0].size_type : "",
-    size_number: item?.category_sizes[0] ? item?.category_sizes[0].size_unit_id : "",
+    size_type: !!item?.sizes[0] ? item?.sizes[0].size_type : "",
+    size_number: item?.sizes[0] ? item?.sizes[0].size_unit_id : "",
   }))
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export const SubTables = ({ subTableData }: any) => {
     if (queryData) {
       setData(
         modifiedData.map((item) => ({
-          ...item?.category_sizes[0],
+          ...item?.sizes[0],
           types: queryData[0]?.types,
           country: queryData[0]?.country,
           color: queryData[0]?.color,
