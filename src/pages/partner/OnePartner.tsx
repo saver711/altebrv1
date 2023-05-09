@@ -127,16 +127,21 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
         }
       >
         {partnerLoading && <Loading mainTitle={t("view doc Details")} />}
-        <InnerFormLayout title={partner?.name}>
+        <InnerFormLayout title={partner?.name} leftComponent={ <Button action={() => setDocumentOpen(true)}>
+                  {t("view all documents")}
+                </Button>}>
           {isSuccess && (
             <>
-              <div className="flex gap-4 flex-col">
+              <div className="flex gap-4 flex-col col-span-4 m-auto">
                 <img
                   src={partner.national_image || blankPerson}
                   alt={`partner ${partner.name}`}
                   className="w-[7rem] h-[7rem] rounded-full"
                 />
-                {partner.name && (
+         
+              </div>
+              <div className="flex gap-4 flex-col">
+              {partner.name && (
                   <TextLine boldText={t("Name")} lightString={partner.name} />
                 )}
                 {partner.nationality_name && (
@@ -153,6 +158,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                   />
                 )}
               </div>
+
               <div className="flex gap-4 flex-col">
                 {partner?.country && (
                   <TextLine
@@ -206,9 +212,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
               </div>
               <div className="flex justify-between gap-4 col-span-4 align-middle ">
                 <h3 className=" font-bold">{t("main documents")}</h3>
-                <Button action={() => setDocumentOpen(true)}>
-                  {t("view all documents")}
-                </Button>
+          
               </div>
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                 {partner?.document?.map((doc, i) => (

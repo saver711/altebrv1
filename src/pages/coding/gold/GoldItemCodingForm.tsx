@@ -8,9 +8,8 @@ import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
 import {
   BaseInputField,
   CheckBoxField,
-  Checkbox,
   Modal,
-  TextAreaField,
+  TextAreaField
 } from "../../../components/molecules"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import { SelectCategorySize } from "../../../components/templates/categories-sizes/SelectCategorySize"
