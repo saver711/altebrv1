@@ -183,8 +183,8 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
 
   ///
   return (
-    <Accordion className=" bg-lightGreen" title="تفاصيل الأحجار">
-      <div className="  bg-lightGreen rounded-md p-4 mt-3">
+    <Accordion className=" bg-lightGreen mt-8" title="تفاصيل الأحجار">
+      <div className="  bg-lightGreen rounded-md p-4">
         <div className="bg-white shadows mt-6 rounded-md p-4 overflow-x-hidden">
           <Formik
             initialValues={goldCodingStoneValues}

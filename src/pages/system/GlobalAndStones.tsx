@@ -87,7 +87,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       id: crypto.randomUUID(),
       title: t("gold colors"),
       name: "colors",
-      addLabel: `${t('add color"')}`,
+      addLabel: `${t('add color')}`,
       addComponent: <CreateColor />,
       viewLabel: `${t('view colors')}`,
       viewHandler: () => navigate("colors"),

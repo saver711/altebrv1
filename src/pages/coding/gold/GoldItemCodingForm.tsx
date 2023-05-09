@@ -139,7 +139,7 @@ export const GoldItemCodingForm = ({
     hasSizes && (!isMultiCategory || hasItemsWithSizes)
   ///
   return (
-    <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
+    <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 relative">
       {/* <div className="col-span-4">
         <Checkbox
           onChange={(e) => handleFixAllPieceData(e)}
@@ -297,25 +297,6 @@ export const GoldItemCodingForm = ({
         type="text"
         name="wage"
       />
-      {/* يحتوي علي حجر ام لا */}
-      <div className=" col-span-1 flex items-center justify-center">
-        <CheckBoxField
-          name="has_stones"
-          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
-        />
-        {/* <RadioGroup name="has_stones">
-          <RadioGroup.RadioButton
-            value={true}
-            label="يحتوي علي احجار"
-            id="true"
-          />
-          <RadioGroup.RadioButton
-            value={false}
-            label="لا يحتوي علي احجار"
-            id="false"
-          />
-        </RadioGroup> */}
-      </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
         <div className=" col-span-4">
@@ -335,6 +316,25 @@ export const GoldItemCodingForm = ({
           id="details"
           label="وصف القطعة"
         />
+      </div>
+       {/* يحتوي علي حجر ام لا */}
+       <div className=" col-span-1 flex items-center justify-center absolute -bottom-16">
+        <CheckBoxField
+          name="has_stones"
+          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
+        />
+        {/* <RadioGroup name="has_stones">
+          <RadioGroup.RadioButton
+            value={true}
+            label="يحتوي علي احجار"
+            id="true"
+          />
+          <RadioGroup.RadioButton
+            value={false}
+            label="لا يحتوي علي احجار"
+            id="false"
+          />
+        </RadioGroup> */}
       </div>
       {/* /////// */}
       {/* تفاصيل المقاسات */}

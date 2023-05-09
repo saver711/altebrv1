@@ -7,9 +7,15 @@ import { t } from "i18next"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
+import * as Yup from "yup"
 import { useFetch, useMutate } from "../../../../hooks"
 import { supplier } from "../../../../pages/suppliers/AllSuppliers"
 import { Email_TP } from "../../../../types"
+import {
+  nationalNumberMax,
+  nationalNumberMin,
+  requiredTranslation,
+} from "../../../../utils/helpers"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
@@ -22,6 +28,7 @@ import {
   allDocs_TP,
 } from "../../reusableComponants/documents/Documents"
 import { SupplierMainData } from "./SupplierMainData"
+
 ///
 /////////// Types
 ///
@@ -42,6 +49,42 @@ const AddSupplier = ({
   setShow,
 }: AddSupplierProps_TP) => {
   /////////// VARIABLES
+  const supplierValidatingSchema = () =>
+  Yup.object({
+    // supplier validation
+    name: Yup.string().trim().required(requiredTranslation),
+    type: Yup.string().trim().required(requiredTranslation),
+    is_mediator: Yup.boolean(),
+    company_name: Yup.string().trim().required(requiredTranslation),
+    address: Yup.string().trim().required(requiredTranslation),
+    // mobile: Yup.string()
+    // .trim()
+    // .required(requiredTranslation).test('isValidateNumber', 'رقم غير صحيح', function (value:string) {
+    //   return isValidPhoneNumber(value || "")
+    // }),
+    mobile: Yup.string().trim().required(requiredTranslation),
+    phone: Yup.string().trim().required(requiredTranslation),
+    email: Yup.string().trim().required(requiredTranslation),
+    password: !!!editData ? Yup.string().trim().required(requiredTranslation) : Yup.string(),
+    fax: Yup.string().trim().required(requiredTranslation),
+    nationality_id: Yup.string().trim().required(requiredTranslation),
+    national_number: Yup.string()
+      .min(10, nationalNumberMin)
+      .max(30, nationalNumberMax)
+      .required(requiredTranslation),
+    national_expire_date: Yup.string().required(requiredTranslation),
+    // national address validation
+    country_id: Yup.string().trim().required(requiredTranslation),
+    city_id: Yup.string().trim().required(requiredTranslation),
+    district_id: Yup.string().trim().required(requiredTranslation),
+    building_number: Yup.string().trim().required(requiredTranslation),
+    street_number: Yup.string().trim().required(requiredTranslation),
+    sub_number: Yup.string().trim().required(requiredTranslation),
+    zip_code: Yup.string().trim().required(requiredTranslation),
+  })
+
+
+
 
   const incomingData = !!editData ? editData!.document.map(item => ({
     ...item.data,
@@ -204,6 +247,8 @@ const AddSupplier = ({
               editedValues = editedValuesWithoutDocument
             if (JSON.stringify(values.logo[0].path) === JSON.stringify(editData.logo))
               delete (editedValues.logo)
+              if (values.password === "")
+              delete (editedValues.password)
             mutate({
               endpointName: `supplier/api/v1/suppliers/${editData.id}`,
               values: editedValues,

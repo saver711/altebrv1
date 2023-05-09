@@ -366,7 +366,7 @@ export const GoldCodingSanadFormHandler = ({
 
             {/* بنود الترقيم */}
             <Accordion
-              className=" bg-lightGreen "
+              className=" bg-lightGreen"
               isInitiallyOpen={true}
               title="بنود الترقيم"
             >
