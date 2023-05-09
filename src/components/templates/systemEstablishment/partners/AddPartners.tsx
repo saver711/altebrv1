@@ -52,12 +52,14 @@ export const AddPartners = ({
     phone: editData?.phone || "",
     end_date: editData ? new Date(editData?.end_date) : new Date(),
     start_date: editData ? new Date(editData?.start_date) : new Date(),
-    x_city: editData?.city?.id || "",
+    // x_city: editData?.city?.id || "",
     // city_value: editData?.city?.name || "",
-    x_country: editData?.country?.id || "",
-    // country_value: editData?.country?.name || "",
+    // x_country: editData?.country?.id || "",
+    country_id: editData?.country?.id || "",
+    city_id: editData?.city?.id || "",
+
     nationality_name: editData?.nationality_name || "",
-    nationality_id: editData?.nationality_id || "",
+    nationality_id: editData?.nationality.id || "",
     national_image: !!editData?.national_image
       ? [
           {
@@ -121,7 +123,7 @@ export const AddPartners = ({
     mutationFn: mutateData,
     onSuccess: () => {
       notify("success")
-      setModel(false)
+      // setModel(false)
       queryClient.refetchQueries(["partner"])
     },
     onError: (error) => {
@@ -146,8 +148,7 @@ export const AddPartners = ({
           className="font-bold text-2xl p-8 rounded-lg bg-mainGreen text-white cursor-pointer"
           onClick={() => navigate("/testSystem")}
         >
-          please complete accounts operations first click to complete the
-          operation{" "}
+          {t('please complete accounts operations first click to complete the operation')}
         </h2>
       </div>
     )
@@ -164,8 +165,8 @@ export const AddPartners = ({
             phone: values.phone,
             end_date: formatDate(values.end_date),
             start_date: formatDate(values.start_date),
-            city_id: values.x_city,
-            country_id: values.x_country,
+            city_id: values.city_id,
+            country_id: values.country_id,
             nationality_name: values.nationality_name,
             national_image: values.national_image[0],
             nationality_id: values.nationality_id,
@@ -182,12 +183,7 @@ export const AddPartners = ({
             },
             document: docsFormValues,
           }
-          console.log("🚀 ~ file: AddPartners.tsx:262 ~ values:", values)
           if (!!editData) {
-            console.log(
-              "🚀 ~ file: AddPartners.tsx:262 ~ editedValues:",
-              editedValues
-            )
 
             let { document, ...editedValuesWithoutDocument } = editedValues
             if (docsFormValues.length > editData.document.length)
@@ -209,7 +205,6 @@ export const AddPartners = ({
               editWithFormData: true,
             })
           } else {
-            console.log("editedValues=>", editedValues)
             mutate({
               endpointName: "partner/api/v1/partners",
               values: editedValues,
@@ -217,7 +212,7 @@ export const AddPartners = ({
             })
           }
 
-          // console.log("partners values ", { ...values, ...[docsFormValues] })
+          console.log("partners values ", { ...values, ...[docsFormValues] })
         }}
       >
         <Form>

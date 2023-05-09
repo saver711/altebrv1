@@ -14,12 +14,12 @@ const TableHeader: React.FC = () => {
   } = useContext(TableContext)
   return (
     <thead className={classNames.header}>
-      <tr className="[&>tr:first:!rounded-tr-lg last:!rounded-tl-lg]">
+      <tr className="[&>tr:first:!rounded-tr-lg last:!rounded-tl-lg ">
         {selection && selection !== "none" && selection !== "multiple" && (
-          <th key={crypto.randomUUID()} className="p-3"></th>
+          <th key={crypto.randomUUID()} className="p-3 !bg-mainGreen"></th>
         )}
         {selection !== "none" && selection === "multiple" && (
-          <th key={crypto.randomUUID()} className="p-3">
+          <th key={crypto.randomUUID()} className="p-3 !bg-mainGreen">
             <Checkbox
               checked={selected?.length === data.length && data.length > 0}
               onChange={() => {
@@ -35,12 +35,12 @@ const TableHeader: React.FC = () => {
         {columns
           .filter((col: Column) => col.name !== "actions")
           .map((col: Column, index: number) => (
-            <th key={index} className="p-3">
+            <th key={index} className="p-3 !bg-mainGreen !text-white">
               {col.label}
             </th>
           ))}
         {columns.find((col: Column) => col.name === "actions") && (
-          <th key={crypto.randomUUID()} className="p-3">
+          <th key={crypto.randomUUID()} className="p-3 !bg-mainGreen !text-white">
             <p>{columns.find((col: Column) => col.name === "actions")?.label}</p>
           </th>
         )}

@@ -22,7 +22,7 @@ const NinjaTable = <T extends {}>({
     table: "table-auto text-center border-black border-1 w-full",
     header: "bg-mainGreen text-white rounded-lg",
     body: "bg-white",
-    row: "hover:bg-gray-100",
+    row: "hover:bg-gray-100 border",
     cell: "p-2",
   },
   creatable = true,

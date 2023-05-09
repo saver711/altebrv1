@@ -43,8 +43,8 @@ export const CreateNationalities = ({
 
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_ar: editData ? editData.name : !isRTL ? value! : "",
-    name_en: editData ? "" : !isRTL ? value! : "",
+    name_en: editData ? editData.name_en: !isRTL ? value! : "",
+    name_ar: editData ? editData.name_ar: isRTL ? value! : "",
   }
   const validationSchema = Yup.object({
     name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -73,14 +73,16 @@ export const CreateNationalities = ({
         onAdd(value)
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllNationalities'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewNationalities_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllNationalities'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewNationalities_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
     onError: (error) => {

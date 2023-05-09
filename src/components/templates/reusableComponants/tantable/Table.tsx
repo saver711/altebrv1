@@ -11,6 +11,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { Button } from "../../../atoms"
 import { ReactNode } from "react"
 import { t } from "i18next"
+import { useIsRTL } from "../../../../hooks"
 interface ReactTableProps<T extends object> {
   data: T[]
   columns: ColumnDef<T>[]
@@ -35,7 +36,7 @@ export const Table = <T extends object>({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   })
-
+  const isRTL = useIsRTL()
   return (
     <>
       <div className={`overflow-hidden ${footered ? '' : 'GlobalTable'}  w-full flex flex-col gap-4`}>
@@ -90,14 +91,14 @@ export const Table = <T extends object>({
                 action={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
-                <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
               </Button>
               <Button
                 className=" rounded bg-mainGreen p-[.18rem] "
                 action={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
               >
-                <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
               </Button>
             </div>
           </div>

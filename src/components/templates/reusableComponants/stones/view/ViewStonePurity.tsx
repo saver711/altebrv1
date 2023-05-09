@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { BaseInputField, Modal } from "../../../../molecules"
 import { AddButton } from "../../../../molecules/AddButton"
 import { t } from "i18next"
-import { useFetch, useMutate } from "../../../../../hooks"
+import { useFetch, useIsRTL, useMutate } from "../../../../../hooks"
 import { Button } from "../../../../atoms"
 import { ColumnDef } from '@tanstack/react-table'
 import { Table } from "../../tantable/Table"
@@ -45,6 +45,7 @@ export const ViewStonePurity = () => {
   ///
   /////////// STATES
   ///
+  const isRTL = useIsRTL()
   const [dataSource, setDataSource] = useState<StonesPurities[]>([])
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState<boolean>(false)
@@ -252,14 +253,14 @@ export const ViewStonePurity = () => {
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >
-                    <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
                   </Button>
                   <Button
                     className=" rounded bg-mainGreen p-[.18rem] "
                     action={() => setPage((prev) => prev + 1)}
                     disabled={page == purities.pages}
                   >
-                    <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
                   </Button>
                 </div>
               </div>

@@ -107,7 +107,7 @@ const CreateColor = ({
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
             <div className="flex flex-col">
-              <h2 className="text-xl font-bold mb-4">{t('stones colors')}</h2>
+              <h2 className="text-xl font-bold mb-4">{t('color')}</h2>
               <div className="grid grid-cols-4 mb-4 gap-3 text-start">
                 <BaseInputField
                   id="stone_color_ar"

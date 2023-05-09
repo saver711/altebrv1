@@ -176,9 +176,9 @@ export const Cities = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress.city.id,
-      value: editData?.nationalAddress.city.name,
-      label: editData?.nationalAddress.city.name || "اختر مدينة",
+      id: editData?.nationalAddress?.city?.id,
+      value: editData?.nationalAddress?.city?.name,
+      label: editData?.nationalAddress?.city?.name || "اختر مدينة",
     })
   }, [])
 
@@ -259,14 +259,6 @@ export const Cities = ({
           })
         }}
         fieldKey={fieldKey}
-        defaultValue={{
-          value: editData ? editData?.city_name : "",
-          label: editData
-            ? editData?.city_name
-            : cities?.length === 0
-            ? "لا يوجد "
-            : "اختر الدوله اولا ",
-        }}
         // {...{...(values?.city_value && { value:{
         //   value: values?.city_value || "",
         //   label: values?.city_value || ""

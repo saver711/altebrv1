@@ -5,9 +5,9 @@
 /////////// Types
 
 import { t } from "i18next"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { AiFillDelete, AiFillEdit } from "react-icons/ai"
-import { useFetch, useMutate } from "../../../../hooks"
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
 import { ColumnTP } from "../../../molecules/table/types"
 import { Loading } from "../../../organisms/Loading"
 import { Header } from "../../../atoms/Header"
@@ -19,11 +19,15 @@ import { EditIcon, ViewIcon } from "../../../atoms/icons"
 import { SvgDelete } from "../../../atoms/icons/SvgDelete"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
-import { Modal } from "../../../molecules"
+import { BaseInputField, Modal } from "../../../molecules"
 import { AddDistrict } from "../AddDistrict"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { Back } from "../../../../utils/utils-components/Back"
-
+import * as Yup from 'yup'
+import { Form, Formik } from "formik"
+import { BiSearchAlt } from "react-icons/bi"
+import { AddButton } from "../../../molecules/AddButton"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 ///
 export type ViewDistricts_TP = {
   city_id: string
@@ -32,49 +36,24 @@ export type ViewDistricts_TP = {
   country_id: string
   id: string
   name: string
+  name_ar: string
+  name_en: string
 }
+
+type Search_TP = {
+  search: string
+}
+
+const initialValues: Search_TP = {
+  search: ''
+}
+
+const validationSchema = Yup.object({
+  search: Yup.string().trim()
+})
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
-
-// const ninja2Columns = [
-//   {
-//     name: "index",
-//     label: "code",
-//   },
-//   {
-//     name: "name",
-//     label: t("Districts"),
-//   },
-//   {
-//     name: "actions",
-//     label: "Actions",
-//     actions: [
-//       {
-//         label: "Edit",
-//         icon: (
-//           <AiFillEdit
-//             onClick={(row) => {
-//               alert(`Trying to edit row ${row}`)
-//             }}
-//           />
-//         ),
-//       },
-//       {
-//         label: "Delete",
-//         icon: (
-//           <AiFillDelete
-//             className="text-red-700"
-//             onClick={(row) => {
-//               alert(`Trying to delete row ${row}`)
-//             }}
-//           />
-//         ),
-//       },
-//     ],
-//   },
-// ] as ColumnTP[]
-
 ///
 export const ViewDistricts = () => {
   /////////// CUSTOM HOOKS
@@ -84,16 +63,18 @@ export const ViewDistricts = () => {
   const [editData, setEditData] = useState<ViewDistricts_TP>()
   const [deleteData, setDeleteData] = useState<ViewDistricts_TP>()
   const [dataSource, setDataSource] = useState<ViewDistricts_TP[]>([])
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState<number>(1)
 
   const columns = useMemo<ColumnDef<ViewDistricts_TP>[]>(
     () => [
       {
         cell: (info) => info.getValue(),
-        accessorKey: "id",
+        accessorKey: "index",
         header: () => <span>{t("Sequence ")} </span>,
       },
       {
-        header: () => <span>{t("Districts")} </span>,
+        header: () => <span>{t("districts")} </span>,
         accessorKey: "name",
         cell: (info) => info.getValue(),
       },
@@ -126,22 +107,30 @@ export const ViewDistricts = () => {
     ],
     []
   )
-
+  const isRTL = useIsRTL()
   let count = 1
-  const { data, isLoading, isError, error, isSuccess } = useFetch<
+  const { data, isLoading, isError, error, refetch, isRefetching, isSuccess } = useFetch<
     ViewDistricts_TP[]
   >({
-    endpoint: `/governorate/api/v1/districts`,
+    endpoint: search === '' 
+    ? `governorate/api/v1/districts?page=${page}`
+    : `governorate/api/v1/districts?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: [`AllDistricts`],
-    select: (districts) =>
-      districts.map((district) => ({
-        ...district,
-        index: count++,
-      })),
+    pagination: true,
     onSuccess(data) {
-      setDataSource(data)
+      setDataSource(data.data)
+    },
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
     },
   })
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -149,9 +138,10 @@ export const ViewDistricts = () => {
   } = useMutate<ViewDistricts_TP>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: ViewDistricts_TP[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: ViewDistricts_TP[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(['AllDistricts'])
       setOpen(false)
       notify("success")
     },
@@ -159,7 +149,7 @@ export const ViewDistricts = () => {
 
   const handleSubmit = () => {
     mutate({
-      endpointName: `/governorate/api/v1/countries/${deleteData?.id}`,
+      endpointName: `/governorate/api/v1/districts/${deleteData?.id}`,
       method: "delete",
     })
   }
@@ -175,10 +165,59 @@ export const ViewDistricts = () => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
+  useEffect(() => {
+    refetch()
+  }, [page])
 
+  useEffect(() => {
+    if (page == 1) {
+      refetch()
+    } else {
+      setPage(1)
+    }
+  }, [search])
   ///
   return (
-    <div className="p-4">
+    <>
+      <div className="flex justify-between align-middle mb-8">
+        <h3 className="font-bold">
+          {`${t("system establishment")} / ${t("districts")}`}
+        </h3>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
+          validationSchema={validationSchema}
+        >
+          <Form className="flex align-middle gap-2">
+            <BaseInputField
+              id="search"
+              name="search"
+              type="text"
+              placeholder={`${t("search")}`}
+            />
+            <Button type="submit" disabled={isRefetching}>
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
+            </Button>
+          </Form>
+        </Formik>
+        <div className="flex">
+          <AddButton
+            action={() => {
+              setEditData(undefined)
+              setModel(true)
+              setOpen(true)
+            }}
+            addLabel={`${t("add")}`}
+          />
+          <div className="ms-2">
+            <Back />
+          </div>
+        </div>
+      </div>
       {isError && (
         <div className=" m-auto">
           <Header
@@ -187,44 +226,75 @@ export const ViewDistricts = () => {
           />
         </div>
       )}
-      {isLoading && <Loading mainTitle={t("districts")} />}
-      {isSuccess && !!!dataSource?.length && (
-        <EmptyDataView>
-          <AddDistrict />
-        </EmptyDataView>
-      )}
-      {!isLoading && (
-        <div className="flex justify-end mb-2">
-          <Back />
-        </div>
-      )}
-      {isSuccess && !!dataSource && !!dataSource.length && (
-        <Table data={dataSource} showNavigation columns={columns} />
-      )}
-      <Modal
-        isOpen={open}
-        onClose={() => {
-          setOpen(false)
-        }}
-      >
-        {model ? (
-          <AddDistrict
-            editData={editData}
-            setDataSource={setDataSource}
-            setShow={setOpen}
-          />
-        ) : (
-          <div className="flex flex-col gap-8 justify-center items-center">
-            <Header header={` حذف : ${deleteData?.name}`} />
-            <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} variant="danger">
-                {`${t("confirm")}`}
-              </Button>
-              <Button>{`${t("close")}`}</Button>
-            </div>
+      <div className="flex flex-col gap-6 items-center">
+        {(isLoading || isRefetching) && <Loading mainTitle={t("districts")} />}
+        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
           </div>
         )}
-      </Modal>
-    </div>
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+          <Table data={dataSource} columns={columns}>
+            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t('page')}
+                  <span className=" text-mainGreen">
+                    {data.current_page}
+                  </span>
+                  {t('from')}
+                  <span className=" text-mainGreen">{data.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == data.pages}
+                  >
+                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                  </Button>
+                </div>
+              </div>
+          </Table>
+        )}
+        <Modal
+          isOpen={open}
+          onClose={() => {
+            setOpen(false)
+          }}
+        >
+          {model ? (
+            <AddDistrict
+              editData={editData}
+              setDataSource={setDataSource}
+              setShow={setOpen}
+            />
+          ) : (
+            <div className="flex flex-col gap-8 justify-center items-center">
+              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <div className="flex gap-4 justify-center items-cent">
+                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                  {`${t("confirm")}`}
+                </Button>
+                <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
+              </div>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </>
   )
 }
