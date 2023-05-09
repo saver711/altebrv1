@@ -157,7 +157,7 @@ export const AddPartners = ({
     <>
       <Formik
         initialValues={initialValues}
-        // validationSchema={partnerValidatingSchema}
+        validationSchema={partnerValidatingSchema}
         onSubmit={(values: InitialValues_TP) => {
           let editedValues = {
             name: values.name,
@@ -183,12 +183,7 @@ export const AddPartners = ({
             },
             document: docsFormValues,
           }
-          console.log("🚀 ~ file: AddPartners.tsx:262 ~ values:", values)
           if (!!editData) {
-            console.log(
-              "🚀 ~ file: AddPartners.tsx:262 ~ editedValues:",
-              editedValues
-            )
 
             let { document, ...editedValuesWithoutDocument } = editedValues
             if (docsFormValues.length > editData.document.length)
@@ -210,7 +205,6 @@ export const AddPartners = ({
               editWithFormData: true,
             })
           } else {
-            console.log("editedValues=>", editedValues)
             mutate({
               endpointName: "partner/api/v1/partners",
               values: editedValues,

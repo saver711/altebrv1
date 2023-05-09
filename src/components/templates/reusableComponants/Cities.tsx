@@ -158,7 +158,6 @@ export const Cities = ({
   label = "city",
   editData,
 }: Cities_TP) => {
-  console.log("🚀 ~ file: Cities.tsx:161 ~ editData:", editData)
   /////////// VARIABLES
   ///
   const { setFieldValue, values } = useFormikContext()

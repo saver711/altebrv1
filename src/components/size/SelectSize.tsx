@@ -6,10 +6,10 @@
 ///
 
 import { t } from "i18next"
-import { useFetch } from "../../hooks"
-import { Select } from "../molecules"
-import { CreateSizes } from "../CreateSizes"
 import { useEffect, useState } from "react"
+import { useFetch } from "../../hooks"
+import { CreateSizes } from "../CreateSizes"
+import { Select } from "../molecules"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -17,7 +17,7 @@ type SelectSize_TP = {
     editData?: any
 }
 ///
-export const SelectSize = ({editData}: SelectSize_TP) => {
+export const SelectSize = ({ editData }: SelectSize_TP) => {
     /////////// VARIABLES
     ///
     const [newValue, setNewValue] = useState()
@@ -25,15 +25,15 @@ export const SelectSize = ({editData}: SelectSize_TP) => {
     ///
     /////////// CUSTOM HOOKS
     ///
-    const { data: sizes , isLoading , isError } = useFetch({
+    const { data: sizes, isLoading, isError } = useFetch({
         endpoint: 'size/api/v1/sizes',
         queryKey: ['sizes'],
-        select:(sizes=>{
-            return sizes.map(item=>({
-                value:item.type,
-                label:`${item.type} - (${item.start}-${item.end})`,
-                id:item.id,
-                units:item.units
+        select: (sizes => {
+            return sizes.map(item => ({
+                value: item.type,
+                label: `${item.type} - (${item.start}-${item.end})`,
+                id: item.id,
+                units: item.units
             }))
         }),
     })
@@ -47,14 +47,14 @@ export const SelectSize = ({editData}: SelectSize_TP) => {
     /////////// SIDE EFFECTS
     ///
     useEffect(() => {
-    const best = editData?.category_sizes.map(editItem => {
-        return {
-            id: editItem.id || "",
-            value: editItem.type || "",
-            label: editItem.type || "اختر المقاس",
-        }
-    })
-    setNewValue(best)
+        const best = editData?.category_sizes.map(editItem => {
+            return {
+                id: editItem.id || "",
+                value: editItem.type || "",
+                label: editItem.type || "اختر المقاس",
+            }
+        })
+        setNewValue(best)
     }, [])
 
     // useEffect(() => {
@@ -86,7 +86,7 @@ export const SelectSize = ({editData}: SelectSize_TP) => {
             onChange={(option) => {
                 //@ts-ignore
                 setNewValue(option)
-              }}
+            }}
             loading={isLoading}
             creatable
             //@ts-ignore
