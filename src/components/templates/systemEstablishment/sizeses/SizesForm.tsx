@@ -20,7 +20,6 @@ import {
   OuterFormLayout,
   Select
 } from "../../../molecules"
-import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
 /////////// Types
 ///
 type sizesTypes_TP = {
@@ -251,15 +250,15 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
   }, [JSON.stringify(sizeTypes)])
  
   const handleSubmit = (values: any) => {
-    console.log("handelSubmit", values)
     sizesMutate({
-      endpointName: "/size/api/v1/sizes",
+      endpointName: editData ?  `/size/api/v1/sizes/${editData.id}` : '/size/api/v1/sizes',
       values: {
         type: !showCategories ? values.type : values.sizeType,
         start: values.start,
         end: values.end,
         increase: values.increase,
         category_id: values.category_id,
+        method: editData ? "put" : "post"
       },
     })
   }
