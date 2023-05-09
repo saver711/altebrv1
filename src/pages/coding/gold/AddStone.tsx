@@ -11,6 +11,7 @@ import { Header } from "../../../components/atoms/Header"
 import {
   Accordion,
   BaseInputField,
+  CheckBoxField,
   TextAreaField,
 } from "../../../components/molecules"
 import NinjaTable from "../../../components/molecules/NinjaTable"
@@ -202,18 +203,18 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   label="نوع الحجر"
                   name="stone_id"
                   field="id"
-                  // onChange={(option) => {
-                  //   setFieldValue("stoneType_value", option.value)
-                  // }}
+                // onChange={(option) => {
+                //   setFieldValue("stoneType_value", option.value)
+                // }}
                 />
 
                 <SelectStonePurity
                   field="id"
                   label="نقاء الحجر"
                   name="purity_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stonePurity_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stonePurity_value', option.value)
+                // })}
                 />
                 <BaseInputField
                   id="weight"
@@ -231,9 +232,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   field="id"
                   label="طبيعة الحجر"
                   name="nature_id"
-                  // onChange={(option => {
-                  //   setFieldValue('stoneNature_value', option.value)
-                  // })}
+                // onChange={(option => {
+                //   setFieldValue('stoneNature_value', option.value)
+                // })}
                 />
                 <BaseInputField
                   id="certificate_number"
@@ -252,25 +253,25 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   label="رابط شهادة الحجر"
                 />
                 <div className="col-span-4 flex gap-x-5" >
-                <SelectStoneShape
-                  multi
-                  field="id"
-                  label="قطع شكل الحجر"
-                  name="shape_id"
+                  <SelectStoneShape
+                    multi
+                    field="id"
+                    label="قطع شكل الحجر"
+                    name="shape_id"
                   // onChange={(option => {
                   //   setFieldValue('stoneShape_value', option.value)
                   // })}
-                />
-                <SelectColor
-                  field="id"
-                  multi
-                  label="لون الحجر"
-                  name="color_id"
-                  modalTitle="إضافة لون حجر"
+                  />
+                  <SelectColor
+                    field="id"
+                    multi
+                    label="لون الحجر"
+                    name="color_id"
+                    modalTitle="إضافة لون حجر"
                   // onChange={(option => {
                   //   setFieldValue('stoneColor_value', option.value)
                   // })}
-                />
+                  />
                 </div>
                 <div className=" col-span-4 flex flex-col gap-2 ">
                   <label htmlFor="certificate_files">إرفاق شهادة الحجر</label>

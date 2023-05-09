@@ -42,6 +42,7 @@ import { ViewStonePurity } from "../components/templates/reusableComponants/ston
 import { ViewStoneNature } from "../components/templates/reusableComponants/stones/view/ViewStoneNature"
 import { OneSupplier } from "../pages/suppliers/OneSupplier"
 import { ViewStoneColor } from "../components/templates/reusableComponants/stones/view/ViewStoneColor"
+import { ViewSizes } from "../components/templates/systemEstablishment/view/ViewSizes"
 export const AllRoutesProvider = () => {
   const { permissions, userData } = useContext(authCtx)
   
@@ -129,6 +130,10 @@ export const AllRoutesProvider = () => {
           <Route
             path="/system/global-and-stones/categories"
             element={<ViewCategories />}
+          />
+          <Route
+            path="/system/global-and-stones/sizes"
+            element={<ViewSizes/>}
           />
           <Route
             path="/system/global-and-stones/markets"

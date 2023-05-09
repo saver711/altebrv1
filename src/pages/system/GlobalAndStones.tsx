@@ -31,6 +31,7 @@ import CreateStoneNature from "../../components/templates/reusableComponants/sto
 import { Back } from "../../utils/utils-components/Back"
 import { SystemCard } from "../../components/templates/systemEstablishment/SystemCard"
 import { StonesCard } from "../../components/templates/systemEstablishment/StonesCard"
+import { CreateSizes } from "../../components/CreateSizes"
 ///
 /////////// Types
 ///
@@ -110,13 +111,22 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       viewHandler: () => navigate("karats"),
     },
     {
-      id: crypto.randomUUID(),
+    id: crypto.randomUUID(),
       title: t("categories"),
       name: "categories",
       addLabel: `${t('add category')}`,
       addComponent: <CreateCategory />,
       viewLabel: `${t('view categories')}`,
       viewHandler: () => navigate("categories"),
+    },
+    {
+      id: crypto.randomUUID(),
+      title: t("sizes"),
+      name: "sizes",
+      addLabel: "إضافة مقاس",
+      addComponent: <CreateSizes/>,
+      viewLabel: "عرض مقاس",
+      viewHandler: () => navigate("sizes"),
     },
     {
       id: crypto.randomUUID(),
@@ -192,6 +202,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
     categories: false,
     nationalities: false,
     karats: false,
+    sizes:false
   })
 
   const [stonesPopups, setStonesPopups] = useState<{
