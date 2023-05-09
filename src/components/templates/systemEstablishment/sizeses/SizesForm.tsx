@@ -257,9 +257,8 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
         start: values.start,
         end: values.end,
         increase: values.increase,
-        category_id: values.category_id,
-        method: editData ? "put" : "post"
       },
+      method: editData ? "put" : "post"
     })
   }
 
