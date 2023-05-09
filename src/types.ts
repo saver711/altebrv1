@@ -89,7 +89,7 @@ export type CategoryMainData_TP = {
   has_selsal: boolean
   type: "multi" | "single"
   selling_type: "part" | "all"
-  sizes?: CategorySize_TP[]
+  category_sizes?: CategorySize_TP[]
 }
 
 export type CategorySize_TP = {

@@ -235,7 +235,7 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
     onSuccess: (data) => {
       console.log("sizesMutate", data)
       if(setModel){
-        queryClient.refetchQueries(['sizes'])
+        queryClient.refetchQueries(["sizes"])
       }
       notify("success")
     },

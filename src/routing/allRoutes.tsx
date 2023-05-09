@@ -133,7 +133,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/global-and-stones/sizes"
-            element={<ViewSizes/>}
+            element={<ViewSizes title="عرض المقاسات"/>}
           />
           <Route
             path="/system/global-and-stones/markets"
