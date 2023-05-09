@@ -262,6 +262,7 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("sizeIsRequired", false)
     }
   }, [activeBand, isSubmitting])
+  console.log(`activeBand:`, activeBand)
 
   useEffect(() => {
     if (!!activeBand) {

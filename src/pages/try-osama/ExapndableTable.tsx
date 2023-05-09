@@ -37,8 +37,13 @@ export function ExpandableTable({ addedPieces }: any) {
 
   const columnHelper = createColumnHelper<any>()
   // عشان احط الداتا اللي ناقصه ستاتيك حاليا لحد ما نشوف بعدين
-  const modifiedData = addedPieces.map(item => ({
-    ...item, classification: 'ذهب', id_code: crypto.randomUUID().slice(0, 5), karat_id: crypto.randomUUID().slice(0, 2), index: ++count, sizes: item?.sizes || []
+  const modifiedData = addedPieces.map((item) => ({
+    ...item,
+    classification: "ذهب",
+    id_code: crypto.randomUUID().slice(0, 5),
+    karat_id: crypto.randomUUID().slice(0, 2),
+    index: ++count,
+    sizes: item?.category_sizes || [],
   }))
 
   //states

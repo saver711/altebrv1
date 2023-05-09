@@ -37,7 +37,7 @@ export const karatStocks = [
 export const prepareItemsToShowInCaseOfTa2m = (category: Category_TP, sizes: SizePopup_TP[]) => category.items?.filter((item) => {
     return (
         !!item.has_size &&
-        !!item.sizes?.length &&
+        !!item.category_sizes?.length &&
         item.id !== sizes.find((size) => item.id === size.category_id)?.category_id
     )
 })
