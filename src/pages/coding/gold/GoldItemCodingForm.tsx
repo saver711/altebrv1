@@ -394,7 +394,7 @@ export const GoldItemCodingForm = ({
           </Modal>
 
       {/* تفاصيل الاوزان */ }
-          < Modal
+          <Modal
         isOpen = {
           !!awzanItems &&
           !!awzanItems.length &&
@@ -405,7 +405,8 @@ export const GoldItemCodingForm = ({
         onClose={setWeightItemsModal}
         title="الوزن التفصيلي للقطع"
       >
-        <Formik
+        <>
+            <Formik
           initialValues={awzanItemsFormInitValues || {}}
           onSubmit={(vals) => {
             // لو تجميعة الاوزان اكتر من ال leftWeight اريتيرن
@@ -459,7 +460,8 @@ export const GoldItemCodingForm = ({
             </>
           )}
             </Formik>
-      </>
+        </>
+        </Modal>
     </div>
   )
 }

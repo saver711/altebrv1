@@ -26,6 +26,7 @@ import SelectStoneType from "../../../components/templates/reusableComponants/st
 import { SetState_TP } from "../../../types"
 import { notify } from "../../../utils/toast"
 import {
+  GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
   goldCodingStoneValues
 } from "../coding-types-and-helpers"
@@ -124,9 +125,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newStones = [...stones]
               newStones?.splice(props.rowIndex, 1)
               setStones(newStones)
-              const newStones = [...stones]
-              newStones?.splice(props.rowIndex, 1)
-              setStones(newStones)
+              // const newStones = [...stones]
+              // newStones?.splice(props.rowIndex, 1)
+              // setStones(newStones)
             }}
           />
         )
