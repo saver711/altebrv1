@@ -125,8 +125,7 @@ export const AddPartners = ({
     onSuccess: () => {
       notify("success")
       // setModel(false)
-      queryClient.refetchQueries(["partner"])
-    },
+                                                                                                                                                                                                                                                                                                                                                                                                                },
     onError: (error) => {
       console.log(error)
     },
