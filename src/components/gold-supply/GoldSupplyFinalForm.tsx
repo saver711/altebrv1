@@ -86,6 +86,7 @@ export const GoldSupplyFinalForm = ({
           (
             info.row.original.weight *
             Number(formValues?.api_gold_price) *
+            info.row.original.stock * 
             0.15
           ),
         accessorKey: "gold_tax",
