@@ -41,7 +41,7 @@ export const EmptyDataView = ({ children }: EmptyDataView_TP) => {
     <>
       <div className="mb-5 pr-5 flex flex-col gap-5 items-center justify-center">
         <Header
-          header={t(`لا يوجد`)}
+          header={t("no items")}
           className="text-center text-2xl font-bold"
         />
         <div className="flex">
