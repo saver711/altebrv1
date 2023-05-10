@@ -31,7 +31,7 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
         select: (sizes => {
             return sizes.map(item => ({
                 value: item.type,
-                label: `${item.type} - (${item.start}-${item.end})`,
+                label: `${item.type}`,
                 id: item.id,
                 units: item.units
             }))
