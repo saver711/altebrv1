@@ -139,12 +139,12 @@ export const sideBarItems: MenuItem_TP[] = [
       //     },
       //   ],
       // },
-      {
-        id: crypto.randomUUID(),
-        label: "employees",
-        link: "/employees",
-        icon: GrGroup,
-      }, 
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: "employees",
+      //   link: "/employees",
+      //   icon: GrGroup,
+      // }, 
       // {
       //   id: crypto.randomUUID(),
       //   label: 'reserve gold',

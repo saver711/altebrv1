@@ -43,7 +43,7 @@ export const BondTotals = ({
               >
                 <p> {box.account}</p>
                 <p>
-                  {box.value} {t(box.unit_id)}
+                  {box.value.toFixed(3).replace(/\.?0+$/, '')} {t(box.unit_id)}
                 </p>
               </li>
             )

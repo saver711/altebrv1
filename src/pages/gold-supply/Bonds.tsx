@@ -82,12 +82,12 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         header: () => <span>{t("total gold by 24")} </span>,
         accessorKey: "total_gold_by_24",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
       },
       {
         header: () => <span>{t("total money")} </span>,
         accessorKey: "total_money",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
       },
       {
         header: () => <span>{t("item count")} </span>,
