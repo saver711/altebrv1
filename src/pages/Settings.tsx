@@ -85,7 +85,7 @@ export const Settings = ({ title }: SettingsProps_TP) => {
       <button type="button" onClick={toggleLang}>
         change Language
       </button>
-      <div className="flex items-center gap-2 w-[50rem]">
+      {/* <div className="flex items-center gap-2 w-[50rem]">
         <Label htmlFor="digitsCount" size="lg">
           عدد الأرقام العشرية
         </Label>
@@ -107,7 +107,7 @@ export const Settings = ({ title }: SettingsProps_TP) => {
         <Button loading={isLoggingOut} action={logOutHandler}>
           تسجيل خروج
         </Button>
-      </div>
+      </div> */}
     </>
   )
 }

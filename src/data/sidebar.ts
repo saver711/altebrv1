@@ -79,77 +79,78 @@ export const sideBarItems: MenuItem_TP[] = [
             link: "/bonds/gold",
             icon: AiFillGolden,
           },
-          {
-            id: crypto.randomUUID(),
-            label: 'diamond bond supply',
-            link: "/bonds/diamond",
-            icon: GiCutDiamond,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: 'accessories bond supply',
-            link: "accessories",
-            icon: BiDiamond,
-          },
+          // {
+          //   id: crypto.randomUUID(),
+          //   label: 'diamond bond supply',
+          //   link: "/bonds/diamond",
+          //   icon: GiCutDiamond,
+          // },
+          // {
+          //   id: crypto.randomUUID(),
+          //   label: 'accessories bond supply',
+          //   link: "accessories",
+          //   icon: BiDiamond,
+          // },
         ],
       },
-      {
-        id: crypto.randomUUID(),
-        label: 'payment',
-        icon: MdOutlineAttachMoney,
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'payment',
+      //   icon: MdOutlineAttachMoney,
 
-        items: [
-          {
-            id: crypto.randomUUID(),
-            label: 'bond payment',
-            link: "/return-payment",
-            icon: CiImport,
-          },
-        ],
-      },
-      {
-        id: crypto.randomUUID(),
-        label: 'payoff',
-        link: "Return",
-        icon: MdOutlinePayments,
-        items: [
-          {
-            id: crypto.randomUUID(),
-            label: 'supply payoff',
-            link: "return-table",
-            icon: MdOutlinePayments,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: 'gold payoff',
-            link: "return-gold",
-            icon: AiFillGolden,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: 'diamond payoff',
-            link: "return-diamond",
-            icon: AiFillGolden,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: 'accessories payoff',
-            link: "return-accessories",
-            icon: AiFillGolden,
-          },
-        ],
-      },
-      {
-        id: crypto.randomUUID(),
-        label: "employees",
-        link: "/employees",
-        icon: GrGroup,
-      }, {
-        id: crypto.randomUUID(),
-        label: 'reserve gold',
-        link: "accessories",
-        icon: MdOutlinePayments,
-      },
+      //   items: [
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'bond payment',
+      //       link: "/return-payment",
+      //       icon: CiImport,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'payoff',
+      //   link: "Return",
+      //   icon: MdOutlinePayments,
+      //   items: [
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'supply payoff',
+      //       link: "return-table",
+      //       icon: MdOutlinePayments,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'gold payoff',
+      //       link: "return-gold",
+      //       icon: AiFillGolden,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'diamond payoff',
+      //       link: "return-diamond",
+      //       icon: AiFillGolden,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'accessories payoff',
+      //       link: "return-accessories",
+      //       icon: AiFillGolden,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: "employees",
+      //   link: "/employees",
+      //   icon: GrGroup,
+      // }, 
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'reserve gold',
+      //   link: "accessories",
+      //   icon: MdOutlinePayments,
+      // },
     ],
   },
   {

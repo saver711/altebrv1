@@ -31,7 +31,6 @@ export const goldValidatingSchema = Yup.object({
     supplier_id: Yup.string().trim().required(requiredTranslation),
     bond_number: Yup.string().trim().required(requiredTranslation),
     entity_gold_price: Yup.string().trim().required(requiredTranslation).typeError(requiredTranslation),
-    notes: Yup.string().trim().required(requiredTranslation),
     out_goods_value: Yup.string().trim().when('twred_type', {
         is:'global',
         then:(schema)=> schema.trim().required(requiredTranslation),

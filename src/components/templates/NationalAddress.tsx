@@ -5,7 +5,6 @@ import { t } from "i18next"
 import { InnerFormLayout } from "../molecules/InnerFormLayout"
 import { BaseInputField } from "../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "./reusableComponants/Country_city_distract_markets"
-import { supplier } from "../../pages/suppliers/AllSuppliers"
 
 ///
 /////////// Types
@@ -61,7 +60,7 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
         <BaseInputField
           id="streetNumber"
           label={`${t("street number")}`}
-          name="building_number"
+          name="street_number"
           type="text"
           placeholder={`${t("street number")}`}
           required
@@ -72,7 +71,7 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
         <BaseInputField
           id="buildingNumber"
           label={`${t("building number")}`}
-          name="street_number"
+          name="building_number"
           type="text"
           placeholder={`${t("building number")}`}
           required

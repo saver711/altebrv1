@@ -1,3 +1,4 @@
+
 /////////// IMPORTS
 ///
 import { useQueryClient } from "@tanstack/react-query"
@@ -233,7 +234,7 @@ export const AddPartners = ({
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
-      </Formik>      
+      </Formik>
     </>
   )
 }

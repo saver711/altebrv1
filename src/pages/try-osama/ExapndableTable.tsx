@@ -30,7 +30,7 @@ type Categories_TP = {
   selling_type: string
   type: string
 }
-export function ExpandableTable({ addedPieces }: any) {
+export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boolean , addedPieces:any}) {
   // variables
   let count = 0
 
@@ -81,14 +81,15 @@ export function ExpandableTable({ addedPieces }: any) {
       columnHelper.accessor('value', {
         header: `${t('value')}`
       }),
-      columnHelper.accessor('view', {
+      ...(showDetails ?  [columnHelper.accessor('view', {
         header: `${t('view')}`,
         cell: (info) => <ViewIcon action={() => {
           setSubTableData({ index: info.row.original.index, data: modifiedData })
           setModalOpen(true)
         }
         } className='mx-auto text-mainGreen text-2xl' />
-      }),
+      })] : [])
+      ,
     ],
     []
   )
@@ -243,7 +244,7 @@ export function ExpandableTable({ addedPieces }: any) {
         <pre>{JSON.stringify(expanded, null, 2)}</pre> */}
       </div>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <SubTables subTableData={subTableData} />
+        <SubTables subTableData={subTableData} addedPieces={addedPieces} />
       </Modal>
     </div>
   )

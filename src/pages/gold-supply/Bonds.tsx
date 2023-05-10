@@ -2,14 +2,14 @@ import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
+import { Header } from "../../components/atoms/Header"
 import { AddIcon, ViewIcon } from "../../components/atoms/icons"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import { useFetch, useIsRTL } from "../../hooks"
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
-import { Header } from "../../components/atoms/Header"
 
 type BondsProps_TP = {
   title: string
@@ -82,12 +82,12 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         header: () => <span>{t("total gold by 24")} </span>,
         accessorKey: "total_gold_by_24",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
       },
       {
         header: () => <span>{t("total money")} </span>,
         accessorKey: "total_money",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
       },
       {
         header: () => <span>{t("item count")} </span>,
@@ -122,7 +122,21 @@ export const Bonds = ({ title }: BondsProps_TP) => {
   useEffect(() => {
     refetch()
   }, [page])
-
+   
+  // if(dataSource.length === 0) return(
+  //   <>
+  //   <div className="flex justify-between mb-5">
+  //       <h2 className="font-bold text-2xl">{t("bonds")}</h2>
+  //       <Button
+  //         action={() => navigate(`/bonds/gold`)}
+  //         className="flex items-center gap-2"
+  //       >
+  //         <AddIcon /> {t("add bond")}
+  //       </Button>
+  //     </div>
+  //     <h2 className="text-center font-bold text-2xl mt-40" >{t('There are no bonds')}</h2>
+  //   </>
+  // )
   return (
     <div className="p-4">
       <Helmet>
@@ -138,6 +152,14 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         </Button>
       </div>
       {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
+      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+        )}
       <div className="" >
       {isSuccess &&
           !!dataSource &&

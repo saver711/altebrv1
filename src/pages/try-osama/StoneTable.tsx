@@ -160,7 +160,7 @@ export const StoneTable = ({ subTableData }: any) => {
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
                         {
                           !!cell.getContext().getValue() ?
-                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('visit link')}</span> <BiLinkExternal/> </a> :
+                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('link')}</span> <BiLinkExternal/> </a> :
                         flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

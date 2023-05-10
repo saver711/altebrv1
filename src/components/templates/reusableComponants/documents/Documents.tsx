@@ -15,7 +15,7 @@ import { DocumentForm } from "./DocumentForm"
 type DocumentsProps_TP = {
   docsFormValues: any
   setDocsFormValues: Dispatch<SetStateAction<any[]>>
-  editable?:boolean
+  editable?: boolean
 }
 export type DocType_TP = {
   id: string
@@ -35,8 +35,9 @@ export type allDocs_TP = {
 export const Documents = ({
   setDocsFormValues,
   docsFormValues,
-  editable=false
+  editable = false,
 }: DocumentsProps_TP) => {
+
   ///
   /////////// STATES
   ///
@@ -85,15 +86,14 @@ export const Documents = ({
                   key={item.id}
                 >
                   <div className="flex gap-x-4 items-center">
-                    {
-                      !editable &&
-                    <Edit
-                      action={() => {
-                        setAddDocPopup(true)
-                        setEditableData(item)
-                      }}
-                    />
-                    }
+                    {!editable && (
+                      <Edit
+                        action={() => {
+                          setAddDocPopup(true)
+                          setEditableData(item)
+                        }}
+                      />
+                    )}
                     <Delete action={() => deleteDocHandler(item.id)} />
                   </div>
                   <CiFolderOn
@@ -103,7 +103,12 @@ export const Documents = ({
                       setShow(true)
                     }}
                   />
-                  <span>{item?.docName}</span>
+                  <span>
+                    {t("document name")} : {item?.docName}
+                  </span>
+                  <span>
+                    {t("document type")} : {item?.docType.label}
+                  </span>
                 </div>
               ))}
             </div>
