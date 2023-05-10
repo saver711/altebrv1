@@ -137,7 +137,7 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    category_sizes: Yup.array().when("has_size", {
+    category_sizes: Yup.string().when("has_size", {
       is: true,
       then: (schema) => schema.min(1, requiredTranslation),
     }),
@@ -245,7 +245,7 @@ const CreateCategory = ({
       values: multi
         ? multiValues
         : values.has_size
-        ? { ...singleValues, category_sizes: values.category_sizes }
+        ? { ...singleValues, category_sizes: [values.category_sizes] }
         : singleValues,
       method: editData ? "put" : "post",
     })
