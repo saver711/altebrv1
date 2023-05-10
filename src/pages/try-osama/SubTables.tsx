@@ -55,7 +55,6 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
   const [queryData, setQueryData] = useState<any[] | undefined>()
 
   const queryClient = useQueryClient()
-  console.log("first==>" , selectedRow)
 
   //@ts-ignore
   const modifiedData = selectedRow.map((item) => ({
@@ -67,6 +66,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
   useEffect(() => {
     if (queryClient) {
       const types = queryClient.getQueryData<Query_TP[]>(["sizes"])
+      console.log("types===>",types)
       const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = modifiedData?.map((item) => {

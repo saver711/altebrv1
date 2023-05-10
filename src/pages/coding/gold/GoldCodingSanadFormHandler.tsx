@@ -395,8 +395,8 @@ export const GoldCodingSanadFormHandler = ({
             <div className="flex items-end justify-end gap-x-5">
               {/* submit البند */}
               {!!addedPieces.length && (
-                <div className="flex flex-col" >
-                  <span className="bg-mainGreen rounded-full w-8 h-8 text-white fond-bold text-xl text-center mb-2" >{addedPieces.length}</span>
+                <div className="relative" >
+                  <span className="bg-mainGreen rounded-full  h-6 w-6 text-white text-center mb-2 absolute -top-4 z-50" >{addedPieces.length}</span>
                 <Button bordered={true} action={() => setStage(2)}>
                   {t("preview")}
                 </Button>
