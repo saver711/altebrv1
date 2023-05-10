@@ -12,6 +12,7 @@ import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 import { Query_TP } from "../coding/gold/AddStone"
+import { ExpandableTable } from "./ExapndableTable"
 import { StoneTable } from "./StoneTable"
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -19,7 +20,7 @@ import { StoneTable } from "./StoneTable"
 ///
 const columnHelper = createColumnHelper<any>()
 
-export const SubTables = ({ subTableData }: any) => {
+export const SubTables = ({ subTableData  , addedPieces}: any) => {
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -65,6 +66,7 @@ export const SubTables = ({ subTableData }: any) => {
   useEffect(() => {
     if (queryClient) {
       const types = queryClient.getQueryData<Query_TP[]>(["sizes"])
+      console.log("types===>",types)
       const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = modifiedData?.map((item) => {
@@ -116,10 +118,10 @@ export const SubTables = ({ subTableData }: any) => {
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-
   ///
   return (
     <>
+     <ExpandableTable addedPieces={[addedPieces[selectedRow[0].index-1]]} showDetails={false}/>
       <div className="flex justify-center items-center">
         <span className="text-center font-bold text-2xl mb-12">
           باقي تفاصيل القطعه
