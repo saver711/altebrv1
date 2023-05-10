@@ -89,9 +89,7 @@ input::placeholder {
   width: 100%;
 }
 
-/* .border-b {
-  border-bottom: 3px solid #295e5652;
-} */
+
 .myVideo{
   position: fixed;
   right: 0;
@@ -114,7 +112,6 @@ input::placeholder {
 .content input[name=email]{
   color: black;
 }
-=======
 .css-b62m3t-container{
   position: relative;
   /* margin-bottom: 50px; */
@@ -127,4 +124,3 @@ input::placeholder {
 .css-5htak9-MultiValueGeneric2{
   font-size: 70% !important;
 }
->>>>>>> 521b367bf5a2129716500cc388867f042a615fd1

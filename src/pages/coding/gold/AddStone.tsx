@@ -126,12 +126,6 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newStones = [...stones]
               newStones?.splice(props.rowIndex, 1)
               setStones(newStones)
-<<<<<<< HEAD
-              // const newStones = [...stones]
-              // newStones?.splice(props.rowIndex, 1)
-              // setStones(newStones)
-=======
->>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
             }}
           />
         )

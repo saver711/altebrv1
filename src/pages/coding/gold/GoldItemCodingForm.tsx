@@ -395,15 +395,9 @@ export const GoldItemCodingForm = ({
         ))}
       </Modal>
 
-<<<<<<< HEAD
-      {/* تفاصيل الاوزان */ }
-          <Modal
-        isOpen = {
-=======
       {/* تفاصيل الاوزان */}
       <Modal
         isOpen={
->>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
           !!awzanItems &&
           !!awzanItems.length &&
           weightItemsModal &&
@@ -467,14 +461,9 @@ export const GoldItemCodingForm = ({
               </Button>
             </>
           )}
-<<<<<<< HEAD
             </Formik>
         </>
         </Modal>
-=======
-        </Formik>
-      </Modal>
->>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
     </div>
   )
 }
