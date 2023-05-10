@@ -4,7 +4,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
 import { useFetch, useIsRTL, useMutate } from "../../../../../hooks"
 import { SelectOption_TP } from "../../../../../types"
@@ -137,10 +137,10 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    category_sizes: Yup.string().when("has_size", {
-      is: true,
-      then: (schema) => schema.min(1, requiredTranslation),
-    }),
+    // category_sizes: Yup.array().when("has_size", {
+    //   is: true,
+    //   then: (schema) => schema.required(requiredTranslation),
+    // }),
   })
 
   ///
@@ -250,13 +250,13 @@ const CreateCategory = ({
       method: editData ? "put" : "post",
     })
 
-    multi
-      ? console.log(multiValues)
-      : console.log(
-          values.has_size
-            ? { ...singleValues, category_sizes: values.category_sizes }
-            : singleValues
-        )
+    // multi
+    //   ? console.log(multiValues)
+    //   : console.log(
+    //       values.has_size
+    //         ? { ...singleValues, category_sizes: values.category_sizes }
+    //         : singleValues
+    //     )
   }
 
   return (
