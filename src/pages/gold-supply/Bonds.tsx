@@ -123,20 +123,20 @@ export const Bonds = ({ title }: BondsProps_TP) => {
     refetch()
   }, [page])
    
-  if(dataSource.length === 0) return(
-    <>
-    <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("bonds")}</h2>
-        <Button
-          action={() => navigate(`/bonds/gold`)}
-          className="flex items-center gap-2"
-        >
-          <AddIcon /> {t("add bond")}
-        </Button>
-      </div>
-      <h2 className="text-center font-bold text-2xl mt-40" >{t('There are no bonds')}</h2>
-    </>
-  )
+  // if(dataSource.length === 0) return(
+  //   <>
+  //   <div className="flex justify-between mb-5">
+  //       <h2 className="font-bold text-2xl">{t("bonds")}</h2>
+  //       <Button
+  //         action={() => navigate(`/bonds/gold`)}
+  //         className="flex items-center gap-2"
+  //       >
+  //         <AddIcon /> {t("add bond")}
+  //       </Button>
+  //     </div>
+  //     <h2 className="text-center font-bold text-2xl mt-40" >{t('There are no bonds')}</h2>
+  //   </>
+  // )
   return (
     <div className="p-4">
       <Helmet>
@@ -152,6 +152,14 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         </Button>
       </div>
       {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
+      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t('no items')}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+        )}
       <div className="" >
       {isSuccess &&
           !!dataSource &&
