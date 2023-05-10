@@ -142,7 +142,7 @@ export const ViewCompanyDetails = () => {
               }
             >
               <>
-                <div className="flex gap-4 flex-col">
+                <div className="flex gap-2 flex-col">
                   <img
                     src={company?.logo || blankPerson}
                     alt={`company ${company?.logo}`}
