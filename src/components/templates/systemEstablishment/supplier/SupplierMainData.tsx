@@ -19,6 +19,8 @@ import {
 import RadioGroup from "../../../molecules/RadioGroup"
 import { DropFile } from "../../../molecules/files/DropFile"
 import { CreateNationalities } from "../../CreateNationalities"
+import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
+import { SelectNationality } from "../SelectNationality"
 ///
 /////////// Types
 ///
@@ -136,23 +138,34 @@ export const SupplierMainData = ({
           placeholder={`${t("address")}`}
           labelProps={{ className: "mb-1" }}
         />
-        {
-          !!!editData?.phone &&
+        <Country_city_distract_markets
+          countryName="country_id "
+          countryLabel={`${t("country")}`}
+          editData={{
+            nationalAddress: {
+              country: {
+                id: editData?.country?.id,
+                name: editData?.country?.name,
+              },
+              city: {
+                id: editData?.city?.id,
+                name: editData?.city?.name,
+              },
+              district: {
+                id: editData?.nationalAddress?.district?.id,
+                name: editData?.nationalAddress?.district?.name,
+              },
+            },
+          }}
+        />
+        {!!!editData?.phone && (
           <PhoneInput
             label={`${t("mobile number")}`}
-            name="mobile"
+            name="phone"
             placeholder={`${t("mobile number")}`}
           />
-        }
-        <BaseInputField
-          id="phone"
-          required
-          label={`${t("phone number")}`}
-          name="phone"
-          type="text"
-          placeholder={`${t("phone number")}`}
-          labelProps={{ className: "mb-1" }}
-        />
+        )}
+
         <BaseInputField
           id="email"
           required
@@ -161,8 +174,7 @@ export const SupplierMainData = ({
           type="email"
           placeholder={`${t("email")}`}
         />
-        {
-          !!!editData?.phone &&
+        {!!!editData?.phone && (
           <BaseInputField
             id="password"
             required
@@ -171,7 +183,7 @@ export const SupplierMainData = ({
             type="password"
             placeholder={`${t("password")}`}
           />
-        }
+        )}
         <BaseInputField
           id="fax"
           required
@@ -182,44 +194,7 @@ export const SupplierMainData = ({
           labelProps={{ className: "mb-1" }}
         />
         <div className="flex flex-col">
-          <Select
-            id="nationality_id"
-            label={`${t("nationality")}`}
-            name="nationality_id"
-            placeholder={`${t("nationality")}`}
-            loadingPlaceholder={`${t("loading")}`}
-            options={nationalitiesOptions}
-            //@ts-ignore
-            onChange={(option: SingleValue<SelectOption_TP>) =>
-              setFieldValue("nationality_id", option?.id)
-            }
-            loading={nationalitiesLoading}
-            creatable
-            CreateComponent={CreateNationalities}
-            isDisabled={!!!nationalitiesLoading && !!nationalitiesErrorReason}
-            defaultValue={{
-              value: editData ? editData?.nationality_name : "",
-              label: editData
-                ? editData?.nationality_name
-                : t("choose nationality"),
-            }}
-          />
-          {nationalitiesErrorReason && (
-            <div className="flex gap-x-2 items-center">
-              {!nationalitiesLoading && (
-                <span className="text-mainRed">
-                  {`${t("failed while loading data")}`}
-                </span>
-              )}
-              {!nationalitiesLoading && (
-                <AiOutlineReload
-                  onClick={() => refetchNationalities()}
-                  className="cursor-pointer hover:animate-spin font-bold text-xl text-mainGreen"
-                  title={`${t("reload")}`}
-                />
-              )}
-            </div>
-          )}
+          <SelectNationality name="nationality_id" editData={editData} />
         </div>
         <BaseInputField
           id="national_number"

@@ -5,7 +5,7 @@
 /////////// Types
 
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Button } from "../atoms"
 import { BoxesDataBase } from "../atoms/card/BoxesDataBase"
 import { OuterFormLayout } from "../molecules"
@@ -91,7 +91,6 @@ export const GoldSupplySecondForm = ({
         karat_value: '',
         category_value: ''
     }
-
     ///
     /////////// SIDE EFFECTS
     ///
