@@ -57,19 +57,6 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
         setNewValue(best)
     }, [])
 
-    // useEffect(() => {
-    //     if(!!newValue){
-    //         const selectedValue = sizes.find(size=> size.id === newValue[newValue.length-1].units[0].size_id)
-    //         console.log("🚀 ~ file: SelectSize.tsx:64 ~ useEffect ~ selectedValue:", newValue)
-    //         const sizeUnits = selectedValue.units.map(unit=>({
-    //             id:unit.id,
-    //             value:unit.value,
-    //             label:unit.value                
-    //         }))
-    //         setSizeValues(sizeUnits) 
-    //     }
-    // }, [newValue])
-    /////////// FUNCTIONS | EVENTS | IF CASES
     ///
 
     ///
@@ -86,13 +73,12 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
           value={newValue}
           onChange={(option) => {
             //@ts-ignore
-            setNewValue(option)
+              setNewValue(option)
           }}
           loading={isLoading}
           creatable
           //@ts-ignore
           CreateComponent={CreateSizes}
-          isMulti={true}
         />
         {/* <Select
               onChange={(option) => {

@@ -70,7 +70,7 @@ export const SelectCategorySize = ({
   /////////// CUSTOM HOOKS
   ///
   const { values, setFieldError, setFieldTouched, setFieldValue } =
-    useFormikContext<{ sizeIsRequired: boolean; [key: string]: any }>()
+    useFormikContext<{ sizeIsRequired: boolean;[key: string]: any }>()
   ///
   /////////// STATES
   ///
