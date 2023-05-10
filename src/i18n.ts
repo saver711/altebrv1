@@ -9,6 +9,7 @@ i18n
     .use(Backend)
     .use(initReactI18next)
     .init({
+        lng: "ar",
         load: "languageOnly", // will prevent backend from loading en-US for example
         backend: {
             // loadPath: "/locales/{{lng}}/{{ns}}.json",
