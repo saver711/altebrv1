@@ -146,12 +146,12 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('gold tax')}`,
-        cell: (info) => (Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100,
+        cell: (info) => ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100).toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'goldTaxes',
       },
       {
         header: `${t('total tax')}`,
-        cell: (info) => ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3))),
+        cell: (info) => (((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100))).toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'itemTaxes',
       },
     ],
@@ -167,22 +167,22 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('gram (debtor)')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'debtor_gram',
       },
       {
         header: `${t('reyal (debtor)')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'debtor_SRA',
       },      
       {
         header: `${t('gram (creditor)')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'creditor_gram',
       },
       {
         header: `${t('reyal (creditor)')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
         accessorKey: 'creditor_SRA',
       }
     ],
