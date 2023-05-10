@@ -22,7 +22,7 @@ export const BondTotals = ({
   return (
     <div className="flex flex-col gap-4 py-4">
       <div className="flex justify-between">
-        <h2 className="text-xl font-bold">{title ? title : t('bond total')}</h2>
+        <h2 className="text-xl font-bold">{title ? t(`${title}`) : t('bond total')}</h2>
         <div>
           <Back />
         </div>
