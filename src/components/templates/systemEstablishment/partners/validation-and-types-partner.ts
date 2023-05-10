@@ -1,8 +1,8 @@
 import { t } from "i18next"
-import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
 
 export type InitialValues_TP = {
+  [ x: string ]: any
   name: string
   email: string
   phone: string
@@ -30,7 +30,7 @@ export type InitialValues_TP = {
   sub_number: string
   zip_code: string
 }
-const requiredTranslation = () => `${t("required")}`
+export const requiredTranslation = () => `${t("required")}`
 
 export const partnerValidatingSchema = () =>
   Yup.object({
@@ -39,8 +39,8 @@ export const partnerValidatingSchema = () =>
     phone: Yup.string().trim().required(requiredTranslation),
     end_date: Yup.date().required(requiredTranslation),
     start_date: Yup.date().required(requiredTranslation),
-    x_city: Yup.string().trim().required(requiredTranslation),
-    x_country: Yup.string().trim().required(requiredTranslation),
+    // x_city: Yup.string().trim().required(requiredTranslation),
+    // x_country: Yup.string().trim().required(requiredTranslation),
     nationality_id: Yup.string().trim().required(requiredTranslation),
     building_number: Yup.string().trim().required(requiredTranslation),
     country_id: Yup.string().trim().required(requiredTranslation),

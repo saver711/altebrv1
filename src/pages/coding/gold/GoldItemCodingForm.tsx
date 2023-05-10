@@ -8,7 +8,6 @@ import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
 import {
   BaseInputField,
   CheckBoxField,
-  Checkbox,
   Modal,
   TextAreaField
 } from "../../../components/molecules"
@@ -23,10 +22,9 @@ import {
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
   SizePopup_TP,
-  addTa2mSizesSchema
+  addTa2mSizesSchema,
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
-
 ///
 /////////// Types
 ///
@@ -52,6 +50,7 @@ export const GoldItemCodingForm = ({
   setSizes,
   activeBand,
 }: ItemCodingFormProps_TP) => {
+  console.log(`itemsToShowInCaseOfTa2m:`, itemsToShowInCaseOfTa2m)
   /////////// VARIABLES
   ///
   const hasSizes = !!sizes.length
@@ -60,8 +59,9 @@ export const GoldItemCodingForm = ({
   const hasItemsWithSizes = activeBand.category.items?.some(
     (item) => item?.has_size
   )
+  const [awzanItems, setAwzanItems] = useState(activeBand.category.items)
 
-  const awzanItems = activeBand.category.items
+  // const awzanItems = activeBand.category.items
   const awzanItemsFormInitValues = awzanItems?.reduce(
     (acc, { id }) => ({
       ...acc,
@@ -111,6 +111,10 @@ export const GoldItemCodingForm = ({
       setDetailedWeight_total(undefined)
     }
   }, [activeBand])
+
+  useEffect(() => {
+    setAwzanItems(activeBand.category.items)
+  }, [activeBand])
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -133,21 +137,22 @@ export const GoldItemCodingForm = ({
     hasSizes && (!isMultiCategory || hasItemsWithSizes)
   ///
   return (
-    <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
-      <div className="col-span-4">
+    <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 relative">
+      {/* <div className="col-span-4">
         <Checkbox
           onChange={(e) => handleFixAllPieceData(e)}
           name="fixPieceData"
           id="fixPieceData"
           label="تثبيت معلومات القطعة"
         />
-      </div>
+      </div> */}
       {/* غير محدد */}
       {/* {loadingCategories && activeBand.category?.id == 1 && <Spinner />} */}
       {activeBand.category?.id == 1 && (
         <SelectCategorySize
           sizes={sizes}
           setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+          setAwzanItems={setAwzanItems}
           categoryName="category_id"
           sizeTypeName="size_type"
           showNotDefinedType={false}
@@ -219,18 +224,7 @@ export const GoldItemCodingForm = ({
         <div className="flex mb-1 justify-between items-center">
           <label htmlFor="weight">الوزن</label>
           {awzanItems && !!awzanItems?.length && (
-            <div className="relative">
-              {detailedWeight_total !== 0 && detailedWeight_total && (
-                <DeleteIcon
-                  size={10}
-                  className="absolute -top-2 -start-2"
-                  action={() => {
-                    setDetailedWeight_total(undefined)
-                    values.weightitems = []
-                  }}
-                />
-              )}
-
+            <div className="flex items-center">
               <WeightIcon
                 action={() =>
                   detailedWeight_total !== 0 &&
@@ -238,6 +232,17 @@ export const GoldItemCodingForm = ({
                   setWeightItemsModal(true)
                 }
               />
+
+              {detailedWeight_total !== 0 && detailedWeight_total && (
+                <DeleteIcon
+                  // size={10}
+                  // className=" -top-2 -start-2"
+                  action={() => {
+                    setDetailedWeight_total(undefined)
+                    values.weightitems = []
+                  }}
+                />
+              )}
             </div>
           )}
         </div>
@@ -249,10 +254,10 @@ export const GoldItemCodingForm = ({
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
-              value: detailedWeight_total,
-              onChange: (e) => setDetailedWeight_total(+e.target.value),
-              disabled: true,
-            }),
+                value: detailedWeight_total,
+                onChange: (e) => setDetailedWeight_total(+e.target.value),
+                disabled: true,
+              }),
           }}
           // value={detailedWeight_total !== 0 && detailedWeight_total ? detailedWeight_total : undefined}
           // onChange={(e) => setDetailedWeight_total(+e.target.value)}
@@ -261,8 +266,9 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-            }`}
+          className={`${
+            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+          }`}
         />
       </div>
 
@@ -277,9 +283,9 @@ export const GoldItemCodingForm = ({
         modalTitle="إضافة لون ذهب"
         name="color_id"
         label="لون الذهب"
-      // onChange={(option) => {
-      //   setFieldValue("color_value", option.value)
-      // }}
+        // onChange={(option) => {
+        //   setFieldValue("color_value", option.value)
+        // }}
       />
       {/* الاجرة */}
       <BaseInputField
@@ -289,32 +295,9 @@ export const GoldItemCodingForm = ({
         type="text"
         name="wage"
       />
-      {/* يحتوي علي حجر ام لا */}
-      <div className=" col-span-1 flex items-center justify-center">
-        <CheckBoxField
-          name="has_stones"
-          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
-        />
-        <CheckBoxField
-          name="has_stones"
-          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
-        />
-        {/* <RadioGroup name="has_stones">
-          <RadioGroup.RadioButton
-            value={true}
-            label="يحتوي علي احجار"
-            id="true"
-          />
-          <RadioGroup.RadioButton
-            value={false}
-            label="لا يحتوي علي احجار"
-            id="false"
-          />
-        </RadioGroup> */}
-      </div>
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
-        <div className=" col-span-4" >
+        <div className=" col-span-4">
           <SizesTable sizes={sizes} setSizes={setSizes} />
         </div>
       )}
@@ -331,6 +314,25 @@ export const GoldItemCodingForm = ({
           id="details"
           label="وصف القطعة"
         />
+      </div>
+      {/* يحتوي علي حجر ام لا */}
+      <div className=" col-span-1 flex items-center justify-center absolute -bottom-16">
+        <CheckBoxField
+          name="has_stones"
+          label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
+        />
+        {/* <RadioGroup name="has_stones">
+          <RadioGroup.RadioButton
+            value={true}
+            label="يحتوي علي احجار"
+            id="true"
+          />
+          <RadioGroup.RadioButton
+            value={false}
+            label="لا يحتوي علي احجار"
+            id="false"
+          />
+        </RadioGroup> */}
       </div>
       {/* /////// */}
       {/* تفاصيل المقاسات */}
@@ -389,13 +391,19 @@ export const GoldItemCodingForm = ({
                 </Button>
               </>
             )}
-              </Formik>
+          </Formik>
         ))}
-          </Modal>
+      </Modal>
 
+<<<<<<< HEAD
       {/* تفاصيل الاوزان */ }
           <Modal
         isOpen = {
+=======
+      {/* تفاصيل الاوزان */}
+      <Modal
+        isOpen={
+>>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
           !!awzanItems &&
           !!awzanItems.length &&
           weightItemsModal &&
@@ -459,9 +467,14 @@ export const GoldItemCodingForm = ({
               </Button>
             </>
           )}
+<<<<<<< HEAD
             </Formik>
         </>
         </Modal>
+=======
+        </Formik>
+      </Modal>
+>>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
     </div>
   )
 }

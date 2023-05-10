@@ -5,7 +5,7 @@
 /////////// Types
 
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Button } from "../atoms"
 import { BoxesDataBase } from "../atoms/card/BoxesDataBase"
 import { OuterFormLayout } from "../molecules"
@@ -20,6 +20,12 @@ type GoldSupplySecondFormProps_TP = {
     setStage: Dispatch<SetStateAction<number>>
     setFormValues: Dispatch<SetStateAction<GoldFirstFormInitValues_TP | undefined>>
     setFinalData: Dispatch<SetStateAction<FinalData_TP | undefined>>
+    data: OTableDataTypes[]
+    setData: Dispatch<SetStateAction<OTableDataTypes[]>>
+    boxValues: OTableDataTypes[]
+    setBoxValues: Dispatch<SetStateAction<OTableDataTypes[]>>
+    editData: OTableDataTypes
+    setEditData: Dispatch<SetStateAction<OTableDataTypes>>
 }
 export type BoxesTypes = {
     karat_24_aggregate: number
@@ -52,16 +58,25 @@ export type OTableDataTypes = GoldTableProperties_TP & TableHelperValues_TP
 ///
 
 ///
-export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setFinalData }: GoldSupplySecondFormProps_TP) => {
+export const GoldSupplySecondForm = ({ 
+    formValues, 
+    setStage, 
+    setFormValues, 
+    setFinalData,
+    data,
+    setData,
+    boxValues,
+    setBoxValues,
+    editData,
+    setEditData,
+}: GoldSupplySecondFormProps_TP) => {
     ///
     /////////// CUSTOM HOOKS
     ///
     ///
     /////////// STATES
     ///
-    const [data, setData] = useState<OTableDataTypes[]>([])
-    const [boxValues, setBoxValues] = useState<OTableDataTypes[]>([])
-    const [editData, setEditData] = useState<OTableDataTypes>({} as OTableDataTypes)
+    const [dirty, setDirty] = useState(false)
     const defaultValues: OTableDataTypes = {
         id: crypto.randomUUID(),
         number: editData.number || '',
@@ -76,7 +91,6 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
         karat_value: '',
         category_value: ''
     }
-
     ///
     /////////// SIDE EFFECTS
     ///
@@ -112,7 +126,7 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
     }, 0)
 
     const total_tax = boxValues.reduce((acc, curr) => {
-        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(formValues?.api_gold_price) * .15))
+        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
     }, 0)
 
     const total_weight = boxValues.reduce((acc, curr) => {
@@ -127,14 +141,14 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
             <GoldFirstFormView formValues={formValues} setStage={setStage} setFormValues={setFormValues} />
         </OuterFormLayout>
         <div className="px-4">
-            <h1 className="text-2xl mb-5 mt-10">اجمالي السند</h1>
+            <h1 className="text-2xl mb-5 mt-10">{t('bond total')}</h1>
             <div className="grid-cols-4 grid gap-8" >
 
                 {/* اجمالي الذهب حسب الاسهم */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p>اجمالي الذهب 24 حسب الأسهم</p>
-                        <p>{total_24_gold_by_stock} جرام</p>
+                        <p>{t('total 24 gold by stock')}</p>
+                        <p>{total_24_gold_by_stock} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الذهب حسب الاسهم */}
@@ -142,8 +156,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي الاجور */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p>اجمالي الأجور</p>
-                        <p>{total_wages} ر.س</p>
+                        <p>{t('total wages')}</p>
+                        <p>{total_wages} {t('reyal')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الاجور */}
@@ -151,8 +165,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي الضريبة */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p>اجمالي الضريبة</p>
-                        <p>{total_tax} ر.س</p>
+                        <p>{t('total tax')}</p>
+                        <p>{total_tax} {t('reyal')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الضريبة */}
@@ -160,8 +174,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي الوزن القائم */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p>اجمالي الوزن القائم</p>
-                        <p>{total_weight} جرام</p>
+                        <p>{t('total weight')}</p>
+                        <p>{total_weight} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الوزن القائم */}
@@ -169,8 +183,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي صندوق الذهب 18 */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p> اجمالي صندوق الذهب 18</p>
-                        <p>{karat_18_aggregate} جرام</p>
+                        <p>{t('total 18 gold box')}</p>
+                        <p>{karat_18_aggregate} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 18 */}
@@ -178,8 +192,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي صندوق الذهب 21 */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p> اجمالي صندوق الذهب 21</p>
-                        <p>{karat_21_aggregate} جرام</p>
+                        <p>{t('total 21 gold box')}</p>
+                        <p>{karat_21_aggregate} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 21 */}
@@ -187,8 +201,8 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي صندوق الذهب 22 */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p> اجمالي صندوق الذهب 22</p>
-                        <p>{karat_22_aggregate} جرام</p>
+                        <p>{t('total 22 gold box')}</p>
+                        <p>{karat_22_aggregate} {t('gram')}</p>
 
                     </BoxesDataBase>
                 </div>
@@ -197,16 +211,16 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                 {/* اجمالي صندوق الذهب 24 */}
                 <div className="col-span-1" >
                     <BoxesDataBase>
-                        <p> اجمالي صندوق الذهب 24</p>
-                        <p>{karat_24_aggregate} جرام</p>
+                        <p>{t('total 24 gold box')}</p>
+                        <p>{karat_24_aggregate} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 24 */}
 
             </div>
-            <h1 className="text-2xl mb-5 mt-10">بنود السند</h1>
+            <h1 className="text-2xl mb-5 mt-10">{t('bond items')}</h1>
             <div className="flex flex-col gap-6 items-center">
-                <OTable data={data} setData={setData} defaultValues={defaultValues} setEditData={setEditData} editData={editData} formValues={formValues} setBoxValues={setBoxValues} />
+                <OTable setDirty={setDirty} data={data} setData={setData} defaultValues={defaultValues} setEditData={setEditData} editData={editData} formValues={formValues} setBoxValues={setBoxValues} />
                 <Button 
                     action={() => {
                         setFinalData({
@@ -224,21 +238,25 @@ export const GoldSupplySecondForm = ({ formValues, setStage, setFormValues, setF
                                 return {
                                     ...item,
                                     number: `${i + 1}`,
-                                    total_wages: (Number(item.weight) * Number(item.wage)).toFixed(3),
-                                    wage_tax: (Number(item.weight) * Number(item.wage) * .15).toFixed(3),
-                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3),
+                                    total_wages: (Number(item.weight) * Number(item.wage)),
+                                    wage_tax: (Number(item.weight) * Number(item.wage) * .15),
+                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
                                 }
                             })
                         })
                         if (data.length > 0)  {
-                            setStage(prev => prev + 1)
+                            if (dirty) {
+                                notify('error', `${t('must add the item')}`)
+                            } else {
+                                setStage(prev => prev + 1)
+                            }
                         } else {
-                            notify('error', 'يجب إدخال بنود')
+                            notify('error', `${t('must add one item at least')}`)
                         }
                     }} 
                     className="mr-auto ml-8  flex"
                 >
-                    {t('submit')}
+                    {t('next')}
                 </Button>
             </div>
         </div>

@@ -67,18 +67,21 @@ const CreateStoneType = ({
       notify("success")
       if(value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['stone_type'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['stone_type'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_types'])
       }
       if (setDataSource && setShow) {
-        setDataSource((prev: any)=> [...prev, data])
+        // setDataSource((prev: any)=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_types'])
         setShow(false)
       } 
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesTypes[]) => 
-          prev.map((p: StonesTypes) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_types'])
+        // setDataSource((prev: StonesTypes[]) => 
+        //   prev.map((p: StonesTypes) => p.id === data.id ? data : p))
       }
     }
   })

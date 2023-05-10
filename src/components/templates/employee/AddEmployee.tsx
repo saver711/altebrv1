@@ -105,7 +105,7 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
     }] : [],
     email: editEmployeeData?.email || "" as Email_TP,
     date_of_hiring: new Date(),
-    password: editEmployeeData?.password || "",  // national address initial values
+    password: "",
     district_id: editEmployeeData?.nationalAddress.district.id || "",
     district_value: editEmployeeData?.nationalAddress.district.name || "",
     building_number: editEmployeeData?.nationalAddress?.building_number || "",
@@ -176,6 +176,9 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
               delete (editedValues.national_image)
             if (JSON.stringify(values.image[0].path) === JSON.stringify(editEmployeeData.image))
               delete (editedValues.image)
+            if (values.password === "")
+              delete (editedValues.password)
+            console.log(editedValues)
             mutate({
               endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
               values: editedValues,
@@ -205,7 +208,7 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
               }
             >
               <EmployeeMainData title={`${t("main data")}`} editEmployeeData={editEmployeeData} />
-              <NationalAddress editData={editEmployeeData}/>
+              <NationalAddress editData={editEmployeeData} />
               <Documents
                 docsFormValues={docsFormValues}
                 setDocsFormValues={setDocsFormValues}

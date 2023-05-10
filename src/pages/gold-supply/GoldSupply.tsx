@@ -12,12 +12,13 @@ import { Helmet } from "react-helmet-async"
 // } from "../../types"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
-import { BoxesTypes, GoldSupplySecondForm, OTableDataTypes } from "../../components/gold-supply/GoldSupplySecondForm"
 import { GoldSupplyFinalForm } from "../../components/gold-supply/GoldSupplyFinalForm"
 import { GoldSupplyFirstForm } from "../../components/gold-supply/GoldSupplyFirstForm"
+import { BoxesTypes, GoldSupplySecondForm, OTableDataTypes } from "../../components/gold-supply/GoldSupplySecondForm"
 import { GoldFirstFormInitValues_TP } from "../../components/gold-supply/formInitialValues_types"
 import { Loading } from "../../components/organisms/Loading"
 import { useFetch } from "../../hooks/useFetch"
+import { Back } from "../../utils/utils-components/Back"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -65,6 +66,9 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
   const [stage, setStage] = useState(1)
   const [formValues, setFormValues] = useState<GoldFirstFormInitValues_TP>()
   const [finalData, setFinalData] = useState<FinalData_TP>()
+  const [data, setData] = useState<OTableDataTypes[]>([])
+  const [boxValues, setBoxValues] = useState<OTableDataTypes[]>([])
+  const [editData, setEditData] = useState<OTableDataTypes>({} as OTableDataTypes)
   /////////// SIDE EFFECTS
 
   /////////// IF CASES
@@ -74,11 +78,13 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
   /////////// FUNCTIONS
 
   ///
-  if (checkOperationsLoading) return <Loading mainTitle={`${t('loading')}`} subTitle="checking accounts operations" />
+  if (checkOperationsLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t("checking accounts operations")}`} />
 
   //  should be (!checkOperations?.status) ↓↓↓
   if (!checkOperations?.status) return <div className="h-screen flex justify-center items-center  bg-flatWhite " >
-    <h2 className="font-bold text-2xl p-8 rounded-lg bg-mainGreen text-white cursor-pointer" onClick={() => navigate('/testSystem')} >please complete accounts operations first click to complete the operation </h2>
+    <h2 className="font-bold text-2xl p-8 rounded-lg bg-mainGreen text-white cursor-pointer" onClick={() => navigate('/testSystem')}>
+      {t(`please complete accounts operations first click to complete the operation`)}
+    </h2>
   </div>
 
   return (
@@ -87,8 +93,11 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
         <title>{title}</title>
       </Helmet>
       {stage !== 3 && (
-        <div className="mb-0 pr-5">
-          <h1 className="text-2xl font-bold">{`${t('create gold document')}`}</h1>
+        <div className="mb-0 px-5 flex justify-between">
+          <h1 className="text-2xl font-bold">{`${t('create gold bond')}`}</h1>
+          <div>
+            <Back />
+          </div>
         </div>
       )}
 
@@ -101,10 +110,26 @@ export const GoldSupply = ({ title }: GoldSupplyProps_TP) => {
         />
       )}
       {stage === 2 && (
-        <GoldSupplySecondForm formValues={formValues} setStage={setStage} setFormValues={setFormValues} setFinalData={setFinalData} />
+        <GoldSupplySecondForm 
+          formValues={formValues} 
+          setStage={setStage} 
+          setFormValues={setFormValues} 
+          setFinalData={setFinalData} 
+          data={data}
+          setData={setData}
+          boxValues={boxValues}
+          setBoxValues={setBoxValues}
+          editData={editData}
+          setEditData={setEditData}
+        />
       )}
       {stage === 3 && (
-        <GoldSupplyFinalForm formValues={formValues} setStage={setStage} setFormValues={setFormValues} finalData={finalData} />
+        <GoldSupplyFinalForm 
+          formValues={formValues} 
+          setStage={setStage} 
+          setFormValues={setFormValues} 
+          finalData={finalData} 
+        />
       )}
     </>
   )

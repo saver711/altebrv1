@@ -180,7 +180,8 @@ export const Districts = ({
   ///
   /////////// SIDE EFFECTS
   ///
-   useEffect(() => {
+  useEffect(() => {
+     console.log("0", editData?.nationalAddress?.district.name)
      setNewValue({
        id: editData?.nationalAddress?.district.id || "",
        value: editData?.nationalAddress?.district.name || "",
@@ -221,13 +222,6 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
-   useEffect(() => {
-     setNewValue({
-       id: editData?.nationalAddress.district.id,
-       value: editData?.nationalAddress.district.name,
-       label: editData?.nationalAddress.district.name || "اختر الحي",
-     })
-   }, [])
   // console.log("distractNameeditData", editData)
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -266,14 +260,6 @@ export const Districts = ({
           })
         }}
         fieldKey={fieldKey}
-        defaultValue={{
-          value: editData ? editData?.district_name : "",
-          label: editData
-            ? editData?.district_name
-            : districts?.length === 0
-            ? "لا يوجد "
-            : "اختر المدينه اولا",
-        }}
         // {...{...(values?.district_value && { value:{
         //   value: values?.district_value || "",
         //   label: values?.district_value || ""

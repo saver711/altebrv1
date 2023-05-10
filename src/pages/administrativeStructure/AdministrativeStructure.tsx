@@ -50,21 +50,20 @@ export const AdministrativeStructure = ({
   const [dataSource, setDataSource] = useState<PermissionGroup_TP[]>([])
   const [open, setOpen] = useState<boolean>(false)
   const [model, setModel] = useState(false)
-  const [administrative, setAdministrativeOpen] = useState(false)
   const [editData, setEditData] = useState<any>()
   const [deleteData, setDeleteData] = useState<any>()
-  
+
   ///
   const AddAdministrative = (
-    <Button action={() =>{
-      setAdministrativeOpen(true)
+    <Button bordered action={() =>{
+      navigate(-1)
     } }>
-      {t("add")}
+      {t("back")}
     </Button>
   )
   /////////// CUSTOM HOOKS
   ///
-  const { isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
+  const {  isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
     endpoint: 'administrative/api/v1/roles',
     queryKey: ['allRoles'],
     onSuccess: (data)=> { setDataSource(data) }
@@ -185,13 +184,6 @@ export const AdministrativeStructure = ({
           )}
         </div>
       </OuterFormLayout>
-      <Modal
-        isOpen={administrative}
-        onClose={() => setAdministrativeOpen(false)}
-        title={`${t("administrative structure")}`}
-      >
-        <AddAdministrativeStructure title={t("administrative structure")} />
-      </Modal>
     </>
   )
 }

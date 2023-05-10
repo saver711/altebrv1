@@ -77,10 +77,11 @@ input:-webkit-autofill:active {
 .pdf-no-scroll .rpv-core__inner-pages--vertical {
   overflow-y: hidden;
 }
-input::placeholder{
+input::placeholder {
   padding-bottom: 2px;
 }
 
+<<<<<<< HEAD
 .css-1i837h3-ValueContainer2{
   position: absolute !important;
   top: 34px;
@@ -113,3 +114,17 @@ input::placeholder{
 .content input[name=email]{
   color: black;
 }
+=======
+.css-b62m3t-container{
+  position: relative;
+  /* margin-bottom: 50px; */
+}
+.css-1i837h3-ValueContainer2{
+  display: flex;
+  position: absolute;
+  top: 45px;
+}
+.css-5htak9-MultiValueGeneric2{
+  font-size: 70% !important;
+}
+>>>>>>> 521b367bf5a2129716500cc388867f042a615fd1

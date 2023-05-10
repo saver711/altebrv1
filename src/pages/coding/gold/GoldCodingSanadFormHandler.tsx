@@ -262,6 +262,7 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("sizeIsRequired", false)
     }
   }, [activeBand, isSubmitting])
+  console.log(`activeBand:`, activeBand)
 
   useEffect(() => {
     if (!!activeBand) {
@@ -366,7 +367,7 @@ export const GoldCodingSanadFormHandler = ({
 
             {/* بنود الترقيم */}
             <Accordion
-              className=" bg-lightGreen "
+              className=" bg-lightGreen"
               isInitiallyOpen={true}
               title="بنود الترقيم"
             >
@@ -394,9 +395,12 @@ export const GoldCodingSanadFormHandler = ({
             <div className="flex items-end justify-end gap-x-5">
               {/* submit البند */}
               {!!addedPieces.length && (
+                <div className="relative" >
+                  <span className="bg-mainGreen rounded-full  h-6 w-6 text-white text-center mb-2 absolute -top-4 z-50" >{addedPieces.length}</span>
                 <Button bordered={true} action={() => setStage(2)}>
                   {t("preview")}
                 </Button>
+                </div>
               )}
               <Button action={submitForm}>{t("save")}</Button>
             </div>

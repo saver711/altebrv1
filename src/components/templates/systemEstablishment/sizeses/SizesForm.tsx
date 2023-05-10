@@ -4,7 +4,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik, FormikValues } from "formik"
 import { t } from "i18next"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { SingleValue } from "react-select"
 import * as Yup from "yup"
 import { useFetch, useMutate } from "../../../../hooks"
@@ -15,12 +15,11 @@ import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../atoms"
 import {
-    BaseInputField,
-    InnerFormLayout,
-    OuterFormLayout,
-    Select
+  BaseInputField,
+  InnerFormLayout,
+  OuterFormLayout,
+  Select
 } from "../../../molecules"
-import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
 /////////// Types
 ///
 type sizesTypes_TP = {
@@ -77,7 +76,7 @@ const NewSizeTypeOptionComponent = ({
   })
   const handleSubmit = (values: FormikValues) => {
     console.log(values)
-    
+
     mutate({
       endpointName: "",
       values: {
@@ -128,8 +127,13 @@ const NewSizeTypeOptionComponent = ({
     </div>
   )
 }
+type SizeForm_TP={
+  showCategories?:boolean
+  setModel?:Dispatch<SetStateAction<boolean>>
+  editData?:any
+}
 
-export const SizesForm = () => {
+export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) => {
   /////////// VARIABLES
   ///
   const validatingSchema = Yup.object().shape({
@@ -145,26 +149,32 @@ export const SizesForm = () => {
       .required("برجاء ملئ هذا الحقل")
       .min(0)
       .typeError(" مسموح بالارقام  فقط  "),
-    category_id: Yup.string()
+    category_id:!showCategories ? Yup.string()
       .trim()
       .required("برجاء ملئ هذا الحقل")
-      .typeError("لا يمكن ان يكون الحقل فارغ"),
+      .typeError("لا يمكن ان يكون الحقل فارغ") : Yup.string(),
     sizeType: Yup.string()
       .trim()
       .required("برجاء ملئ هذا الحقل")
       .typeError("لا يمكن ان يكون الحقل فارغ"),
+    type: !showCategories ? Yup.string()
+      .trim()
+      .required("برجاء ملئ هذا الحقل")
+      .typeError("لا يمكن ان يكون الحقل فارغ") : Yup.string() ,
   })
 
   const initialValues = {
-    category_id: "",
     sizeType: "",
-    start: "",
-    end: "",
-    increase: "",
+    start: editData?.start ||"",
+    end:editData?.end || "",
+    increase:editData?.increase || "",
+    type:editData?.type || ""
   }
   ///
   /////////// CUSTOM HOOKS
   ///
+  const queryClient = useQueryClient()
+
   const categoriesOptionsApi = [
     { id: 1, value: "1", label: "سلسله" },
     { id: 4, value: "2", label: "خاتم" },
@@ -178,7 +188,6 @@ export const SizesForm = () => {
   ///
   /////////// SIDE EFFECTS
   ///
-  console.log(categoryID)
   ///
   /////////// IF CASES
   ///
@@ -224,6 +233,9 @@ export const SizesForm = () => {
     mutationFn: mutateData,
     onSuccess: (data) => {
       console.log("sizesMutate", data)
+      if(setModel){
+        queryClient.refetchQueries(["sizes"])
+      }
       notify("success")
     },
     onError: (err) => {
@@ -236,20 +248,17 @@ export const SizesForm = () => {
       setNewValue(null)
     }
   }, [JSON.stringify(sizeTypes)])
-
-  console.log("categories", categories)
-  console.log("sizeType", sizeTypes)
+ 
   const handleSubmit = (values: any) => {
-    console.log("handelSubmit", values)
     sizesMutate({
-      endpointName: "/size/api/v1/sizes",
+      endpointName: editData ?  `/size/api/v1/sizes/${editData.id}` : '/size/api/v1/sizes',
       values: {
-        type: values.sizeType,
+        type: !showCategories ? values.type : values.sizeType,
         start: values.start,
         end: values.end,
         increase: values.increase,
-        category_id: values.category_id,
       },
+      method: editData ? "put" : "post"
     })
   }
 
@@ -258,7 +267,7 @@ export const SizesForm = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => handleSubmit(values)}
-        validationSchema={validatingSchema}
+        //validationSchema={validatingSchema}
       >
         {({ setFieldValue, values }) => (
           <Form>
@@ -276,37 +285,9 @@ export const SizesForm = () => {
                 }
               >
                 <InnerFormLayout>
-                  <Select
-                    label="الاصناف"
-                    name="category_id"
-                    id="category_id"
-                    isMulti={false}
-                    required={false}
-                    placeholder="Select"
-                    loadingPlaceholder="Loading..."
-                    loading={false}
-                    creatable={true}
-                    CreateComponent={CreateCategory}
-                    options={categoriesOptionsApi}
-                    fieldKey="id"
-                    onChange={(option) => {
-                      setFieldValue("category_id", option?.id)
-                      //@ts-ignore
-                      setCategoryID(option)
-                    }}
-                    // defaultValue={{
-                    //   value: categoriesOptionsApi[0].label,
-                    //   label: categoriesOptionsApi[0].label,
-                    // }}
-                  />
-                  {/* <SelectCategory
-                  label={`${t("categories")}`}
-                  name="category_id"
-                  field="id"
-                  onChange={(option: any) => {
-                    setCategoryID(option)
-                  }}
-                /> */}
+                
+                {
+                  showCategories &&
                   <Select
                     label="نوع المقاس"
                     name="sizeType"
@@ -319,9 +300,8 @@ export const SizesForm = () => {
                       `
                     ${sizeTypes?.length !== 0 ? "اختر النوع" : "لا يوجد "} `
                     }
-                    loadingPlaceholder={`${
-                      !categoryID?.id ? "اختر الصنف أولا" : t("loading")
-                    }`}
+                    loadingPlaceholder={`${!categoryID?.id ? "اختر الصنف أولا" : t("loading")
+                      }`}
                     loading={loadingSizeType}
                     creatable={true}
                     CreateComponent={NewSizeTypeOptionComponent}
@@ -333,6 +313,18 @@ export const SizesForm = () => {
                     }}
                     fieldKey="id"
                   />
+                }
+                  {
+                    !showCategories && 
+                    <BaseInputField
+                      id="type"
+                      label={`${t('size type')}`}
+                      name="type"
+                      type="text"
+                      placeholder={`${t('size type')}`}
+                      required
+                    />
+                  }
                   <BaseInputField
                     id="start"
                     label=" بدايه معدل المقاس"

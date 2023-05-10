@@ -47,8 +47,8 @@ export const AddCountry = ({
   ///
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_ar: editData ? editData.name : "",
-    name_en: "",
+    name_ar: editData ? editData?.name_ar : "",
+    name_en: editData ? editData?.name_en : "",
   }
 
   const countryValidatingSchema = Yup.object({
@@ -81,14 +81,16 @@ console.log("co",initialValues)
         })
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllCountries'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewCountries_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllCountries'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewCountries_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
     onError: (error) => {

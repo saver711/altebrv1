@@ -57,14 +57,14 @@ export const StoneTable = ({ subTableData }: any) => {
   /////////// STATES
 
 
-
-
-
   ///
   //@ts-ignore
   const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
+  console.log("🚀 ~ file: StoneTable.tsx:63 ~ StoneTable ~ selectedRow:", selectedRow)
   const queryClient = useQueryClient()
   const [queryData, setQueryData] = useState<StoneRow_TP[] | undefined>()
+  //@ts-ignore
+  const StonesData = selectedRow[0]?.stones || []
   useEffect(() => {
     if (queryClient) {
       const types = queryClient.getQueryData<Query_TP[]>(["stone_type"])
@@ -74,33 +74,32 @@ export const StoneTable = ({ subTableData }: any) => {
       const purities = queryClient.getQueryData<Query_TP[]>(["stone_purity"])
       const natures = queryClient.getQueryData<Query_TP[]>(["stone_nature"])
       const allQueries = StonesData?.map((stone) => {
+        console.log("first==>", stone)
         const finaleStone = {
-          stone: types?.find((type) => type.id == stone.stones[0].stone_id)?.name,
+          stone: types?.find((type) => type.id == stone.stone_id)?.name,
           color: colors
-            ?.filter((item) => stone.stones[0].color_id.includes(item.id))
+            ?.filter((item) => stone.color_id.includes(item.id))
             .map((item) => item.name)
             .join(" & ")!,
           shape: shapes
-            ?.filter((item) => stone.stones[0].shape_id.includes(item.id))
+            ?.filter((item) => stone.shape_id.includes(item.id))
             .map((item) => item.name)
             .join(" & ")!,
-          purity: purities?.find((type) => type.id == stone.stones[0].purity_id)?.name!,
-          nature: natures?.find((type) => type.id == stone.stones[0].nature_id)?.name!,
-          country: countries?.find((country) => country.id == stone.stones[0].certificate_source)?.name!,
+          purity: purities?.find((type) => type.id == stone.purity_id)?.name!,
+          nature: natures?.find((type) => type.id == stone.nature_id)?.name!,
+          country: countries?.find((country) => country.id == stone.certificate_source)?.name!,
         }
         return finaleStone
       })
       setQueryData(allQueries)
     }
   }, [queryClient])
-  //@ts-ignore
-  const StonesData = selectedRow.filter(item => item?.stones)
   const [data, setData] = useState([])
+  console.log(queryData)
   //@ts-ignore
   useEffect(() => {
     if(queryData){
-      console.log("===>",queryData[0]?.country)
-      setData(StonesData.map(item => ({ ...item?.stones[0],types:queryData[0]?.stone,  colors:queryData[0]?.color ,shapes:queryData[0]?.shape ,purities:queryData[0]?.purity ,natures:queryData[0]?.nature , certificate_source:queryData[0]?.country})))
+      setData(StonesData.map((item , index) => ({ ...item,types:queryData[index]?.stone,  colors:queryData[index]?.color ,shapes:queryData[index]?.shape ,purities:queryData[index]?.purity ,natures:queryData[index]?.nature , certificate_source:queryData[index]?.country})))
     }
   }, [queryData])
   
@@ -157,13 +156,11 @@ export const StoneTable = ({ subTableData }: any) => {
               return (
                 <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
-                    cell.getContext().column.id === 'certificate_url' &&
-                    console.log("------>>",cell.getContext().row.original?.certificate_url )
                     return (
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
                         {
                           !!cell.getContext().getValue() ?
-                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('visit link')}</span> <BiLinkExternal/> </a> :
+                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('link')}</span> <BiLinkExternal/> </a> :
                         flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

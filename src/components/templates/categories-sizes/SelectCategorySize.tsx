@@ -44,6 +44,7 @@ type SelectCategorySizeProps_TP = {
   sizeTypeFieldKey?: "id" | "value"
   theSizeFieldKey?: "id" | "value"
   setItemsToShowInCaseOfTa2m?: SetState_TP<CategoryMainData_TP[]>
+  setAwzanItems?: SetState_TP<CategoryMainData_TP[] | undefined>
   sizes?: SizePopup_TP[]
 }
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -59,6 +60,7 @@ export const SelectCategorySize = ({
   sizeTypeFieldKey = "id",
   theSizeFieldKey = "id",
   setItemsToShowInCaseOfTa2m,
+  setAwzanItems,
   sizes,
 }: SelectCategorySizeProps_TP) => {
   /////////// VARIABLES
@@ -68,7 +70,7 @@ export const SelectCategorySize = ({
   /////////// CUSTOM HOOKS
   ///
   const { values, setFieldError, setFieldTouched, setFieldValue } =
-    useFormikContext<{ sizeIsRequired: boolean; [key: string]: any }>()
+    useFormikContext<{ sizeIsRequired: boolean;[key: string]: any }>()
   ///
   /////////// STATES
   ///
@@ -114,6 +116,14 @@ export const SelectCategorySize = ({
                 setItemsToShowInCaseOfTa2m([])
               }
             }
+
+            if (setAwzanItems) {
+              if (option.type === "multi") {
+                setAwzanItems(option.items)
+              } else {
+                setAwzanItems(undefined)
+              }
+            }
             if (selectedCategory?.id !== option.id) {
               setSelectedSizeTypeOption(null)
               setFieldValue(sizeTypeName, "")
@@ -136,7 +146,7 @@ export const SelectCategorySize = ({
       {/* ---------------------------------- */}
       {!!values.sizeIsRequired &&
         !!selectedCategory &&
-        !!selectedCategory.sizes?.length && (
+        !!selectedCategory.category_sizes?.length && (
           <>
             <Select
               onChange={(option) => {
@@ -155,7 +165,7 @@ export const SelectCategorySize = ({
               label="نوع المقاس"
               placeholder="نوع المقاس"
               id="select-size-type"
-              options={selectedCategory.sizes?.map((size) => ({
+              options={selectedCategory.category_sizes?.map((size) => ({
                 ...size,
                 value: size.type,
                 label: size.type,
@@ -175,7 +185,7 @@ export const SelectCategorySize = ({
               label="المقاس"
               placeholder="المقاس"
               id="select-size-number"
-              options={selectedCategory.sizes
+              options={selectedCategory.category_sizes
                 ?.find((size) => size.id === selectedSizeTypeOption?.id)
                 ?.units.map((unit) => ({
                   ...unit,

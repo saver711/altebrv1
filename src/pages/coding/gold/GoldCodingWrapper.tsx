@@ -32,8 +32,9 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   /////////// CUSTOM HOOKS
   ///
   const [addedPieces, setAddedPieces] = useState<
-    GoldCodingSanad_initialValues_TP[]
+  GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
+  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
 
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
@@ -101,7 +102,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       )}
       {stage === 2 && (
         <div className="flex flex-col mx-auto relative" >
-          <ExpandableTable addedPieces={addedPieces} />
+          <ExpandableTable addedPieces={addedPieces} showDetails={true}/>
           <div className=" flex item-center gap-x-2 mr-auto">
             <Button action={() => setStage(1)} bordered>رجوع</Button>
             <Button loading={isLoading} action={() => sendPieces(addedPieces)} className="">ارسال</Button>

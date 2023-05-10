@@ -29,29 +29,29 @@ export const sideBarItems: MenuItem_TP[] = [
   {
     id: crypto.randomUUID(),
     icon: TbSmartHome,
-    label: "الرئيسيه",
+    label: 'home',
     link: "/",
   },
   {
     id: crypto.randomUUID(),
-    label: "اعدادات النظام ",
+    label: 'system establishment',
     link: "system",
     icon: CiSettings,
   },
   {
     id: crypto.randomUUID(),
-    label: "الترقيم",
+    label: 'coding',
     icon: CiExport,
     items: [
       {
         id: crypto.randomUUID(),
-        label: "الهويات المرقمة",
+        label: 'coded identities',
         link: "/coding",
         icon: RiVipCrownLine,
       },
       {
         id: crypto.randomUUID(),
-        label: "ترقيم الذهب",
+        label: 'gold coding',
         link: "/coding/gold",
         icon: RiVipCrownLine,
       },
@@ -59,102 +59,103 @@ export const sideBarItems: MenuItem_TP[] = [
   },
   {
     id: crypto.randomUUID(),
-    label: "السندات",
+    label: 'bonds',
     icon: IoDocumentsOutline,
     items: [
       {
         id: crypto.randomUUID(),
-        label: "التوريد",
+        label: 'supply',
         icon: CiExport,
         items: [
           {
             id: crypto.randomUUID(),
-            label: "السندات",
+            label: 'bonds',
             link: "/bonds",
             icon: RiVipCrownLine,
           },
           {
             id: crypto.randomUUID(),
-            label: "سند توريد ذهب ",
+            label: 'gold bond supply',
             link: "/bonds/gold",
             icon: AiFillGolden,
           },
-          {
-            id: crypto.randomUUID(),
-            label: "سند توريد الماس  ",
-            link: "/bonds/diamond",
-            icon: GiCutDiamond,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: "سند توريد متفرقات ",
-            link: "accessories",
-            icon: BiDiamond,
-          },
+          // {
+          //   id: crypto.randomUUID(),
+          //   label: 'diamond bond supply',
+          //   link: "/bonds/diamond",
+          //   icon: GiCutDiamond,
+          // },
+          // {
+          //   id: crypto.randomUUID(),
+          //   label: 'accessories bond supply',
+          //   link: "accessories",
+          //   icon: BiDiamond,
+          // },
         ],
       },
-      {
-        id: crypto.randomUUID(),
-        label: "السداد ",
-        icon: MdOutlineAttachMoney,
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'payment',
+      //   icon: MdOutlineAttachMoney,
 
-        items: [
-          {
-            id: crypto.randomUUID(),
-            label: "سند السداد ",
-            link: "/return-payment",
-            icon: CiImport,
-          },
-        ],
-      },
-      {
-        id: crypto.randomUUID(),
-        label: "المردود",
-        link: "Return",
-        icon: MdOutlinePayments,
-        items: [
-          {
-            id: crypto.randomUUID(),
-            label: " مردود توريد",
-            link: "return-table",
-            icon: MdOutlinePayments,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: " مردود ذهب",
-            link: "return-gold",
-            icon: AiFillGolden,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: " مردود الماس",
-            link: "return-diamond",
-            icon: AiFillGolden,
-          },
-          {
-            id: crypto.randomUUID(),
-            label: " مردود متفرقات",
-            link: "return-accessories",
-            icon: AiFillGolden,
-          },
-        ],
-      },
-      {
-        id: crypto.randomUUID(),
-        label: t("employees"),
-        link: "/employees",
-        icon: GrGroup,
-      }, {
-        id: crypto.randomUUID(),
-        label: "حجز الذهب ",
-        link: "accessories",
-        icon: MdOutlinePayments,
-      },
+      //   items: [
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'bond payment',
+      //       link: "/return-payment",
+      //       icon: CiImport,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'payoff',
+      //   link: "Return",
+      //   icon: MdOutlinePayments,
+      //   items: [
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'supply payoff',
+      //       link: "return-table",
+      //       icon: MdOutlinePayments,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'gold payoff',
+      //       link: "return-gold",
+      //       icon: AiFillGolden,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'diamond payoff',
+      //       link: "return-diamond",
+      //       icon: AiFillGolden,
+      //     },
+      //     {
+      //       id: crypto.randomUUID(),
+      //       label: 'accessories payoff',
+      //       link: "return-accessories",
+      //       icon: AiFillGolden,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: "employees",
+      //   link: "/employees",
+      //   icon: GrGroup,
+      // }, 
+      // {
+      //   id: crypto.randomUUID(),
+      //   label: 'reserve gold',
+      //   link: "accessories",
+      //   icon: MdOutlinePayments,
+      // },
     ],
   },
   {
     id: crypto.randomUUID(),
-    label: "الاعدادات ",
+    label: 'settings',
     link: "settings",
     icon: CiSettings,
   },

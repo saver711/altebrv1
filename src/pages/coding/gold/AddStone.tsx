@@ -11,7 +11,8 @@ import { Header } from "../../../components/atoms/Header"
 import {
   Accordion,
   BaseInputField,
-  TextAreaField
+  CheckBoxField,
+  TextAreaField,
 } from "../../../components/molecules"
 import NinjaTable from "../../../components/molecules/NinjaTable"
 import RadioGroup from "../../../components/molecules/RadioGroup"
@@ -28,7 +29,7 @@ import { notify } from "../../../utils/toast"
 import {
   GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
-  goldCodingStoneValues
+  goldCodingStoneValues,
 } from "../coding-types-and-helpers"
 
 ///
@@ -125,9 +126,12 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
               const newStones = [...stones]
               newStones?.splice(props.rowIndex, 1)
               setStones(newStones)
+<<<<<<< HEAD
               // const newStones = [...stones]
               // newStones?.splice(props.rowIndex, 1)
               // setStones(newStones)
+=======
+>>>>>>> 521b367bf5a2129716500cc388867f042a615fd1
             }}
           />
         )
@@ -162,7 +166,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
           count: stone.count,
           nature: natures?.find((type) => type.id == stone.nature_id)?.name!,
           certificate_number: stone.certificate_number,
-          certificate_source: countries?.find((country) => country.id == stone.certificate_source)?.name!,
+          certificate_source: countries?.find(
+            (country) => country.id == stone.certificate_source
+          )?.name!,
           certificate_url: stone.certificate_url,
         }
         return finaleStone
@@ -183,21 +189,21 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
 
   ///
   return (
-    <Accordion className=" bg-lightGreen" title="تفاصيل الأحجار">
-      <div className="  bg-lightGreen rounded-md p-4 mt-3">
+    <Accordion className=" bg-lightGreen mt-8" title="تفاصيل الأحجار">
+      <div className="  bg-lightGreen rounded-md p-4">
         <div className="bg-white shadows mt-6 rounded-md p-4 overflow-x-hidden">
           <Formik
             initialValues={goldCodingStoneValues}
             validationSchema={goldCodingStoneSchema}
             onSubmit={(values) => {
-              notify('success' , `${t('stone added successfully')}`)
+              notify("success", `${t("stone added successfully")}`)
               setStones((curr) => [
                 ...(curr || []),
                 { id: crypto.randomUUID(), ...values },
               ])
             }}
           >
-            {({ submitForm, errors, touched, setFieldValue}) => (
+            {({ submitForm, errors, touched, setFieldValue }) => (
               <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 ">
                 <SelectStoneType
                   label="نوع الحجر"
@@ -207,25 +213,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                 //   setFieldValue("stoneType_value", option.value)
                 // }}
                 />
-                <SelectColor
-                  field="id"
-                  multi
-                  label="لون الحجر"
-                  name="color_id"
-                  modalTitle="إضافة لون حجر"
-                // onChange={(option => {
-                //   setFieldValue('stoneColor_value', option.value)
-                // })}
-                />
-                <SelectStoneShape
-                  multi
-                  field="id"
-                  label="قطع شكل الحجر"
-                  name="shape_id"
-                // onChange={(option => {
-                //   setFieldValue('stoneShape_value', option.value)
-                // })}
-                />
+
                 <SelectStonePurity
                   field="id"
                   label="نقاء الحجر"
@@ -260,13 +248,37 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   type="text"
                   label="رقم شهادة الحجر"
                 />
-                <Country_city_distract_markets countryName="certificate_source" countryLabel="مصدر شهادة الحجر"/>
+                <Country_city_distract_markets
+                  countryName="certificate_source"
+                  countryLabel="مصدر شهادة الحجر"
+                />
                 <BaseInputField
                   id="certificate_url"
                   name="certificate_url"
                   type="text"
                   label="رابط شهادة الحجر"
                 />
+                <div className="col-span-4 flex gap-x-5" >
+                  <SelectStoneShape
+                    multi
+                    field="id"
+                    label="قطع شكل الحجر"
+                    name="shape_id"
+                  // onChange={(option => {
+                  //   setFieldValue('stoneShape_value', option.value)
+                  // })}
+                  />
+                  <SelectColor
+                    field="id"
+                    multi
+                    label="لون الحجر"
+                    name="color_id"
+                    modalTitle="إضافة لون حجر"
+                  // onChange={(option => {
+                  //   setFieldValue('stoneColor_value', option.value)
+                  // })}
+                  />
+                </div>
                 <div className=" col-span-4 flex flex-col gap-2 ">
                   <label htmlFor="certificate_files">إرفاق شهادة الحجر</label>
                   <DropFile name="certificate_files" />
@@ -295,27 +307,27 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                     label="مواصفات الحجر"
                   />
                 </div>
-                {!!stones && !!stones.length && queryData?.length > 0 && (
-            <div className="flex flex-col col-span-4">
-              <Header header="تفاصيل الأحجار المضافة" />
-              <div className=" my-6 shadows bg-lightGreen bg-opacity-50 rounded-lg p-[.10rem]">
-                {!!queryData && (
-                  <div className="subTable">
-                    <NinjaTable
-                      data={queryData}
-                      columns={columns}
-                      creatable={false} 
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
                 <div className="col-span-4 flex justify-end items-end">
                   <Button action={submitForm} bordered>
-                    {stones?.length > 0 ? "إضافة حجر آخر" :"إضافة حجر"}
+                    {stones?.length > 0 ? "إضافة حجر آخر" : "إضافة حجر"}
                   </Button>
                 </div>
+                {!!stones && !!stones.length && queryData?.length > 0 && (
+                  <div className="flex flex-col col-span-4">
+                    <Header header="تفاصيل الأحجار المضافة" />
+                    <div className=" my-6 shadows bg-lightGreen bg-opacity-50 rounded-lg p-[.10rem]">
+                      {!!queryData && (
+                        <div className="subTable">
+                          <NinjaTable
+                            data={queryData}
+                            columns={columns}
+                            creatable={false}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </Formik>

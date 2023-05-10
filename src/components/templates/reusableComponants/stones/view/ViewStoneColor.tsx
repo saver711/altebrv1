@@ -19,6 +19,8 @@ import { Form, Formik } from "formik"
 import * as Yup from 'yup'
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { useQueryClient } from "@tanstack/react-query"
+import { Back } from "../../../../../utils/utils-components/Back"
 
 ///
 /////////// TYPES
@@ -59,17 +61,17 @@ export const ViewStoneColor = () => {
   const cols = useMemo<ColumnDef<StonesColors>[]>(
     () => [
       {
-        header: 'ID',
+        header: `${t('Sequence ')}`,
         cell: (info) => info.renderValue(),
-        accessorKey: 'id',
+        accessorKey: 'index',
       },
       {
-        header: 'Name',
+        header: `${t('Name')}`,
         cell: (info) => info.renderValue(),
         accessorKey: 'name',
       },
       {
-        header: 'Edit',
+        header: `${t('action')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -103,16 +105,26 @@ export const ViewStoneColor = () => {
     : `stones/api/v1/colors?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
     queryKey: ['view_stones_colors'],
     pagination: true,
-    onSuccess(data) {setDataSource(data.data)}
+    onSuccess(data) {setDataSource(data.data)},
+    select(data) {
+      return {
+        ...data,
+        data: data.data.map((item, i) => ({
+          ...item,
+          index: i + 1,
+        })),
+      }
+    },
   })
-
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isDeleting,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: StonesColors[]) => prev.filter(p => p.id !== deleteData?.id))
+      // setDataSource((prev: StonesColors[]) => prev.filter(p => p.id !== deleteData?.id))
+      queryClient.refetchQueries(['view_stones_colors'])
       setOpen(false)
       notify("success")
     }
@@ -142,7 +154,7 @@ export const ViewStoneColor = () => {
     <>
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('stones colors')}`}
+          {`${t('system establishment')} / ${t('color')}`}
         </h3>
         <Formik
           initialValues={initialValues}
@@ -170,6 +182,9 @@ export const ViewStoneColor = () => {
             }}
             addLabel={`${t('add')}`}
             />
+          <div className="ms-2">
+            <Back />
+          </div>
         </div>
       </div>
       {error && (
@@ -199,11 +214,11 @@ export const ViewStoneColor = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {(isLoading || isRefetching) && <Loading mainTitle={t("stones colors")} />}
-        {isSuccess && !!!dataSource?.length && (
+        {(isLoading || isRefetching) && <Loading mainTitle={t("color")} />}
+        {isSuccess && !!!dataSource?.length && !isLoading && !isRefetching && (
           <div className="mb-5 pr-5">
             <Header
-              header={t(`لا يوجد`)}
+              header={t('no items')}
               className="text-center text-2xl font-bold"
             />
           </div>
@@ -212,11 +227,11 @@ export const ViewStoneColor = () => {
           <Table data={dataSource} columns={cols}>
             <div className="mt-3 flex items-center justify-end gap-5 p-2">
               <div className="flex items-center gap-2 font-bold">
-                عدد الصفحات
+                {t('page')}
                 <span className=" text-mainGreen">
                   {colors.current_page}
                 </span>
-                من
+                {t('from')}
                 <span className=" text-mainGreen">
                   {colors.pages}
                 </span>
@@ -227,14 +242,14 @@ export const ViewStoneColor = () => {
                   action={() => setPage(prev => prev - 1)}
                   disabled={page == 1}
                 >
-                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
                 </Button>
                 <Button
                   className=" rounded bg-mainGreen p-[.18rem] "
                   action={() => setPage(prev => prev + 1)}
                   disabled={page == colors.pages}
                 >
-                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
                 </Button>
               </div>
             </div>

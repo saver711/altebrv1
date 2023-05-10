@@ -67,18 +67,21 @@ const CreateColor = ({
       notify("success")
       if(value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(['colors'], (old: any) => {
-          return [...old, data]
-        })
+        // queryClient.setQueryData(['colors'], (old: any) => {
+        //   return [...old, data]
+        // })
+        queryClient.refetchQueries(['view_stones_colors'])
       } 
       if (setDataSource && setShow && !item) {
-        setDataSource((prev: StonesColors[])=> [...prev, data])
+        // setDataSource((prev: StonesColors[])=> [...prev, data])
+        queryClient.refetchQueries(['view_stones_colors'])
         setShow(false)
       }
       if (setDataSource && setShow && item) {
         setShow(false)
-        setDataSource((prev: StonesColors[]) => 
-          prev.map((p: StonesColors) => p.id === data.id ? data : p))
+        queryClient.refetchQueries(['view_stones_colors'])
+        // setDataSource((prev: StonesColors[]) => 
+        //   prev.map((p: StonesColors) => p.id === data.id ? data : p))
       }
     }
   })
@@ -104,7 +107,7 @@ const CreateColor = ({
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
             <div className="flex flex-col">
-              <h2 className="text-xl font-bold mb-4">{t('stones colors')}</h2>
+              <h2 className="text-xl font-bold mb-4">{t('color')}</h2>
               <div className="grid grid-cols-4 mb-4 gap-3 text-start">
                 <BaseInputField
                   id="stone_color_ar"

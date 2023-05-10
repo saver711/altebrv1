@@ -1,3 +1,4 @@
+import { t } from "i18next"
 import * as Yup from "yup"
 
 export type GoldFirstFormInitValues_TP = {
@@ -8,31 +9,37 @@ export type GoldFirstFormInitValues_TP = {
     employee_value:string
     supplier_value:string
     bond_number:string
-    api_gold_price:string
+    api_gold_price:number
     entity_gold_price:string
     notes:string
-    out_goods_value:string
+    out_goods_value?:string
     media:any
-    goods_media:any
+    goods_media?:any
 }
 
+const requiredTranslation = () => `${t("required")}`
+
 export const goldValidatingSchema = Yup.object({
-    twred_type: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    twred_type: Yup.string().trim().required(requiredTranslation),
     bond_date: Yup.date()
-        .max(new Date())
-        .required("برجاء ملئ هذا الحقل")
-        .typeError("أدخل التاريخ من فضلك"),
-        employee_id: Yup.string()
-        .trim()
-        .required("برجاء ملئ هذا الحقل"),
-        supplier_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-        bond_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-        entity_gold_price: Yup.string().trim().required("برجاء ملئ هذا الحقل").typeError("الأرقام فقط مسموحة"),
-        notes: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
-        out_goods_value: Yup.string().trim().when('twred_type', {
-            is:'global',
-            then:(schema)=> schema.trim().required("برجاء ملئ هذا الحقل"),
-        }),
-       media: Yup.array().required().min(1 ,"برجاء ملئ هذا الحقل" )
+    .max(new Date())
+    .required(requiredTranslation)
+    .typeError(requiredTranslation),
+    employee_id: Yup.string()
+    .trim()
+    .required(requiredTranslation),
+    supplier_id: Yup.string().trim().required(requiredTranslation),
+    bond_number: Yup.string().trim().required(requiredTranslation),
+    entity_gold_price: Yup.string().trim().required(requiredTranslation).typeError(requiredTranslation),
+    out_goods_value: Yup.string().trim().when('twred_type', {
+        is:'global',
+        then:(schema)=> schema.trim().required(requiredTranslation),
+    }),
+    api_gold_price: Yup.number().required(requiredTranslation).min(1, requiredTranslation),
+    media: Yup.array().required().min(1 ,requiredTranslation),
+    goods_media: Yup.array().when('twred_type', {
+        is:'global',
+        then:(schema)=> schema.required().min(1 ,requiredTranslation),
+    }),
 })
   

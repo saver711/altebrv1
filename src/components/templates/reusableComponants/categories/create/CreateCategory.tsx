@@ -4,7 +4,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
 import { useFetch, useIsRTL, useMutate } from "../../../../../hooks"
 import { SelectOption_TP } from "../../../../../types"
@@ -12,17 +12,16 @@ import { mutateData } from "../../../../../utils/mutateData"
 import { notify } from "../../../../../utils/toast"
 import { HandleBackErrors } from "../../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../../atoms"
-import { Add } from "../../../../atoms/icons/Add"
-import { SvgDelete } from "../../../../atoms/icons/SvgDelete"
 import {
-    BaseInputField,
-    CheckBoxField,
-    OuterFormLayout,
-    Select
+  BaseInputField,
+  CheckBoxField,
+  OuterFormLayout,
+  Select
 } from "../../../../molecules"
 import RadioGroup from "../../../../molecules/RadioGroup"
 
 import { requiredTranslation } from "../../../../../utils/helpers"
+import { SelectSize } from "../../../../size/SelectSize"
 
 ///
 /////////// Types
@@ -42,7 +41,7 @@ type SingleCategory_TP = {
   selling_type: "part" | "all"
   has_selsal: boolean
   has_size: boolean
-  sizes: SizeProps_TP[]
+  category_sizes: SizeProps_TP[]
 } & SizeProps_TP
 
 type InitialValues_TP = {
@@ -73,7 +72,9 @@ const CreateCategory = ({
   ///
   /////////// STATES
   ///
-  const [sizes, setSizes] = useState<SizeProps_TP2[]>(editData ? editData?.sizes ? editData?.sizes : [] : [])
+  // const [sizes, setSizes] = useState<SizeProps_TP2[]>(
+  //   editData ? (editData?.category_sizes ? editData?.category_sizes : []) : []
+  // )
 
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
@@ -103,7 +104,11 @@ const CreateCategory = ({
     end: 0,
     increase: 0,
     size_type: "غير محدد",
-    sizes: editData ? editData?.sizes ? editData?.sizes : [] : [],
+    category_sizes: editData
+      ? editData?.category_sizes
+        ? editData?.category_sizes
+        : []
+      : [],
   }
 
   const validatingSchema = Yup.object({
@@ -117,25 +122,25 @@ const CreateCategory = ({
       is: "multi",
       then: (schema) => schema.min(1, requiredTranslation),
     }),
-    start: Yup.number().when("has_size", {
-      is: true && sizes?.length <= 0,
-      then: (schema) =>
-        schema.min(1, requiredTranslation).required(requiredTranslation),
-    }),
-    end: Yup.number().when("has_size", {
-      is: true && sizes?.length <= 0,
-      then: (schema) =>
-        schema.min(1, requiredTranslation).required(requiredTranslation),
-    }),
-    increase: Yup.number().when("has_size", {
-      is: true && sizes?.length <= 0,
-      then: (schema) =>
-        schema.min(1, requiredTranslation).required(requiredTranslation),
-    }),
-    size_type: Yup.string().when("has_size", {
-      is: true && sizes?.length <= 0,
-      then: (schema) => schema.required(requiredTranslation),
-    }),
+    // start: Yup.number().when("has_size", {
+    //   is: true && sizes?.length <= 0,
+    //   then: (schema) =>
+    //     schema.min(1, requiredTranslation).required(requiredTranslation),
+    // }),
+    // end: Yup.number().when("has_size", {
+    //   is: true && sizes?.length <= 0,
+    //   then: (schema) =>
+    //     schema.min(1, requiredTranslation).required(requiredTranslation),
+    // }),
+    // increase: Yup.number().when("has_size", {
+    //   is: true && sizes?.length <= 0,
+    //   then: (schema) =>
+    //     schema.min(1, requiredTranslation).required(requiredTranslation),
+    // }),
+    // category_sizes: Yup.array().when("has_size", {
+    //   is: true,
+    //   then: (schema) => schema.required(requiredTranslation),
+    // }),
   })
 
   ///
@@ -170,14 +175,16 @@ const CreateCategory = ({
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(['AllCategory'])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: any) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(['AllCategory'])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: any) => (p.id === data?.id ? data : p))
+        // )
       }
     },
   })
@@ -185,32 +192,32 @@ const CreateCategory = ({
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  const addSize = (props: SizeProps_TP) => {
-    const size = {
-      start: props.start,
-      end: props.end,
-      increase: props.increase,
-      type: props.size_type,
-    }
-    setSizes([...sizes, size])
-    // const size_gap = props.end - props.start
-    // if (size_gap > 0 && (size_gap % props.increase === 0)) {
-    //   const size = {
-    //     start: props.start,
-    //     end: props.end,
-    //     increase: props.increase,
-    //     type: props.size_type,
-    //   }
-    //   setSizes([...sizes, size])
-    // } else {
-    //   notify('error', `${t('sizes must be accurate')}`)
-    // }
-  }
+  // const addSize = (props: SizeProps_TP) => {
+  //   const size = {
+  //     start: props.start,
+  //     end: props.end,
+  //     increase: props.increase,
+  //     type: props.size_type,
+  //   }
+  //   setSizes([...sizes, size])
+  //   // const size_gap = props.end - props.start
+  //   // if (size_gap > 0 && (size_gap % props.increase === 0)) {
+  //   //   const size = {
+  //   //     start: props.start,
+  //   //     end: props.end,
+  //   //     increase: props.increase,
+  //   //     type: props.size_type,
+  //   //   }
+  //   //   setSizes([...sizes, size])
+  //   // } else {
+  //   //   notify('error', `${t('sizes must be accurate')}`)
+  //   // }
+  // }
 
-  const deleteSize = (index: number) => {
-    const newSizes = sizes.filter((size, i) => index !== i)
-    setSizes(newSizes)
-  }
+  // const deleteSize = (index: number) => {
+  //   const newSizes = sizes.filter((size, i) => index !== i)
+  //   setSizes(newSizes)
+  // }
 
   const send = (values: InitialValues_TP) => {
     const multi = values.type === "multi"
@@ -238,14 +245,18 @@ const CreateCategory = ({
       values: multi
         ? multiValues
         : values.has_size
-        ? { ...singleValues, sizes }
+        ? { ...singleValues, category_sizes: [values.category_sizes] }
         : singleValues,
       method: editData ? "put" : "post",
     })
 
-    multi
-       ? console.log(multiValues)
-       : console.log(values.has_size ? {...singleValues, sizes} : singleValues)
+    // multi
+    //   ? console.log(multiValues)
+    //   : console.log(
+    //       values.has_size
+    //         ? { ...singleValues, category_sizes: values.category_sizes }
+    //         : singleValues
+    //     )
   }
 
   return (
@@ -321,6 +332,7 @@ const CreateCategory = ({
                     type="text"
                     placeholder={`${t("category name in english")}`}
                   />
+                <div className="col-span-2" >
                   {props.values.type == "multi" && (
                     <Select
                       label={`${t("choose categories")}`}
@@ -335,6 +347,7 @@ const CreateCategory = ({
                       loading={categoryLoading}
                     />
                   )}
+                </div>
                 </div>
                 <div className="flex justify-between mb-8">
                   <div className="flex gap-3">
@@ -361,53 +374,12 @@ const CreateCategory = ({
                     </div>
                   )}
                 </div>
+                <div className="grid grid-cols-2" >
                 {props.values.has_size == true && props.values.type === "single" && (
-                  <div className="grid grid-cols-5 mb-4 gap-10 text-start">
-                    <BaseInputField
-                      id="start"
-                      label={`${t("size rate")}`}
-                      name="start"
-                      type="number"
-                      placeholder={`${t("start")}`}
-                    />
-                    <BaseInputField
-                      id="end"
-                      label={`${t("size rate")}`}
-                      name="end"
-                      type="number"
-                      placeholder={`${t("end")}`}
-                    />
-                    <BaseInputField
-                      id="increase"
-                      label={`${t("increase rate")}`}
-                      name="increase"
-                      type="number"
-                      placeholder={`${t("increase rate")}`}
-                    />
-                    <BaseInputField
-                      id="size_type"
-                      label={`${t("size type")}`}
-                      name="size_type"
-                      type="text"
-                      placeholder={`${t("size type")}`}
-                    />
-                    <Button
-                      type="button"
-                      className="self-end relative active:top-[1px] py-2 px-8 font-bold rounded-md w-full border border-lightBlack flex items-center justify-center gap-2"
-                      disabled={
-                        props.values.start <= 0 ||
-                        props.values.end <= 0 ||
-                        props.values.increase <= 0 ||
-                        props.values.size_type == ""
-                      }
-                      action={() => addSize(props.values)}
-                    >
-                      <Add />
-                      {t("add")}
-                    </Button>
-                  </div>
+                 <SelectSize editData={editData} />
                 )}
-                {sizes.length > 0 && props.values.has_size && (
+                </div>
+                {/* {sizes.length > 0 && props.values.has_size && (
                   <div className="grid grid-cols-6 gap-5 mb-5 text-center">
                     {sizes.map((size: SizeProps_TP2, index) => (
                       <div key={index} className="bg-white p-3 text-mainGreen shadow-md grid grid-cols-12 rounded-xl hover:bg-mainGreen hover:text-white">
@@ -447,16 +419,16 @@ const CreateCategory = ({
                       </div>
                     ))}
                   </div>
-                )}
+                )} */}
                 <Button
                   type="button"
                   action={() => {
                     if (
                       props.values.has_size &&
-                      sizes.length <= 0 &&
+                      props.values.category_sizes.length <= 0 &&
                       props.isValid
                     )
-                      notify("error", `${t("sizes is required")}`)
+                      notify("error", `${t("category_sizes is required")}`)
                     else props.submitForm()
                   }}
                   className="self-end"

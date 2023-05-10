@@ -4,13 +4,14 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { BiSearchAlt } from "react-icons/bi"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
-import * as Yup from 'yup'
+import * as Yup from "yup"
 import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
@@ -23,6 +24,7 @@ import { BaseInputField, Modal } from "../../../molecules"
 import { AddButton } from "../../../molecules/AddButton"
 import { Loading } from "../../../organisms/Loading"
 import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
+import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { Table } from "../../reusableComponants/tantable/Table"
 
 ///
@@ -36,11 +38,11 @@ type Search_TP = {
 }
 
 const initialValues: Search_TP = {
-  search: ''
+  search: "",
 }
 
 const validationSchema = Yup.object({
-  search: Yup.string().trim()
+  search: Yup.string().trim(),
 })
 
 ///
@@ -48,7 +50,7 @@ export const ViewCategories = () => {
   /////////// CUSTOM HOOKS
   ///
   const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
   const [model, setModel] = useState(false)
   const [editData, setEditData] = useState<ViewCategories_TP>()
   const [deleteData, setDeleteData] = useState<ViewCategories_TP>()
@@ -60,7 +62,6 @@ export const ViewCategories = () => {
         cell: (info) => info.getValue(),
         accessorKey: "index",
         header: () => <span>{t("Sequence ")} </span>,
-
       },
       {
         header: () => <span>{t("categories")} </span>,
@@ -105,7 +106,6 @@ export const ViewCategories = () => {
     ],
     []
   )
-
   const isRTL = useIsRTL()
   let count = 1
   const {
@@ -115,11 +115,14 @@ export const ViewCategories = () => {
     error,
     isSuccess,
     refetch,
-    isRefetching
+    isRefetching,
   } = useFetch<ViewCategories_TP[]>({
-    endpoint: search === '' 
-    ? `classification/api/v1/categories?page=${page}` 
-    : `classification/api/v1/categories?page=${page}&${isRTL ? 'nameAr' : 'nameEn'}[lk]=${search}`,
+    endpoint:
+      search === ""
+        ? `classification/api/v1/categories?page=${page}`
+        : `classification/api/v1/categories?page=${page}&${
+            isRTL ? "nameAr" : "nameEn"
+          }[lk]=${search}`,
     queryKey: [`AllCategory`],
     pagination: true,
     onSuccess(data) {
@@ -133,8 +136,10 @@ export const ViewCategories = () => {
           index: i + 1,
         })),
       }
-    }
+    },
   })
+
+  const queryClient = useQueryClient()
   const {
     mutate,
     error: mutateError,
@@ -142,9 +147,10 @@ export const ViewCategories = () => {
   } = useMutate<ViewCategories_TP>({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev: ViewCategories_TP[]) =>
-        prev.filter((p) => p.id !== deleteData?.id)
-      )
+      // setDataSource((prev: ViewCategories_TP[]) =>
+      //   prev.filter((p) => p.id !== deleteData?.id)
+      // )
+      queryClient.refetchQueries(["AllCategory"])
       setOpen(false)
       notify("success")
     },
@@ -167,6 +173,13 @@ export const ViewCategories = () => {
       setPage(1)
     }
   }, [search])
+  const a = []
+  if (isSuccess && dataSource?.length === 0)
+    return (
+      <EmptyDataView>
+        <CreateCategory />
+      </EmptyDataView>
+    )
 
   ///
   return (
@@ -196,6 +209,7 @@ export const ViewCategories = () => {
             </Button>
           </Form>
         </Formik>
+
         <div className="flex">
           <AddButton
             action={() => {
@@ -221,6 +235,7 @@ export const ViewCategories = () => {
         </div>
       )}
       {(isLoading || isRefetching) && <Loading mainTitle={t("categories")} />}
+
       {isSuccess &&
         !!dataSource &&
         !isLoading &&
@@ -229,11 +244,11 @@ export const ViewCategories = () => {
           <Table data={dataSource} columns={columns}>
             <div className="mt-3 flex items-center justify-end gap-5 p-2">
               <div className="flex items-center gap-2 font-bold">
-                عدد الصفحات
+                {t("page")}
                 <span className=" text-mainGreen">
                   {categories.current_page}
                 </span>
-                من
+                {t("from")}
                 <span className=" text-mainGreen">{categories.pages}</span>
               </div>
               <div className="flex items-center gap-2 ">
@@ -242,14 +257,22 @@ export const ViewCategories = () => {
                   action={() => setPage((prev) => prev - 1)}
                   disabled={page == 1}
                 >
-                  <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  {isRTL ? (
+                    <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  ) : (
+                    <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  )}
                 </Button>
                 <Button
                   className=" rounded bg-mainGreen p-[.18rem] "
                   action={() => setPage((prev) => prev + 1)}
                   disabled={page == categories.pages}
                 >
-                  <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  {isRTL ? (
+                    <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                  ) : (
+                    <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                  )}
                 </Button>
               </div>
             </div>
