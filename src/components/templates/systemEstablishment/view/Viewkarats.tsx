@@ -76,6 +76,11 @@ export const ViewKarats = () => {
         cell: (info) => info.getValue(),
       },
       {
+        header: () => <span>{t("karats rate")} </span>,
+        accessorKey: "equivalent",
+        cell: (info) => info.getValue(),
+      },
+      {
         header: () => <span>{t("action")}</span>,
         accessorKey: "action",
         cell: (info) => {
@@ -132,6 +137,7 @@ export const ViewKarats = () => {
       }
     },
   })
+  
   const queryClient = useQueryClient()
   const {
     mutate,
@@ -164,7 +170,6 @@ export const ViewKarats = () => {
   ///
   /////////// SIDE EFFECTS
   ///
-  console.log(karats)
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   useEffect(() => {

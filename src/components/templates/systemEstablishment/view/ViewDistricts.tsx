@@ -79,6 +79,16 @@ export const ViewDistricts = () => {
         cell: (info) => info.getValue(),
       },
       {
+        header: () => <span>{t("cities")} </span>,
+        accessorKey: "city_name",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("countries")} </span>,
+        accessorKey: "country_name",
+        cell: (info) => info.getValue(),
+      },
+      {
         header: () => <span>{t("action")}</span>,
         accessorKey: "action",
         cell: (info) => {
@@ -129,6 +139,7 @@ export const ViewDistricts = () => {
       }
     },
   })
+
   const queryClient = useQueryClient()
   const {
     mutate,

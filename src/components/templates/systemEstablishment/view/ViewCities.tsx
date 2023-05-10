@@ -74,6 +74,11 @@ export const ViewCities = () => {
         accessorKey: "name",
         cell: (info) => info.getValue(),
       },
+      // {
+      //   header: () => <span>{t("countries")} </span>,
+      //   accessorKey: "country_name",
+      //   cell: (info) => info.getValue(),
+      // },
       {
         header: () => <span>{t("action")}</span>,
         accessorKey: "action",
@@ -125,7 +130,6 @@ export const ViewCities = () => {
       }
     },
   })
-
   /////////// VARIABLES
   ///
   ///

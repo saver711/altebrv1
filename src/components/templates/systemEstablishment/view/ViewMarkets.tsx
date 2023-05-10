@@ -73,6 +73,21 @@ export const ViewMarkets = () => {
         header: () => <span>{t("Sequence ")} </span>,
       },
       {
+        header: () => <span>{t("cities")} </span>,
+        accessorKey: "city_name",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("countries")} </span>,
+        accessorKey: "country_name",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("district")} </span>,
+        accessorKey: "district_name",
+        cell: (info) => info.getValue(),
+      },
+      {
         header: () => <span>{t("markets")} </span>,
         accessorKey: "name",
         cell: (info) => info.getValue(),
@@ -134,6 +149,7 @@ export const ViewMarkets = () => {
       }
     },
   })
+
   const queryClient = useQueryClient()
   const {
     mutate,

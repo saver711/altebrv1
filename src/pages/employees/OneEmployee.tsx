@@ -294,7 +294,15 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                   </Modal>
                 </>
               ) : (
-                <Header header="no items" />
+                <div className="flex gap-2   capitalize">
+                  <p className=" text-lg font-bold text-mainGreen ">
+                    {t(`documents`)} :
+                  </p>
+                  <Header
+                    header={t("no documents to show")}
+                    className="text-mainGreen mb-0"
+                  />
+                </div>
               )}
 
               <div className="">

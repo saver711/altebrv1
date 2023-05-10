@@ -131,6 +131,7 @@ export const ViewClassifications = () => {
       }
     },
   })
+
   const queryClient = useQueryClient()
   const {
     mutate,
