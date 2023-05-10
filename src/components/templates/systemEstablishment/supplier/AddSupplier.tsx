@@ -200,7 +200,6 @@ const AddSupplier = ({
     onSuccess: (data) => {
       queryClient.refetchQueries(["suppliers"])
       notify("success")
-      setShow(false)
     },
     onError: (error) => {
       console.log(error)
