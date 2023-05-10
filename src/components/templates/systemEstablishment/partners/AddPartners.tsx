@@ -238,7 +238,7 @@ export const AddPartners = ({
             </OuterFormLayout>
           </HandleBackErrors>
         </Form>
-      </Formik>      
+      </Formik>
     </>
   )
 }
