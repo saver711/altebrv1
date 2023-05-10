@@ -224,18 +224,7 @@ export const GoldItemCodingForm = ({
         <div className="flex mb-1 justify-between items-center">
           <label htmlFor="weight">الوزن</label>
           {awzanItems && !!awzanItems?.length && (
-            <div className="relative">
-              {detailedWeight_total !== 0 && detailedWeight_total && (
-                <DeleteIcon
-                  size={10}
-                  className="absolute -top-2 -start-2"
-                  action={() => {
-                    setDetailedWeight_total(undefined)
-                    values.weightitems = []
-                  }}
-                />
-              )}
-
+            <div className="flex items-center">
               <WeightIcon
                 action={() =>
                   detailedWeight_total !== 0 &&
@@ -243,6 +232,17 @@ export const GoldItemCodingForm = ({
                   setWeightItemsModal(true)
                 }
               />
+
+              {detailedWeight_total !== 0 && detailedWeight_total && (
+                <DeleteIcon
+                  // size={10}
+                  // className=" -top-2 -start-2"
+                  action={() => {
+                    setDetailedWeight_total(undefined)
+                    values.weightitems = []
+                  }}
+                />
+              )}
             </div>
           )}
         </div>
@@ -315,8 +315,8 @@ export const GoldItemCodingForm = ({
           label="وصف القطعة"
         />
       </div>
-       {/* يحتوي علي حجر ام لا */}
-       <div className=" col-span-1 flex items-center justify-center absolute -bottom-16">
+      {/* يحتوي علي حجر ام لا */}
+      <div className=" col-span-1 flex items-center justify-center absolute -bottom-16">
         <CheckBoxField
           name="has_stones"
           label={`${!!!values.has_stones ? "لا" : ""} يحتوي علي أحجار`}
