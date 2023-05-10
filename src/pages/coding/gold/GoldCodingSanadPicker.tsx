@@ -48,13 +48,17 @@ export const GoldCodingSanadPicker = () => {
   const searchValues: SearchValues_TP = {
     id: '',
     bond_number: '',
-    bond_date: getDayBefore(new Date()),
+    bond_date: '',
     total_weight: '',
   }
 
   const columns: Column[] = [
     {
       name: "index",
+      label: t('Sequence '),
+    },
+    {
+      name: "id",
       label: t('bond number'),
     },
     {
@@ -101,7 +105,9 @@ export const GoldCodingSanadPicker = () => {
     queryKey: ["goldCodingSanads"],
     pagination: true,
     onSuccess: (data) => {
+      // console.log(data.data)
       setDataSource(data.data)
+      // setActiveBond(data.data[0].id)
     },
     select(data) {
       return {
@@ -198,15 +204,15 @@ export const GoldCodingSanadPicker = () => {
                 type="text"
               />
               <DateInputField
-                label={`${t('supply date')}`}
+                label={`${t('bond date')}`}
                 name="bond_date"
                 labelProps={{ className: "mt--10" }}
               />
               <BaseInputField 
-                label={`${t('supply weight')}`}
-                id="total_weight"
-                name="total_weight"
-                placeholder={`${t('supply weight')}`}
+                label={`${t('total gold by 24')}`}
+                id="total_gold_by_24"
+                name="total_gold_by_24"
+                placeholder={`${t('total gold by 24')}`}
                 className="shadow-xs"
                 type="text"
               />    
@@ -233,7 +239,7 @@ export const GoldCodingSanadPicker = () => {
           !isRefetching &&
           !!activeBond &&
           !!dataSource.length && (
-          <div className=" flex flex-col gap-1" key={activeBond.id}>
+          <div className=" flex flex-col gap-1">
             <Header header={`${t('choose gold bond supply')}`} className="mb-3 text-lg" />
             <div className="GlobalTable">
               <NinjaTable<GoldSanad_TP>

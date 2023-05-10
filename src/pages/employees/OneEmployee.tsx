@@ -72,13 +72,17 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
             <div className="col-span-4">
               <div className="grid gap-x-1 grid-cols-4">
                 {/* Right column */}
-                <div className="flex gap-4 flex-col mb-8">
+                <div className="flex gap-4 flex-col col-span-4 m-auto ">
                   <img
                     src={employee.image || blankPerson}
                     alt={`employee ${employee.name}`}
-                    className="w-[7rem] rounded-full"
+                    className="w-[7rem] h-[7rem] rounded-full"
                   />
-                  {employee.name && (
+               
+                </div>
+                {/* The rest */}
+                <div className="flex gap-4 flex-col mt-4 ">
+                {employee.name && (
                     <TextLine
                       boldText={t("Name")}
                       lightString={employee.name}
@@ -103,8 +107,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                     />
                   )}
                 </div>
-                {/* The rest */}
-                <div className="flex gap-4 flex-col mb-8 ">
+                <div className="flex gap-4 flex-col mt-4 ">
                   {employee.address && (
                     <TextLine
                       boldText={t("address")}
@@ -137,7 +140,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                   )}
                 </div>
 
-                <div className="flex gap-4 flex-col mb-8">
+                <div className="flex gap-4 flex-col mt-4">
                   {employee.branch && (
                     <TextLine
                       boldText={t("branch")}

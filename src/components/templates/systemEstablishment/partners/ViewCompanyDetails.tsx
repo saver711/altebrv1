@@ -117,7 +117,7 @@ export const ViewCompanyDetails = () => {
   ///
   return (
     <>
-      <OuterFormLayout header={`${t("view details company")}`} leftComponent={<Back/>}>
+      <OuterFormLayout header={`${t("view details company")}`} leftComponent={<Back />}>
         {isError && (
           <div className=" m-auto">
             <Header
@@ -136,19 +136,38 @@ export const ViewCompanyDetails = () => {
           companyDetails.length > 0 &&
           companyDetailsData?.map((company: CompanyDetails_TP) => (
             <InnerFormLayout
-              title={`بيانات ${company?.name}`}
+              title={
+                <div className="flex">
+                  {`بيانات ${company?.name}`
+                  }                <EditIcon action={() => setEditCompanyOpen(true)} />
+                </div>
+
+              }
               leftComponent={
-                <EditIcon action={() => setEditCompanyOpen(true)} />
+                <>
+                  {company.document.length > 2 && (
+                    <Button action={() => setDocumentOpen(true)}>
+                      {t("view all documents")}
+                    </Button>
+                  )}
+                </>
               }
             >
               <>
+<<<<<<< HEAD
                 <div className="flex gap-2 flex-col">
+=======
+                <div className="flex gap-4 flex-col col-span-4 m-auto">
+>>>>>>> 2b4a42e64023983eae2f2378cf3d2c0b94e4e475
                   <img
                     src={company?.logo || blankPerson}
                     alt={`company ${company?.logo}`}
                     className="w-[7rem] h-[7rem] rounded-full"
                   />
 
+
+                </div>
+                <div className="flex gap-4 flex-col">
                   {company?.name && (
                     <TextLine
                       boldText={t("company")}
@@ -229,11 +248,7 @@ export const ViewCompanyDetails = () => {
 
                 <div className="flex justify-between gap-4 col-span-4 align-middle ">
                   <h1 className="font-bold ">{t("main documents")}</h1>
-                  {company.document.length > 2 && (
-                    <Button action={() => setDocumentOpen(true)}>
-                      {t("view all documents")}
-                    </Button>
-                  )}
+
                 </div>
 
                 <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
@@ -297,62 +312,74 @@ export const ViewCompanyDetails = () => {
 
                 {company.document.length !== 0
                   ? company.document?.slice(0, 2).map((doc, i) => (
-                      <>
-                        <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
-                          <div className=" flex items-center justify-center mb-8">
-                            <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
-                              <p className=" text-lg font-bold text-mainGreen">
-                                {t(`document`)} {i + 1}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                            <div className="flex gap-4 flex-col">
-                              {doc.data?.docType?.label && (
-                                <TextLine
-                                  boldText={t("document name")}
-                                  lightString={doc.data?.docType?.label}
-                                />
-                              )}
-                            </div>
-                            <div className="flex gap-4 flex-col">
-                              {doc.data?.docName && (
-                                <TextLine
-                                  boldText={t("document name")}
-                                  lightString={doc.data?.docName}
-                                />
-                              )}
-                            </div>
-                            <div className="flex gap-4 flex-col  ">
-                              {doc.data?.docNumber && (
-                                <TextLine
-                                  boldText={t("document number")}
-                                  lightString={doc.data?.docNumber}
-                                />
-                              )}
-                            </div>
-                            <div className="flex gap-4 flex-col  ">
-                              {doc.data?.endDate && (
-                                <TextLine
-                                  boldText={t("document endDate")}
-                                  lightString={formatDate(
-                                    new Date(doc.data?.endDate)
-                                  )}
-                                />
-                              )}
-                            </div>
-                            <div className="flex gap-4 flex-col">
-                              {doc.data?.reminder && (
-                                <TextLine
-                                  boldText={t("reminder days count")}
-                                  lightString={doc.data?.reminder}
-                                />
-                              )}
-                            </div>
+                    <>
+                      <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
+                        <div className=" flex items-center justify-center mb-8">
+                          <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                            <p className=" text-lg font-bold text-mainGreen">
+                              {t(`document`)} {i + 1}
+                            </p>
                           </div>
                         </div>
-                      </>
-                    ))
+                        <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                          <div className="flex gap-4 flex-col">
+                            {doc.data?.docType?.label && (
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docType?.label}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col">
+                            {doc.data?.docName && (
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docName}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col  ">
+                            {doc.data?.docNumber && (
+                              <TextLine
+                                boldText={t("document number")}
+                                lightString={doc.data?.docNumber}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col  ">
+                            {doc.data?.endDate && (
+                              <TextLine
+                                boldText={t("document endDate")}
+                                lightString={formatDate(
+                                  new Date(doc.data?.endDate)
+                                )}
+                              />
+                            )}
+                          </div>
+                          <div className="flex gap-4 flex-col">
+                            {doc.data?.reminder && (
+                              <TextLine
+                                boldText={t("reminder days count")}
+                                lightString={doc.data?.reminder}
+                              />
+                            )}
+                          </div>
+                          {/* <div className="flex gap-4 flex-col">
+                            {doc?.files && (
+                             <FilesPreviewOutFormik preview={true}
+                             images={[
+                               {
+                                 path:doc?.files.preview,
+                                 type: "image",
+                               },
+                     
+                             ]}/>
+                            )}
+                          </div> */}
+                        </div>
+                      </div>
+                    </>
+                  ))
                   : "لايوجد وثائق"}
 
                 {/* العنوان الوطني */}

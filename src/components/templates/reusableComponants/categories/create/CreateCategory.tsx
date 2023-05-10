@@ -41,7 +41,7 @@ type SingleCategory_TP = {
   selling_type: "part" | "all"
   has_selsal: boolean
   has_size: boolean
-  sizes: SizeProps_TP[]
+  category_sizes: SizeProps_TP[]
 } & SizeProps_TP
 
 type InitialValues_TP = {
@@ -72,7 +72,9 @@ const CreateCategory = ({
   ///
   /////////// STATES
   ///
-  const [sizes, setSizes] = useState<SizeProps_TP2[]>(editData ? editData?.sizes ? editData?.sizes : [] : [])
+  // const [sizes, setSizes] = useState<SizeProps_TP2[]>(
+  //   editData ? (editData?.category_sizes ? editData?.category_sizes : []) : []
+  // )
 
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
@@ -102,7 +104,11 @@ const CreateCategory = ({
     end: 0,
     increase: 0,
     size_type: "غير محدد",
-    sizes: editData ? editData?.sizes ? editData?.sizes : [] : [],
+    category_sizes: editData
+      ? editData?.category_sizes
+        ? editData?.category_sizes
+        : []
+      : [],
   }
 
   const validatingSchema = Yup.object({
@@ -131,8 +137,8 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    sizes: Yup.array().when("has_size", {
-      is: true && sizes?.length <= 0,
+    category_sizes: Yup.array().when("has_size", {
+      is: true,
       then: (schema) => schema.min(1, requiredTranslation),
     }),
   })
@@ -186,32 +192,32 @@ const CreateCategory = ({
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  const addSize = (props: SizeProps_TP) => {
-    const size = {
-      start: props.start,
-      end: props.end,
-      increase: props.increase,
-      type: props.size_type,
-    }
-    setSizes([...sizes, size])
-    // const size_gap = props.end - props.start
-    // if (size_gap > 0 && (size_gap % props.increase === 0)) {
-    //   const size = {
-    //     start: props.start,
-    //     end: props.end,
-    //     increase: props.increase,
-    //     type: props.size_type,
-    //   }
-    //   setSizes([...sizes, size])
-    // } else {
-    //   notify('error', `${t('sizes must be accurate')}`)
-    // }
-  }
+  // const addSize = (props: SizeProps_TP) => {
+  //   const size = {
+  //     start: props.start,
+  //     end: props.end,
+  //     increase: props.increase,
+  //     type: props.size_type,
+  //   }
+  //   setSizes([...sizes, size])
+  //   // const size_gap = props.end - props.start
+  //   // if (size_gap > 0 && (size_gap % props.increase === 0)) {
+  //   //   const size = {
+  //   //     start: props.start,
+  //   //     end: props.end,
+  //   //     increase: props.increase,
+  //   //     type: props.size_type,
+  //   //   }
+  //   //   setSizes([...sizes, size])
+  //   // } else {
+  //   //   notify('error', `${t('sizes must be accurate')}`)
+  //   // }
+  // }
 
-  const deleteSize = (index: number) => {
-    const newSizes = sizes.filter((size, i) => index !== i)
-    setSizes(newSizes)
-  }
+  // const deleteSize = (index: number) => {
+  //   const newSizes = sizes.filter((size, i) => index !== i)
+  //   setSizes(newSizes)
+  // }
 
   const send = (values: InitialValues_TP) => {
     const multi = values.type === "multi"
@@ -239,14 +245,18 @@ const CreateCategory = ({
       values: multi
         ? multiValues
         : values.has_size
-        ? { ...singleValues, sizes: values.sizes }
+        ? { ...singleValues, category_sizes: values.category_sizes }
         : singleValues,
       method: editData ? "put" : "post",
     })
 
     multi
-       ? console.log(multiValues)
-       : console.log(values.has_size ? {...singleValues, sizes: values.sizes} : singleValues)
+      ? console.log(multiValues)
+      : console.log(
+          values.has_size
+            ? { ...singleValues, category_sizes: values.category_sizes }
+            : singleValues
+        )
   }
 
   return (
@@ -415,10 +425,10 @@ const CreateCategory = ({
                   action={() => {
                     if (
                       props.values.has_size &&
-                      props.values.sizes.length <= 0 &&
+                      props.values.category_sizes.length <= 0 &&
                       props.isValid
                     )
-                      notify("error", `${t("sizes is required")}`)
+                      notify("error", `${t("category_sizes is required")}`)
                     else props.submitForm()
                   }}
                   className="self-end"

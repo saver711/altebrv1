@@ -63,7 +63,7 @@ export const AdministrativeStructure = ({
   )
   /////////// CUSTOM HOOKS
   ///
-  const { isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
+  const {  isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
     endpoint: 'administrative/api/v1/roles',
     queryKey: ['allRoles'],
     onSuccess: (data)=> { setDataSource(data) }

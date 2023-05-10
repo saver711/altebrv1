@@ -239,9 +239,9 @@ export const GoldSupplySecondForm = ({
                                 return {
                                     ...item,
                                     number: `${i + 1}`,
-                                    total_wages: (Number(item.weight) * Number(item.wage)).toFixed(3),
-                                    wage_tax: (Number(item.weight) * Number(item.wage) * .15).toFixed(3),
-                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0).toFixed(3),
+                                    total_wages: (Number(item.weight) * Number(item.wage)),
+                                    wage_tax: (Number(item.weight) * Number(item.wage) * .15),
+                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
                                 }
                             })
                         })
