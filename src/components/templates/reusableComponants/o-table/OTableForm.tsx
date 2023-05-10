@@ -109,6 +109,7 @@ import { useFetch } from "../../../../hooks"
           (
             info.row.original.weight *
             Number(formValues?.api_gold_price) *
+            info.row.original.stock * 
             0.15
           ).toFixed(3),
       }),

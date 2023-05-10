@@ -48,7 +48,7 @@ export const GoldCodingSanadPicker = () => {
   const searchValues: SearchValues_TP = {
     id: '',
     bond_number: '',
-    bond_date: '',
+    bond_date: null,
     total_weight: '',
   }
 
