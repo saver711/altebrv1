@@ -12,6 +12,7 @@ import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 import { Query_TP } from "../coding/gold/AddStone"
+import { ExpandableTable } from "./ExapndableTable"
 import { StoneTable } from "./StoneTable"
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -19,7 +20,7 @@ import { StoneTable } from "./StoneTable"
 ///
 const columnHelper = createColumnHelper<any>()
 
-export const SubTables = ({ subTableData }: any) => {
+export const SubTables = ({ subTableData  , addedPieces}: any) => {
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -58,22 +59,43 @@ export const SubTables = ({ subTableData }: any) => {
   //@ts-ignore
   const modifiedData = selectedRow.map((item) => ({
     ...item,
-    size_type: !!item?.category_sizes ? item?.category_sizes.size_type : "",
-    size_number: item?.category_sizes ? item?.category_sizes.size_unit_id : "",
+    size_type: !!item?.size_type ? item?.size_type : "",
+    size_number: !!item?.size_unit_id ? item?.size_unit_id : "",
   }))
 
   useEffect(() => {
     if (queryClient) {
-      const types = queryClient.getQueryData<Query_TP[]>(["sizes"])
+      const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
       const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
-      const allQueries = modifiedData?.map((item) => {
+      const allQueries = modifiedData?.map((item:any) => {
+
+        const sizes_types_ids = item.sizes.map((size:any)=>size.size_type)
+        const category_sizes =  categories?.map(category=>category?.category_sizes).flat()
+        const units_ids = item.sizes.map((size:any)=>size.size_unit_id)
+        const category_sizes_units =  categories?.map(category=>category?.category_sizes.map(item=>item.units)).flat(Infinity)
+
         const finaleItem = {
-          types: types?.find((type) => type?.id == item?.stones[0].stone_id)
-            ?.name,
+          categories: !!item?.sizes.length ? category_sizes?.filter(size=> {
+            return sizes_types_ids.some((id:any)=> id == size.id)
+          }).map(item=>item.type).join(' & ')
+          : categories?.map(type=>type?.category_sizes?.find((type) => type?.id === item.size_type)?.type).filter(item=>item).join(''),
+
           country: countries?.find((country) => country?.id == item?.country_id)
             ?.name,
+
           color: colors?.find((color) => color?.id == item?.color_id)?.name,
+
+          size_number: !!item?.sizes.length ?  category_sizes_units?.filter(size=> {
+            return units_ids.some(id=> id == size.id)
+          }).map(item=>item.value).join(' & ')
+          :  category_sizes_units?.filter(unit=> unit.id == item.size_unit_id )[0]?.value , 
+
+          ZZ: category_sizes_units,
+          units_ids: units_ids,
+          xx : category_sizes_units?.filter(size=> {
+            return units_ids.some(id=> id == size.id)
+          }).map(item=>item.value).join(' & ')
         }
         return finaleItem
       })
@@ -84,16 +106,18 @@ export const SubTables = ({ subTableData }: any) => {
   ///
   //@ts-ignore
 
-  const [data, setData] = useState(modifiedData)
+  const [data, setData] = useState([])
 
   useEffect(() => {
     if (queryData) {
       setData(
         modifiedData.map((item) => ({
-          ...item?.category_sizes,
-          types: queryData[0]?.types,
+          ...item,
+          categories: queryData[0]?.categories,
           country: queryData[0]?.country,
           color: queryData[0]?.color,
+          size_type:queryData[0]?.categories,
+          size_unit_id:queryData[0]?.size_number,
           karat_value: item.karat_value,
           bond_date: item.bond_date,
         }))
@@ -116,10 +140,13 @@ export const SubTables = ({ subTableData }: any) => {
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-
   ///
   return (
     <>
+    <div className="text-center" >
+
+     <ExpandableTable addedPieces={[addedPieces[selectedRow[0].index-1]]} showDetails={false}/>
+    </div>
       <div className="flex justify-center items-center">
         <span className="text-center font-bold text-2xl mb-12">
           باقي تفاصيل القطعه

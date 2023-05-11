@@ -4,28 +4,27 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
+import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import * as Yup from 'yup'
 import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { Loading } from "../../../organisms/Loading"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
+import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
-import { BaseInput, Button, Label } from "../../../atoms"
-import { ColumnDef } from "@tanstack/react-table"
 import { EditIcon, ViewIcon } from "../../../atoms/icons"
 import { SvgDelete } from "../../../atoms/icons/SvgDelete"
 import { BaseInputField, Modal } from "../../../molecules"
-import { AddCities } from "../AddCities"
-import { useQueryClient } from "@tanstack/react-query"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
-import { Back } from "../../../../utils/utils-components/Back"
-import * as Yup from 'yup'
-import { Form, Formik } from "formik"
-import { BiSearchAlt } from "react-icons/bi"
 import { AddButton } from "../../../molecules/AddButton"
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import { Loading } from "../../../organisms/Loading"
+import { Table } from "../../reusableComponants/tantable/Table"
+import { AddCities } from "../AddCities"
 
 ///
 export type ViewCities_TP = {
@@ -80,7 +79,7 @@ export const ViewCities = () => {
       //   cell: (info) => info.getValue(),
       // },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (

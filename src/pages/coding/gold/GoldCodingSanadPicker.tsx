@@ -205,6 +205,7 @@ export const GoldCodingSanadPicker = () => {
               />
               <DateInputField
                 label={`${t('bond date')}`}
+                placeholder={`${t('bond date')}`}
                 name="bond_date"
                 labelProps={{ className: "mt--10" }}
               />
