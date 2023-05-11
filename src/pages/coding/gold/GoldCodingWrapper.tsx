@@ -114,7 +114,6 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
             <Button
               loading={isLoading}
               action={() => sendPieces(addedPieces)}
-              className=""
             >
               ارسال
             </Button>
