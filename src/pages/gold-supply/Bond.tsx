@@ -254,7 +254,10 @@ export const Bond = ({ title }: BondProps_TP) => {
         <h2 className="text-center">لايوجد بنود</h2>
       )}
       {!(isLoading || isFetching) && isSuccess && !!restrictions?.length && (
-        <Table data={restrictions} footered showNavigation columns={cols2} />
+        <>
+          <h2 className="text-xl mb-5 font-bold">{t('accounting entry')}</h2>
+          <Table data={restrictions} footered showNavigation columns={cols2} />
+        </>
       )}
     </>
   )
