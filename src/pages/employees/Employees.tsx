@@ -66,17 +66,17 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
           className="flex items-center gap-2"
           bordered
         >
-          {t('back')}
+          {t("back")}
         </Button>
       </div>
       <div className="grid grid-cols-3">
         {isSuccess &&
           employees.length > 0 &&
-          employees.map(({ id, name, img, ...rest }) => (
+          employees.map(({ id, name, image, ...rest }) => (
             <EmployeeCard
               id={id}
               name={name}
-              img={img}
+              img={image}
               key={id}
               rest={rest}
               setEditEmployeeData={setEditEmployeeData}

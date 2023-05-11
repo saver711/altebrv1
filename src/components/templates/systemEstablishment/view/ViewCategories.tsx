@@ -173,13 +173,12 @@ export const ViewCategories = () => {
       setPage(1)
     }
   }, [search])
-  const a = []
-  if (isSuccess && dataSource?.length === 0)
-    return (
-      <EmptyDataView>
-        <CreateCategory />
-      </EmptyDataView>
-    )
+  // if (isSuccess && dataSource?.length === 0)
+  //   return (
+  //     <EmptyDataView>
+  //       <CreateCategory />
+  //     </EmptyDataView>
+  //   )
 
   ///
   return (
@@ -265,7 +264,7 @@ export const ViewCategories = () => {
                   )}
                 </Button>
                 <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
+                  className=" rounded bg-mainGreen p-[.18rem]  "
                   action={() => setPage((prev) => prev + 1)}
                   disabled={page == categories.pages}
                 >

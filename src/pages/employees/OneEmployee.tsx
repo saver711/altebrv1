@@ -94,7 +94,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                   <img
                     src={employee.image || blankPerson}
                     alt={`employee ${employee.name}`}
-                    className="w-[7rem] h-[7rem] rounded-full"
+                    className="w-[7rem] h-[7rem] rounded-full object-cover"
                   />
                 </div>
                 {/* The rest */}
@@ -200,23 +200,21 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                 </div>
                 {/*  national image*/}
                 {(employee.national_image || employee.image) && (
-                  <div className="relative">
-                    <TextLine boldText={t("media")} lightString="" />
-                    <div className="absolute -top-6 right-16">
-                      <FilesPreviewOutFormik
-                        preview={true}
-                        images={[
-                          {
-                            path: employee.national_image,
-                            type: "image",
-                          },
-                          {
-                            path: employee.image,
-                            type: "image",
-                          },
-                        ]}
-                      />
-                    </div>
+                  <div className="flex items-center gap-1">
+                    <p className="mt-1">{t("media")} : </p>
+                    <FilesPreviewOutFormik
+                      preview={true}
+                      images={[
+                        {
+                          path: employee.national_image,
+                          type: "image",
+                        },
+                        {
+                          path: employee.image,
+                          type: "image",
+                        },
+                      ]}
+                    />
                   </div>
                 )}
               </div>
@@ -231,7 +229,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                   <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                     {employee?.document?.map((doc, i) => (
                       <>
-                        <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed mt-3  justify-center align-middle">
+                        <div className="flex gap-4 flex-col col-span-4 border-t-2 mt-3 p-3 border-b-2 border-dashed  justify-center align-middle">
                           <div className=" flex items-center justify-center ">
                             <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
                               <p className=" text-lg font-bold text-mainGreen">
@@ -282,7 +280,8 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                                 />
                               )}
                             </div>
-                            <div className="">
+                            <div className=" flex items-center">
+                              <p className="mb-3">{t("media")} : </p>
                               {doc?.files?.length !== 0 && (
                                 <FilesPreviewOutFormik images={doc?.files} />
                               )}
@@ -309,7 +308,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                 {employee?.document.length !== 0 &&
                   employee?.document
                     .map((doc: allDocs_TP, i: string) => (
-                      <div className=" flex flex-col gap-4 border-b-2 border-dashed p-4 items-center justify-center">
+                      <div className=" flex flex-col gap-4 mt-6 border-t-2  border-b-2 border-dashed p-4 items-center justify-center">
                         <div className=" flex items-center justify-center mb-8">
                           <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
                             <p className=" text-lg font-bold text-mainGreen">
@@ -341,9 +340,12 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
                             boldText={t("reminder days count")}
                             lightString={doc?.data?.reminder}
                           />
-                          {doc?.files?.length !== 0 && (
-                            <FilesPreviewOutFormik images={doc?.files} />
-                          )}
+                          <div className=" flex items-center">
+                            <p className="mb-3">{t("media")} : </p>
+                            {doc?.files?.length !== 0 && (
+                              <FilesPreviewOutFormik images={doc?.files} />
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))

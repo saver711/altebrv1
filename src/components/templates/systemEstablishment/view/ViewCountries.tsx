@@ -267,7 +267,7 @@ export const ViewCountries = () => {
                 </div>
                 <div className="flex items-center gap-2 ">
                   <Button
-                    className=" rounded bg-mainGreen p-[.18rem] "
+                    className=" rounded bg-mainGreen p-[.18rem] !border-none"
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >

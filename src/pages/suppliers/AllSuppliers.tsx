@@ -17,7 +17,7 @@ import { useFetch, useIsRTL, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { Back } from "../../utils/utils-components/Back"
-import * as Yup from 'yup'
+import * as Yup from "yup"
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { BiSearchAlt } from "react-icons/bi"
@@ -33,11 +33,11 @@ type Search_TP = {
 }
 
 const initialValues: Search_TP = {
-  search: ''
+  search: "",
 }
 
 const validationSchema = Yup.object({
-  search: Yup.string().trim()
+  search: Yup.string().trim(),
 })
 
 /////////// HELPER VARIABLES & FUNCTIONS
@@ -96,7 +96,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
   const [editData, setEditData] = useState<supplier>()
   const [deleteData, setDeleteData] = useState<supplier>()
   const [dataSource, setDataSource] = useState<supplier[]>([])
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
   const [page, setPage] = useState<number>(1)
   const navigate = useNavigate()
 
@@ -158,11 +158,12 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
     error,
     refetch,
     isRefetching,
-    isFetching
+    isFetching,
   } = useFetch<supplier[]>({
-    endpoint: search === '' 
-    ? `supplier/api/v1/suppliers?page=${page}`
-    : `supplier/api/v1/suppliers?page=${page}&name[lk]=${search}`,
+    endpoint:
+      search === ""
+        ? `supplier/api/v1/suppliers?page=${page}`
+        : `supplier/api/v1/suppliers?page=${page}&name[lk]=${search}`,
     queryKey: ["suppliers"],
     pagination: true,
     onSuccess(data) {
@@ -179,7 +180,10 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
     },
     onError: (err) => console.log(err),
   })
-    console.log("🚀 ~ file: AllSuppliers.tsx:151 ~ AllSuppliers ~ suppliers:", suppliers)
+  console.log(
+    "🚀 ~ file: AllSuppliers.tsx:151 ~ AllSuppliers ~ suppliers:",
+    suppliers
+  )
 
   ///
   /////////// CUSTOM HOOKS
@@ -215,7 +219,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
       // setDataSource((prev: supplier[]) =>
       //   prev.filter((p) => p.id !== deleteData?.id)
       // )
-      queryClient.refetchQueries(['suppliers'])
+      queryClient.refetchQueries(["suppliers"])
       setOpen(false)
       notify("success")
     },
@@ -238,6 +242,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
     }
   }, [search])
   ///
+
   return (
     <>
       <Helmet>
@@ -254,12 +259,13 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
           }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
               id="search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt
@@ -292,27 +298,31 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
       )}
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && <Loading mainTitle={t("suppliers")} />}
-        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-        )}
+        {isSuccess &&
+          !!!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t("no items")}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&
           !isRefetching &&
           !!dataSource.length && (
-          <Table data={dataSource} columns={columns}>
-            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+            <Table data={dataSource} columns={columns}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  {t('page')}
+                  {t("page")}
                   <span className=" text-mainGreen">
                     {suppliers.current_page}
                   </span>
-                  {t('from')}
+                  {t("from")}
                   <span className=" text-mainGreen">{suppliers.pages}</span>
                 </div>
                 <div className="flex items-center gap-2 ">
@@ -321,19 +331,27 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >
-                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                   <Button
                     className=" rounded bg-mainGreen p-[.18rem] "
                     action={() => setPage((prev) => prev + 1)}
                     disabled={page == suppliers.pages}
                   >
-                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                 </div>
               </div>
-          </Table>
-        )}
+            </Table>
+          )}
         <Modal
           isOpen={open}
           onClose={() => {
@@ -349,9 +367,13 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
             />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
-              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <Header header={`${t("delete")} : ${deleteData?.name}`} />
               <div className="flex gap-4 justify-center items-cent">
-                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                <Button
+                  action={handleSubmit}
+                  loading={mutateLoading}
+                  variant="danger"
+                >
                   {`${t("confirm")}`}
                 </Button>
                 <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
