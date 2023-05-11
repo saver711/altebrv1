@@ -105,13 +105,18 @@ import SelectKarat from "../karats/select/SelectKarat"
       }),
       columnHelper.accessor("gold_tax", {
         header: `${t("gold tax")}`,
-        cell: (info) =>
-          (
-            info.row.original.weight *
-            Number(formValues?.api_gold_price) *
-            info.row.original.stock * 
-            0.15
-          ).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => {
+          if (info.row.original.karat_value == '24') {
+            return 0
+          } else {
+            return (
+              info.row.original.weight *
+              Number(formValues?.api_gold_price) *
+              info.row.original.stock * 
+              0.15
+            ).toFixed(3).replace(/\.?0+$/, '')
+          }
+        },
       }),
       columnHelper.accessor("actions", {
         header: `${t("actions")}`,
@@ -446,7 +451,7 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="gold_tax"
                       name="gold_tax"
-                      value={(
+                      value={values.karat_value == '24' ? 0 : (
                         Number(values.weight) *
                         Number(formValues?.api_gold_price) *
                         Number(values.stock) * 
@@ -455,7 +460,7 @@ import SelectKarat from "../karats/select/SelectKarat"
                       onChange={() =>
                         setFieldValue(
                           "gold_tax",
-                          (
+                          values.karat_value == '24' ? 0 : (
                             Number(values.weight) *
                             Number(formValues?.api_gold_price) *
                             Number(values.stock) * 
