@@ -173,14 +173,6 @@ export const ViewCategories = () => {
       setPage(1)
     }
   }, [search])
-  const a = []
-  if (isSuccess && dataSource?.length === 0)
-    return (
-      <EmptyDataView>
-        <CreateCategory />
-      </EmptyDataView>
-    )
-
   ///
   return (
     <div className="p-4">
