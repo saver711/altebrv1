@@ -65,10 +65,6 @@ export const Bond = ({ title }: BondProps_TP) => {
   } = useFetch<Contract_TP>({
     endpoint: `twredGold/api/v1/bond/${bondID}`,
     queryKey: ['one_bond'],
-    onSuccess: (data) => {
-      console.log('dsdsd')
-      console.log(data)
-    },
     select: (contract) => ({
       id: contract.id,
       bond_number: contract.bond_number,
@@ -146,12 +142,24 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('gold tax')}`,
-        cell: (info) => ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => {
+          if (info.row.original.goldKarat == '24') {
+            return 0
+          } else {
+            return ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100).toFixed(3).replace(/\.?0+$/, '')
+          }
+        },
         accessorKey: 'goldTaxes',
       },
       {
         header: `${t('total tax')}`,
-        cell: (info) => (((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100))).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => {
+          if (info.row.original.goldKarat == '24') {
+            return (Number(info.renderValue()) * (15/100)).toFixed(3).replace(/\.?0+$/, '')
+          } else {
+            return (((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100))).toFixed(3).replace(/\.?0+$/, '')
+          }
+        },
         accessorKey: 'itemTaxes',
       },
     ],

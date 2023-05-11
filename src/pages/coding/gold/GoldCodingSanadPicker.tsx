@@ -54,10 +54,6 @@ export const GoldCodingSanadPicker = () => {
 
   const columns: Column[] = [
     {
-      name: "index",
-      label: t('Sequence '),
-    },
-    {
       name: "id",
       label: t('bond number'),
     },
