@@ -33,9 +33,10 @@ type ItemCodingFormProps_TP = {
   itemsToShowInCaseOfTa2m: CategoryMainData_TP[] | undefined
   detailedWeight_total: number | undefined
   setDetailedWeight_total: SetState_TP<number | undefined>
-  activeBand: GoldSanadBand_TP
   sizes: SizePopup_TP[]
   setSizes: SetState_TP<SizePopup_TP[]>
+  activeBand: GoldSanadBand_TP
+  setActiveBand: SetState_TP<GoldSanadBand_TP| undefined>
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -89,7 +90,8 @@ export const GoldItemCodingForm = ({
   // })
 
   const { values, setFieldValue } =
-    useFormikContext<GoldCodingSanad_initialValues_TP>()
+  useFormikContext<GoldCodingSanad_initialValues_TP>()
+  console.log(`values:`, values)
   ///
   /////////// STATES
   ///
