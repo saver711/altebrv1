@@ -4,25 +4,22 @@
 ///
 /////////// Types
 
+import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useMemo, useState } from "react"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
 import { useFetch, useMutate } from "../../../../hooks"
-import NinjaTable from "../../../molecules/NinjaTable"
-import { ColumnTP } from "../../../molecules/table/types"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { BaseInput, Button, Label } from "../../../atoms"
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { Modal } from "../../../molecules"
-import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
-import StonesColors from "../hashim/StonesColors"
 import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon, ViewIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { Modal } from "../../../molecules"
+import { Loading } from "../../../organisms/Loading"
+import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
+import { Table } from "../../reusableComponants/tantable/Table"
+import StonesColors from "../hashim/StonesColors"
 
 ///
 export type ViewColors_TP = {
@@ -55,7 +52,7 @@ export const ViewColors = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (

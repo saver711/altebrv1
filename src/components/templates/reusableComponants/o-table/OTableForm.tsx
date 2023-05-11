@@ -2,19 +2,19 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
-    useReactTable,
-  } from "@tanstack/react-table"
-  import { Field, Form, useFormikContext } from "formik"
-  import { t } from "i18next"
-  import { Dispatch, SetStateAction, useEffect } from "react"
-  import { AiOutlinePlus } from "react-icons/ai"
-  import { DeleteIcon, EditIcon } from "../../../atoms/icons"
-  import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
-  import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
-  import { BaseInputField, Select } from "../../../molecules"
-  import SelectCategory from "../categories/select/SelectCategory"
-  import SelectKarat from "../karats/select/SelectKarat"
+    useReactTable
+} from "@tanstack/react-table"
+import { Field, Form, useFormikContext } from "formik"
+import { t } from "i18next"
+import { Dispatch, SetStateAction, useEffect } from "react"
+import { AiOutlinePlus } from "react-icons/ai"
 import { useFetch } from "../../../../hooks"
+import { DeleteIcon, EditIcon } from "../../../atoms/icons"
+import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
+import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
+import { BaseInputField, Select } from "../../../molecules"
+import SelectCategory from "../categories/select/SelectCategory"
+import SelectKarat from "../karats/select/SelectKarat"
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
@@ -114,7 +114,7 @@ import { useFetch } from "../../../../hooks"
           ).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("actions", {
-        header: `${t("action")}`,
+        header: `${t("actions")}`,
       }),
     ]
   

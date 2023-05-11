@@ -4,30 +4,27 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
-import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { ColumnTP } from "../../../molecules/table/types"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { BaseInput, Button, Label } from "../../../atoms"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { ColumnDef } from "@tanstack/react-table"
-import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
-import { CreateClassification } from "../../reusableComponants/classifications/create/CreateClassification"
-import { Back } from "../../../../utils/utils-components/Back"
-import { useQueryClient } from "@tanstack/react-query"
-import { Form, Formik } from "formik"
 import { BiSearchAlt } from "react-icons/bi"
-import { AddButton } from "../../../molecules/AddButton"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import * as Yup from 'yup'
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
+import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon, ViewIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
+import { AddButton } from "../../../molecules/AddButton"
+import { Loading } from "../../../organisms/Loading"
+import { CreateClassification } from "../../reusableComponants/classifications/create/CreateClassification"
+import { Table } from "../../reusableComponants/tantable/Table"
 ///
 export type ViewClassifications_TP = {
   id: string
@@ -75,7 +72,7 @@ export const ViewClassifications = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
