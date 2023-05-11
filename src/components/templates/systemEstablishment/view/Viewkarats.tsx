@@ -4,31 +4,27 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
+import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
+import * as Yup from 'yup'
 import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import NinjaTable from "../../../molecules/NinjaTable"
-import { ColumnTP } from "../../../molecules/table/types"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { BaseInput, Button, Label } from "../../../atoms"
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
-import CreateKarat from "../../reusableComponants/karats/create/CreateKarat"
 import { Back } from "../../../../utils/utils-components/Back"
-import { Form, Formik } from "formik"
-import { BiSearchAlt } from "react-icons/bi"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon, ViewIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
 import { AddButton } from "../../../molecules/AddButton"
-import * as Yup from 'yup'
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
-import { useQueryClient } from "@tanstack/react-query"
+import { Loading } from "../../../organisms/Loading"
+import CreateKarat from "../../reusableComponants/karats/create/CreateKarat"
+import { Table } from "../../reusableComponants/tantable/Table"
 ///
 export type ViewKarats_TP = {
   id: string
@@ -76,7 +72,7 @@ export const ViewKarats = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (

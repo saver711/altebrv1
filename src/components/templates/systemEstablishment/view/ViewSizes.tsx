@@ -15,11 +15,11 @@ import { useFetch, useIsRTL, useMutate } from '../../../../hooks'
 import { mutateData } from '../../../../utils/mutateData'
 import { notify } from '../../../../utils/toast'
 import { Back } from '../../../../utils/utils-components/Back'
-import { CreateSizes } from '../../../CreateSizes'
 import { Button } from '../../../atoms'
 import { Header } from '../../../atoms/Header'
 import { EditIcon, ViewIcon } from '../../../atoms/icons'
 import { SvgDelete } from '../../../atoms/icons/SvgDelete'
+import { CreateSizes } from '../../../CreateSizes'
 import { BaseInputField, Modal } from '../../../molecules'
 import { AddButton } from '../../../molecules/AddButton'
 import { Loading } from '../../../organisms/Loading'
@@ -92,7 +92,7 @@ type AllSizesProps_TP = {
             cell: (info) => info.getValue(),
           },
           {
-            header: () => <span>{t("action")}</span>,
+            header: () => <span>{t("actions")}</span>,
             accessorKey: "action",
             cell: (info) => {
               return (

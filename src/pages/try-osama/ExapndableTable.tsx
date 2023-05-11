@@ -1,25 +1,24 @@
 //@ts-noCheck
-import React from 'react'
+import React from "react"
 
-
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from "@tanstack/react-query"
 import {
-  ExpandedState,
   createColumnHelper,
+  ExpandedState,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable
-} from '@tanstack/react-table'
-import { t } from 'i18next'
-import { useEffect, useMemo, useState } from 'react'
-import { ViewIcon } from '../../components/atoms/icons'
-import { Modal } from '../../components/molecules'
-import { SubTables } from './SubTables'
+} from "@tanstack/react-table"
+import { t } from "i18next"
+import { useEffect, useMemo, useState } from "react"
+import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
+import { Modal } from "../../components/molecules"
+import { SubTables } from "./SubTables"
 
-// types 
+// types
 type Categories_TP = {
   has_selsal: string
   has_size: string
@@ -30,10 +29,17 @@ type Categories_TP = {
   selling_type: string
   type: string
 }
-export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boolean , addedPieces:any}) {
+export function ExpandableTable({
+  addedPieces,
+  setAddedPieces,
+  showDetails,
+}: {
+  showDetails?: boolean
+  addedPieces: GoldCodingSanad_initialValues_TP[]
+  setAddedPieces?: SetState_TP<GoldCodingSanad_initialValues_TP[]>
+}) {
   // variables
   let count = 0
-
 
   const columnHelper = createColumnHelper<any>()
   // عشان احط الداتا اللي ناقصه ستاتيك حاليا لحد ما نشوف بعدين
@@ -49,47 +55,76 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
   //states
   const [data, setData] = useState(modifiedData)
 
-
   const [expanded, setExpanded] = React.useState<ExpandedState>({})
   const [modalOpen, setModalOpen] = useState(false)
-  const [subTableData, setSubTableData] = useState<{ index: string, data: typeof data }>()
+  const [subTableData, setSubTableData] = useState<{
+    index: string
+    data: typeof data
+  }>()
   const [queryData, setQueryData] = useState<any[] | undefined>()
 
   const columns = useMemo<any>(
     () => [
-      columnHelper.accessor('index', {
-        header: `${t('index')}`
+      columnHelper.accessor("index", {
+        header: `${t("index")}`,
       }),
       // columnHelper.accessor('id_code', {
       //   header: `${t('identification code')}`
       // }),
-      columnHelper.accessor('classification', {
-        header: `${t('classification')}`
+      columnHelper.accessor("classification", {
+        header: `${t("classification")}`,
       }),
-      columnHelper.accessor('category', {
-        header: `${t('category')}`
+      columnHelper.accessor("category", {
+        header: `${t("category")}`,
       }),
-      columnHelper.accessor('model_number', {
-        header: `${t('model number')}`
+      columnHelper.accessor("model_number", {
+        header: `${t("model number")}`,
       }),
-      columnHelper.accessor('weight', {
-        header: `${t('weight')}`
+      columnHelper.accessor("weight", {
+        header: `${t("weight")}`,
       }),
-      columnHelper.accessor('wage', {
-        header: `${t('wage')}`
+      columnHelper.accessor("wage", {
+        header: `${t("wage")}`,
       }),
-      columnHelper.accessor('value', {
-        header: `${t('value')}`
+      columnHelper.accessor("value", {
+        header: `${t("value")}`,
       }),
-      ...(showDetails ?  [columnHelper.accessor('view', {
-        header: `${t('view')}`,
-        cell: (info) => <ViewIcon action={() => {
-          setSubTableData({ index: info.row.original.index, data: modifiedData })
-          setModalOpen(true)
-        }
-        } className='mx-auto text-mainGreen text-2xl' />
-      })] : [])
-      ,
+      ...(showDetails
+        ? [
+            columnHelper.accessor("actions", {
+              header: `${t("actions")}`,
+              cell: (info) => (
+                <div className="flex justify-center gap-3">
+                  <ViewIcon
+                    size={23}
+                    action={() => {
+                      setSubTableData({
+                        index: info.row.original.index,
+                        data: modifiedData,
+                      })
+                      setModalOpen(true)
+                    }}
+                    className="text-mainGreen"
+                  />
+                  {setAddedPieces && (
+                    <DeleteIcon
+                      size={23}
+                      action={() => {
+                        const thisId = info.row.original.front_key
+                        setData((curr) =>
+                          curr.filter((piece) => piece.front_key !== thisId)
+                        )
+                        setAddedPieces((curr) =>
+                          curr.filter((piece) => piece.front_key !== thisId)
+                        )
+                      }}
+                    />
+                  )}
+                </div>
+              ),
+            }),
+          ]
+        : []),
     ],
     []
   )
@@ -106,15 +141,17 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
     getExpandedRowModel: getExpandedRowModel(),
   })
 
-  // custom hooks 
+  // custom hooks
   const queryClient = useQueryClient()
 
   useEffect(() => {
     if (queryClient) {
-      const categories = queryClient.getQueryData(['categories'])
+      const categories = queryClient.getQueryData(["categories"])
       const allQueries = modifiedData?.map((item) => {
         const finaleItem = {
-          category: categories?.find((category) => category.id == item.category_id)?.name,
+          category: categories?.find(
+            (category) => category.id == item.category_id
+          )?.name,
         }
         return finaleItem
       })
@@ -124,22 +161,34 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
 
   useEffect(() => {
     if (queryData) {
-      setData(modifiedData.map((item,index) => ({ ...item, category: queryData[index]?.category, view: 'icon' })))
+      setData(
+        modifiedData.map((item, index) => ({
+          ...item,
+          category: queryData[index]?.category,
+          actions: "icon",
+        }))
+      )
     }
   }, [queryData])
 
   return (
-    <div className='flex flex-col justify-center items-center w-full'>
-      <h2 className='font-bold text-2xl' >{t('final review')}</h2>
-      <h3>الهويات المرقمه من سند رقم -<span className='text-orange-500' >001</span></h3>
-      <div className='w-full'>
-        <table className='mt-2 border-mainGreen shadow-lg mb-2 w-full'>
-          <thead className='bg-mainGreen text-white'>
-            {table.getHeaderGroups().map(headerGroup => (
+    <div className="flex flex-col justify-center items-center w-full">
+      <h2 className="font-bold text-2xl">{t("final review")}</h2>
+      <h3>
+        الهويات المرقمه من سند رقم -<span className="text-orange-500">001</span>
+      </h3>
+      <div className="w-full">
+        <table className="mt-2 border-mainGreen shadow-lg mb-2 w-full">
+          <thead className="bg-mainGreen text-white">
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
+                {headerGroup.headers.map((header) => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className='p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none  whitespace-nowrap'>
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="p-4 border-l-2 border-l-lightGreen first:rounded-r-lg last:rounded-l-lg last:rounded-b-none first:rounded-b-none  whitespace-nowrap"
+                    >
                       {header.isPlaceholder ? null : (
                         <div>
                           {flexRender(
@@ -155,18 +204,27 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => {
+            {table.getRowModel().rows.map((row) => {
               return (
-                <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
-                  {row.getVisibleCells().map(cell => {
+                <tr
+                  key={row.id}
+                  className="border-l-2 border-l-flatWhite text-center h-[40px]"
+                >
+                  {row.getVisibleCells().map((cell) => {
                     return (
-                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed'}`} >
-                        {
-                          !!cell.getContext().getValue() ?
-                            flexRender(
+                      <td
+                        key={cell.id}
+                        className={`border-l-[#b9b7b7]-500 border  ${
+                          !!!cell.getContext().getValue() &&
+                          "bg-gray-300 cursor-not-allowed"
+                        }`}
+                      >
+                        {!!cell.getContext().getValue()
+                          ? flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
-                            ) : '---'}
+                            )
+                          : "---"}
                       </td>
                     )
                   })}
@@ -250,7 +308,7 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
   )
 }
 
- // ----------------   filtration section -------------------------
+// ----------------   filtration section -------------------------
 // function Filter({
 //   column,
 //   table,
@@ -302,7 +360,7 @@ export function ExpandableTable({ addedPieces , showDetails }: {showDetails?:boo
 //   )
 // }
 
- // ----------------   checkbox section -------------------------
+// ----------------   checkbox section -------------------------
 // function IndeterminateCheckbox({
 //   indeterminate,
 //   className = '',

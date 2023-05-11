@@ -79,7 +79,7 @@ export const ViewCategories = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (

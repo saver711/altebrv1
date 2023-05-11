@@ -1,28 +1,27 @@
 /////////// IMPORTS
+import { useQueryClient } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
+import { BiSearchAlt } from "react-icons/bi"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
+import * as Yup from 'yup'
 import { Button } from "../../components/atoms"
 import { Header } from "../../components/atoms/Header"
 import { EditIcon, ViewIcon } from "../../components/atoms/icons"
 import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
 import { BaseInputField, Modal } from "../../components/molecules"
+import { AddButton } from "../../components/molecules/AddButton"
 import { Loading } from "../../components/organisms/Loading"
-import { EmptyDataView } from "../../components/templates/reusableComponants/EmptyDataView"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import AddSupplier from "../../components/templates/systemEstablishment/supplier/AddSupplier"
 import { useFetch, useIsRTL, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { Back } from "../../utils/utils-components/Back"
-import * as Yup from 'yup'
-import { useQueryClient } from "@tanstack/react-query"
-import { Form, Formik } from "formik"
-import { BiSearchAlt } from "react-icons/bi"
-import { AddButton } from "../../components/molecules/AddButton"
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 ///
 ///
 /////////// Types
@@ -113,7 +112,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
