@@ -56,6 +56,9 @@ export const DocumentForm = ({
       .min(1, requiredTranslation)
       .required(requiredTranslation),
     endDate: Yup.string().required(requiredTranslation),
+    files: Yup.array()
+      .required(requiredTranslation)
+      .min(1, requiredTranslation),
   })
 
   ///

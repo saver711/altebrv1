@@ -112,7 +112,6 @@ type AllSizesProps_TP = {
                     }}
                     stroke="#ef4444"
                   />
-                  <ViewIcon action={() => navigate(`${info.row.original.id}`)} />
                 </div>
               )
             },
@@ -230,12 +229,13 @@ type AllSizesProps_TP = {
             }}
             validationSchema={validationSchema}
           >
-            <Form className="flex align-middle gap-2">
+            <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
               <BaseInputField
                 id="search"
                 name="search"
                 type="text"
                 placeholder={`${t("search")}`}
+                className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
               />
               <Button type="submit" disabled={isRefetching}>
                 <BiSearchAlt
@@ -268,27 +268,31 @@ type AllSizesProps_TP = {
         )}
         <div className="flex flex-col gap-6 items-center">
           {(sizesLoading || isRefetching) && <Loading mainTitle={t("sizes")} />}
-          {isSuccess && !!!dataSource && !sizesLoading && !isRefetching && !!dataSource.length && (
-            <div className="mb-5 pr-5">
-              <Header
-                header={t('no items')}
-                className="text-center text-2xl font-bold"
-              />
-            </div>
-          )}
+          {isSuccess &&
+            !!!dataSource &&
+            !sizesLoading &&
+            !isRefetching &&
+            !!dataSource.length && (
+              <div className="mb-5 pr-5">
+                <Header
+                  header={t("no items")}
+                  className="text-center text-2xl font-bold"
+                />
+              </div>
+            )}
           {isSuccess &&
             !!dataSource &&
             !sizesLoading &&
             !isRefetching &&
             !!dataSource.length && (
-            <Table data={dataSource} columns={columns}>
-              <div className="mt-3 flex items-center justify-end gap-5 p-2">
+              <Table data={dataSource} columns={columns}>
+                <div className="mt-3 flex items-center justify-end gap-5 p-2">
                   <div className="flex items-center gap-2 font-bold">
-                    {t('page')}
+                    {t("page")}
                     <span className=" text-mainGreen">
                       {sizes.current_page}
                     </span>
-                    {t('from')}
+                    {t("from")}
                     <span className=" text-mainGreen">{sizes.pages}</span>
                   </div>
                   <div className="flex items-center gap-2 ">
@@ -297,19 +301,27 @@ type AllSizesProps_TP = {
                       action={() => setPage((prev) => prev - 1)}
                       disabled={page == 1}
                     >
-                      {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                      {isRTL ? (
+                        <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                      ) : (
+                        <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                      )}
                     </Button>
                     <Button
                       className=" rounded bg-mainGreen p-[.18rem] "
                       action={() => setPage((prev) => prev + 1)}
                       disabled={page == sizes.pages}
                     >
-                      {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                      {isRTL ? (
+                        <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                      ) : (
+                        <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                      )}
                     </Button>
                   </div>
                 </div>
-            </Table>
-          )}
+              </Table>
+            )}
         </div>
         <Modal
           isOpen={open}
@@ -318,15 +330,16 @@ type AllSizesProps_TP = {
           }}
         >
           {model ? (
-            <CreateSizes
-              editData={editData}
-              setModel={setModel}
-            />
+            <CreateSizes editData={editData} setModel={setModel} />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
-              <Header header={`${t('delete')} : ${deleteData?.size}`} />
+              <Header header={`${t("delete")} : ${deleteData?.size}`} />
               <div className="flex gap-4 justify-center items-cent">
-                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                <Button
+                  action={handleSubmit}
+                  loading={mutateLoading}
+                  variant="danger"
+                >
                   {`${t("confirm")}`}
                 </Button>
                 <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
@@ -334,8 +347,6 @@ type AllSizesProps_TP = {
             </div>
           )}
         </Modal>
-
       </>
-
     )
   }

@@ -124,7 +124,8 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
     mutationFn: mutateData,
     onSuccess: () => {
       notify("success")
-      queryClient.refetchQueries(['employees'])
+      queryClient.refetchQueries([ 'employees' ])
+      console.log('first')
     },
     onError: (error) => {
       console.log(error)

@@ -11,6 +11,7 @@ import { TextLine } from "../../components/templates/employee/TextLine"
 import { useFetch } from "../../hooks"
 import { formatDate } from "../../utils/date"
 import { useState } from "react"
+import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 ///
 /////////// Types
 ///
@@ -74,9 +75,11 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
           <InnerFormLayout
             title={supplier?.name}
             leftComponent={
-              <Button action={() => setDocumentOpen(true)}>
-                {t("view all documents")}
-              </Button>
+              supplier?.document?.length !== 0 && (
+                <Button className="mb-3" action={() => setDocumentOpen(true)}>
+                  {t("view all documents")}
+                </Button>
+              )
             }
           >
             {isSuccess && (
@@ -237,6 +240,12 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                               />
                             )}
                           </div>
+                          {doc.files?.length !== 0 && (
+                            <div className="flex items-center">
+                              <p className="mb-3">{t("media")} : </p>
+                              <FilesPreviewOutFormik images={doc?.files} />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>
@@ -255,7 +264,6 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                           </div>
                           <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                             <div className="flex gap-4 flex-col">
-                              {console.log("zz", doc.data.docName)}
                               {doc.data?.docType?.label && (
                                 <TextLine
                                   boldText={t("document name")}
@@ -289,14 +297,12 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                                 />
                               )}
                             </div>
-                            <div className="flex gap-4 flex-col">
-                              {doc.data?.reminder && (
-                                <TextLine
-                                  boldText={t("reminder days count")}
-                                  lightString={doc.data?.reminder}
-                                />
-                              )}
-                            </div>
+                            {doc.files?.length !== 0 && (
+                              <div className="flex items-center">
+                                <p className="mb-3">{t("media")} : </p>
+                                <FilesPreviewOutFormik images={doc?.files} />
+                              </div>
+                            )}
                           </div>
                         </div>
                       </>
@@ -333,7 +339,9 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                         {supplier.nationalAddress?.district.name && (
                           <TextLine
                             boldText={t("district")}
-                            lightString={supplier.nationalAddress?.district.name}
+                            lightString={
+                              supplier.nationalAddress?.district.name
+                            }
                           />
                         )}
                       </div>
@@ -349,7 +357,9 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                         {supplier.nationalAddress?.street_number && (
                           <TextLine
                             boldText={t("street number")}
-                            lightString={supplier.nationalAddress?.street_number}
+                            lightString={
+                              supplier.nationalAddress?.street_number
+                            }
                           />
                         )}
                       </div>

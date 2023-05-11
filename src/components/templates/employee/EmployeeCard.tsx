@@ -56,6 +56,7 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
           notify("error")
       }
   })
+
   ///
   /////////// STATES
   ///
@@ -75,13 +76,17 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
   }
   ///
   return (
-    <div className="col-span-1 shadow-md shadow-slate-400 px-9 py-5 rounded-lg m-5" >
+    <div className="col-span-1 shadow-md shadow-slate-400 px-9 py-5 rounded-lg m-5">
       {/* Employee img */}
-      <div className="w-1/4 mx-auto mb-10 rounded-full">
-        <img src={img || blankPerson} alt={`employee: ${name}`} className="w-full rounded-full bg-mainGray pt-2" />
+      <div className=" w-32  bg-gray-100 mx-auto mb-10 p-2 rounded-md">
+        <img
+          src={img || blankPerson}
+          alt={`employee: ${name}`}
+          className="  object-cover rounded-md w-full"
+        />
       </div>
       {/* Employee name */}
-      <h2 className="text-center mb-5 font-bold text-2xl" >{name}</h2>
+      <h2 className="text-center mb-5 font-bold text-2xl">{name}</h2>
       {/* Employee actions */}
       <div className="flex items-center justify-center">
         <Button
@@ -91,24 +96,37 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
           <ViewIcon />
           {/* عرض */}
         </Button>
-        <Button bordered className="flex items-center mx-1" action={()=>{
+        <Button
+          bordered
+          className="flex items-center mx-1"
+          action={() => {
             setEditEmployeeData({
-              ...rest , img , id , name
+              ...rest,
+              img,
+              id,
+              name,
             })
-           setOpen(true)
-          }} >
-          <EditIcon/>
+            setOpen(true)
+          }}
+        >
+          <EditIcon />
           {/* تعديل */}
         </Button>
-        <Button variant="danger"  className="flex items-center mx-1" action={()=>deleteHandler(id)} loading={deleteLoading}>
-          <DeleteIcon/>
+        <Button
+          variant="danger"
+          className="flex items-center mx-1"
+          action={() => deleteHandler(id)}
+          loading={deleteLoading}
+        >
+          <DeleteIcon />
           {/* حذف */}
         </Button>
       </div>
-      <Modal 
-      isOpen={open}
-      onClose={() => setOpen(false)} >
-          <AddEmployee title={`${t('add employee')}`} editEmployeeData={editEmployeeData} />
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <AddEmployee
+          title={`${t("add employee")}`}
+          editEmployeeData={editEmployeeData}
+        />
       </Modal>
     </div>
   )

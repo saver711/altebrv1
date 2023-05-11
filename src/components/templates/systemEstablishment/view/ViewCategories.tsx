@@ -79,7 +79,7 @@ export const ViewCategories = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("actions")}</span>,
+        header: () => <span>{t("action")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
@@ -173,6 +173,13 @@ export const ViewCategories = () => {
       setPage(1)
     }
   }, [search])
+  // if (isSuccess && dataSource?.length === 0)
+  //   return (
+  //     <EmptyDataView>
+  //       <CreateCategory />
+  //     </EmptyDataView>
+  //   )
+
   ///
   return (
     <div className="p-4">
@@ -187,12 +194,13 @@ export const ViewCategories = () => {
           }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
               id="category_search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt
@@ -256,7 +264,7 @@ export const ViewCategories = () => {
                   )}
                 </Button>
                 <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
+                  className=" rounded bg-mainGreen p-[.18rem]  "
                   action={() => setPage((prev) => prev + 1)}
                   disabled={page == categories.pages}
                 >
