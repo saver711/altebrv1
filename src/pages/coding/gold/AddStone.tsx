@@ -252,7 +252,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   type="text"
                   label="رابط شهادة الحجر"
                 />
-                <div className="col-span-4 flex gap-x-5" >
+                {/* <div className="col-span-4 flex gap-x-5" > */}
                   <SelectStoneShape
                     multi
                     field="id"
@@ -272,7 +272,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   //   setFieldValue('stoneColor_value', option.value)
                   // })}
                   />
-                </div>
+                {/* </div> */}
                 <div className=" col-span-4 flex flex-col gap-2 ">
                   <label htmlFor="certificate_files">إرفاق شهادة الحجر</label>
                   <DropFile name="certificate_files" />
