@@ -300,8 +300,8 @@
   "bond items": "بنود السند",
   "must add one item at least": "يجب إضافة بند علي الأقل",
   "must add the item": "يجب إضافة البند",
-  "please enter a valid weight": "'برجاء إدخال وزن صحيح'",
-  "please enter a valid stock": "'برجاء إدخال سهم صحيح'",
+  "please enter a valid weight": "برجاء إدخال وزن صحيح",
+  "please enter a valid stock": "برجاء إدخال سهم صحيح",
   "top stock value is 1": "اعلي قيمة للسهم هو 1",
   "no bonds": "لا يوجد سندات",
   "no items": "لا يوجد",
@@ -363,5 +363,6 @@
   "There are no bonds": "لا يوجد سندات",
   "piece has been added": "تمت اضافة القطعه",
   "supply": "التوريد",
-  "total bonds": "اجمالي السندات"
+  "total bonds": "اجمالي السندات",
+  "please enter a valid wage": "برجاء إدخال اجرة صحيح"
 }

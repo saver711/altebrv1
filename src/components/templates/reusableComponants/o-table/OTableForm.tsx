@@ -87,7 +87,7 @@ import { useFetch } from "../../../../hooks"
       }),
       columnHelper.accessor("stock", {
         header: `${t("stocks")}`,
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("wage", {
         header: `${t("wage")}`,
@@ -96,12 +96,12 @@ import { useFetch } from "../../../../hooks"
       columnHelper.accessor("total_wages", {
         header: `${t("total wages")}`,
         cell: (info) =>
-          (info.row.original.weight * info.row.original.wage).toFixed(3),
+          (info.row.original.weight * info.row.original.wage).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("wage_tax", {
         header: `${t("wage tax")}`,
         cell: (info) =>
-          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3),
+          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("gold_tax", {
         header: `${t("gold tax")}`,
@@ -111,7 +111,7 @@ import { useFetch } from "../../../../hooks"
             Number(formValues?.api_gold_price) *
             info.row.original.stock * 
             0.15
-          ).toFixed(3),
+          ).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("actions", {
         header: `${t("action")}`,
@@ -155,7 +155,7 @@ import { useFetch } from "../../../../hooks"
 
         setFieldValue(
           "stock",
-          karatValues.find((item) => item.karat === values.karat_value)?.value
+          karatValues.find((item) => item.karat === values.karat_value)?.value.replace(/\.?0+$/, '')
         )
       }
     }, [values.karat_id])
@@ -340,7 +340,7 @@ import { useFetch } from "../../../../hooks"
                       id="stock"
                       name="stock"
                       type="number"
-                      value={values.stock || editData.stock}
+                      value={values.stock.replace(/\.?0+$/, '') || editData.stock.replace(/\.?0+$/, '')}
                       onChange={(e: any) => {
                         setFieldValue("stock", e.target.value)
                       }}
@@ -420,7 +420,7 @@ import { useFetch } from "../../../../hooks"
                       name="total_wages"
                       value={(
                         Number(values.weight) * Number(values.wage)
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
@@ -432,11 +432,11 @@ import { useFetch } from "../../../../hooks"
                         Number(values.weight) *
                         Number(values.wage) *
                         0.15
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       onChange={() =>
                         setFieldValue(
                           "wage_tax",
-                          Number(values.weight) * Number(values.wage) * 0.15
+                          (Number(values.weight) * Number(values.wage) * 0.15).toFixed(3).replace(/\.?0+$/, '')
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
@@ -448,15 +448,19 @@ import { useFetch } from "../../../../hooks"
                       name="gold_tax"
                       value={(
                         Number(values.weight) *
-                          Number(formValues?.api_gold_price) *
+                        Number(formValues?.api_gold_price) *
+                        Number(values.stock) * 
                           0.15 || 0
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       onChange={() =>
                         setFieldValue(
                           "gold_tax",
-                          Number(values.weight) *
+                          (
+                            Number(values.weight) *
                             Number(formValues?.api_gold_price) *
+                            Number(values.stock) * 
                             0.15
+                          ).toFixed(3).replace(/\.?0+$/, '')
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
