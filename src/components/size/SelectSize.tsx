@@ -21,7 +21,6 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
     /////////// VARIABLES
     ///
     const [newValue, setNewValue] = useState()
-    const [sizeValues, setSizeValues] = useState()
     ///
     /////////// CUSTOM HOOKS
     ///
@@ -46,6 +45,7 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
     ///
     /////////// SIDE EFFECTS
     ///
+
     useEffect(() => {
         const best = editData?.category_sizes.map(editItem => {
             return {

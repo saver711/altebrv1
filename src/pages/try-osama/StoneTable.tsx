@@ -11,12 +11,16 @@ import {
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { BiLinkExternal } from 'react-icons/bi'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import { Button } from '../../components/atoms'
+import { useIsRTL } from '../../hooks'
 import { Query_TP, StoneRow_TP } from '../coding/gold/AddStone'
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 export const StoneTable = ({ subTableData }: any) => {
+  const isRTL = useIsRTL()
   const columnHelper = createColumnHelper<any>()
 
   const columns = useMemo<any>(
@@ -95,11 +99,11 @@ export const StoneTable = ({ subTableData }: any) => {
   const [data, setData] = useState([])
   //@ts-ignore
   useEffect(() => {
-    if(queryData){
-      setData(StonesData.map((item , index) => ({ ...item,types:queryData[index]?.stone,  colors:queryData[index]?.color ,shapes:queryData[index]?.shape ,purities:queryData[index]?.purity ,natures:queryData[index]?.nature , certificate_source:queryData[index]?.country})))
+    if (queryData) {
+      setData(StonesData.map((item, index) => ({ ...item, types: queryData[index]?.stone, colors: queryData[index]?.color, shapes: queryData[index]?.shape, purities: queryData[index]?.purity, natures: queryData[index]?.nature, certificate_source: queryData[index]?.country })))
     }
   }, [queryData])
-  
+
 
 
   const table = useReactTable({
@@ -119,13 +123,13 @@ export const StoneTable = ({ subTableData }: any) => {
   ///
 
   ///
-  if(!!!queryData) return <h2>loading</h2>
+  if (!!!queryData) return <h2>loading</h2>
   if (StonesData.length <= 0) return <h2 className="text-center font-bold text-xl text-mainGreen bg-lightGreen p-2 rounded mt-8 w-1/3 mx-auto" >لا تحتوي هذه القطعه على حجر</h2>
   return (
     <>
-    <div className='flex justify-center items-center' >
-      <span className="text-center bg-lightGreen p-2 rounded-lg  text-mainGreen inline-block" > {t('stone details')} </span>
-    </div>
+      <div className='flex justify-center items-center' >
+        <span className="text-center bg-lightGreen p-2 rounded-lg  text-mainGreen inline-block" > {t('stone details')} </span>
+      </div>
       <div className="p-2 w-full">
         <table className='border-mainGreen shadow-lg mb-2 text-center text-[.8rem] font-light w-full'>
           <thead className='bg-mainGreen text-white'>
@@ -154,30 +158,57 @@ export const StoneTable = ({ subTableData }: any) => {
                 <tr key={row.id} className='border-l-2 border-l-flatWhite text-center h-[40px]'>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
+                      <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed'}`} >
                         {
                           !!cell.getContext().getValue() ?
-                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('link')}</span> <BiLinkExternal/> </a> :
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        ) :'---'}
+                            cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('link')}</span> <BiLinkExternal /> </a> :
+                              flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              ) : '---'}
                       </td>
                     )
                   })}
-              </tr>
+                </tr>
               )
             })}
           </tbody>
           <tfoot className='h-[40px]' >
             {table.getRowModel().rows.map(row => {
               return <td colSpan={10} className='text-start px-4' key={row.id}>
-                   {row.original.details} :<span className="text-l font-bold">{t('stone description')} </span> 
-                </td>
+                {row.original.details} :<span className="text-l font-bold">{t('stone description')} </span>
+              </td>
             }).slice(0, 1)}
           </tfoot>
         </table>
-        <div className="h-2" />
+        {/* pagination */}
+
+        <div className="mt-3 flex items-center justify-end gap-5 p-2">
+            <div className="flex items-center gap-2 font-bold">
+              {t('page')}
+              <span className=" text-mainGreen">
+                {table.getState().pagination.pageIndex + 1}
+              </span>
+              {t('from')}
+              <span className=" text-mainGreen">{table.getPageCount()} </span>
+            </div>
+            <div className="flex items-center gap-2 ">
+              <Button
+                className=" rounded bg-mainGreen p-[.18rem] "
+                action={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+              </Button>
+              <Button
+                className=" rounded bg-mainGreen p-[.18rem] "
+                action={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+              </Button>
+            </div>
+          </div>
       </div>
     </>
   )
