@@ -79,6 +79,16 @@ export const ViewDistricts = () => {
         cell: (info) => info.getValue(),
       },
       {
+        header: () => <span>{t("cities")} </span>,
+        accessorKey: "city_name",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("countries")} </span>,
+        accessorKey: "country_name",
+        cell: (info) => info.getValue(),
+      },
+      {
         header: () => <span>{t("action")}</span>,
         accessorKey: "action",
         cell: (info) => {
@@ -99,7 +109,6 @@ export const ViewDistricts = () => {
                 }}
                 stroke="#ef4444"
               />
-              <ViewIcon action={() => console.log("view", info.row.original)} />
             </div>
           )
         },
@@ -130,6 +139,7 @@ export const ViewDistricts = () => {
       }
     },
   })
+
   const queryClient = useQueryClient()
   const {
     mutate,
@@ -190,12 +200,13 @@ export const ViewDistricts = () => {
           }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
               id="search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt
@@ -228,48 +239,58 @@ export const ViewDistricts = () => {
       )}
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && <Loading mainTitle={t("districts")} />}
-        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-        )}
+        {isSuccess &&
+          !!!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t("no items")}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&
           !isRefetching &&
           !!dataSource.length && (
-          <Table data={dataSource} columns={columns}>
-            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+            <Table data={dataSource} columns={columns}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  {t('page')}
-                  <span className=" text-mainGreen">
-                    {data.current_page}
-                  </span>
-                  {t('from')}
+                  {t("page")}
+                  <span className=" text-mainGreen">{data.current_page}</span>
+                  {t("from")}
                   <span className=" text-mainGreen">{data.pages}</span>
                 </div>
                 <div className="flex items-center gap-2 ">
                   <Button
-                    className=" rounded bg-mainGreen p-[.18rem] "
+                    className=" rounded bg-mainGreen p-[.18rem] !border-none"
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >
-                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                   <Button
                     className=" rounded bg-mainGreen p-[.18rem] "
                     action={() => setPage((prev) => prev + 1)}
                     disabled={page == data.pages}
                   >
-                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                 </div>
               </div>
-          </Table>
-        )}
+            </Table>
+          )}
         <Modal
           isOpen={open}
           onClose={() => {
@@ -284,9 +305,13 @@ export const ViewDistricts = () => {
             />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
-              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <Header header={`${t("delete")} : ${deleteData?.name}`} />
               <div className="flex gap-4 justify-center items-cent">
-                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                <Button
+                  action={handleSubmit}
+                  loading={mutateLoading}
+                  variant="danger"
+                >
                   {`${t("confirm")}`}
                 </Button>
                 <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>

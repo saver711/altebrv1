@@ -2,19 +2,19 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
-    useReactTable,
-  } from "@tanstack/react-table"
-  import { Field, Form, useFormikContext } from "formik"
-  import { t } from "i18next"
-  import { Dispatch, SetStateAction, useEffect } from "react"
-  import { AiOutlinePlus } from "react-icons/ai"
-  import { DeleteIcon, EditIcon } from "../../../atoms/icons"
-  import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
-  import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
-  import { BaseInputField, Select } from "../../../molecules"
-  import SelectCategory from "../categories/select/SelectCategory"
-  import SelectKarat from "../karats/select/SelectKarat"
+    useReactTable
+} from "@tanstack/react-table"
+import { Field, Form, useFormikContext } from "formik"
+import { t } from "i18next"
+import { Dispatch, SetStateAction, useEffect } from "react"
+import { AiOutlinePlus } from "react-icons/ai"
 import { useFetch } from "../../../../hooks"
+import { DeleteIcon, EditIcon } from "../../../atoms/icons"
+import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
+import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
+import { BaseInputField, Select } from "../../../molecules"
+import SelectCategory from "../categories/select/SelectCategory"
+import SelectKarat from "../karats/select/SelectKarat"
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
@@ -87,7 +87,7 @@ import { useFetch } from "../../../../hooks"
       }),
       columnHelper.accessor("stock", {
         header: `${t("stocks")}`,
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue().replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("wage", {
         header: `${t("wage")}`,
@@ -96,25 +96,30 @@ import { useFetch } from "../../../../hooks"
       columnHelper.accessor("total_wages", {
         header: `${t("total wages")}`,
         cell: (info) =>
-          (info.row.original.weight * info.row.original.wage).toFixed(3),
+          (info.row.original.weight * info.row.original.wage).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("wage_tax", {
         header: `${t("wage tax")}`,
         cell: (info) =>
-          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3),
+          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3).replace(/\.?0+$/, ''),
       }),
       columnHelper.accessor("gold_tax", {
         header: `${t("gold tax")}`,
-        cell: (info) =>
-          (
-            info.row.original.weight *
-            Number(formValues?.api_gold_price) *
-            info.row.original.stock * 
-            0.15
-          ).toFixed(3),
+        cell: (info) => {
+          if (info.row.original.karat_value == '24') {
+            return 0
+          } else {
+            return (
+              info.row.original.weight *
+              Number(formValues?.api_gold_price) *
+              info.row.original.stock * 
+              0.15
+            ).toFixed(3).replace(/\.?0+$/, '')
+          }
+        },
       }),
       columnHelper.accessor("actions", {
-        header: `${t("action")}`,
+        header: `${t("actions")}`,
       }),
     ]
   
@@ -155,7 +160,7 @@ import { useFetch } from "../../../../hooks"
 
         setFieldValue(
           "stock",
-          karatValues.find((item) => item.karat === values.karat_value)?.value
+          karatValues.find((item) => item.karat === values.karat_value)?.value.replace(/\.?0+$/, '')
         )
       }
     }, [values.karat_id])
@@ -340,7 +345,7 @@ import { useFetch } from "../../../../hooks"
                       id="stock"
                       name="stock"
                       type="number"
-                      value={values.stock || editData.stock}
+                      value={values.stock.replace(/\.?0+$/, '') || editData.stock.replace(/\.?0+$/, '')}
                       onChange={(e: any) => {
                         setFieldValue("stock", e.target.value)
                       }}
@@ -420,7 +425,7 @@ import { useFetch } from "../../../../hooks"
                       name="total_wages"
                       value={(
                         Number(values.weight) * Number(values.wage)
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
@@ -432,11 +437,11 @@ import { useFetch } from "../../../../hooks"
                         Number(values.weight) *
                         Number(values.wage) *
                         0.15
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       onChange={() =>
                         setFieldValue(
                           "wage_tax",
-                          Number(values.weight) * Number(values.wage) * 0.15
+                          (Number(values.weight) * Number(values.wage) * 0.15).toFixed(3).replace(/\.?0+$/, '')
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
@@ -446,17 +451,21 @@ import { useFetch } from "../../../../hooks"
                     <Field
                       id="gold_tax"
                       name="gold_tax"
-                      value={(
+                      value={values.karat_value == '24' ? 0 : (
                         Number(values.weight) *
-                          Number(formValues?.api_gold_price) *
+                        Number(formValues?.api_gold_price) *
+                        Number(values.stock) * 
                           0.15 || 0
-                      ).toFixed(3)}
+                      ).toFixed(3).replace(/\.?0+$/, '')}
                       onChange={() =>
                         setFieldValue(
                           "gold_tax",
-                          Number(values.weight) *
+                          values.karat_value == '24' ? 0 : (
+                            Number(values.weight) *
                             Number(formValues?.api_gold_price) *
+                            Number(values.stock) * 
                             0.15
+                          ).toFixed(3).replace(/\.?0+$/, '')
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"

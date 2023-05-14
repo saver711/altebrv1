@@ -5,7 +5,11 @@ import { Helmet } from "react-helmet-async"
 import { useNavigate, useParams } from "react-router-dom"
 import blankPerson from "../../assets/blank-person-image.png"
 import { Button } from "../../components/atoms"
-import { InnerFormLayout, Modal, OuterFormLayout } from "../../components/molecules"
+import {
+  InnerFormLayout,
+  Modal,
+  OuterFormLayout,
+} from "../../components/molecules"
 import { TextLine } from "../../components/templates/employee/TextLine"
 import { useFetch } from "../../hooks"
 import { Employee_TP } from "../employees/employees-types"
@@ -15,6 +19,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { Query_TP } from "../coding/gold/AddStone"
 import { SelectOption_TP } from "../../types"
 import { formatDate } from "../../utils/date"
+import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 ///
 /////////// Types
 ///
@@ -29,13 +34,13 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
   /////////// VARIABLES
   ///
   const { partnerID } = useParams()
-  const [documentOpen, setDocumentOpen] = useState(false);
+  const [documentOpen, setDocumentOpen] = useState(false)
 
   const navigate = useNavigate()
   ///
   /////////// CUSTOM HOOKS
   ///
-  
+
   const {
     data: partner,
     isSuccess,
@@ -44,8 +49,6 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
     endpoint: `partner/api/v1/partners/${partnerID}`,
     queryKey: ["partners", partnerID!],
   })
-    console.log("🚀 ~ file: OnePartner.tsx:43 ~ OnePartner ~ partner:", partner)
-  
 
   /////////// STATES
   ///
@@ -54,55 +57,52 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
 
   // const queryClient = useQueryClient()
 
-//   const {
-//     data: countriesOptions,
-//     isLoading: countriesLoading,
-//     refetch: refetchCountries,
-//     failureReason: countriesErrorReason
-// } = useFetch<SelectOption_TP[]>({
-//     endpoint: "governorate/api/v1/countries",
-//     queryKey: ["countries"],
-//     select: (countries) => countries.map((country: any) => ({
-//         id: country.id,
-//         value: country.name,
-//         label: country.name ,
-//     })),
-// })
-  
-  
-//     const {
-//       data: citiesOptions,
-//       isLoading: citiesLoading,
-//       refetch: refetchCities,
-//       failureReason: citiesErrorReason,
-//     } = useFetch<SelectOption_TP[]>({
-//       endpoint: "governorate/api/v1/cities",
-//       queryKey: ["cities"],
-//       select: (cities) =>
-//         cities.map((city: any) => ({
-//           id: city.id,
-//           value: city.name,
-//           label: city.name,
-//         })),
-//     })
-//       console.log("🚀 ~ file: OnePartner.tsx:87 ~ OnePartner ~ citiesOptions:", citiesOptions)
-//     console.log("🚀 ~ file: OnePartner.tsx:70 ~ OnePartner ~ countriesOptions:", countriesOptions)
+  //   const {
+  //     data: countriesOptions,
+  //     isLoading: countriesLoading,
+  //     refetch: refetchCountries,
+  //     failureReason: countriesErrorReason
+  // } = useFetch<SelectOption_TP[]>({
+  //     endpoint: "governorate/api/v1/countries",
+  //     queryKey: ["countries"],
+  //     select: (countries) => countries.map((country: any) => ({
+  //         id: country.id,
+  //         value: country.name,
+  //         label: country.name ,
+  //     })),
+  // })
 
+  //     const {
+  //       data: citiesOptions,
+  //       isLoading: citiesLoading,
+  //       refetch: refetchCities,
+  //       failureReason: citiesErrorReason,
+  //     } = useFetch<SelectOption_TP[]>({
+  //       endpoint: "governorate/api/v1/cities",
+  //       queryKey: ["cities"],
+  //       select: (cities) =>
+  //         cities.map((city: any) => ({
+  //           id: city.id,
+  //           value: city.name,
+  //           label: city.name,
+  //         })),
+  //     })
+  //       console.log("🚀 ~ file: OnePartner.tsx:87 ~ OnePartner ~ citiesOptions:", citiesOptions)
+  //     console.log("🚀 ~ file: OnePartner.tsx:70 ~ OnePartner ~ countriesOptions:", countriesOptions)
 
-//   useEffect(() => {
-//     const allData = {
+  //   useEffect(() => {
+  //     const allData = {
 
-//        country : countriesOptions?.find(
-//         (country) => country.id == partner?.country?.id
-//       )?.value,
-//        city : citiesOptions?.find(
-//         (city) => city.id == partner?.city.id
-//       )?.value
-//     }
+  //        country : countriesOptions?.find(
+  //         (country) => country.id == partner?.country?.id
+  //       )?.value,
+  //        city : citiesOptions?.find(
+  //         (city) => city.id == partner?.city.id
+  //       )?.value
+  //     }
 
-
-//     setAllData(allData)
-//   }, [countriesOptions, citiesOptions])
+  //     setAllData(allData)
+  //   }, [countriesOptions, citiesOptions])
   ///
   /////////// SIDE EFFECTS
   ///
@@ -127,21 +127,27 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
         }
       >
         {partnerLoading && <Loading mainTitle={t("view doc Details")} />}
-        <InnerFormLayout title={partner?.name} leftComponent={ <Button action={() => setDocumentOpen(true)}>
-                  {t("view all documents")}
-                </Button>}>
+        <InnerFormLayout
+          title={partner?.name}
+          leftComponent={
+            partner?.document?.length !== 0 && (
+              <Button className="mb-3" action={() => setDocumentOpen(true)}>
+                {t("view all documents")}
+              </Button>
+            )
+          }
+        >
           {isSuccess && (
             <>
               <div className="flex gap-4 flex-col col-span-4 m-auto">
                 <img
                   src={partner.national_image || blankPerson}
                   alt={`partner ${partner.name}`}
-                  className="w-[7rem] h-[7rem] rounded-full"
+                  className="w-[7rem] h-[7rem] rounded-full object-cover"
                 />
-         
               </div>
               <div className="flex gap-4 flex-col">
-              {partner.name && (
+                {partner.name && (
                   <TextLine boldText={t("Name")} lightString={partner.name} />
                 )}
                 {partner.nationality_name && (
@@ -207,12 +213,14 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                   />
                 )}
                 {partner?.email && (
-                  <TextLine boldText={t("email")} lightString={partner?.email} />
+                  <TextLine
+                    boldText={t("email")}
+                    lightString={partner?.email}
+                  />
                 )}
               </div>
               <div className="flex justify-between gap-4 col-span-4 align-middle ">
                 <h3 className=" font-bold">{t("main documents")}</h3>
-          
               </div>
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                 {partner?.document?.map((doc, i) => (
@@ -268,6 +276,12 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                             />
                           )}
                         </div>
+                        {doc.files?.length !== 0 && (
+                          <div className="flex items-center">
+                            <p className="mb-3">{t("media")} : </p>
+                            <FilesPreviewOutFormik images={doc?.files} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </>
@@ -276,7 +290,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
               {partner.document.length !== 0
                 ? partner?.document?.slice(0, 2).map((doc, i) => (
                     <>
-                      <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
+                      <div className="flex gap-4 flex-col col-span-4 border-t-2 mt-3 p-3 border-b-2 border-dashed  justify-center align-middle">
                         <div className=" flex items-center justify-center mb-8">
                           <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
                             <p className=" text-lg font-bold text-mainGreen">
@@ -328,6 +342,12 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                               />
                             )}
                           </div>
+                          {doc.files?.length !== 0 && (
+                            <div className="flex items-center">
+                              <p className="mb-3">{t("media")} : </p>
+                              <FilesPreviewOutFormik images={doc?.files} />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>

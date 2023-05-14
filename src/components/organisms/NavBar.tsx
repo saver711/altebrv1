@@ -9,7 +9,7 @@ const NavBar = () => {
     <div className="w-100 flex h-14 items-center justify-between p-2">
       <div className="w-100 flex items-center gap-12 py-6 px-4">
         <img src={logo} className="ms-3 h-12 w-12 object-contain" alt="logo" />
-        <Can access={["api.v1.categories.store"]}>
+        {/* <Can access={["api.v1.categories.store"]}>
           <form className="flex items-center rounded-md border-2 border-slate-200 p-1 ">
             <input
               type="search"
@@ -18,7 +18,7 @@ const NavBar = () => {
             />
             <BiSearchAlt className="fill-slate-400" />
           </form>
-        </Can>
+        </Can> */}
       </div>
       <div className="me-2 flex  items-center gap-4">
         <IoSettingsOutline

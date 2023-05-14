@@ -4,30 +4,27 @@
 ///
 /////////// Types
 
+import { useQueryClient } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { Form, Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
-import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
-import { ColumnTP } from "../../../molecules/table/types"
-import { Loading } from "../../../organisms/Loading"
-import { Header } from "../../../atoms/Header"
-import { BaseInput, Button, Label } from "../../../atoms"
-import { EditIcon, ViewIcon } from "../../../atoms/icons"
-import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { mutateData } from "../../../../utils/mutateData"
-import { notify } from "../../../../utils/toast"
-import { Table } from "../../reusableComponants/tantable/Table"
-import { BaseInputField, Modal } from "../../../molecules"
-import { ColumnDef } from "@tanstack/react-table"
-import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
-import { CreateClassification } from "../../reusableComponants/classifications/create/CreateClassification"
-import { Back } from "../../../../utils/utils-components/Back"
-import { useQueryClient } from "@tanstack/react-query"
-import { Form, Formik } from "formik"
 import { BiSearchAlt } from "react-icons/bi"
-import { AddButton } from "../../../molecules/AddButton"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import * as Yup from 'yup'
+import { useFetch, useIsRTL, useMutate } from "../../../../hooks"
+import { mutateData } from "../../../../utils/mutateData"
+import { notify } from "../../../../utils/toast"
+import { Back } from "../../../../utils/utils-components/Back"
+import { Button } from "../../../atoms"
+import { Header } from "../../../atoms/Header"
+import { EditIcon, ViewIcon } from "../../../atoms/icons"
+import { SvgDelete } from "../../../atoms/icons/SvgDelete"
+import { BaseInputField, Modal } from "../../../molecules"
+import { AddButton } from "../../../molecules/AddButton"
+import { Loading } from "../../../organisms/Loading"
+import { CreateClassification } from "../../reusableComponants/classifications/create/CreateClassification"
+import { Table } from "../../reusableComponants/tantable/Table"
 ///
 export type ViewClassifications_TP = {
   id: string
@@ -75,7 +72,7 @@ export const ViewClassifications = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
@@ -95,7 +92,6 @@ export const ViewClassifications = () => {
                 }}
                 stroke="#ef4444"
               />
-              <ViewIcon action={() => console.log("view", info.row.original)} />
             </div>
           )
         },
@@ -132,6 +128,7 @@ export const ViewClassifications = () => {
       }
     },
   })
+
   const queryClient = useQueryClient()
   const {
     mutate,
@@ -191,12 +188,13 @@ export const ViewClassifications = () => {
           }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
               id="search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt
@@ -228,29 +226,37 @@ export const ViewClassifications = () => {
         </div>
       )}
       <div className="flex flex-col gap-6 items-center">
-        {(isLoading || isRefetching) && <Loading mainTitle={t("classifications")} />}
-        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
+        {(isLoading || isRefetching) && (
+          <Loading mainTitle={t("classifications")} />
         )}
+        {isSuccess &&
+          !!!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t("no items")}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&
           !isRefetching &&
           !!dataSource.length && (
-          <Table data={dataSource} columns={columns}>
-            <div className="mt-3 flex items-center justify-end gap-5 p-2">
+            <Table data={dataSource} columns={columns}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  {t('page')}
+                  {t("page")}
                   <span className=" text-mainGreen">
                     {classifications.current_page}
                   </span>
-                  {t('from')}
-                  <span className=" text-mainGreen">{classifications.pages}</span>
+                  {t("from")}
+                  <span className=" text-mainGreen">
+                    {classifications.pages}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 ">
                   <Button
@@ -258,19 +264,27 @@ export const ViewClassifications = () => {
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >
-                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                   <Button
                     className=" rounded bg-mainGreen p-[.18rem] "
                     action={() => setPage((prev) => prev + 1)}
                     disabled={page == classifications.pages}
                   >
-                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                 </div>
               </div>
-          </Table>
-        )}
+            </Table>
+          )}
         <Modal
           isOpen={open}
           onClose={() => {
@@ -285,9 +299,13 @@ export const ViewClassifications = () => {
             />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
-              <Header header={`${t('delete')} : ${deleteData?.name}`} />
+              <Header header={`${t("delete")} : ${deleteData?.name}`} />
               <div className="flex gap-4 justify-center items-cent">
-                <Button action={handleSubmit} loading={mutateLoading} variant="danger">
+                <Button
+                  action={handleSubmit}
+                  loading={mutateLoading}
+                  variant="danger"
+                >
                   {`${t("confirm")}`}
                 </Button>
                 <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>

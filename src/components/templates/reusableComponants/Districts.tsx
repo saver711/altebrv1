@@ -175,19 +175,19 @@ export const Districts = ({
   ///
   const [newValue, setNewValue] =
     useState<SingleValue<SelectOption_TP> | null>()
-  const { setFieldValue , values } = useFormikContext()
+  const { setFieldValue, values } = useFormikContext()
 
   ///
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-     console.log("0", editData?.nationalAddress?.district.name)
-     setNewValue({
-       id: editData?.nationalAddress?.district.id || "",
-       value: editData?.nationalAddress?.district.name || "",
-       label: editData?.nationalAddress?.district.name || "",
-     })
-   }, [])
+    console.log("0", editData?.nationalAddress?.district.name)
+    setNewValue({
+      id: editData?.nationalAddress?.district.id || "",
+      value: editData?.nationalAddress?.district.name || "",
+      label: editData?.nationalAddress?.district.name || "",
+    })
+  }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -222,7 +222,6 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
-  // console.log("distractNameeditData", editData)
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select
@@ -233,19 +232,17 @@ export const Districts = ({
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
         placeholder={
-          city?.id
-            ? `${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}`
-            : ""
+          city?.id && `${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}`
         }
         options={districts}
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (distractName){
+          if (distractName) {
             setFieldValue(distractName, option?.id)
-            setFieldValue('district_value', option!.value)
+            setFieldValue("district_value", option!.value)
           }
-            
+
           // if (marketName && editData) setFieldValue(marketName, editData?.market_id)
           setDistrictId(option)
           setNewValue(option)

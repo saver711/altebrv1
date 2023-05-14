@@ -10,12 +10,10 @@ import { useGetQueryData } from "../../../hooks/useGetQueryData"
 import { Category_TP, SelectOption_TP, SetState_TP } from "../../../types"
 import { notify } from "../../../utils/toast"
 import {
-  GoldCodingSanad_initialValues_TP,
-  GoldCodingStoneValues_TP,
-  GoldSanad_TP,
-  SizePopup_TP,
   codingSanad_initialValues,
-  codingSanad_schema
+  codingSanad_schema, GoldCodingSanad_initialValues_TP,
+  GoldCodingStoneValues_TP, GoldSanadBand_TP, GoldSanad_TP,
+  SizePopup_TP
 } from "../coding-types-and-helpers"
 import { GoldCodingSanadFormHandler } from "./GoldCodingSanadFormHandler"
 ///
@@ -78,6 +76,8 @@ export const CodingSanad = ({
     number | undefined
   >()
 
+  const [activeBand, setActiveBand] = useState<GoldSanadBand_TP | undefined>()
+
   ///
   /////////// SIDE EFFECTS
   ///
@@ -105,18 +105,17 @@ export const CodingSanad = ({
   }
   const updateSanadWithNewWeight = (formBandId: string, formWeight: number) => {
     if (selectedSanad) {
-      const newSanadItems = selectedSanad.items
-        .map((band) => {
-          if (band.id === formBandId) {
-            return {
-              ...band,
-              leftWeight: band.leftWeight - formWeight,
-            }
-          } else {
-            return band
+      const newSanadItems = selectedSanad.items.map((band) => {
+        if (band.id === formBandId) {
+          return {
+            ...band,
+            leftWeight: band.leftWeight - formWeight,
           }
-        })
-        // .filter((band) => band.leftWeight >= 1)
+        } else {
+          return band
+        }
+      })
+      // .filter((band) => band.leftWeight >= 1)
 
       setSelectedSanad((curr) => ({
         ...(curr || selectedSanad),
@@ -127,9 +126,14 @@ export const CodingSanad = ({
 
   function finalSubmit(values: GoldCodingSanad_initialValues_TP) {
     if (!isAbleToCodeMore()) return
+
     updateSanadWithNewWeight(values.band_id!, values.weight)
     // setAddedPieces((curr) => [...curr, { ...values, stones }])
-    setAddedPieces((curr) => [...curr, {...values, front_key: crypto.randomUUID()}])
+    setAddedPieces((curr) => [
+      ...curr,
+      { ...values, front_key: crypto.randomUUID() },
+    ])
+    setActiveBand(curr => ({...curr, leftWeight: curr?.leftWeight - values.weight}))
   }
   ///
   return (
@@ -141,7 +145,7 @@ export const CodingSanad = ({
             validationSchema={codingSanad_schema}
             initialValues={codingSanad_initialValues}
             onSubmit={(values) => {
-              notify('success' , `${t('piece has been added')}`)
+              notify("success", `${t("piece has been added")}`)
               // VARS
               const selectedCateg = categories?.find(
                 (categ) => categ.id === values.category_id
@@ -156,13 +160,13 @@ export const CodingSanad = ({
                 size_unit_id,
                 sizeIsRequired,
                 left_weight,
-                stones : Omitted,
+                stones: Omitted,
                 weightitems,
                 ...baseValues
               } = values
 
-              if(values.has_stones && !!stones?.length){
-                baseValues = {...baseValues, stones}
+              if (values.has_stones && !!stones?.length) {
+                baseValues = { ...baseValues, stones }
               }
 
               // ---> فير محدد او صنف عادي - صنف له مقاس - تم اضافة المقاس
@@ -309,6 +313,8 @@ export const CodingSanad = ({
                   setAddedPieces={setAddedPieces}
                   stage={stage}
                   setStage={setStage}
+                  activeBand={activeBand}
+                  setActiveBand={setActiveBand}
                 />
               </>
             )}
