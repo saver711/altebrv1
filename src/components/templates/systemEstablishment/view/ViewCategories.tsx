@@ -18,11 +18,12 @@ import { notify } from "../../../../utils/toast"
 import { Back } from "../../../../utils/utils-components/Back"
 import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
-import { EditIcon } from "../../../atoms/icons"
+import { EditIcon, ViewIcon } from "../../../atoms/icons"
 import { SvgDelete } from "../../../atoms/icons/SvgDelete"
 import { BaseInputField, Modal } from "../../../molecules"
 import { AddButton } from "../../../molecules/AddButton"
 import { Loading } from "../../../organisms/Loading"
+import { TextLine } from "../../employee/TextLine"
 import CreateCategory from "../../reusableComponants/categories/create/CreateCategory"
 import { EmptyDataView } from "../../reusableComponants/EmptyDataView"
 import { Table } from "../../reusableComponants/tantable/Table"
@@ -31,6 +32,17 @@ import { Table } from "../../reusableComponants/tantable/Table"
 type ViewCategories_TP = {
   id: string
   name: string
+}
+type ViewSingleCategories_TP = {
+  id: string
+  name: string
+  name_en: string
+  selling_type: string
+  type: string
+  has_size: string
+  has_selsal: string
+  items: { name: string }[]
+  sizes: { type: string }[]
 }
 
 type Search_TP = {
@@ -50,8 +62,16 @@ export const ViewCategories = () => {
   /////////// CUSTOM HOOKS
   ///
   const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState("")
   const [model, setModel] = useState(false)
+  const [action, setAction] = useState({
+    edit: false,
+    delete: false,
+    view: false,
+  })
+
+  const [viewSingleCategory, setViewSingleCategory] =
+    useState<ViewSingleCategories_TP>()
+  const [search, setSearch] = useState("")
   const [editData, setEditData] = useState<ViewCategories_TP>()
   const [deleteData, setDeleteData] = useState<ViewCategories_TP>()
   const [dataSource, setDataSource] = useState<ViewCategories_TP[]>([])
@@ -88,16 +108,38 @@ export const ViewCategories = () => {
                 action={() => {
                   setOpen((prev) => !prev)
                   setEditData(info.row.original)
-                  setModel(true)
+                  setAction({
+                    edit: true,
+                    delete: false,
+                    view: false,
+                  })
+                  setModel(false)
                 }}
               />
               <SvgDelete
                 action={() => {
                   setOpen((prev) => !prev)
                   setDeleteData(info.row.original)
+                  setAction({
+                    delete: true,
+                    view: false,
+                    edit: false,
+                  })
                   setModel(false)
                 }}
                 stroke="#ef4444"
+              />
+              <ViewIcon
+                action={() => {
+                  setViewSingleCategory(info.row.original)
+                  setOpen((prev) => !prev)
+                  setAction({
+                    view: true,
+                    delete: false,
+                    edit: false,
+                  })
+                  setModel(false)
+                }}
               />
             </div>
           )
@@ -181,6 +223,8 @@ export const ViewCategories = () => {
   //   )
 
   ///
+  console.log(categories)
+  console.log(viewSingleCategory)
   return (
     <div className="p-4">
       <div className="flex justify-between mb-8">
@@ -284,13 +328,21 @@ export const ViewCategories = () => {
           setOpen(false)
         }}
       >
-        {model ? (
+        {action.edit && (
           <CreateCategory
             editData={editData}
             setDataSource={setDataSource}
             setShow={setOpen}
           />
-        ) : (
+        )}
+        {model && (
+          <CreateCategory
+            editData={editData}
+            setDataSource={setDataSource}
+            setShow={setOpen}
+          />
+        )}
+        {action.delete && (
           <div className="flex flex-col gap-8 justify-center items-center">
             <Header header={` حذف : ${deleteData?.name}`} />
             <div className="flex gap-4 justify-center items-cent">
@@ -304,6 +356,61 @@ export const ViewCategories = () => {
               <Button>{`${t("close")}`}</Button>
             </div>
           </div>
+        )}
+        {action.view && (
+          <>
+            <div className=" flex flex-col gap-6 items-center ">
+              <Header
+                header={` View details for  : ${viewSingleCategory?.name}`}
+                className=" text-mainGreen"
+              />
+              <div className="grid grid-cols-3 gap-12 ">
+                <TextLine
+                  boldText={t("name")}
+                  lightString={viewSingleCategory?.name}
+                />
+                <TextLine
+                  boldText={t("English name")}
+                  lightString={viewSingleCategory?.name_en}
+                />
+                <TextLine
+                  boldText={t("Selling policy")}
+                  lightString={viewSingleCategory?.selling_type}
+                />
+
+                {viewSingleCategory?.type === "multi" &&
+                  viewSingleCategory?.items?.map((item) => (
+                    <TextLine
+                      boldText={t("category type")}
+                      lightString={viewSingleCategory?.name}
+                    />
+                  ))}
+                {viewSingleCategory?.type === "single" && (
+                  <TextLine
+                    boldText={t("category type")}
+                    lightString={viewSingleCategory?.type}
+                  />
+                )}
+                <TextLine
+                  boldText={t("category policy")}
+                  lightString={
+                    viewSingleCategory?.has_selsal ? (
+                      <>{`${t("accepts the addition of a chain")}`}</>
+                    ) : (
+                      <>{`${t("does not accepts the addition of a chain")}`}</>
+                    )
+                  }
+                />
+                {viewSingleCategory?.has_size &&
+                  viewSingleCategory?.sizes?.map((size) => (
+                    <TextLine
+                      boldText={t("size type")}
+                      lightString={size.type}
+                    />
+                  ))}
+              </div>
+            </div>
+          </>
         )}
       </Modal>
     </div>

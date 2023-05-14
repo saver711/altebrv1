@@ -43,9 +43,11 @@ import { ViewStoneNature } from "../components/templates/reusableComponants/ston
 import { OneSupplier } from "../pages/suppliers/OneSupplier"
 import { ViewStoneColor } from "../components/templates/reusableComponants/stones/view/ViewStoneColor"
 import { ViewSizes } from "../components/templates/systemEstablishment/view/ViewSizes"
+import { ViewBranches } from "../components/templates/reusableComponants/branches/ViewBranches"
+import { OneBranches } from "../components/templates/reusableComponants/branches/OneBranches"
 export const AllRoutesProvider = () => {
   const { permissions, userData } = useContext(authCtx)
-  
+
   return (
     <PermissionCtxProvider userPermissions={permissions || [""]}>
       <Routes>
@@ -90,6 +92,14 @@ export const AllRoutesProvider = () => {
             path="/system/operations"
             element={<Operation title="كل العمليات" />}
           />
+          <Route
+            path="/system/branches"
+            element={<ViewBranches title="كل الفروع" />}
+          />
+          <Route
+            path="/system/branches/:branchesID"
+            element={<OneBranches title="الفرع" />}
+          />
           {/* ------- عام واحجار -------- */}
           <Route
             path="/system/global-and-stones"
@@ -133,7 +143,7 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/system/global-and-stones/sizes"
-            element={<ViewSizes title="عرض المقاسات"/>}
+            element={<ViewSizes title="عرض المقاسات" />}
           />
           <Route
             path="/system/global-and-stones/markets"
@@ -177,7 +187,10 @@ export const AllRoutesProvider = () => {
             path="system/employees"
             element={<Employees title={t("employees")} />}
           />
-          <Route path="system/employees/:employeeID" element={<OneEmployee />} />
+          <Route
+            path="system/employees/:employeeID"
+            element={<OneEmployee />}
+          />
           <Route
             path="/bonds/gold"
             element={<GoldSupply title={t("gold supply")} />}

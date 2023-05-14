@@ -8,148 +8,135 @@ import { NationalAddress } from "../.."
 import { useMutate } from "../../../../hooks"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
+import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../atoms"
+import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
 import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
 ///
 /////////// Types
 ///
 type CreateBranchProps_TP = {
-    value: string
-    onAdd: (value: string) => void
+  value?: string
+  onAdd?: (value: string) => void
+  editData?: { [key: string]: any }
 }
 
 type InitialValues_TP = {
-    [x: string]: string
+  [x: string]: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 export const CreateBranch = ({
-    value,
-    onAdd
+  value,
+  onAdd,
+  editData,
 }: CreateBranchProps_TP) => {
-    /////////// VARIABLES
-    ///
-    const initialValues: InitialValues_TP = {
-        name_ar: "",
-        name_en: "",
-        market_id: "",
-        city_id: "",
-        district_id: "",
-        market_number: "",
-        phone: "",
-        fax: "",
-        building_number: "",
-        street_number: "",
-        sub_number: "",
-        address: "",
-        number: "",
-        zip_code: "",
-    }
-    const validationSchema = Yup.object({
-        name_ar: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        name_en: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        market_id: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        city_id: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        district_id: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        market_number: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        phone: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        fax: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        building_number: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        street_number: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        sub_number: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        address: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        number: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-        zip_code: Yup.string().trim().required('برجاء ملئ هذا الحقل'),
-    })
+  /////////// VARIABLES
+  ///
+  console.log("v", editData)
+  const initialValues: InitialValues_TP = {
+    name: editData ? editData.name_ar : "",
+    market_id: editData ? editData.market_name : "",
+    city_id: editData ? editData.city_name : "",
+    district_id: editData ? editData.nationalAddress.name : "",
+    market_number: editData ? editData.market_number : "",
+    phone: editData ? editData.phone : "",
+    fax: editData ? editData.fax : "",
+    number: editData ? editData.number : "",
+    building_number: editData ? editData.nationalAddress.building_number : "",
+    street_number: editData ? editData.nationalAddress.street_number : "",
+    sub_number: editData ? editData.nationalAddress.sub_number : "",
+    address: editData ? editData.nationalAddress.address : "",
+    zip_code: editData ? editData.nationalAddress.zip_code : "",
+  }
+  const validationSchema = Yup.object({
+    name: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    district_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    market_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    phone: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    fax: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    building_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    street_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    sub_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    address: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    zip_code: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+  })
 
+  /////////// STATES
+  ///
+  ///
+  /////////// CUSTOM HOOKS
+  ///
+  const queryClient = useQueryClient()
+  const { mutate, error, isLoading } = useMutate({
+    mutationFn: mutateData,
+    onSuccess: (data) => {
+      notify("success")
+      queryClient.setQueryData(["branches"], (old: any) => {
+        return [...old, data]
+      })
+      onAdd(value)
+    },
+    onError: (error) => {
+      notify("error")
+      console.log(error)
+    },
+  })
+  /////////// SIDE EFFECTS
+  ///
 
-    /////////// STATES
-    ///
-    ///
-    /////////// CUSTOM HOOKS
-    ///
-    const queryClient = useQueryClient();
-    const {
-        mutate,
-        error: errorQuery,
-        isLoading
-    } = useMutate({
-        mutationFn: mutateData,
-        onSuccess: (data) => {
-            notify("success")
-            queryClient.setQueryData(['branches'], (old: any) => {
-                return [...old, data]
-            })
-            onAdd(value)
+  /////////// FUNCTIONS | EVENTS | IF CASES
+  ///
+
+  function PostNewValue(values: InitialValues_TP) {
+    mutate({
+      endpointName: "branch/api/v1/branches",
+      values: {
+        ...values,
+        nationalAddress: {
+          sub_number: values.sub_number,
+          city_id: values.city_id,
+          district_id: values.district_id,
+          zip_code: values.zip_code,
+          address: values.address,
+          building_number: values.building_number,
+          street_number: values.street_number,
         },
-        onError: (error) => {
-            notify("error")
-            console.log(error)
-        }
+      },
     })
-    /////////// SIDE EFFECTS
-    ///
-
-    /////////// FUNCTIONS | EVENTS | IF CASES
-    ///
-
-    function PostNewValue(values: InitialValues_TP) {
-
-        mutate({
-          endpointName: "branch/api/v1/branches",
-          values: {
-            ...values,
-            nationalAddress: {
-              sub_number: values.sub_number,
-              city_id: values.city_id,
-              district_id: values.district_id,
-              zip_code: values.zip_code,
-              address: values.address,
-              building_number: values.building_number,
-              street_number: values.street_number,
-            },
-          },
-        })
-    }
-    ///
-    return (
-      <div className="flex items-center justify-between gap-2">
-        <Formik
-          initialValues={initialValues}
-          onSubmit={(values) => {
-            PostNewValue(values)
-          }}
-          validationSchema={validationSchema}
-        >
-          <Form className="w-full">
-            <div className="flex flex-col gap-y-8">
-              <div className="grid-cols-4 items-center grid gap-x-4">
-                {/* branch ar  start */}
-                <div className="col-sapn-1">
+  }
+  ///
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) => {
+          PostNewValue(values)
+        }}
+        validationSchema={validationSchema}
+      >
+        <HandleBackErrors errors={error?.response?.data?.errors}>
+          <OuterFormLayout header={t("Add Branch")}>
+            <Form className="w-full">
+              <InnerFormLayout title={t("main data")}>
+                {/* branch name  start */}
+                <div className="col-span-1">
                   <BaseInputField
-                    id="name_ar"
+                    id="name"
                     label={`${t("branch in arabic")}`}
                     name="name_ar"
                     type="text"
                     placeholder={`${t("branch in arabic")}`}
+                    defaultValue={editData && editData.name}
                   />
                 </div>
-                {/* branch ar  end */}
-
-                {/* branch en  start */}
-                <div className="col-sapn-1">
-                  <BaseInputField
-                    id="name_en"
-                    label={`${t("branch in english")}`}
-                    name="name_en"
-                    type="text"
-                    placeholder={`${t("branch in english")}`}
-                  />
-                </div>
-                {/* branch en  end */}
+                {/* branch name  end */}
 
                 {/* branch number  start */}
                 <div className="col-sapn-1">
@@ -159,10 +146,10 @@ export const CreateBranch = ({
                     name="number"
                     type="text"
                     placeholder={`${t("branch number")}`}
+                    defaultValue={editData && editData.number}
                   />
                 </div>
                 {/* branch number  end */}
-
                 {/* market  start */}
                 <Country_city_distract_markets
                   cityFieldKey="value"
@@ -177,6 +164,7 @@ export const CreateBranch = ({
                   marketFieldKey="id"
                   marketLabel={`${t("market")}`}
                   marketName="market_id"
+                  editData={editData}
                 />
                 {/* market  end */}
 
@@ -188,6 +176,7 @@ export const CreateBranch = ({
                     name="market_number"
                     type="number"
                     placeholder={`${t("market number")}`}
+                    defaultValue={editData && editData.market_number}
                   />
                 </div>
                 {/* market number  end */}
@@ -200,6 +189,7 @@ export const CreateBranch = ({
                     name="address"
                     type="text"
                     placeholder={`${t("address")}`}
+                    defaultValue={editData && editData.nationalAddress.address}
                   />
                 </div>
                 {/* address  end */}
@@ -212,32 +202,32 @@ export const CreateBranch = ({
                     name="phone"
                     type="text"
                     placeholder={`${t("phone")}`}
+                    defaultValue={editData && editData.phone}
                   />
                 </div>
                 {/* phone end */}
 
                 {/* fax start */}
-                <div className="col-sapn-1">
+                <div className="col-span-1">
                   <BaseInputField
                     id="fax"
                     label={`${t("fax")}`}
                     name="fax"
                     type="text"
                     placeholder={`${t("fax")}`}
+                    defaultValue={editData && editData.fax}
                   />
                 </div>
                 {/* fax end */}
-              </div>
-
-              <div>
-                <NationalAddress />
-              </div>
-            </div>
-            <Button loading={isLoading} type="submit" className="mr-auto">
-              {t("submit")}
-            </Button>
-          </Form>
-        </Formik>
-      </div>
-    )
+              </InnerFormLayout>
+              <NationalAddress editData={editData} />
+              <Button loading={isLoading} type="submit" className="mr-auto">
+                {t("submit")}
+              </Button>
+            </Form>
+          </OuterFormLayout>
+        </HandleBackErrors>
+      </Formik>
+    </div>
+  )
 }

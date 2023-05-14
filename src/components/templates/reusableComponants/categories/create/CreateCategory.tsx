@@ -16,7 +16,7 @@ import {
   BaseInputField,
   CheckBoxField,
   OuterFormLayout,
-  Select
+  Select,
 } from "../../../../molecules"
 import RadioGroup from "../../../../molecules/RadioGroup"
 
@@ -87,7 +87,7 @@ const CreateCategory = ({
         id: item.id,
         label: item.name,
         name: item.name,
-        value: item.id
+        value: item.id,
       }
     })
   }
@@ -176,12 +176,12 @@ const CreateCategory = ({
       }
       if (setDataSource && setShow && !editData && !error) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllCategory'])
+        queryClient.refetchQueries(["AllCategory"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        queryClient.refetchQueries(['AllCategory'])
+        queryClient.refetchQueries(["AllCategory"])
         // setDataSource((prev: any) =>
         //   prev.map((p: any) => (p.id === data?.id ? data : p))
         // )
@@ -332,22 +332,22 @@ const CreateCategory = ({
                     type="text"
                     placeholder={`${t("category name in english")}`}
                   />
-                <div className="col-span-2" >
-                  {props.values.type == "multi" && (
-                    <Select
-                      label={`${t("choose categories")}`}
-                      name="items"
-                      id="items"
-                      isMulti={true}
-                      required={false}
-                      defaultValue={handleEditedItems(props.values.items)}
-                      placeholder={`${t("choose categories")}`}
-                      loadingPlaceholder="Loading..."
-                      options={categoryOptions}
-                      loading={categoryLoading}
-                    />
-                  )}
-                </div>
+                  <div className="col-span-2">
+                    {props.values.type == "multi" && (
+                      <Select
+                        label={`${t("choose categories")}`}
+                        name="items"
+                        id="items"
+                        isMulti={true}
+                        required={false}
+                        defaultValue={handleEditedItems(props.values.items)}
+                        placeholder={`${t("choose categories")}`}
+                        loadingPlaceholder="Loading..."
+                        options={categoryOptions}
+                        loading={categoryLoading}
+                      />
+                    )}
+                  </div>
                 </div>
                 <div className="flex justify-between mb-8">
                   <div className="flex gap-3">
@@ -374,10 +374,11 @@ const CreateCategory = ({
                     </div>
                   )}
                 </div>
-                <div className="grid grid-cols-2" >
-                {props.values.has_size == true && props.values.type === "single" && (
-                 <SelectSize editData={editData} />
-                )}
+                <div className="grid grid-cols-2">
+                  {props.values.has_size == true &&
+                    props.values.type === "single" && (
+                      <SelectSize editData={editData} />
+                    )}
                 </div>
                 {/* {sizes.length > 0 && props.values.has_size && (
                   <div className="grid grid-cols-6 gap-5 mb-5 text-center">
@@ -446,3 +447,4 @@ const CreateCategory = ({
 }
 
 export default CreateCategory
+

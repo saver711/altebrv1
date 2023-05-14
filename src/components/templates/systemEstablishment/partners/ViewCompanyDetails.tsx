@@ -137,7 +137,7 @@ export const ViewCompanyDetails = () => {
           companyDetailsData?.map((company: CompanyDetails_TP) => (
             <InnerFormLayout
               title={
-                <div className="flex">
+                <div className="flex gap-2">
                   {`بيانات ${company?.name}`
                   }                <EditIcon action={() => setEditCompanyOpen(true)} />
                 </div>
@@ -146,7 +146,7 @@ export const ViewCompanyDetails = () => {
               leftComponent={
                 <>
                   {company.document.length > 2 && (
-                    <Button action={() => setDocumentOpen(true)}>
+                    <Button className="mb-3" action={() => setDocumentOpen(true)}>
                       {t("view all documents")}
                     </Button>
                   )}
