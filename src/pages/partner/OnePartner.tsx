@@ -49,6 +49,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
     endpoint: `partner/api/v1/partners/${partnerID}`,
     queryKey: ["partners", partnerID!],
   })
+  console.log("🚀 ~ file: OnePartner.tsx:52 ~ OnePartner ~ partner:", partner)
 
   /////////// STATES
   ///
@@ -218,6 +219,20 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                     lightString={partner?.email}
                   />
                 )}
+                {partner.national_image ? (
+                  <div className="flex items-center gap-1">
+                    <p className="mt-1">{t("media")} : </p>
+                    <FilesPreviewOutFormik
+                      preview={true}
+                      images={[
+                        {
+                          path: partner.national_image,
+                          type: "image",
+                        },
+                      ]}
+                    />
+                  </div>
+                ): " لايوجد وسائط"}
               </div>
               <div className="flex justify-between gap-4 col-span-4 align-middle ">
                 <h3 className=" font-bold">{t("main documents")}</h3>
@@ -276,12 +291,12 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                             />
                           )}
                         </div>
-                        {doc.files?.length !== 0 && (
+                        {doc.files?.length !== 0 ? (
                           <div className="flex items-center">
                             <p className="mb-3">{t("media")} : </p>
                             <FilesPreviewOutFormik images={doc?.files} />
                           </div>
-                        )}
+                        ):"لايوجد وسائظ"}
                       </div>
                     </div>
                   </>
@@ -342,12 +357,12 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                               />
                             )}
                           </div>
-                          {doc.files?.length !== 0 && (
+                          {doc.files?.length !== 0 ? (
                             <div className="flex items-center">
                               <p className="mb-3">{t("media")} : </p>
                               <FilesPreviewOutFormik images={doc?.files} />
                             </div>
-                          )}
+                          ) : "لاوجد وسائط"}
                         </div>
                       </div>
                     </>

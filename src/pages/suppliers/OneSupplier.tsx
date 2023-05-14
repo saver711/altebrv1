@@ -114,30 +114,30 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                       lightString={supplier.phone}
                     />
                   )}
-                </div>
-                <div className="flex gap-4 flex-col">
                   {supplier.company_name && (
                     <TextLine
                       boldText={t("company_name")}
                       lightString={supplier.company_name}
                     />
                   )}
-                  {supplier.country_name && (
+                </div>
+                <div className="flex gap-4 flex-col">
+                  {supplier.country.name && (
                     <TextLine
                       boldText={t("country_name")}
-                      lightString={supplier.country_name}
+                      lightString={supplier.country.name}
                     />
                   )}
-                  {supplier.city_name && (
+                  {supplier.city.name && (
                     <TextLine
                       boldText={t("city_name")}
-                      lightString={supplier.city_name}
+                      lightString={supplier.city.name}
                     />
                   )}
-                  {supplier.district_name && (
+                  {supplier.type && (
                     <TextLine
-                      boldText={t("district_name")}
-                      lightString={supplier.district_name}
+                      boldText={t("type")}
+                      lightString={supplier.type}
                     />
                   )}
                 </div>
@@ -159,12 +159,6 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                   {supplier.tax && (
                     <TextLine boldText={t("tax")} lightString={supplier.tax} />
                   )}
-                  {supplier.type && (
-                    <TextLine
-                      boldText={t("type")}
-                      lightString={supplier.type}
-                    />
-                  )}
                 </div>
                 <div className="flex gap-4 flex-col">
                   {supplier.address && (
@@ -184,6 +178,20 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                       boldText={t("email")}
                       lightString={supplier.email}
                     />
+                  )}
+                  {supplier.logo && (
+                    <div className="flex items-center gap-1">
+                      <p className="mt-1">{t("media")} : </p>
+                      <FilesPreviewOutFormik
+                        preview={true}
+                        images={[
+                          {
+                            path: supplier.logo,
+                            type: "image",
+                          },
+                        ]}
+                      />
+                    </div>
                   )}
                 </div>
                 <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
@@ -240,12 +248,13 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                               />
                             )}
                           </div>
-                          {doc.files?.length !== 0 && (
+                          {doc.files?.length !== 0 ? (
                             <div className="flex items-center">
                               <p className="mb-3">{t("media")} : </p>
                               <FilesPreviewOutFormik images={doc?.files} />
                             </div>
-                          )}
+                          ):"لاوجد وسائط"}
+
                         </div>
                       </div>
                     </>
@@ -297,12 +306,13 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                                 />
                               )}
                             </div>
-                            {doc.files?.length !== 0 && (
+                            {doc.files?.length !== 0 ? (
                               <div className="flex items-center">
                                 <p className="mb-3">{t("media")} : </p>
                                 <FilesPreviewOutFormik images={doc?.files} />
                               </div>
-                            )}
+                            ):"لايوجد وسائط"}
+       
                           </div>
                         </div>
                       </>
