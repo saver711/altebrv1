@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
-import { useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
@@ -10,6 +10,7 @@ import { AddIcon, ViewIcon } from "../../components/atoms/icons"
 import { BondTotals } from "../../components/gold-supply/BondTotals"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
+import { numberContext, numberFormatterCtx } from "../../context/settings/number-formatter"
 import { useFetch, useIsRTL } from "../../hooks"
 
 type BondsProps_TP = {
@@ -34,6 +35,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
   const navigate = useNavigate()
   const [dataSource, setDataSource] = useState<Bond_TP[]>([])
   const [page, setPage] = useState<number>(1)
+  const { formatGram, formatReyal } = numberContext()
 
   let count = 1
   const { data, isError, isSuccess, error, refetch, isRefetching, isLoading } = useFetch<Bond_TP[]>({
@@ -85,12 +87,12 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         header: () => <span>{t("total gold by 24")} </span>,
         accessorKey: "total_gold_by_24",
-        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatGram(Number(info.getValue())),
       },
       {
         header: () => <span>{t("total money")} </span>,
         accessorKey: "total_money",
-        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(Number(info.getValue())),
       },
       {
         header: () => <span>{t("item count")} </span>,

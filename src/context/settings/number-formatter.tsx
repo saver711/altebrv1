@@ -1,23 +1,39 @@
 import { useMutation } from "@tanstack/react-query"
-import { createContext, ReactNode } from "react"
+import { createContext, ReactNode, useContext } from "react"
 import { useFetch } from "../../hooks/useFetch"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { useLocalStorage } from "../../hooks"
 import { MutateDataParameters_TP } from "../../types"
 
+type digits_count_TP = {reyal: number, gram: number}
+
 type numberFormatter_TP = {
-  digits_count: number
-  changeDigitsCount: (digit: number) => void
-  formatNumber: (digit: number | string) => string
+  digits_count: digits_count_TP
+  changeDigitsCount: (digit: digits_count_TP) => void
+  formatReyal: (digit: number | string) => string
+  formatGram: (digit: number | string) => string
   digits_countLoading: boolean
 }
+
+type ResponseData_TP = {
+  id: number
+  value: number
+}
+
+type Setting_TP = {
+  value: number
+}
+
 export const numberFormatterCtx = createContext<numberFormatter_TP>({
-  digits_count: 2,
-  changeDigitsCount: (digit: number) => {},
-  formatNumber: (digit: number | string) => "",
+  digits_count: {reyal: 2, gram: 2},
+  changeDigitsCount: (digit: digits_count_TP) => {},
+  formatReyal: (digit: number | string) => "",
+  formatGram: (digit: number | string) => "",
   digits_countLoading: false,
 })
+
+export const numberContext = () => useContext(numberFormatterCtx)
 
 export const NumberFormatterProvider = ({
   children,
@@ -27,89 +43,90 @@ export const NumberFormatterProvider = ({
   /////////// VARIABLES
   const [storedDigitsCount, setStoredDigitsCount] = useLocalStorage(
     "digits_count",
-    2
+    {reyal: 2, gram: 2}
   )
 
-  ///
-  /////////// STATES
-  ///
-  ///
-  /////////// CUSTOM HOOKS
-  ///
-  type Setting_TP = {
-    value: number
-  }
-
   const {
-    data: digits_countData,
-    isError,
-    isLoading,
-    isSuccess: digits_countFetchSuccess,
-    failureReason,
-    isFetching,
     refetch,
   } = useFetch<Setting_TP>({
-    enabled: false, // >>>> Remove this
-    endpoint: "company/api/v1/company_settings/1",
+    // enabled: false, // >>>> Remove this
+    endpoint: "companySettings/api/v1/companysettings/19",
     queryKey: ["digits_count"],
-    select: (digits_countObj) => ({ value: +digits_countObj.value }),
+    select: (digits_countObj) => ({ value: digits_countObj.value }),
     onSuccess: (digits_count) => {
-      setStoredDigitsCount(digits_count.value)
+      setStoredDigitsCount(JSON.parse(`${digits_count.value}`))
     },
   })
 
-  type ResponseData_TP = {
-    id: number
-    value: number
-  }
+  
 
   const {
     mutate,
     isLoading: digits_countLoading,
-    isSuccess: digits_countPostSuccess,
-    error: errorQuery,
   } = useMutation({
     mutationFn: (data: MutateDataParameters_TP) =>
       mutateData<ResponseData_TP>(data),
     onError: (err) => console.log(err),
     onSuccess: (data) => {
-      console.log(`data:`, data)
       refetch()
       notify()
     },
   })
 
-  const changeDigitsCount = (digit: number) => {
+  const changeDigitsCount = (digit: digits_count_TP) => {
     mutate({
-      endpointName: "company/api/v1/company_settings/1",
+      endpointName: "companySettings/api/v1/companysettings/19",
       values: {
-        key: "digits_count",
-        value: digit,
-      },
-      method: "put",
+        key: "before_init",
+        value: JSON.stringify(digit),
+        _method: 'put'
+      }
     })
-
     setStoredDigitsCount(digit)
   }
 
   // Number formatter
-  const formatNumber = (num: number | string) => {
-    const fixedNum = (+num).toFixed(storedDigitsCount)
+  // const formatNumber = (num: number | string) => {
+  //   const fixedNum = (+num).toFixed(storedDigitsCount)
+  //   const formattedNum = new Intl.NumberFormat("en-EG", {
+  //     style: "decimal",
+  //     notation: "standard",
+  //     minimumFractionDigits: storedDigitsCount,
+  //   }).format(+fixedNum)
+  //   const trimmedNum = formattedNum.replace(/\.?0+$/, '')
+  //   return trimmedNum
+  // }
+
+  const formatReyal = (num: number | string) => {
+    const fixedNum = (+num).toFixed(storedDigitsCount?.reyal)
     const formattedNum = new Intl.NumberFormat("en-EG", {
       style: "decimal",
       notation: "standard",
-      minimumFractionDigits: storedDigitsCount,
+      minimumFractionDigits: storedDigitsCount?.reyal,
     }).format(+fixedNum)
-    return formattedNum
+    const trimmedNum = formattedNum.replace(/\.?0+$/, '')
+    return trimmedNum
+  }
+
+  const formatGram = (num: number | string) => {
+    const fixedNum = (+num).toFixed(storedDigitsCount?.gram)
+    const formattedNum = new Intl.NumberFormat("en-EG", {
+      style: "decimal",
+      notation: "standard",
+      minimumFractionDigits: storedDigitsCount?.gram,
+    }).format(+fixedNum)
+    const trimmedNum = formattedNum.replace(/\.?0+$/, '')
+    return trimmedNum
   }
 
   return (
     <numberFormatterCtx.Provider
       value={{
-        digits_count: storedDigitsCount,
+        digits_count: storedDigitsCount!,
         changeDigitsCount,
         digits_countLoading,
-        formatNumber,
+        formatReyal,
+        formatGram
       }}
     >
       {children}
