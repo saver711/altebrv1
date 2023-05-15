@@ -5,7 +5,7 @@ import ZoomIn from "../../../../atoms/icons/ZoomIn"
 import ZoomOut from "../../../../atoms/icons/ZoomOut"
 import AccountingTreeData, { TreeNode_TP } from "./AccountingTreeData"
 import { Back } from "../../../../../utils/utils-components/Back"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { useFetch } from "../../../../../hooks"
 import { Header } from "../../../../atoms/Header"
 import { t } from "i18next"
@@ -55,7 +55,10 @@ const AccountingTree = () => {
                       <Back />
                     </div>
                     <div className="flex gap-2">
-                      <button ref={reset} onClick={() => zoomOut()}></button>
+                      <button ref={reset} onClick={() => {
+                        zoomOut()
+                        rest.centerView()
+                      }}></button>
                       <Button className="bg-mainOrange" action={() => zoomIn()}>
                         <ZoomIn />
                       </Button>
