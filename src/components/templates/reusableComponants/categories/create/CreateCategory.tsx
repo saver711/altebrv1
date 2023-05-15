@@ -309,7 +309,7 @@ const CreateCategory = ({
                         />
                         <RadioGroup.RadioButton
                           value="all"
-                          label={`${t("sell in bulks")}`}
+                          label={`${t("Selling by weight")}`}
                           id="sell_in_bulks"
                         />
                       </div>

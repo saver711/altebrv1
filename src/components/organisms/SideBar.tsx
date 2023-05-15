@@ -1,20 +1,19 @@
 /////////// IMPORTS
 ///
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 // components
 import {
-  Sidebar,
   Menu,
   MenuItem,
+  Sidebar,
   SubMenu,
   useProSidebar,
 } from "react-pro-sidebar"
 import { useIsRTL } from "../../hooks/useIsRTL"
-import { FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi"
 // helpers
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { MenuItem_TP, sideBarItems } from "../../data/sidebar"
-import { useState, useEffect, useMemo } from "react"
 
 type OpenMenus_TP = {
   [key: string]: boolean
@@ -32,19 +31,20 @@ export const SideBar = () => {
   const path = location.pathname
 
   const goTo = (e: any, link: string) => {
-    e.preventDefault()
-    // left click
-    if (e.button === 0) {
-      // ctrl + left click
-      if (e.ctrlKey) {
-        window.open(link, "_blank")
-      } else {
-        navigate(link)
-      }
-    } else if (e.button === 1) {
-      // middle click
-      window.open(link, "_blank")
-    }
+    console.log("🚀 ~ file: SideBar.tsx:35 ~ goTo ~ link:", link)
+    // e.preventDefault()
+    // // left click
+    // if (e.button === 0) {
+    //   // ctrl + left click
+    //   if (e.ctrlKey) {
+    //     window.open(link, "_blank")
+    //   } else {
+    //     navigate(link)
+    //   }
+    // } else if (e.button === 1) {
+    //   // middle click
+    //   window.open(link, "_blank")
+    // }
   }
 
   const findPathParentMenu = (path: string) => {
@@ -113,12 +113,15 @@ export const SideBar = () => {
         }
         key={Item.id}
         onClick={(e) => {
-          goTo(e, Item.link!)
-        }}
+          if (e.button === 0) {
+              // ctrl + left click
+              if (!!!e.ctrlKey) 
+                navigate(Item.link)
+        }}}
         icon={<Item.icon size={20} />}
         active={location.pathname === Item.link}
       >
-        {t(Item.label)}
+           <Link to={`${Item.link}`}><div>{t(Item.label)}</div></Link>
       </MenuItem>
     )
   }

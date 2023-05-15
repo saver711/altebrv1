@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom"
 import { BondTotals } from "../../components/gold-supply/BondTotals"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
+import { numberContext } from "../../context/settings/number-formatter"
 import { useFetch } from "../../hooks"
 
 type BondProps_TP = {
@@ -54,6 +55,7 @@ type Contract_TP = {
 
 export const Bond = ({ title }: BondProps_TP) => {
   const { bondID } = useParams()
+  const { formatGram, formatReyal } = numberContext()
 
   const { 
     data: contract, 
@@ -65,10 +67,6 @@ export const Bond = ({ title }: BondProps_TP) => {
   } = useFetch<Contract_TP>({
     endpoint: `twredGold/api/v1/bond/${bondID}`,
     queryKey: ['one_bond'],
-    onSuccess: (data) => {
-      console.log('dsdsd')
-      console.log(data)
-    },
     select: (contract) => ({
       id: contract.id,
       bond_number: contract.bond_number,
@@ -98,7 +96,7 @@ export const Bond = ({ title }: BondProps_TP) => {
           unit_id: box.unit_id,
           computational_movement: box.computational_movement
         }
-      })
+      }) 
     }),
   })
 
@@ -111,7 +109,7 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('weight')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: 'goldWeight',
       },
       {
@@ -126,32 +124,44 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('wage')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: 'wage',
       },
       {
         header: `${t('gold price')}`,
-        cell: (info) => info.row.original.entity_gold_price,
+        cell: (info) => info.renderValue(),
         accessorKey: 'entity_gold_price',
       },
       {
         header: `${t('total wages')}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: 'totalWage',
       },
       {
         header: `${t('wage tax')}`,
-        cell: (info) => parseFloat((Number(info.renderValue()) * (15/100)).toFixed(3)),
+        cell: (info) => formatReyal(Number(info.renderValue()) * (15/100)),
         accessorKey: 'payoffTaxes',
       },
       {
         header: `${t('gold tax')}`,
-        cell: (info) => ((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => {
+          if (info.row.original.goldKarat == '24') {
+            return 0
+          } else {
+            return formatReyal((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100)
+          }
+        },
         accessorKey: 'goldTaxes',
       },
       {
         header: `${t('total tax')}`,
-        cell: (info) => (((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100))).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => {
+          if (info.row.original.goldKarat == '24') {
+            return formatReyal(Number(info.renderValue()) * (15/100))
+          } else {
+            return formatReyal(((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100)))
+          }
+        },
         accessorKey: 'itemTaxes',
       },
     ],
@@ -167,22 +177,22 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('gram (debtor)')}`,
-        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: 'debtor_gram',
       },
       {
         header: `${t('reyal (debtor)')}`,
-        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: 'debtor_SRA',
       },      
       {
         header: `${t('gram (creditor)')}`,
-        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: 'creditor_gram',
       },
       {
         header: `${t('reyal (creditor)')}`,
-        cell: (info) => info.renderValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: 'creditor_SRA',
       }
     ],
@@ -254,7 +264,10 @@ export const Bond = ({ title }: BondProps_TP) => {
         <h2 className="text-center">لايوجد بنود</h2>
       )}
       {!(isLoading || isFetching) && isSuccess && !!restrictions?.length && (
-        <Table data={restrictions} footered showNavigation columns={cols2} />
+        <>
+          <h2 className="text-xl mb-5 font-bold">{t('accounting entry')}</h2>
+          <Table data={restrictions} footered showNavigation columns={cols2} />
+        </>
       )}
     </>
   )

@@ -25,7 +25,7 @@ export const Checkbox = ({
   return (
     <div className="flex items-center">
       <BaseInput
-        id={id}
+        id={id || name}
         className={className}
         {...{
           ...props,

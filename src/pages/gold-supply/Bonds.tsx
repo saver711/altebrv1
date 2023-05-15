@@ -1,14 +1,16 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
-import { useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { Header } from "../../components/atoms/Header"
 import { AddIcon, ViewIcon } from "../../components/atoms/icons"
+import { BondTotals } from "../../components/gold-supply/BondTotals"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
+import { numberContext, numberFormatterCtx } from "../../context/settings/number-formatter"
 import { useFetch, useIsRTL } from "../../hooks"
 
 type BondsProps_TP = {
@@ -25,6 +27,7 @@ export type Bond_TP = {
   total_money: number
   item_count: number
   bond_number: number
+  allboxes: []
 }
 
 export const Bonds = ({ title }: BondsProps_TP) => {
@@ -32,6 +35,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
   const navigate = useNavigate()
   const [dataSource, setDataSource] = useState<Bond_TP[]>([])
   const [page, setPage] = useState<number>(1)
+  const { formatGram, formatReyal } = numberContext()
 
   let count = 1
   const { data, isError, isSuccess, error, refetch, isRefetching, isLoading } = useFetch<Bond_TP[]>({
@@ -40,6 +44,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
     pagination: true,
     onSuccess(data) {
       setDataSource(data.data)
+      console.log(data.data)
     },
     select(data) {
       return {
@@ -82,12 +87,12 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       {
         header: () => <span>{t("total gold by 24")} </span>,
         accessorKey: "total_gold_by_24",
-        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatGram(Number(info.getValue())),
       },
       {
         header: () => <span>{t("total money")} </span>,
         accessorKey: "total_money",
-        cell: (info) => info.getValue().toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(Number(info.getValue())),
       },
       {
         header: () => <span>{t("item count")} </span>,
@@ -142,8 +147,15 @@ export const Bonds = ({ title }: BondsProps_TP) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("bonds")}</h2>
+      {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+        <BondTotals title={'total bonds'} boxesData={dataSource[0].allboxes} />
+      )}
+      <div className="flex justify-between my-5">
+        <h3 className="text-2xl">{t("bonds")}</h3>
         <Button
           action={() => navigate(`/bonds/gold`)}
           className="flex items-center gap-2"
@@ -159,41 +171,46 @@ export const Bonds = ({ title }: BondsProps_TP) => {
               className="text-center text-2xl font-bold"
             />
           </div>
-        )}
+      )}
+      {/* {!(isLoading) && isSuccess && !!data[0]?.boxes?.length && (
+        <BondTotals boxesData={data[0]?.boxes} />
+      )} */}
       <div className="" >
       {isSuccess &&
           !!dataSource &&
           !isLoading &&
           !isRefetching &&
           !!dataSource.length && (
-            <Table data={dataSource} columns={columns}>
-              <div className="mt-3 flex items-center justify-end gap-5 p-2">
-                <div className="flex items-center gap-2 font-bold">
-                  {t('page')}
-                  <span className=" text-mainGreen">
-                    {data.current_page}
-                  </span>
-                  {t('from')}
-                  <span className=" text-mainGreen">{data.pages}</span>
+            <>
+              <Table data={dataSource} columns={columns}>
+                <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                  <div className="flex items-center gap-2 font-bold">
+                    {t('page')}
+                    <span className=" text-mainGreen">
+                      {data.current_page}
+                    </span>
+                    {t('from')}
+                    <span className=" text-mainGreen">{data.pages}</span>
+                  </div>
+                  <div className="flex items-center gap-2 ">
+                    <Button
+                      className=" rounded bg-mainGreen p-[.18rem] "
+                      action={() => setPage((prev) => prev - 1)}
+                      disabled={page == 1}
+                    >
+                      {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    </Button>
+                    <Button
+                      className=" rounded bg-mainGreen p-[.18rem] "
+                      action={() => setPage((prev) => prev + 1)}
+                      disabled={page == data.pages}
+                    >
+                      {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 ">
-                  <Button
-                    className=" rounded bg-mainGreen p-[.18rem] "
-                    action={() => setPage((prev) => prev - 1)}
-                    disabled={page == 1}
-                  >
-                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
-                  </Button>
-                  <Button
-                    className=" rounded bg-mainGreen p-[.18rem] "
-                    action={() => setPage((prev) => prev + 1)}
-                    disabled={page == data.pages}
-                  >
-                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
-                  </Button>
-                </div>
-              </div>
-            </Table>
+              </Table>
+            </>
           )}
       </div>
       {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (

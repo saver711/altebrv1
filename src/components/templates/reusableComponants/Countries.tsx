@@ -168,7 +168,7 @@ export const Countries = ({
     refetch,
   } = useFetch<SelectOption_TP[], Country_TP[]>({
     queryKey: ["countries"],
-    endpoint: "governorate/api/v1/countries",
+    endpoint: "governorate/api/v1/countries?type=all",
     select: (data) =>
       data.map((country) => ({
         ...country,

@@ -58,6 +58,7 @@ export const DropFile = ({ name }: DropFileProps_TP) => {
     const pdfs = pdfFiles.filter((file) => pdfOrImage(file) === "pdf")
     setPdfs(pdfs)
   }, [values[name]])
+  
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
