@@ -11,9 +11,12 @@ import { Category_TP, SelectOption_TP, SetState_TP } from "../../../types"
 import { notify } from "../../../utils/toast"
 import {
   codingSanad_initialValues,
-  codingSanad_schema, GoldCodingSanad_initialValues_TP,
-  GoldCodingStoneValues_TP, GoldSanadBand_TP, GoldSanad_TP,
-  SizePopup_TP
+  codingSanad_schema,
+  GoldCodingSanad_initialValues_TP,
+  GoldCodingStoneValues_TP,
+  GoldSanadBand_TP,
+  GoldSanad_TP,
+  SizePopup_TP,
 } from "../coding-types-and-helpers"
 import { GoldCodingSanadFormHandler } from "./GoldCodingSanadFormHandler"
 ///
@@ -24,6 +27,8 @@ type CodingSanadProps_TP = {
   setAddedPieces: SetState_TP<GoldCodingSanad_initialValues_TP[]>
   stage: number
   setStage: SetState_TP<number>
+  selectedSanad: GoldSanad_TP | undefined
+  setSelectedSanad: SetState_TP<GoldSanad_TP | undefined>
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -34,12 +39,12 @@ export const CodingSanad = ({
   addedPieces,
   stage,
   setStage,
+  selectedSanad,
+  setSelectedSanad
 }: CodingSanadProps_TP) => {
   /////////// VARIABLES
   ///
   const { sanadId } = useParams()
-  const [selectedSanadLocal, setSelectedSanadLocal] =
-    useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
   const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
     GoldCodingSanad_initialValues_TP[]
   >(`addedPiecesLocal_${sanadId}`)
@@ -65,9 +70,7 @@ export const CodingSanad = ({
   ///
   /////////// STATES
   ///
-  const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
-    selectedSanadLocal
-  )
+
   const [sizes, setSizes] = useState<SizePopup_TP[]>([])
 
   const [stones, setStones] = useState<GoldCodingStoneValues_TP[]>([])
@@ -106,6 +109,20 @@ export const CodingSanad = ({
   const updateSanadWithNewWeight = (formBandId: string, formWeight: number) => {
     if (selectedSanad) {
       const newSanadItems = selectedSanad.items.map((band) => {
+        if (stones.some((stone) => stone.stone_type === "not_added")) {
+          const notAddedStones = stones.filter(
+            (stone) => stone.stone_type === "not_added"
+          )
+          const tableWeight = notAddedStones.reduce(
+            (acc, curr) => acc + +curr.weight,
+            0
+          )
+          return {
+            ...band,
+            leftWeight: band.leftWeight - (formWeight - tableWeight * .2),
+          }
+        }
+
         if (band.id === formBandId) {
           return {
             ...band,
@@ -133,7 +150,9 @@ export const CodingSanad = ({
       ...curr,
       { ...values, front_key: crypto.randomUUID() },
     ])
-    setActiveBand(curr => ({...curr, leftWeight: curr?.leftWeight - values.weight}))
+    // setActiveBand((curr) => {
+    //   return { ...curr, leftWeight: curr?.leftWeight - values.weight }
+    // })
   }
   ///
   return (
@@ -162,6 +181,7 @@ export const CodingSanad = ({
                 left_weight,
                 stones: Omitted,
                 weightitems,
+                init_wage,
                 ...baseValues
               } = values
 
@@ -193,109 +213,6 @@ export const CodingSanad = ({
                 return
               }
               finalSubmit(baseValues)
-
-              // امسح الاستونز لو لايحتوي علي احجار
-              //---------------------------
-              // لو لا يحتوي علي احجار
-              // if (values.has_stones == "false"){
-              // }
-              // if it is multi(طقم) and has size
-              //    - make sure sizes array has items ✅
-
-              // .................
-              // const selectedCateg = categories?.find(
-              //   (categ) => categ.id === values.category_id
-              // )
-              // const isTa2m = selectedCateg?.type === "multi"
-
-              // if (selectedCateg && selectedCateg.items) {
-              //   const lengthOfItemsThatHasSize = selectedCateg.items.filter(
-              //     (item) => item.has_size
-              //   ).length
-              //   if (
-              //     isTa2m &&
-              //     !!selectedCateg.has_size &&
-              //     sizes.length < lengthOfItemsThatHasSize
-              //   ) {
-              //     notify(
-              //       "error",
-              //       `انت ترقم طقم وبه ${lengthOfItemsThatHasSize} اصناف ذو مقاسات وقد قمت بإضافة ${sizes.length} أصناف فقط`
-              //     )
-              //     return
-              //   }
-              // }
-              // .................
-
-              // delete values.left_weight ✅
-              // delete values.sizeIsRequired ✅
-              // delete values.city_id ✅
-              // delete values.district_id ✅
-
-              // .................
-              // const {
-              //   left_weight: Omitted1,
-              //   sizeIsRequired: Omitted2,
-              //   city_id: Omitted3,
-              //   district_id: Omitted4,
-              //   ...filteredValues
-              // } = values
-
-              // .................
-
-              // if it has no size => ✅
-              //    - delete values.size_type ✅
-              //    - delete values.size_unit_id ✅
-
-              // .................
-
-              // if (!!!values.sizeIsRequired) {
-              //   const { size_unit_id, size_type, ...finalValues } =
-              //     filteredValues
-
-              //   // لو طقم ضيف ال sizes
-              //   if (isTa2m) {
-              //     if (detailedWeight_total !== 0 && !!!detailedWeight_total) {
-              //       const {
-              //         size_unit_id,
-              //         size_type,
-              //         weightitems,
-              //         ...finalValues
-              //       } = filteredValues
-
-              //       // SEND
-              //       if (!isAbleToCodeMore()) return
-              //       updateSanadWithNewWeight(values.band_id!, values.weight)
-              //       setAddedPieces((curr) => [...curr, finalValues])
-              //       return
-              //     }
-              //     const finalValuesForTa2m = { sizes, stones, ...finalValues }
-              //     // SEND
-              //     if (!isAbleToCodeMore()) return
-              //     updateSanadWithNewWeight(values.band_id!, values.weight)
-              //     setAddedPieces((curr) => [...curr, finalValuesForTa2m])
-              //     return
-              //   }
-
-              //   // SEND
-              //   if (!isAbleToCodeMore()) return
-              //   updateSanadWithNewWeight(values.band_id!, values.weight)
-              //   setAddedPieces((curr) => [...curr, finalValues])
-              //   return
-              // }
-
-              // const {
-              //   left_weight,
-              //   sizeIsRequired,
-              //   city_id,
-              //   district_id,
-              //   ...finalValues
-              // } = values
-              // // SEND
-              // if (!isAbleToCodeMore()) return
-              // updateSanadWithNewWeight(values.band_id!, values.weight)
-              // setAddedPieces((curr) => [...curr, { ...finalValues, stones }])
-
-              // .................
             }}
           >
             {({ values, setFieldValue, submitForm, errors }) => (
