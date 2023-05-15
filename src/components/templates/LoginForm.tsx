@@ -10,7 +10,7 @@ import videoHome from "../../assets/homeVideo.mp4"
 import { authCtx } from "../../context/auth-and-perm/auth"
 import { Button } from "../atoms/buttons/Button"
 import { BaseInputField } from "../molecules/formik-fields/BaseInputField"
-
+import loginGif from '../../assets/homeGif.gif'
 ///
 /////////// Types
 ///
@@ -46,7 +46,8 @@ export const LoginForm = () => {
     <div className="flex relative flex-col items-center justify-center h-screen gap-3">
       <div className="myVideo-container">
         <div className="myVideo-container__overlay"></div>
-        <video autoPlay loop muted className="myVideo" src={videoHome} />
+        {/* <video autoPlay loop muted className="myVideo" src={videoHome} /> */}
+        <img src={loginGif} alt="" className="myVideo" />
       </div>
       <div className="content">
         <img
