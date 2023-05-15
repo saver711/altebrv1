@@ -8,6 +8,7 @@ import { Field, Form, useFormikContext } from "formik"
 import { t } from "i18next"
 import { Dispatch, SetStateAction, useEffect } from "react"
 import { AiOutlinePlus } from "react-icons/ai"
+import { numberContext } from "../../../../context/settings/number-formatter"
 import { useFetch } from "../../../../hooks"
 import { DeleteIcon, EditIcon } from "../../../atoms/icons"
 import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
@@ -18,6 +19,7 @@ import SelectKarat from "../karats/select/SelectKarat"
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
+    dirty: boolean
     setDirty: Dispatch<SetStateAction<boolean>>
     editRow: boolean
     categoriesOptions: never[]
@@ -39,6 +41,7 @@ import SelectKarat from "../karats/select/SelectKarat"
   
   ///
   export const OTableForm = ({
+    dirty,
     setDirty,
     editRow,
     categoriesOptions,
@@ -51,7 +54,8 @@ import SelectKarat from "../karats/select/SelectKarat"
     setEditRow,
     setEditData,
   }: OTableFormProps_TP) => {
-    let { enableReinitialize, resetForm, values, setFieldValue, submitForm, dirty } =
+    const { formatGram, formatReyal } = numberContext()
+    let { enableReinitialize, resetForm, values, setFieldValue, submitForm } =
       useFormikContext<any>()
       useEffect(() => {
         if (
@@ -79,7 +83,7 @@ import SelectKarat from "../karats/select/SelectKarat"
       }),
       columnHelper.accessor("weight", {
         header: () => `${t("weight")}`,
-        cell: (info) => info.getValue(),
+        cell: (info) => formatGram(info.getValue()),
       }),
       columnHelper.accessor("karat_value", {
         header: () => `${t("karats")}`,
@@ -91,17 +95,15 @@ import SelectKarat from "../karats/select/SelectKarat"
       }),
       columnHelper.accessor("wage", {
         header: `${t("wage")}`,
-        cell: (info) => info.getValue(),
+        cell: (info) => formatReyal(info.getValue()),
       }),
       columnHelper.accessor("total_wages", {
         header: `${t("total wages")}`,
-        cell: (info) =>
-          (info.row.original.weight * info.row.original.wage).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(info.row.original.weight * info.row.original.wage),
       }),
       columnHelper.accessor("wage_tax", {
         header: `${t("wage tax")}`,
-        cell: (info) =>
-          (info.row.original.weight * info.row.original.wage * 0.15).toFixed(3).replace(/\.?0+$/, ''),
+        cell: (info) => formatReyal(info.row.original.weight * info.row.original.wage * 0.15),
       }),
       columnHelper.accessor("gold_tax", {
         header: `${t("gold tax")}`,
@@ -109,12 +111,12 @@ import SelectKarat from "../karats/select/SelectKarat"
           if (info.row.original.karat_value == '24') {
             return 0
           } else {
-            return (
+            return formatReyal(
               info.row.original.weight *
               Number(formValues?.api_gold_price) *
               info.row.original.stock * 
               0.15
-            ).toFixed(3).replace(/\.?0+$/, '')
+            )
           }
         },
       }),
@@ -398,7 +400,7 @@ import SelectKarat from "../karats/select/SelectKarat"
                         setFieldValue("karat_value", option!.value)
                         setFieldValue(
                           "stock",
-                          karatValues.find(
+                          karatValues!.find(
                             (item) => item.karat === values.karat_value
                           )?.value
                         )
@@ -423,9 +425,9 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="total_wages"
                       name="total_wages"
-                      value={(
+                      value={formatReyal(
                         Number(values.weight) * Number(values.wage)
-                      ).toFixed(3).replace(/\.?0+$/, '')}
+                      )}
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                     />
                   </td>
@@ -433,15 +435,15 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="wage_tax"
                       name="wage_tax"
-                      value={(
+                      value={formatReyal(
                         Number(values.weight) *
                         Number(values.wage) *
                         0.15
-                      ).toFixed(3).replace(/\.?0+$/, '')}
+                      )}
                       onChange={() =>
                         setFieldValue(
                           "wage_tax",
-                          (Number(values.weight) * Number(values.wage) * 0.15).toFixed(3).replace(/\.?0+$/, '')
+                          (Number(values.weight) * Number(values.wage) * 0.15)
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
@@ -451,12 +453,12 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="gold_tax"
                       name="gold_tax"
-                      value={values.karat_value == '24' ? 0 : (
+                      value={values.karat_value == '24' ? 0 : formatReyal(
                         Number(values.weight) *
                         Number(formValues?.api_gold_price) *
                         Number(values.stock) * 
                           0.15 || 0
-                      ).toFixed(3).replace(/\.?0+$/, '')}
+                      )}
                       onChange={() =>
                         setFieldValue(
                           "gold_tax",
@@ -465,7 +467,7 @@ import SelectKarat from "../karats/select/SelectKarat"
                             Number(formValues?.api_gold_price) *
                             Number(values.stock) * 
                             0.15
-                          ).toFixed(3).replace(/\.?0+$/, '')
+                          )
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
@@ -473,10 +475,18 @@ import SelectKarat from "../karats/select/SelectKarat"
                   </td>
                   <td>
                     {!editRow && (
-                      <AiOutlinePlus
-                        className="cursor-pointer text-lg font-bold rounded-md mx-auto w-[30px] h-[30px] active:shadow-none active:w-[28px]"
-                        onClick={submitForm}
-                      />
+                      <div className="flex">
+                        <AiOutlinePlus
+                          className="cursor-pointer text-lg font-bold rounded-md mx-auto w-[30px] h-[30px] active:shadow-none active:w-[28px]"
+                          onClick={submitForm}
+                        />
+                        {dirty && (
+                          <DeleteIcon
+                            className="cursor-pointer rounded-md mx-auto w-[30px] h-[30px] active:shadow-none active:w-[28px]"
+                            action={() => resetForm()}
+                          />
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>

@@ -365,5 +365,12 @@
   "supply": "التوريد",
   "total bonds": "اجمالي السندات",
   "please enter a valid wage": "برجاء إدخال اجرة صحيح",
-  "accounting entry": "القيد المحاسبي"
+  "accounting entry": "القيد المحاسبي",
+  "change numbers": "تغيير الأرقام",
+  "decimal digits count": "عدد الأرقام العشرية",
+  "log out": "تسجيل خروج",
+  "enter different numbers": "ادخل قيم مختلفة",
+  "change language": "تغيير اللغة",
+  "enter positive numbers": "ادخل قيم موجبة",
+  "no notes": "لا يوجد ملاحظات"
 }
