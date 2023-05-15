@@ -23,6 +23,8 @@ import {
   GoldCodingSanad_initialValues_TP,
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
+        import { Loading } from "../../components/organisms/Loading"
+import { Spinner } from "../../components/atoms"
 
 // types
 type Categories_TP = {
@@ -84,15 +86,12 @@ export function ExpandableTable({
       columnHelper.accessor("index", {
         header: `${t("index")}`,
       }),
-      // columnHelper.accessor('id_code', {
-      //   header: `${t('identification code')}`
-      // }),
       columnHelper.accessor("classification", {
         header: `${t("classification")}`,
       }),
       columnHelper.accessor("category", {
         header: `${t("category")}`,
-      }),
+      }), 
       columnHelper.accessor("model_number", {
         header: `${t("model number")}`,
       }),
@@ -191,10 +190,17 @@ export function ExpandableTable({
 
   // custom hooks
   const queryClient = useQueryClient()
+  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+  const {data:allCategories , isLoading:categoryLoading} = useFetch({
+   endpoint:"classification/api/v1/categories?type=all",
+   queryKey:['categories'],
+   enabled:!!!categories,
+   refetchInterval:!!!categories,
+  })
 
   useEffect(() => {
     if (queryClient) {
-      const categories = queryClient.getQueryData(["categories"])
+      const categories = allCategories
       const allQueries = modifiedData?.map((item) => {
         const finaleItem = {
           category: categories?.find(
@@ -205,7 +211,7 @@ export function ExpandableTable({
       })
       setQueryData(allQueries)
     }
-  }, [queryClient])
+  }, [queryClient , allCategories])
 
   useEffect(() => {
     if (queryData) {
@@ -284,7 +290,7 @@ export function ExpandableTable({
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )
-                          : "---"}
+                          : categoryLoading ? <Spinner/> : "---"}
                       </td>
                     )
                   })}
@@ -362,7 +368,7 @@ export function ExpandableTable({
         <pre>{JSON.stringify(expanded, null, 2)}</pre> */}
       </div>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <SubTables subTableData={subTableData} addedPieces={addedPieces} />
+        <SubTables subTableData={subTableData} addedPieces={addedPieces} categoryLoading = {categoryLoading}/>
       </Modal>
     </div>
   )
