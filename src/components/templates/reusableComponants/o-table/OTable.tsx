@@ -12,6 +12,7 @@ import * as Yup from "yup"
 import { t } from "i18next"
 
 type OTableProps_TP = {
+  dirty: boolean,
   setDirty: Dispatch<SetStateAction<boolean>>
   data: OTableDataTypes[]
   setData: Dispatch<SetStateAction<OTableDataTypes[]>>
@@ -37,6 +38,7 @@ const validationSchema = Yup.object({
 })
 
 export function OTable({
+  dirty,
   setDirty,
   data,
   setData,
@@ -101,6 +103,7 @@ export function OTable({
       >
         {({}) => (
           <OTableForm
+            dirty={dirty}
             setDirty={setDirty}
             editRow={editRow}
             categoriesOptions={categoriesOptions}

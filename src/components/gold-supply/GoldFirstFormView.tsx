@@ -133,7 +133,9 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
               )}
               <li className="flex gap-x-2 col-span-2">
                 <strong>{t("notes")}:</strong>
-                <p className="wrapText">{notes}</p>
+                <p className="wrapText">
+                  {notes ? notes : t('no notes')}
+                </p>
               </li>
             </ul>
           </div>

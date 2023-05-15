@@ -27,6 +27,7 @@ export type GoldCodingSanad_initialValues_TP = {
     band_id?: string
     karat_value?: KaratValues_TP
     bond_date?: string
+    init_wage?: number
 }
 export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
     mezan_type: 'manual',
@@ -44,7 +45,7 @@ export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
 }
 const validate = () => `${t("color_id field must have at least 1 items")}`
 const weightValidate = () => `${t("weight must be greater than or equal to 1")}`
-const wageValidate = () => `${t("wage must be greater than or equal to 1")}`
+// const wageValidate = () => `${t("wage must be greater than or equal to")} ${yup.ref("init_wage").}`
 const countValidate = () => `${t("count must be greater than or equal to 1")}`
 const shape_idValidate = () =>`${t("shape_id field must have at least 1 items")}`
 
@@ -65,7 +66,7 @@ export const codingSanad_schema = yup.object().shape({
     .required()
     .min(1, weightValidate)
     .max(yup.ref("left_weight")),
-  wage: yup.number().required().min(1, wageValidate),
+    wage: yup.number().required().min(yup.ref("init_wage")),
   has_stones: yup.boolean(),
   // media: yup.array().required().min(1),
   category_id: yup.string().trim().required(requiredTranslation),
@@ -121,6 +122,7 @@ export type GoldSanadBand_TP = {
     payoffTaxes: number
     payoffTotal: number
     leftWeight: number
+    wage: number
 }
 export type GoldSanad_TP = {
     id: string

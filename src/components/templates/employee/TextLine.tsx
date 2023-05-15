@@ -39,7 +39,7 @@ export const TextLine = ({
   ///
   return (
     <div className={`${containerClasses} flex w-[17rem]`}>
-      <span className="font-bold inline-block me-2">{`${boldText}:`}</span>
+      <span className="font-bold inline-block me-2">{`${boldText} :`}</span>
       <span>{lightString}</span>
     </div>
   )

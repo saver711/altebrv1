@@ -11,7 +11,7 @@ import { Header } from "../../../components/atoms/Header"
 import {
   Accordion,
   BaseInputField,
-  TextAreaField,
+  TextAreaField
 } from "../../../components/molecules"
 import { DropFile } from "../../../components/molecules/files/DropFile"
 import NinjaTable from "../../../components/molecules/NinjaTable"
@@ -28,7 +28,7 @@ import { notify } from "../../../utils/toast"
 import {
   goldCodingStoneSchema,
   goldCodingStoneValues,
-  GoldCodingStoneValues_TP,
+  GoldCodingStoneValues_TP
 } from "../coding-types-and-helpers"
 
 ///
@@ -73,47 +73,47 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
   const columns: Column[] = [
     {
       name: "stone",
-      label: "stone",
+      label: "الحجر",
     },
     {
       name: "color",
-      label: "color",
+      label: "اللون",
     },
     {
       name: "shape",
-      label: "shape",
+      label: "الشكل",
     },
     {
       name: "purity",
-      label: "purity",
+      label: "النقاء",
     },
     {
       name: "weight",
-      label: "weight",
+      label: "الوزن",
     },
     {
       name: "count",
-      label: "count",
+      label: "عدد الأحجار",
     },
     {
       name: "nature",
-      label: "nature",
+      label: "طبيعة الحجر",
     },
     {
       name: "certificate_number",
-      label: "certificate number",
+      label: "رقم الشهادة",
     },
     {
       name: "certificate_source",
-      label: "source",
+      label: "المصدر",
     },
     {
       name: "certificate_url",
-      label: "certificate_url",
+      label: "رابط الشهادة",
     },
     {
       name: "delete",
-      label: "delete",
+      label: "الفعاليات",
       Cell: (props) => {
         return (
           <AiFillDelete

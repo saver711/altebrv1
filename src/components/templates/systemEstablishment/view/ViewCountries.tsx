@@ -92,7 +92,7 @@ export const ViewCountries = () => {
                 }}
                 stroke="#ef4444"
               />
-              {/* <ViewIcon action={() => console.log("view", info.row.original)} /> */}
+         
             </div>
           )
         },
