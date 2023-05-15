@@ -309,7 +309,11 @@ const CreateCategory = ({
                         />
                         <RadioGroup.RadioButton
                           value="all"
-                          label={`${t("Selling by weight")}`}
+                          label={`${
+                            props.values.type !== "multi"
+                              ? t("Selling by weight")
+                              : t("Selling by total")
+                          }`}
                           id="sell_in_bulks"
                         />
                       </div>
