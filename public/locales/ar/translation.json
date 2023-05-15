@@ -365,5 +365,6 @@
   "supply": "التوريد",
   "total bonds": "اجمالي السندات",
   "please enter a valid wage": "برجاء إدخال اجرة صحيح",
-  "accounting entry": "القيد المحاسبي"
+  "accounting entry": "القيد المحاسبي",
+  "document endDate":"تاريخ انتهاء الوثيقة"
 }

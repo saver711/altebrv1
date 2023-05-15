@@ -1,3 +1,4 @@
+
 /////////// IMPORTS
 ///
 
@@ -195,7 +196,7 @@ export const FilesPreview = ({
           deleteFileHandler={deleteFileHandler}
           open={lightboxOpen}
           closeHandler={() => setLightboxOpen(false)}
-          images={[...imagePreview]}
+          images={imagePreview}
         />
       )}
       {/* pdfs*/}
