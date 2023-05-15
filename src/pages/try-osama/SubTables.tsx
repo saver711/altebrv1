@@ -15,13 +15,14 @@ import { useFetch } from "../../hooks"
 import { Query_TP } from "../coding/gold/AddStone"
 import { ExpandableTable } from "./ExapndableTable"
 import { StoneTable } from "./StoneTable"
+import { Loading } from "../../components/organisms/Loading"
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 const columnHelper = createColumnHelper<any>()
 
-export const SubTables = ({ subTableData  , addedPieces}: any) => {
+export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any) => {
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -142,6 +143,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   ///
+  if(categoryLoading && !!queryData) return <Loading mainTitle={t('loading')} />
   return (
     <>
     <div className="text-center" >
@@ -150,7 +152,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
     </div>
       <div className="flex justify-center items-center">
         <span className="text-center font-bold text-2xl mb-12">
-          باقي تفاصيل القطعه
+          {t('piece details')}
         </span>
       </div>
       <p className="text-center mx-auto bg-lightGreen p-2 rounded-lg w-[150px] text-mainGreen">
