@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from "react"
 import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
 import { Modal } from "../../components/molecules"
 import { SubTables } from "./SubTables"
+import { useFetch } from "../../hooks"
 
 // types
 type Categories_TP = {
@@ -171,11 +172,23 @@ export function ExpandableTable({
     }
   }, [queryData])
 
+  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+  const {data:allCategories} = useFetch({
+   endpoint:"classification/api/v1/categories?type=all",
+   queryKey:['categories'],
+   enabled:!!!categories,
+   refetchInterval:!!!categories,
+   onSuccess:(data=>{
+     console.log("🚀 ~ file: SubTables.tsx:71 ~ SubTables ~ categories:", data)
+   })
+  })
+
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <h2 className="font-bold text-2xl">{t("final review")}</h2>
       <h3>
-        الهويات المرقمه من سند رقم -<span className="text-orange-500">001</span>
+        الهويات المرقمه من سند رقم -<span className="text-orange-500">{addedPieces[0].bond_id}</span>
       </h3>
       <div className="w-full">
         <table className="mt-2 border-mainGreen shadow-lg mb-2 w-full">

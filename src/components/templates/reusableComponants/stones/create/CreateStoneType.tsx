@@ -65,11 +65,11 @@ const CreateStoneType = ({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
+      queryClient.setQueryData(['stone_type'], (old: any) => {
+        return [...old, data]
+      })
       if(value && onAdd) {
         onAdd(value)
-        // queryClient.setQueryData(['stone_type'], (old: any) => {
-        //   return [...old, data]
-        // })
         queryClient.refetchQueries(['view_stones_types'])
       }
       if (setDataSource && setShow) {

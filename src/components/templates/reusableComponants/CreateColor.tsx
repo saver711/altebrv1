@@ -65,11 +65,11 @@ const CreateColor = ({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
+      queryClient.setQueryData(['colors'], (old: any) => {
+        return [...old, data]
+      })
       if(value && onAdd) {
         onAdd(value)
-        // queryClient.setQueryData(['colors'], (old: any) => {
-        //   return [...old, data]
-        // })
         queryClient.refetchQueries(['view_stones_colors'])
       } 
       if (setDataSource && setShow && !item) {

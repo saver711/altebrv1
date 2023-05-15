@@ -65,11 +65,11 @@ const CreateStoneNature = ({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
+      queryClient.setQueryData(['stone_nature'], (old: any) => {
+        return [...old, data]
+      })
       if(value && onAdd) {
         onAdd(value)
-        // queryClient.setQueryData(['stone_nature'], (old: any) => {
-        //   return [...old, data]
-        // })
         queryClient.refetchQueries(['view_stones_natures'])
       } 
       if (setDataSource && setShow && !item) {

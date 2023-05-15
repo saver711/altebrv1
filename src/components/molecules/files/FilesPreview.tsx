@@ -99,7 +99,12 @@ export const FilesPreview = ({
       )
     }
   }
-  ///
+   const imagePreview = images.map(image => ({
+    preview: image?.type === 'image' ? image?.path : image?.preview,
+    path: image.preview,
+    type: 'image'
+  }))
+  
   return (
     <>
       <div
@@ -190,7 +195,7 @@ export const FilesPreview = ({
           deleteFileHandler={deleteFileHandler}
           open={lightboxOpen}
           closeHandler={() => setLightboxOpen(false)}
-          images={images}
+          images={[...imagePreview]}
         />
       )}
       {/* pdfs*/}
