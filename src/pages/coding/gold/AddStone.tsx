@@ -11,12 +11,11 @@ import { Header } from "../../../components/atoms/Header"
 import {
   Accordion,
   BaseInputField,
-  CheckBoxField,
-  TextAreaField,
+  TextAreaField
 } from "../../../components/molecules"
+import { DropFile } from "../../../components/molecules/files/DropFile"
 import NinjaTable from "../../../components/molecules/NinjaTable"
 import RadioGroup from "../../../components/molecules/RadioGroup"
-import { DropFile } from "../../../components/molecules/files/DropFile"
 import { Column } from "../../../components/molecules/table/types"
 import { Country_city_distract_markets } from "../../../components/templates/reusableComponants/Country_city_distract_markets"
 import SelectColor from "../../../components/templates/reusableComponants/SelectColor"
@@ -27,9 +26,9 @@ import SelectStoneType from "../../../components/templates/reusableComponants/st
 import { SetState_TP } from "../../../types"
 import { notify } from "../../../utils/toast"
 import {
-  GoldCodingStoneValues_TP,
   goldCodingStoneSchema,
   goldCodingStoneValues,
+  GoldCodingStoneValues_TP
 } from "../coding-types-and-helpers"
 
 ///
@@ -74,47 +73,47 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
   const columns: Column[] = [
     {
       name: "stone",
-      label: "stone",
+      label: "الحجر",
     },
     {
       name: "color",
-      label: "color",
+      label: "اللون",
     },
     {
       name: "shape",
-      label: "shape",
+      label: "الشكل",
     },
     {
       name: "purity",
-      label: "purity",
+      label: "النقاء",
     },
     {
       name: "weight",
-      label: "weight",
+      label: "الوزن",
     },
     {
       name: "count",
-      label: "count",
+      label: "عدد الأحجار",
     },
     {
       name: "nature",
-      label: "nature",
+      label: "طبيعة الحجر",
     },
     {
       name: "certificate_number",
-      label: "certificate number",
+      label: "رقم الشهادة",
     },
     {
       name: "certificate_source",
-      label: "source",
+      label: "المصدر",
     },
     {
       name: "certificate_url",
-      label: "certificate_url",
+      label: "رابط الشهادة",
     },
     {
       name: "delete",
-      label: "delete",
+      label: "الفعاليات",
       Cell: (props) => {
         return (
           <AiFillDelete
@@ -146,24 +145,29 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
       const allQueries = stones?.map((stone) => {
         const finaleStone = {
-          stone: types?.find((type) => type.id == stone.stone_id)?.name!,
-          color: colors
-            ?.filter((item) => stone.color_id.includes(item.id))
-            .map((item) => item.name)
-            .join(" & ")!,
-          shape: shapes
-            ?.filter((item) => stone.shape_id.includes(item.id))
-            .map((item) => item.name)
-            .join(" & ")!,
-          purity: purities?.find((type) => type.id == stone.purity_id)?.name!,
+          stone:
+            types?.find((type) => type.id == stone.stone_id)?.name! || "--",
+          color:
+            colors
+              ?.filter((item) => stone.color_id.includes(item.id))
+              .map((item) => item.name)
+              .join(" & ")! || "--",
+          shape:
+            shapes
+              ?.filter((item) => stone.shape_id.includes(item.id))
+              .map((item) => item.name)
+              .join(" & ")! || "--",
+          purity:
+            purities?.find((type) => type.id == stone.purity_id)?.name! || "--",
           weight: stone.weight,
           count: stone.count,
-          nature: natures?.find((type) => type.id == stone.nature_id)?.name!,
-          certificate_number: stone.certificate_number,
-          certificate_source: countries?.find(
-            (country) => country.id == stone.certificate_source
-          )?.name!,
-          certificate_url: stone.certificate_url,
+          nature:
+            natures?.find((type) => type.id == stone.nature_id)?.name! || "--",
+          certificate_number: stone.certificate_number || "---",
+          certificate_source:
+            countries?.find((country) => country.id == stone.certificate_source)
+              ?.name! || "---",
+          certificate_url: stone.certificate_url || "---",
         }
         return finaleStone
       })
@@ -203,18 +207,18 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   label="نوع الحجر"
                   name="stone_id"
                   field="id"
-                // onChange={(option) => {
-                //   setFieldValue("stoneType_value", option.value)
-                // }}
+                  // onChange={(option) => {
+                  //   setFieldValue("stoneType_value", option.value)
+                  // }}
                 />
 
                 <SelectStonePurity
                   field="id"
                   label="نقاء الحجر"
                   name="purity_id"
-                // onChange={(option => {
-                //   setFieldValue('stonePurity_value', option.value)
-                // })}
+                  // onChange={(option => {
+                  //   setFieldValue('stonePurity_value', option.value)
+                  // })}
                 />
                 <BaseInputField
                   id="weight"
@@ -232,9 +236,9 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   field="id"
                   label="طبيعة الحجر"
                   name="nature_id"
-                // onChange={(option => {
-                //   setFieldValue('stoneNature_value', option.value)
-                // })}
+                  // onChange={(option => {
+                  //   setFieldValue('stoneNature_value', option.value)
+                  // })}
                 />
                 <BaseInputField
                   id="certificate_number"
@@ -252,27 +256,27 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   type="text"
                   label="رابط شهادة الحجر"
                 />
-                <div className="col-span-4 flex gap-x-5" >
-                  <SelectStoneShape
-                    multi
-                    field="id"
-                    label="قطع شكل الحجر"
-                    name="shape_id"
+                {/* <div className="col-span-4 flex gap-x-5" > */}
+                <SelectStoneShape
+                  multi
+                  field="id"
+                  label="قطع شكل الحجر"
+                  name="shape_id"
                   // onChange={(option => {
                   //   setFieldValue('stoneShape_value', option.value)
                   // })}
-                  />
-                  <SelectColor
-                    field="id"
-                    multi
-                    label="لون الحجر"
-                    name="color_id"
-                    modalTitle="إضافة لون حجر"
+                />
+                <SelectColor
+                  field="id"
+                  multi
+                  label="لون الحجر"
+                  name="color_id"
+                  modalTitle="إضافة لون حجر"
                   // onChange={(option => {
                   //   setFieldValue('stoneColor_value', option.value)
                   // })}
-                  />
-                </div>
+                />
+                {/* </div> */}
                 <div className=" col-span-4 flex flex-col gap-2 ">
                   <label htmlFor="certificate_files">إرفاق شهادة الحجر</label>
                   <DropFile name="certificate_files" />

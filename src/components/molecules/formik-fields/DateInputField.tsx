@@ -28,12 +28,14 @@ export const DateInputField = ({
   minDate,
   labelProps,
   value,
+  placeholder
 }: {
   label: string
   name: string
   maxDate?: Date
   minDate?: Date
   value?: Date
+  placeholder?: string
   labelProps?: {
     [key: string]: any
   }
@@ -52,6 +54,7 @@ export const DateInputField = ({
         </Label>
         <DatePicker
           selected={values[name]}
+          placeholderText={placeholder}
           onChange={(date: Date) => {
             setFieldValue(name, date)
           }}

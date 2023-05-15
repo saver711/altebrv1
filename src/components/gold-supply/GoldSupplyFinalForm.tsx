@@ -82,12 +82,18 @@ export const GoldSupplyFinalForm = ({
       },
       {
         header: `${t("gold tax")}`,
-        cell: (info: any) =>
-          (
-            info.row.original.weight *
-            Number(formValues?.api_gold_price) *
-            0.15
-          ),
+        cell: (info: any) => {
+          if (info.row.original.karat_value == '24') {
+            return 0
+          } else {
+            return (
+              info.row.original.weight *
+              Number(formValues?.api_gold_price) *
+              info.row.original.stock * 
+              0.15
+            ).toFixed(3).replace(/\.?0+$/, '')
+          }
+        },
         accessorKey: "gold_tax",
       },
     ],

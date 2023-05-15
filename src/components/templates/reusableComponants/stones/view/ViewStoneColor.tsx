@@ -71,7 +71,7 @@ export const ViewStoneColor = () => {
         accessorKey: 'name',
       },
       {
-        header: `${t('action')}`,
+        header: `${t('actions')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -154,22 +154,27 @@ export const ViewStoneColor = () => {
     <>
       <div className="flex justify-between mb-8">
         <h3 className="font-bold">
-          {`${t('system establishment')} / ${t('color')}`}
+          {`${t("system establishment")} / ${t("color")}`}
         </h3>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {setSearch(values.search)}}
+          onSubmit={(values) => {
+            setSearch(values.search)
+          }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
-              id="color_search"
+              id="search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
-              <BiSearchAlt className={isRefetching ? 'fill-mainGreen' : 'fill-white'} />
+              <BiSearchAlt
+                className={isRefetching ? "fill-mainGreen" : "fill-white"}
+              />
             </Button>
           </Form>
         </Formik>
@@ -180,8 +185,8 @@ export const ViewStoneColor = () => {
               setModel(true)
               setOpen(true)
             }}
-            addLabel={`${t('add')}`}
-            />
+            addLabel={`${t("add")}`}
+          />
           <div className="ms-2">
             <Back />
           </div>
@@ -195,20 +200,26 @@ export const ViewStoneColor = () => {
           />
         </div>
       )}
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-      >
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
-          <CreateColor value={editData?.name} item={editData} setDataSource={setDataSource} setShow={setOpen} />
-          ) : (
+          <CreateColor
+            value={editData?.name}
+            item={editData}
+            setDataSource={setDataSource}
+            setShow={setOpen}
+          />
+        ) : (
           <div className="flex flex-col gap-8 justify-center items-center">
             <Header header={` حذف : ${deleteData?.name}`} />
             <div className="flex gap-4 justify-center items-cent">
-              <Button action={handleSubmit} loading={isDeleting} variant="danger">
-                {`${t('confirm')}`}
+              <Button
+                action={handleSubmit}
+                loading={isDeleting}
+                variant="danger"
+              >
+                {`${t("confirm")}`}
               </Button>
-              <Button action={() => setOpen(false)}>{`${t('close')}`}</Button>
+              <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
             </div>
           </div>
         )}
@@ -218,43 +229,51 @@ export const ViewStoneColor = () => {
         {isSuccess && !!!dataSource?.length && !isLoading && !isRefetching && (
           <div className="mb-5 pr-5">
             <Header
-              header={t('no items')}
+              header={t("no items")}
               className="text-center text-2xl font-bold"
             />
           </div>
         )}
-        {isSuccess && !!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <Table data={dataSource} columns={cols}>
-            <div className="mt-3 flex items-center justify-end gap-5 p-2">
-              <div className="flex items-center gap-2 font-bold">
-                {t('page')}
-                <span className=" text-mainGreen">
-                  {colors.current_page}
-                </span>
-                {t('from')}
-                <span className=" text-mainGreen">
-                  {colors.pages}
-                </span>
+        {isSuccess &&
+          !!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <Table data={dataSource} columns={cols}>
+              <div className="mt-3 flex items-center justify-end gap-5 p-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {t("page")}
+                  <span className=" text-mainGreen">{colors.current_page}</span>
+                  {t("from")}
+                  <span className=" text-mainGreen">{colors.pages}</span>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev - 1)}
+                    disabled={page == 1}
+                  >
+                    {isRTL ? (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    )}
+                  </Button>
+                  <Button
+                    className=" rounded bg-mainGreen p-[.18rem] "
+                    action={() => setPage((prev) => prev + 1)}
+                    disabled={page == colors.pages}
+                  >
+                    {isRTL ? (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center gap-2 ">
-                <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
-                  action={() => setPage(prev => prev - 1)}
-                  disabled={page == 1}
-                >
-                  {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
-                </Button>
-                <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
-                  action={() => setPage(prev => prev + 1)}
-                  disabled={page == colors.pages}
-                >
-                  {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
-                </Button>
-              </div>
-            </div>
-          </Table>
-        )}
+            </Table>
+          )}
       </div>
     </>
   )

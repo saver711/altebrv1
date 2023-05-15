@@ -43,6 +43,8 @@ type GoldCodingSanadFormHandlerProps_TP = {
   setSizes: SetState_TP<SizePopup_TP[]>
   stage: number
   setStage: SetState_TP<number>
+  activeBand: GoldSanadBand_TP | undefined
+  setActiveBand: SetState_TP<GoldSanadBand_TP | undefined>
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -61,6 +63,8 @@ export const GoldCodingSanadFormHandler = ({
   setSizes,
   stage,
   setStage,
+  activeBand,
+  setActiveBand,
 }: GoldCodingSanadFormHandlerProps_TP) => {
   /////////// VARIABLES
   ///
@@ -69,7 +73,6 @@ export const GoldCodingSanadFormHandler = ({
   const [selectedSanadLocal, setSelectedSanadLocal] =
     useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
 
-  const [activeBand, setActiveBand] = useState<GoldSanadBand_TP | undefined>()
   const columns: Column[] = [
     {
       name: "category",
@@ -107,7 +110,7 @@ export const GoldCodingSanadFormHandler = ({
   const total18 = addedPieces
     .filter((piece) => piece.karat_value === "18")
     .reduce((acc, { weight }) => acc + +weight, 0)
-  const totalWages = addedPieces?.reduce((acc, { wage }) => acc + +wage, 0)
+  const totalWages = addedPieces?.reduce((acc, { wage, weight }) => acc + +wage * +weight, 0)
 
   const totals = [
     {
@@ -152,12 +155,11 @@ export const GoldCodingSanadFormHandler = ({
     },
   ]
 
-  
   ///
   /////////// CUSTOM HOOKS
   ///
   const { values, setFieldValue, setFieldError, submitForm, isSubmitting } =
-  useFormikContext<GoldCodingSanad_initialValues_TP>()
+    useFormikContext<GoldCodingSanad_initialValues_TP>()
 
   /* FETCH SANAD */
   const {
@@ -212,22 +214,22 @@ export const GoldCodingSanadFormHandler = ({
     }
   }, [selectedSanad])
 
-  useEffect(()=>{
-    if(!!selectedSanad){
+  useEffect(() => {
+    if (!!selectedSanad) {
       setFieldValue("bond_date", selectedSanad.bond_date)
     }
   }, [selectedSanad])
 
   // useEffect(() => {
   //   if (!!selectedSanad) {
-      // setActiveBand(selectedSanad.items[0])
-      //-------
-      // setFieldValue("bond_id", selectedSanad.id)
-      // setFieldValue("band_id", selectedSanad.items[0]?.id)
-      // setFieldValue("category_id", selectedSanad.items[0]?.category.id)
-      // setFieldValue("left_weight", selectedSanad.items[0]?.leftWeight)
-      // setFieldValue("karat_id", selectedSanad.items[0]?.goldKarat)
-      // setFieldValue("bond_date", selectedSanad.bond_date)
+  // setActiveBand(selectedSanad.items[0])
+  //-------
+  // setFieldValue("bond_id", selectedSanad.id)
+  // setFieldValue("band_id", selectedSanad.items[0]?.id)
+  // setFieldValue("category_id", selectedSanad.items[0]?.category.id)
+  // setFieldValue("left_weight", selectedSanad.items[0]?.leftWeight)
+  // setFieldValue("karat_id", selectedSanad.items[0]?.goldKarat)
+  // setFieldValue("bond_date", selectedSanad.bond_date)
   //   }
   // }, [])
   ///-------------------
@@ -238,7 +240,7 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("karat_value", activeBand.goldKarat)
 
       setItemsToShowInCaseOfTa2m([])
-      
+
       setSizes([])
     }
 
@@ -279,7 +281,7 @@ export const GoldCodingSanadFormHandler = ({
   }, [sizes])
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  
+
   ///
   return (
     <>
@@ -289,119 +291,125 @@ export const GoldCodingSanadFormHandler = ({
       {isLoading && <Loading mainTitle="تحميل السند" />}
       {!!selectedSanad && !!selectedSanad.items.length && (
         // <HandleBackErrors errors={error?.response?.data?.errors}>
-          <>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-4 shadows py-6 px-4 bg-lightGreen rounded-lg bg-opacity-50">
-                <h3>الترقيم بالوزن</h3>
-                <RadioGroup name="mezan_type">
-                  <RadioGroup.RadioButton
-                    value="manual"
-                    label="الوزن اليدوي"
-                    id="manual"
-                  />
-                  <RadioGroup.RadioButton
-                    value="mezan"
-                    label="من الميزان"
-                    id="mezan"
-                  />
-                </RadioGroup>
-              </div>
+        <>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-4 shadows py-6 px-4 bg-lightGreen rounded-lg bg-opacity-50">
+              <h3>الترقيم بالوزن</h3>
+              <RadioGroup name="mezan_type">
+                <RadioGroup.RadioButton
+                  value="manual"
+                  label="الوزن اليدوي"
+                  id="manual"
+                />
+                <RadioGroup.RadioButton
+                  value="mezan"
+                  label="من الميزان"
+                  id="mezan"
+                />
+              </RadioGroup>
             </div>
-            <div className="flex flex-col gap-4 bg-lightGreen rounded-lg bg-opacity-50 p-4 shadows ">
-              <div className="flex flex-col gap-3 ">
-                <div className=" flex items-center w-full justify-between">
-                  <Header
-                    header="إجماليات سند توريد الذهب "
-                    className="text-lg"
-                  />
-                  <h4>
-                    سند رقم /
-                    <span className=" text-mainGreen mr-2">
-                      {selectedSanad.id}
-                    </span>
-                  </h4>
-                </div>
-                <ul className="grid grid-cols-5 gap-4">
-                  {selectedSanad.boxes.map(({ account, id, unit, value }) => (
-                    <BoxesDataBase key={id}>
-                      <p>{t(account)}</p>
-                      <p>
-                        {value} {t(unit)}
-                      </p>
-                    </BoxesDataBase>
-                  ))}
-                </ul>
-              </div>
-              <div className=" flex flex-col gap-1">
-                <Header header="بيانات سند توريد الذهب" className=" text-lg " />
-
-                <div className="GlobalTable">
-                  <NinjaTable<GoldSanadBand_TP>
-                    data={selectedSanad.items}
-                    columns={columns}
-                    selection="single"
-                    selected={activeBand}
-                    // @ts-ignore
-                    setSelected={setActiveBand}
-                    creatable={false}
-                  />
-                </div>
-              </div>
-            </div>
-            {/* {sanadData.boxes.map()} */}
+          </div>
+          <div className="flex flex-col gap-4 bg-lightGreen rounded-lg bg-opacity-50 p-4 shadows ">
             <div className="flex flex-col gap-3 ">
-              <Header header="إجماليات الترقيم" className=" text-lg " />
-              <ul className="grid grid-cols-6 gap-6">
-                {totals.map(({ name, key, unit, value }) => (
-                  <BoxesDataBase variant="secondary" key={key}>
-                    <div className="flex flex-col gap-2">
-                      <p>{name}</p>
-                      <p>
-                        {value} {t(unit)}
-                      </p>
-                    </div>
+              <div className=" flex items-center w-full justify-between">
+                <Header
+                  header="إجماليات سند توريد الذهب "
+                  className="text-lg"
+                />
+                <h4>
+                  سند رقم /
+                  <span className=" text-mainGreen mr-2">
+                    {selectedSanad.id}
+                  </span>
+                </h4>
+              </div>
+              <ul className="grid grid-cols-5 gap-4">
+                {selectedSanad.boxes.map(({ account, id, unit, value }) => (
+                  <BoxesDataBase key={id}>
+                    <p>{t(account)}</p>
+                    <p>
+                      {value} {t(unit)}
+                    </p>
                   </BoxesDataBase>
                 ))}
               </ul>
             </div>
+            <div className=" flex flex-col gap-1">
+              <Header header="بيانات سند توريد الذهب" className=" text-lg " />
 
-            {/* بنود الترقيم */}
-            <Accordion
-              className=" bg-lightGreen"
-              isInitiallyOpen={true}
-              title="بنود الترقيم"
-            >
-              <div className="bg-lightGreen rounded-md p-4 mt-3">
-                <div className=" bg-white shadows mt-6 rounded-md p-4">
-                  {!!activeBand && (
-                    <GoldItemCodingForm
-                      setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
-                      itemsToShowInCaseOfTa2m={itemsToShowInCaseOfTa2m}
-                      detailedWeight_total={detailedWeight_total}
-                      setDetailedWeight_total={setDetailedWeight_total}
-                      sizes={sizes}
-                      setSizes={setSizes}
-                      activeBand={activeBand}
-                    />
-                  )}
-                </div>
+              <div className="GlobalTable">
+                <NinjaTable<GoldSanadBand_TP>
+                  data={selectedSanad.items}
+                  columns={columns}
+                  selection="single"
+                  selected={activeBand}
+                  // @ts-ignore
+                  setSelected={setActiveBand}
+                  creatable={false}
+                />
               </div>
-            </Accordion>
+            </div>
+          </div>
+          {/* {sanadData.boxes.map()} */}
+          <div className="flex flex-col gap-3 ">
+            <Header header="إجماليات الترقيم" className=" text-lg " />
+            <ul className="grid grid-cols-6 gap-6">
+              {totals.map(({ name, key, unit, value }) => (
+                <BoxesDataBase variant="secondary" key={key}>
+                  <div className="flex flex-col gap-2">
+                    <p>{name}</p>
+                    <p>
+                      {value} {t(unit)}
+                    </p>
+                  </div>
+                </BoxesDataBase>
+              ))}
+            </ul>
+          </div>
 
-            {/* الحجر */}
-            {!!values.has_stones && (
-              <AddStone stones={stones} setStones={setStones} />
-            )}
-            <div className="flex items-end justify-end gap-x-5">
-              {/* submit البند */}
-              {!!addedPieces.length && (
+          {/* بنود الترقيم */}
+          <Accordion
+            className=" bg-lightGreen"
+            isInitiallyOpen={true}
+            title="بنود الترقيم"
+          >
+            <div className="bg-lightGreen rounded-md p-4 mt-3">
+              <div className=" bg-white shadows mt-6 rounded-md p-4">
+                {!!activeBand && (
+                  <GoldItemCodingForm
+                    setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+                    itemsToShowInCaseOfTa2m={itemsToShowInCaseOfTa2m}
+                    detailedWeight_total={detailedWeight_total}
+                    setDetailedWeight_total={setDetailedWeight_total}
+                    sizes={sizes}
+                    setSizes={setSizes}
+                    activeBand={activeBand}
+                    setActiveBand={setActiveBand}
+                  />
+                )}
+              </div>
+            </div>
+          </Accordion>
+
+          {/* الحجر */}
+          {!!values.has_stones && (
+            <AddStone stones={stones} setStones={setStones} />
+          )}
+          <div className="flex items-end justify-end gap-x-5">
+            {/* submit البند */}
+            {!!addedPieces.length && (
+              <div className="relative">
+                <span className="bg-mainGreen rounded-full  h-6 w-6 text-white text-center mb-2 absolute -top-4 z-50">
+                  {addedPieces.length}
+                </span>
                 <Button bordered={true} action={() => setStage(2)}>
                   {t("preview")}
                 </Button>
-              )}
-              <Button action={submitForm}>{t("save")}</Button>
-            </div>
-          </>
+              </div>
+            )}
+            <Button action={submitForm}>{t("save")}</Button>
+          </div>
+        </>
         // </HandleBackErrors>
       )}
 

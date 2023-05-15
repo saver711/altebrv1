@@ -69,7 +69,7 @@ export const ViewStonePurity = () => {
         accessorKey: 'name',
       },
       {
-        header: `${t('action')}`,
+        header: `${t('actions')}`,
         cell: (info) => 
         <div className="flex items-center justify-center gap-4">
           <EditIcon
@@ -160,12 +160,13 @@ export const ViewStonePurity = () => {
           }}
           validationSchema={validationSchema}
         >
-          <Form className="flex align-middle gap-2">
+          <Form className="flex gap-2 items-center rounded-md border-2 border-slate-200 p-1">
             <BaseInputField
-              id="purity_search"
+              id="search"
               name="search"
               type="text"
               placeholder={`${t("search")}`}
+              className="placeholder-slate-400 p-[.18rem] !shadow-transparent focus:border-transparent"
             />
             <Button type="submit" disabled={isRefetching}>
               <BiSearchAlt
@@ -224,14 +225,18 @@ export const ViewStonePurity = () => {
         {(isLoading || isRefetching) && (
           <Loading mainTitle={t("stones purities")} />
         )}
-        {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-        )}
+        {isSuccess &&
+          !!!dataSource &&
+          !isLoading &&
+          !isRefetching &&
+          !!dataSource.length && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t("no items")}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&
@@ -240,11 +245,11 @@ export const ViewStonePurity = () => {
             <Table data={dataSource} columns={cols}>
               <div className="mt-3 flex items-center justify-end gap-5 p-2">
                 <div className="flex items-center gap-2 font-bold">
-                  {t('page')}
+                  {t("page")}
                   <span className=" text-mainGreen">
                     {purities.current_page}
                   </span>
-                  {t('from')}
+                  {t("from")}
                   <span className=" text-mainGreen">{purities.pages}</span>
                 </div>
                 <div className="flex items-center gap-2 ">
@@ -253,14 +258,22 @@ export const ViewStonePurity = () => {
                     action={() => setPage((prev) => prev - 1)}
                     disabled={page == 1}
                   >
-                    {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                   <Button
                     className=" rounded bg-mainGreen p-[.18rem] "
                     action={() => setPage((prev) => prev + 1)}
                     disabled={page == purities.pages}
                   >
-                    {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                    {isRTL ? (
+                      <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                    ) : (
+                      <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                    )}
                   </Button>
                 </div>
               </div>

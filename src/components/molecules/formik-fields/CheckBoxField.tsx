@@ -34,6 +34,7 @@ export const CheckBoxField = ({
       <Checkbox
         label={label}
         id={id}
+        name={name}
         value={values[name]}
         className={`${errors[name] && "border-2 border-mainRed"}`}
         {...props}

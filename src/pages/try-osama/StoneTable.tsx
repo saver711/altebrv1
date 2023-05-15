@@ -60,7 +60,6 @@ export const StoneTable = ({ subTableData }: any) => {
   ///
   //@ts-ignore
   const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
-  console.log("🚀 ~ file: StoneTable.tsx:63 ~ StoneTable ~ selectedRow:", selectedRow)
   const queryClient = useQueryClient()
   const [queryData, setQueryData] = useState<StoneRow_TP[] | undefined>()
   //@ts-ignore
@@ -74,7 +73,6 @@ export const StoneTable = ({ subTableData }: any) => {
       const purities = queryClient.getQueryData<Query_TP[]>(["stone_purity"])
       const natures = queryClient.getQueryData<Query_TP[]>(["stone_nature"])
       const allQueries = StonesData?.map((stone) => {
-        console.log("first==>", stone)
         const finaleStone = {
           stone: types?.find((type) => type.id == stone.stone_id)?.name,
           color: colors
@@ -95,7 +93,6 @@ export const StoneTable = ({ subTableData }: any) => {
     }
   }, [queryClient])
   const [data, setData] = useState([])
-  console.log(queryData)
   //@ts-ignore
   useEffect(() => {
     if(queryData){
@@ -160,7 +157,7 @@ export const StoneTable = ({ subTableData }: any) => {
                       <td key={cell.id} className={`border-l-[#b9b7b7]-500 border  ${!!!cell.getContext().getValue() && 'bg-gray-300 cursor-not-allowed' }`} >
                         {
                           !!cell.getContext().getValue() ?
-                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('visit link')}</span> <BiLinkExternal/> </a> :
+                          cell.getContext().column.id === 'certificate_url' ? <a target='_blank' href={`${cell.getContext().row.original?.certificate_url}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><span>{t('link')}</span> <BiLinkExternal/> </a> :
                         flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -168,7 +165,7 @@ export const StoneTable = ({ subTableData }: any) => {
                       </td>
                     )
                   })}
-                </tr>
+              </tr>
               )
             })}
           </tbody>

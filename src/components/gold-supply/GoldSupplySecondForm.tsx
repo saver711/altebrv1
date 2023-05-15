@@ -5,7 +5,7 @@
 /////////// Types
 
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Button } from "../atoms"
 import { BoxesDataBase } from "../atoms/card/BoxesDataBase"
 import { OuterFormLayout } from "../molecules"
@@ -91,7 +91,6 @@ export const GoldSupplySecondForm = ({
         karat_value: '',
         category_value: ''
     }
-
     ///
     /////////// SIDE EFFECTS
     ///
@@ -127,7 +126,11 @@ export const GoldSupplySecondForm = ({
     }, 0)
 
     const total_tax = boxValues.reduce((acc, curr) => {
-        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+        if (curr.karat_value == '24') {
+            return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
+        } else {
+            return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+        }
     }, 0)
 
     const total_weight = boxValues.reduce((acc, curr) => {
@@ -241,7 +244,7 @@ export const GoldSupplySecondForm = ({
                                     number: `${i + 1}`,
                                     total_wages: (Number(item.weight) * Number(item.wage)),
                                     wage_tax: (Number(item.weight) * Number(item.wage) * .15),
-                                    gold_tax: (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
+                                    gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
                                 }
                             })
                         })
