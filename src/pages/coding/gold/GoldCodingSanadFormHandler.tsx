@@ -16,14 +16,14 @@ import { useFetch, useLocalStorage } from "../../../hooks"
 import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import {
   karatStocks,
-  prepareItemsToShowInCaseOfTa2m
+  prepareItemsToShowInCaseOfTa2m,
 } from "../../../utils/helpers"
 import {
   GoldCodingSanad_initialValues_TP,
   GoldCodingStoneValues_TP,
   GoldSanadBand_TP,
   GoldSanad_TP,
-  SizePopup_TP
+  SizePopup_TP,
 } from "../coding-types-and-helpers"
 import { AddStone } from "./AddStone"
 import { GoldItemCodingForm } from "./GoldItemCodingForm"
@@ -110,7 +110,10 @@ export const GoldCodingSanadFormHandler = ({
   const total18 = addedPieces
     .filter((piece) => piece.karat_value === "18")
     .reduce((acc, { weight }) => acc + +weight, 0)
-  const totalWages = addedPieces?.reduce((acc, { wage, weight }) => acc + +wage * +weight, 0)
+  const totalWages = addedPieces?.reduce(
+    (acc, { wage, weight }) => acc + +wage * +weight,
+    0
+  )
 
   const totals = [
     {
@@ -211,36 +214,20 @@ export const GoldCodingSanadFormHandler = ({
       // )
       // const updatedSanad = { ...selectedSanad, items: updatedSanadItems }
       setSelectedSanadLocal(selectedSanad)
-    }
-  }, [selectedSanad])
-
-  useEffect(() => {
-    if (!!selectedSanad) {
       setFieldValue("bond_date", selectedSanad.bond_date)
     }
   }, [selectedSanad])
 
-  // useEffect(() => {
-  //   if (!!selectedSanad) {
-  // setActiveBand(selectedSanad.items[0])
-  //-------
-  // setFieldValue("bond_id", selectedSanad.id)
-  // setFieldValue("band_id", selectedSanad.items[0]?.id)
-  // setFieldValue("category_id", selectedSanad.items[0]?.category.id)
-  // setFieldValue("left_weight", selectedSanad.items[0]?.leftWeight)
-  // setFieldValue("karat_id", selectedSanad.items[0]?.goldKarat)
-  // setFieldValue("bond_date", selectedSanad.bond_date)
-  //   }
-  // }, [])
   ///-------------------
   useEffect(() => {
     if (!!activeBand) {
       setFieldValue("left_weight", activeBand.leftWeight)
       setFieldValue("band_id", activeBand.id)
       setFieldValue("karat_value", activeBand.goldKarat)
-
+      setFieldValue("wage", activeBand.wage)
+      setFieldValue("init_wage", activeBand.wage)
+      
       setItemsToShowInCaseOfTa2m([])
-
       setSizes([])
     }
 

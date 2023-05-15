@@ -9,7 +9,7 @@ import { CError_TP } from "../../../types"
 import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { ExpandableTable } from "../../try-osama/ExapndableTable"
-import { GoldCodingSanad_initialValues_TP } from "../coding-types-and-helpers"
+import { GoldCodingSanad_initialValues_TP, GoldSanad_TP } from "../coding-types-and-helpers"
 import { CodingSanad } from "./CodingSanad"
 ///
 /////////// Types
@@ -25,6 +25,9 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   /////////// VARIABLES
   ///
   const { sanadId } = useParams()
+  const [selectedSanadLocal, setSelectedSanadLocal] =
+    useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
+
   const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
     GoldCodingSanad_initialValues_TP[]
   >(`addedPiecesLocal_${sanadId}`)
@@ -44,7 +47,9 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   ///
   /////////// STATES
   ///
-
+const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
+  selectedSanadLocal
+)
 
   const [stage, setStage] = useState(1)
   ///
@@ -94,6 +99,8 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       </Helmet>
       {stage === 1 && (
         <CodingSanad
+          selectedSanad={selectedSanad}
+          setSelectedSanad={setSelectedSanad}
           stage={stage}
           setStage={setStage}
           addedPieces={addedPieces}
@@ -103,6 +110,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       {stage === 2 && !!addedPieces.length && (
         <div className="flex flex-col mx-auto relative">
           <ExpandableTable
+            setSelectedSanad={setSelectedSanad}
             setAddedPieces={setAddedPieces}
             addedPieces={addedPieces}
             showDetails={true}
@@ -111,10 +119,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
             <Button action={() => setStage(1)} bordered>
               رجوع
             </Button>
-            <Button
-              loading={isLoading}
-              action={() => sendPieces(addedPieces)}
-            >
+            <Button loading={isLoading} action={() => sendPieces(addedPieces)}>
               ارسال
             </Button>
           </div>
@@ -123,9 +128,9 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       {stage === 2 && !!!addedPieces.length && (
         <div className="flex justify-between mx-auto relative">
           <h2 className="text-mainGreen text-xl">لا يوجد قطع مرقمة</h2>
-            <Button action={() => setStage(1)} bordered>
-              رجوع
-            </Button>
+          <Button action={() => setStage(1)} bordered>
+            رجوع
+          </Button>
         </div>
       )}
     </>
