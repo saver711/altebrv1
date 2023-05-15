@@ -110,7 +110,7 @@ export const GoldCodingSanadFormHandler = ({
   const total18 = addedPieces
     .filter((piece) => piece.karat_value === "18")
     .reduce((acc, { weight }) => acc + +weight, 0)
-  const totalWages = addedPieces?.reduce((acc, { wage }) => acc + +wage, 0)
+  const totalWages = addedPieces?.reduce((acc, { wage, weight }) => acc + +wage * +weight, 0)
 
   const totals = [
     {
