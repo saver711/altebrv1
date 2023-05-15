@@ -5,6 +5,9 @@ import { Form, Formik } from "formik"
 import { Helmet } from "react-helmet-async"
 import * as Yup from "yup"
 import { Button } from "../components/atoms/buttons/Button"
+import { Select } from "../components/molecules"
+import { Country_city_distract_markets } from "../components/templates/reusableComponants/Country_city_distract_markets"
+import { useFetch } from "../hooks"
 
 ///
 /////////// Types
@@ -15,20 +18,20 @@ type HomeProps_TP = {
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 const validatingSchema = Yup.object({
-    category_id: Yup.string().trim().required(),
-    size_type: Yup.string()
-      .trim()
-      .when("sizeIsRequired", {
-        is: (val: boolean) => val === true,
-        then: (schema) => schema.required(),
-      }),
-    size_unit_id: Yup.string()
-      .trim()
-      .when("sizeIsRequired", {
-        is: (val: boolean) => val === true,
-        then: (schema) => schema.required(),
-      }),
-  })
+  category_id: Yup.string().trim().required(),
+  size_type: Yup.string()
+    .trim()
+    .when("sizeIsRequired", {
+      is: (val: boolean) => val === true,
+      then: (schema) => schema.required(),
+    }),
+  size_unit_id: Yup.string()
+    .trim()
+    .when("sizeIsRequired", {
+      is: (val: boolean) => val === true,
+      then: (schema) => schema.required(),
+    }),
+})
 ///
 export const Home = ({ title }: HomeProps_TP) => {
   /////////// VARIABLES
@@ -58,7 +61,6 @@ export const Home = ({ title }: HomeProps_TP) => {
   /////////// FUNCTIONS
   ///
 
-  
   ///
   return (
     <>
@@ -192,6 +194,7 @@ export const Home = ({ title }: HomeProps_TP) => {
               <Button type="submit" variant="primary">
                 Submit
               </Button>
+             
             </Form>
           )}
         </Formik>
