@@ -16,7 +16,7 @@ import {
   BaseInputField,
   CheckBoxField,
   OuterFormLayout,
-  Select
+  Select,
 } from "../../../../molecules"
 import RadioGroup from "../../../../molecules/RadioGroup"
 
@@ -87,7 +87,7 @@ const CreateCategory = ({
         id: item.id,
         label: item.name,
         name: item.name,
-        value: item.id
+        value: item.id,
       }
     })
   }
@@ -176,12 +176,12 @@ const CreateCategory = ({
       }
       if (setDataSource && setShow && !editData && !error) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllCategory'])
+        queryClient.refetchQueries(["AllCategory"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        queryClient.refetchQueries(['AllCategory'])
+        queryClient.refetchQueries(["AllCategory"])
         // setDataSource((prev: any) =>
         //   prev.map((p: any) => (p.id === data?.id ? data : p))
         // )
@@ -447,3 +447,4 @@ const CreateCategory = ({
 }
 
 export default CreateCategory
+

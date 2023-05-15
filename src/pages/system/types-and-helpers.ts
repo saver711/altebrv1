@@ -9,7 +9,13 @@ export type Card_TP<T> = {
     viewHandler?: () => void
 }
 
-export type FormNames_TP = 'partners' | "add_supplier" | "add_account" | "add_employee" | "add_administrative_structure"
+export type FormNames_TP =
+  | "partners"
+  | "add_supplier"
+  | "add_account"
+  | "add_employee"
+  | "add_administrative_structure"
+  | "add_branch"
 
 export type GlobalFormNames_TP = 'countries' | 'cities' | "districts" | 'colors' | 'classifications' | 'nationalities' | "karats" | "categories" | "markets" | "sizes"
 
