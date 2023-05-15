@@ -13,6 +13,7 @@ import { OTable } from "../templates/reusableComponants/o-table/OTable"
 import { GoldFirstFormView } from "./GoldFirstFormView"
 import { GoldFirstFormInitValues_TP } from "./formInitialValues_types"
 import { notify } from "../../utils/toast"
+import { numberContext } from "../../context/settings/number-formatter"
 
 ///
 type GoldSupplySecondFormProps_TP = {
@@ -73,6 +74,7 @@ export const GoldSupplySecondForm = ({
     ///
     /////////// CUSTOM HOOKS
     ///
+    const { formatGram, formatReyal } = numberContext()
     ///
     /////////// STATES
     ///
@@ -152,7 +154,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total 24 gold by stock')}</p>
-                        <p>{total_24_gold_by_stock} {t('gram')}</p>
+                        <p>{formatGram(total_24_gold_by_stock)} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الذهب حسب الاسهم */}
@@ -161,7 +163,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total wages')}</p>
-                        <p>{total_wages} {t('reyal')}</p>
+                        <p>{formatReyal(total_wages)} {t('reyal')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الاجور */}
@@ -170,7 +172,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total tax')}</p>
-                        <p>{total_tax} {t('reyal')}</p>
+                        <p>{formatReyal(total_tax)} {t('reyal')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الضريبة */}
@@ -179,7 +181,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total weight')}</p>
-                        <p>{total_weight} {t('gram')}</p>
+                        <p>{formatGram(total_weight)} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي الوزن القائم */}
@@ -188,7 +190,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total 18 gold box')}</p>
-                        <p>{karat_18_aggregate} {t('gram')}</p>
+                        <p>{formatGram(karat_18_aggregate)} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 18 */}
@@ -197,7 +199,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total 21 gold box')}</p>
-                        <p>{karat_21_aggregate} {t('gram')}</p>
+                        <p>{formatGram(karat_21_aggregate)} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 21 */}
@@ -206,7 +208,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total 22 gold box')}</p>
-                        <p>{karat_22_aggregate} {t('gram')}</p>
+                        <p>{formatGram(karat_22_aggregate)} {t('gram')}</p>
 
                     </BoxesDataBase>
                 </div>
@@ -216,7 +218,7 @@ export const GoldSupplySecondForm = ({
                 <div className="col-span-1" >
                     <BoxesDataBase>
                         <p>{t('total 24 gold box')}</p>
-                        <p>{karat_24_aggregate} {t('gram')}</p>
+                        <p>{formatGram(karat_24_aggregate)} {t('gram')}</p>
                     </BoxesDataBase>
                 </div>
                 {/* اجمالي صندوق الذهب 24 */}
@@ -224,44 +226,51 @@ export const GoldSupplySecondForm = ({
             </div>
             <h1 className="text-2xl mb-5 mt-10">{t('bond items')}</h1>
             <div className="flex flex-col gap-6 items-center">
-                <OTable setDirty={setDirty} data={data} setData={setData} defaultValues={defaultValues} setEditData={setEditData} editData={editData} formValues={formValues} setBoxValues={setBoxValues} />
-                <Button 
-                    action={() => {
-                        setFinalData({
-                            boxes: {
-                                karat_24_aggregate,
-                                karat_22_aggregate,
-                                karat_21_aggregate,
-                                karat_18_aggregate,
-                                total_24_gold_by_stock,
-                                total_wages,
-                                total_tax,
-                                total_weight,
-                            },
-                            table: data.map((item, i) => {
-                                return {
-                                    ...item,
-                                    number: `${i + 1}`,
-                                    total_wages: (Number(item.weight) * Number(item.wage)),
-                                    wage_tax: (Number(item.weight) * Number(item.wage) * .15),
-                                    gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
-                                }
+                <OTable dirty={dirty} setDirty={setDirty} data={data} setData={setData} defaultValues={defaultValues} setEditData={setEditData} editData={editData} formValues={formValues} setBoxValues={setBoxValues} />
+                <div className="flex justify-end gap-4 w-full">
+                    <Button
+                        action={() => setStage(1)}
+                        className="bg-mainGray border-mainGreen text-mainGreen"
+                        >
+                        {t("back")}
+                    </Button>  
+                    <Button 
+                        action={() => {
+                            setFinalData({
+                                boxes: {
+                                    karat_24_aggregate,
+                                    karat_22_aggregate,
+                                    karat_21_aggregate,
+                                    karat_18_aggregate,
+                                    total_24_gold_by_stock,
+                                    total_wages,
+                                    total_tax,
+                                    total_weight,
+                                },
+                                table: data.map((item, i) => {
+                                    return {
+                                        ...item,
+                                        number: `${i + 1}`,
+                                        total_wages: (Number(item.weight) * Number(item.wage)),
+                                        wage_tax: (Number(item.weight) * Number(item.wage) * .15),
+                                        gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
+                                    }
+                                })
                             })
-                        })
-                        if (data.length > 0)  {
-                            if (dirty) {
-                                notify('error', `${t('must add the item')}`)
+                            if (data.length > 0)  {
+                                if (dirty) {
+                                    notify('error', `${t('must add the item')}`)
+                                } else {
+                                    setStage(prev => prev + 1)
+                                }
                             } else {
-                                setStage(prev => prev + 1)
+                                notify('error', `${t('must add one item at least')}`)
                             }
-                        } else {
-                            notify('error', `${t('must add one item at least')}`)
-                        }
-                    }} 
-                    className="mr-auto ml-8  flex"
-                >
-                    {t('next')}
-                </Button>
+                        }} 
+                    >
+                        {t('next')}
+                    </Button>
+                </div>
             </div>
         </div>
     </>

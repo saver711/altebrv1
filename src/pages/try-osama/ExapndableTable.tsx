@@ -10,15 +10,22 @@ import {
   getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { Spinner } from "../../components/atoms"
 import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
 import { Modal } from "../../components/molecules"
-import { useFetch } from "../../hooks"
 import { SubTables } from "./SubTables"
+import { useFetch, useLocalStorage } from "../../hooks"
+import { useParams } from "react-router-dom"
+import {
+  GoldCodingSanad_initialValues_TP,
+  GoldSanad_TP,
+} from "../coding/coding-types-and-helpers"
+        import { Loading } from "../../components/organisms/Loading"
+import { Spinner } from "../../components/atoms"
 
 // types
 type Categories_TP = {
@@ -35,11 +42,21 @@ export function ExpandableTable({
   addedPieces,
   setAddedPieces,
   showDetails,
+  setSelectedSanad,
 }: {
   showDetails?: boolean
   addedPieces: GoldCodingSanad_initialValues_TP[]
   setAddedPieces?: SetState_TP<GoldCodingSanad_initialValues_TP[]>
+  setSelectedSanad: SetState_TP<GoldSanad_TP | undefined>
 }) {
+  const { sanadId } = useParams()
+
+  const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
+    GoldCodingSanad_initialValues_TP[]
+  >(`addedPiecesLocal_${sanadId}`)
+
+  const [selectedSanadLocal, setSelectedSanadLocal] =
+    useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
   // variables
   let count = 0
 
@@ -109,13 +126,45 @@ export function ExpandableTable({
                     <DeleteIcon
                       size={23}
                       action={() => {
-                        const thisId = info.row.original.front_key
+                        const row: GoldCodingSanad_initialValues_TP =
+                          info.row.original
+                        const thisId = row.front_key
                         setData((curr) =>
                           curr.filter((piece) => piece.front_key !== thisId)
                         )
                         setAddedPieces((curr) =>
                           curr.filter((piece) => piece.front_key !== thisId)
                         )
+                        setAddedPiecesLocal((curr) =>
+                          curr.filter((piece) => piece.front_key !== thisId)
+                        )
+                        setSelectedSanadLocal((curr) => ({
+                          ...curr,
+                          items: curr.items.map((band) => {
+                            if (band.id === row.band_id) {
+                              return {
+                                ...band,
+                                leftWeight: +band.leftWeight + +row.weight,
+                              }
+                            } else {
+                              return band
+                            }
+                          }),
+                        }))
+
+                        setSelectedSanad((curr) => ({
+                          ...curr,
+                          items: curr.items.map((band) => {
+                            if (band.id === row.band_id) {
+                              return {
+                                ...band,
+                                leftWeight: +band.leftWeight + +row.weight,
+                              }
+                            } else {
+                              return band
+                            }
+                          }),
+                        }))
                       }}
                     />
                   )}
@@ -177,12 +226,23 @@ export function ExpandableTable({
     }
   }, [queryData])
 
+  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+  const { data: allCategories } = useFetch({
+    endpoint: "classification/api/v1/categories?type=all",
+    queryKey: ["categories"],
+    enabled: !!!categories,
+    refetchInterval: !!!categories,
+    onSuccess: (data) => {
+      console.log("🚀 ~ file: SubTables.tsx:71 ~ SubTables ~ categories:", data)
+    },
+  })
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <h2 className="font-bold text-2xl">{t("final review")}</h2>
       <h3>
-        الهويات المرقمه من سند رقم -<span className="text-orange-500">{addedPieces[0].bond_id}</span>
+        الهويات المرقمه من سند رقم -
+        <span className="text-orange-500">{addedPieces[0].bond_id}</span>
       </h3>
       <div className="w-full">
         <table className="mt-2 border-mainGreen shadow-lg mb-2 w-full">

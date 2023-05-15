@@ -38,6 +38,7 @@ export interface BaseInputProps_TP
   className?: string
   autocomplete?: string
   error?: boolean
+  label?: string
   ref?: any
 }
 
@@ -45,22 +46,27 @@ export const BaseInput = forwardRef(
   ({ error, ...props }: BaseInputProps_TP & BaseInputVariants_TP, ref: any) => {
 
     return (
-      <input
-        {...props}
-        type={props.type || "text"}
-        name={props.name}
-        id={props.id}
-        {...(props.placeholder ? { placeholder: props.placeholder } : {})}
-        disabled={props.disabled}
-        className={baseInput({
-          error: error,
-          className: props.className,
-          type: props.type || "text",
-        })}
-        autoComplete={props.autoComplete}
-        value={props.value}
-        ref={ref}
-      />
+      <>
+        {props.label && (
+          <p className="mb-1">{props.label}</p>
+        )}
+        <input
+          {...props}
+          type={props.type || "text"}
+          name={props.name}
+          id={props.id}
+          {...(props.placeholder ? { placeholder: props.placeholder } : {})}
+          disabled={props.disabled}
+          className={baseInput({
+            error: error,
+            className: props.className,
+            type: props.type || "text",
+          })}
+          autoComplete={props.autoComplete}
+          value={props.value}
+          ref={ref}
+        />
+      </>
     )
   }
 )

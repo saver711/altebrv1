@@ -1,31 +1,24 @@
 /////////// IMPORTS
 ///
-//import styles from './Settings.module.css'
 import { ChangeEvent, useContext, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { Button } from "../components/atoms/buttons/Button"
-import { Spinner } from "../components/atoms/UI/Spinner"
 import { numberFormatterCtx } from "../context/settings/number-formatter"
 import { useIsRTL } from "../hooks/useIsRTL"
 import { notify } from "../utils/toast"
 import { BaseInput } from "../components/atoms/inputs/Base"
 import { Label } from "../components/atoms/Label"
 import { authCtx } from "../context/auth-and-perm/auth"
+import { t } from "i18next"
 ///
 /////////// Types
 ///
 type SettingsProps_TP = {
   title: string
 }
-/////////// HELPER VARIABLES & FUNCTIONS
-///
-
 ///
 export const Settings = ({ title }: SettingsProps_TP) => {
-  /////////// VARIABLES
-  ///
-
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -36,7 +29,8 @@ export const Settings = ({ title }: SettingsProps_TP) => {
   ///
   /////////// STATES
   ///
-  const [digitsCount, setDigitsCount] = useState(digits_count)
+  const [reyalDigits, setReyalDigits] = useState(digits_count.reyal)
+  const [gramDigits, setGramDigits] = useState(digits_count.gram)
   ///
   /////////// SIDE EFFECTS
   ///
@@ -47,18 +41,13 @@ export const Settings = ({ title }: SettingsProps_TP) => {
   }, [isRTL])
 
   useEffect(() => {
-    if (!!digits_count) {
-      setDigitsCount(digits_count)
+    if (!!digits_count.reyal) {
+      setReyalDigits(digits_count.reyal)
+    }
+    if (!!digits_count.gram) {
+      setGramDigits(digits_count.gram)
     }
   }, [digits_count])
-
-  ///
-  /////////// IF CASES
-  ///
-
-  ///
-  /////////// EVENTS
-  ///
 
   ///
   /////////// FUNCTIONS
@@ -68,46 +57,65 @@ export const Settings = ({ title }: SettingsProps_TP) => {
   }
 
   const confirmDigitsCount = () => {
-    if (digitsCount === digits_count) {
-      notify("error", "ادخل قيمة مختلفة")
+    if (reyalDigits == digits_count.reyal && gramDigits == digits_count.gram) {
+      notify("error", `${t('enter different numbers')}`)
+      return
+    } else if (reyalDigits <=0 || gramDigits <= 0) {
+      notify("error", `${t('enter positive numbers')}`)
       return
     }
-    changeDigitsCount(digitsCount)
+    changeDigitsCount({reyal: reyalDigits, gram: gramDigits})
   }
-  const changeDigitsCountHandler = (e: ChangeEvent<HTMLInputElement>) =>
-    setDigitsCount(+e.target.value)
+  const changeReyalDigitsHandler = (e: ChangeEvent<HTMLInputElement>) =>
+    setReyalDigits(+e.target.value)
+
+  const changeGramDigitsHandler = (e: ChangeEvent<HTMLInputElement>) =>
+    setGramDigits(+e.target.value)
   ///
   return (
     <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <button type="button" onClick={toggleLang}>
-        change Language
-      </button>
-      {/* <div className="flex items-center gap-2 w-[50rem]">
-        <Label htmlFor="digitsCount" size="lg">
-          عدد الأرقام العشرية
+      <Button type="button" action={() => toggleLang()}>
+        {t('change language')}
+      </Button>
+      <Button loading={isLoggingOut} className="mx-5" action={logOutHandler}>
+        {t('log out')}
+      </Button>
+      <div className="w-[35rem]">
+        <Label htmlFor="countDigits" className="whitespace-nowrap mt-6 mb-3" size="lg">
+          {t('decimal digits count')}
         </Label>
 
-        <BaseInput
-          id="digitsCount"
-          type="number"
-          value={digitsCount && digitsCount.toString()}
-          onChange={changeDigitsCountHandler}
-        />
+        <div className="flex gap-2 mb-4">
+          <div>
+            <BaseInput
+              label={`${t('reyal')}`}
+              id="reyalDigits"
+              type="number"
+              value={reyalDigits && reyalDigits.toString()}
+              onChange={changeReyalDigitsHandler}
+            />
+          </div>
+          <div>
+            <BaseInput
+              label={`${t('gram')}`}
+              id="gramDigits"
+              type="number"
+              value={gramDigits && gramDigits.toString()}
+              onChange={changeGramDigitsHandler}
+            />
+          </div>
+        </div>
         <Button
           loading={digits_countLoading}
           action={confirmDigitsCount}
           className="h-auto w-auto"
         >
-          تغيير الأرقام
+          {t('change numbers')}
         </Button>
-
-        <Button loading={isLoggingOut} action={logOutHandler}>
-          تسجيل خروج
-        </Button>
-      </div> */}
+      </div>
     </>
   )
 }

@@ -203,6 +203,7 @@ export const Countries = ({
           setCountry(option)
           setNewValue(option)
         }}
+        
         defaultValue={{
           value: editData ? editData?.country_name : "",
           label: editData ? editData?.country_name : t("choose country"),
