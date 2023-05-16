@@ -61,6 +61,12 @@ export const FilesPreviewOutFormik = ({
     ///
     /////////// FUNCTIONS | EVENTS | IF CASES
     ///
+    const imagePreview = images.map(image => ({
+        preview: image?.type === 'image' ? image?.path : image?.preview,
+        path: image.preview,
+        type: 'image'
+      }))
+      
 
     ///
     return (
@@ -125,7 +131,7 @@ export const FilesPreviewOutFormik = ({
                     preview={preview}
                     open={lightboxOpen}
                     closeHandler={() => setLightboxOpen(false)}
-                    images={images}
+                    images={imagePreview}
                 />
             )}
             {/* pdfs*/}

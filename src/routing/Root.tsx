@@ -1,6 +1,6 @@
 import { t } from "i18next"
 import { useContext, useEffect } from "react"
-import { useNavigate } from "react-router"
+import { useNavigate, useLocation } from "react-router"
 import { Outlet } from "react-router-dom"
 import Footer from "../components/organisms/Footer"
 import { Loading } from "../components/organisms/Loading"
@@ -11,6 +11,7 @@ import { authCtx } from "../context/auth-and-perm/auth"
 export const Root = () => {
   const { isLoggedIn, isLoadingUpdatedUserData } = useContext(authCtx)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -27,7 +28,12 @@ export const Root = () => {
 
         <SideBar />
 
-        <main className="col-start-2 col-end-3 row-start-2 row-end-3 overflow-y-auto p-10">
+        <main 
+          className={location.pathname === '/system/accounts' 
+          ? "col-start-2 col-end-3 row-start-2 row-end-3 overflow-y-auto pt-10"
+          : "col-start-2 col-end-3 row-start-2 row-end-3 overflow-y-auto p-10" 
+          }
+        >
           <Outlet />
         </main>
 

@@ -137,10 +137,10 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    // category_sizes: Yup.array().when("has_size", {
-    //   is: true,
-    //   then: (schema) => schema.required(requiredTranslation),
-    // }),
+    category_sizes: Yup.string().when("has_size", {
+      is: true,
+      then: (schema) => schema.required(`${t('required')}`).typeError(`${t('required')}`),
+    }),
   })
 
   ///
@@ -309,7 +309,11 @@ const CreateCategory = ({
                         />
                         <RadioGroup.RadioButton
                           value="all"
-                          label={`${t("Selling by weight")}`}
+                          label={`${
+                            props.values.type !== "multi"
+                              ? t("Selling by weight")
+                              : t("Selling by total")
+                          }`}
                           id="sell_in_bulks"
                         />
                       </div>

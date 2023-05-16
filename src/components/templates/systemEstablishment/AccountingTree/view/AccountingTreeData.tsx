@@ -1,8 +1,5 @@
 import { t } from "i18next"
-import { useFetch } from "../../../../../hooks"
-import { Header } from "../../../../atoms/Header"
 import { Tree } from "../../../../atoms/tree"
-import { Loading } from "../../../../organisms/Loading"
 import { AccountingTreeNode } from "./AccountingTreeNode"
 
 export type TreeNode_TP = {
@@ -10,7 +7,11 @@ export type TreeNode_TP = {
   children?: TreeNode_TP[]
 }
 
-const AccountingTreeData = () => {
+type AccountingTreeData_TP = {
+  data: TreeNode_TP[]
+}
+
+const AccountingTreeData = ({data}: AccountingTreeData_TP) => {
   const test: TreeNode_TP[] = [
     {
       label: 'الأصول',
@@ -123,36 +124,12 @@ const AccountingTreeData = () => {
       ],
     },
   ];
-  
-  const { 
-    data,
-    isLoading, 
-    isSuccess, 
-    error 
-  } = useFetch<TreeNode_TP[]>({
-    endpoint: 'accounting/api/v1/treeAccounts',
-    queryKey: ['view_accounting_tree'],
-    onSuccess(data) { 
-      console.log(data) 
-    }
-  })
 
   return (
     <div className="flex flex-col gap-6 items-center">
-      {error && (
-        <div className=" m-auto">
-          <Header
-            className="text-center text-2xl font-bold"
-            header={t(`some thing went wrong ${error.response.data.message}`)}
-          />
-        </div>
-      )}
-      {isLoading && <Loading mainTitle={t("accounting tree")} />}
-      {isSuccess && !!data && !!data.length && (
-        <Tree label={t('accounting tree')}>
-          <AccountingTreeNode tree={data} />
-        </Tree>
-      )}
+      <Tree label={t('accounting tree')}>
+        <AccountingTreeNode tree={data} />
+      </Tree>
     </div>
   )
 }
