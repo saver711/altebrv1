@@ -176,14 +176,18 @@ export const Cities = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress?.city?.id,
-      value: editData?.nationalAddress?.city?.name,
-      label: editData?.nationalAddress?.city?.name || "اختر مدينة",
+      id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
+      value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
+      label:
+        editData?.nationalAddress?.city?.name ||
+        editData?.city_name ||
+        "اختر مدينة",
     })
   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
+
   const {
     data: cities,
     isLoading: citiesLoading,
@@ -203,6 +207,9 @@ export const Cities = ({
     },
     enabled: !!country?.id,
   })
+
+
+
 
   useEffect(() => {
     if (cities) {

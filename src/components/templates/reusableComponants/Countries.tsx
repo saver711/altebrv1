@@ -153,9 +153,16 @@ export const Countries = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress?.country?.id || "",
-      value: editData?.nationalAddress?.country?.name || "",
-      label: editData?.nationalAddress?.country?.name || "اختر دولة",
+      id: editData?.nationalAddress?.country?.id ||
+        editData?.country_id || "",
+      value:
+        editData?.nationalAddress?.country?.name ||
+        editData?.country_name ||
+        "",
+      label:
+        editData?.nationalAddress?.country?.name ||
+        editData?.country_name ||
+        "اختر دولة",
     })
   }, [])
 
@@ -168,7 +175,7 @@ export const Countries = ({
     refetch,
   } = useFetch<SelectOption_TP[], Country_TP[]>({
     queryKey: ["countries"],
-    endpoint: "governorate/api/v1/countries?type=all",
+    endpoint: "governorate/api/v1/countries?per_page=10000",
     select: (data) =>
       data.map((country) => ({
         ...country,
@@ -185,7 +192,7 @@ export const Countries = ({
         label={t(`${label}`).toString()}
         name={countryName}
         placeholder={t(`${label}`).toString()}
-        isDisabled={!countriesLoading && !!failureReason}
+        isDisabled={!countriesLoading && !!failureReason }
         loadingPlaceholder={`${t("loading")}`}
         loading={countriesLoading}
         options={countriesOptions}
@@ -203,7 +210,6 @@ export const Countries = ({
           setCountry(option)
           setNewValue(option)
         }}
-        
         defaultValue={{
           value: editData ? editData?.country_name : "",
           label: editData ? editData?.country_name : t("choose country"),
