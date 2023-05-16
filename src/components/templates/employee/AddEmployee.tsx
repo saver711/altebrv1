@@ -16,7 +16,7 @@ import { notify } from "../../../utils/toast"
 import { HandleBackErrors } from "../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../atoms"
 import { OuterFormLayout } from "../../molecules"
-import { allDocs_TP, Documents } from "../reusableComponants/documents/Documents"
+import { Documents, allDocs_TP } from "../reusableComponants/documents/Documents"
 import { Email_TP, InitialValues_TP } from "./validation-and-types"
 ///
 /////////// Types
@@ -31,6 +31,7 @@ type AddEmployeeProps_TP = {
 
 ///
 export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) => {
+console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:", editEmployeeData)
 
   // validation 
   const employeeValidatingSchema = () => Yup.object({
@@ -86,28 +87,28 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
     mobile: editEmployeeData?.mobile || "",
     username: editEmployeeData?.username || "",
     is_active: editEmployeeData?.is_active ? 'Yes' : "No" || "Yes",
-    city_id: editEmployeeData?.nationalAddress.city.id || "",
-    nationality_id: editEmployeeData?.nationality.id || "",
-    country_id: editEmployeeData?.country.id || "",
-    role_id: editEmployeeData?.role.id || "",
-    role_value: editEmployeeData?.role.name || "",
+    city_id: editEmployeeData?.nationalAddress?.city?.id || "",
+    nationality_id: editEmployeeData?.nationality?.id || "",
+    country_id: editEmployeeData?.country?.id || "",
+    role_id: editEmployeeData?.role?.id || "",
+    role_value: editEmployeeData?.role?.name || "",
     date_of_birth: !!editEmployeeData ? new Date(editEmployeeData?.date_of_birth) : new Date(),
-    branch_id: editEmployeeData?.branch.id || "",
+    branch_id: editEmployeeData?.branch?.id || "",
     national_number: editEmployeeData?.national_number || "",
     national_expire_date: new Date(),
-    national_image: !!editEmployeeData?.image ? [{
+    national_image: !!editEmployeeData?.national_image ? [{
       path: editEmployeeData?.national_image,
       type: "image"
     }] : [],
-    image: !!editEmployeeData?.image ? [{
-      path: editEmployeeData?.image,
+    image: !!editEmployeeData?.img ? [{
+      path: editEmployeeData?.img,
       type: "image"
     }] : [],
     email: editEmployeeData?.email || "" as Email_TP,
     date_of_hiring: new Date(),
     password: "",
-    district_id: editEmployeeData?.nationalAddress.district.id || "",
-    district_value: editEmployeeData?.nationalAddress.district.name || "",
+    district_id: editEmployeeData?.nationalAddress?.district.id || "",
+    district_value: editEmployeeData?.nationalAddress?.district.name || "",
     building_number: editEmployeeData?.nationalAddress?.building_number || "",
     street_number: editEmployeeData?.nationalAddress?.street_number || "",
     sub_number: editEmployeeData?.nationalAddress?.sub_number || "",
@@ -115,6 +116,7 @@ export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) =>
     address: editEmployeeData?.nationalAddress?.address || "",
   }
 
+  console.log('initialValues==========>',initialValues)
 
   ///
   /////////// CUSTOM HOOKS

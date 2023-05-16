@@ -232,7 +232,7 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
-      console.log("sizesMutate", data)
+      queryClient.setQueriesData(['sizes'],(old)=>[...old,data])
       if(setModel){
         queryClient.refetchQueries(["sizes"])
       }

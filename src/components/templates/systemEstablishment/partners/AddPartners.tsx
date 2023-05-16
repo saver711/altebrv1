@@ -36,7 +36,6 @@ type AddPartners_props = {
 ///
 export const AddPartners = ({
   title,
-  setModel,
   dataSource,
   editData,
 }: AddPartners_props) => {
@@ -123,9 +122,8 @@ export const AddPartners = ({
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      notify("success")
-      // setModel(false)
       queryClient.refetchQueries(["partner"])
+      notify("success")
     },
     onError: (error) => {
       console.log(error)
@@ -136,10 +134,7 @@ export const AddPartners = ({
 
   if (checkOperationsLoading)
     return (
-      <Loading
-        mainTitle={`${t("loading")}`}
-        subTitle={`${t("checking accounts operations")}`}
-      />
+      <Loading mainTitle={`${t("loading")}`} subTitle={`${t("checking accounts operations")}`} />
     )
 
   if (!checkOperations?.status)

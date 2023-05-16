@@ -15,6 +15,7 @@ import { t } from "i18next"
 import { formatDate } from "../../utils/date"
 import { useNavigate } from "react-router-dom"
 import { KaratValues_TP } from "../../types"
+import { numberContext } from "../../context/settings/number-formatter"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -35,6 +36,7 @@ export const GoldSupplyFinalForm = ({
 }: GoldSupplyFinalFormProps_TP) => {
   /////////// VARIABLES
   ///
+  const { formatGram, formatReyal } = numberContext()
   const navigate = useNavigate()
   const cols = useMemo<ColumnDef<OTableDataTypes>[]>(
     () => [
@@ -50,7 +52,7 @@ export const GoldSupplyFinalForm = ({
       },
       {
         header: `${t("weight")}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: "weight",
       },
       {
@@ -65,29 +67,35 @@ export const GoldSupplyFinalForm = ({
       },
       {
         header: `${t("wage")}`,
-        cell: (info) => info.renderValue(),
+        cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: "wage",
       },
       {
         header: `${t("total wages")}`,
         cell: (info: any) =>
-          (info.row.original.weight * info.row.original.wage),
+          formatReyal(info.row.original.weight * info.row.original.wage),
         accessorKey: "total_wages",
       },
       {
         header: `${t("wage tax")}`,
         cell: (info: any) =>
-          (info.row.original.weight * info.row.original.wage * 0.15),
+          formatReyal(info.row.original.weight * info.row.original.wage * 0.15),
         accessorKey: "wage_tax",
       },
       {
         header: `${t("gold tax")}`,
-        cell: (info: any) =>
-          (
-            info.row.original.weight *
-            Number(formValues?.api_gold_price) *
-            0.15
-          ),
+        cell: (info: any) => {
+          if (info.row.original.karat_value == '24') {
+            return 0
+          } else {
+            return formatReyal(
+              info.row.original.weight *
+              Number(formValues?.api_gold_price) *
+              info.row.original.stock * 
+              0.15
+            )
+          }
+        },
         accessorKey: "gold_tax",
       },
     ],
@@ -240,6 +248,7 @@ export const GoldSupplyFinalForm = ({
       employee_id: formValues?.employee_id,
       supplier_id: formValues?.supplier_id,
       bond_number: formValues?.bond_number,
+      notes: formValues?.notes,
       api_gold_price: formValues?.api_gold_price,
       entity_gold_price: formValues?.api_gold_price,
       total_gold_by_24: finalData?.boxes.total_24_gold_by_stock,
@@ -257,6 +266,7 @@ export const GoldSupplyFinalForm = ({
       out_goods_value: formValues?.out_goods_value,
       employee_id: formValues?.employee_id,
       supplier_id: formValues?.supplier_id,
+      notes: formValues?.notes,
       bond_number: formValues?.bond_number,
       api_gold_price: formValues?.api_gold_price,
       entity_gold_price: formValues?.api_gold_price,
@@ -316,7 +326,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total 24 gold by stock')}</p>
-              <p>{finalData?.boxes.total_24_gold_by_stock} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.total_24_gold_by_stock)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي الذهب حسب الاسهم */}
@@ -325,7 +335,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total wages')}</p>
-              <p>{getTotalWages()} {t('reyal')}</p>
+              <p>{formatReyal(getTotalWages())} {t('reyal')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي الاجور */}
@@ -334,7 +344,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total tax')}</p>
-              <p>{finalData?.boxes.total_tax} {t('reyal')}</p>
+              <p>{formatReyal(finalData!.boxes.total_tax)} {t('reyal')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي الضريبة */}
@@ -343,7 +353,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total weight')}</p>
-              <p>{finalData?.boxes.total_weight} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.total_weight)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي الوزن القائم */}
@@ -352,7 +362,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total 18 gold box')}</p>
-              <p>{finalData?.boxes.karat_18_aggregate} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.karat_18_aggregate)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي صندوق الذهب 18 */}
@@ -361,7 +371,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total 21 gold box')}</p>
-              <p>{finalData?.boxes.karat_21_aggregate} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.karat_21_aggregate)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي صندوق الذهب 21 */}
@@ -370,7 +380,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total 22 gold box')}</p>
-              <p>{finalData?.boxes.karat_22_aggregate} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.karat_22_aggregate)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي صندوق الذهب 22 */}
@@ -379,7 +389,7 @@ export const GoldSupplyFinalForm = ({
           <div className="col-span-1">
             <BoxesDataBase>
               <p>{t('total 24 gold box')}</p>
-              <p>{finalData?.boxes.karat_24_aggregate} {t('gram')}</p>
+              <p>{formatGram(finalData!.boxes.karat_24_aggregate)} {t('gram')}</p>
             </BoxesDataBase>
           </div>
           {/* اجمالي صندوق الذهب 24 */}

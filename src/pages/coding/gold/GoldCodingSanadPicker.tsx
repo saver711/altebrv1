@@ -54,10 +54,6 @@ export const GoldCodingSanadPicker = () => {
 
   const columns: Column[] = [
     {
-      name: "index",
-      label: t('Sequence '),
-    },
-    {
       name: "id",
       label: t('bond number'),
     },
@@ -205,6 +201,7 @@ export const GoldCodingSanadPicker = () => {
               />
               <DateInputField
                 label={`${t('bond date')}`}
+                placeholder={`${t('bond date')}`}
                 name="bond_date"
                 labelProps={{ className: "mt--10" }}
               />

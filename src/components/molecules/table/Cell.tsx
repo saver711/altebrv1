@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import TableContext from "./context"
 import { CellProps, Column } from "./types"
+import { BiLinkExternal } from "react-icons/bi"
 
 const Cell: React.FC<CellProps> = ({ rowIndex, columnName }) => {
   const [editValue, setEditValue] = useState("")
@@ -47,10 +48,22 @@ const Cell: React.FC<CellProps> = ({ rowIndex, columnName }) => {
   const handleBlur = () => {
     handleCellBlur()
   }
+  /////
+  function isValidUrl(string: string) {
+    const regex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return regex.test(string);
+  } false
+
+
+  ///
 
   const col = columns.find((col: Column) => col.name === columnName)
 
-  const CellComponent = col?.Cell || (() => <span>{value}</span>)
+  const CellComponent = col?.Cell || (() => (
+    isValidUrl(value) ? <a target='_blank' href={`${value}`} className='font-bold flex items-center justify-center gap-x-2 text-blue-900'><BiLinkExternal />link</a> :
+      <span>{value}</span>
+  )
+  )
   const EditComponent = col?.editComponent
 
   return (

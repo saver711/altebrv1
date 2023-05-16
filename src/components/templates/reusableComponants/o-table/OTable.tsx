@@ -12,6 +12,7 @@ import * as Yup from "yup"
 import { t } from "i18next"
 
 type OTableProps_TP = {
+  dirty: boolean,
   setDirty: Dispatch<SetStateAction<boolean>>
   data: OTableDataTypes[]
   setData: Dispatch<SetStateAction<OTableDataTypes[]>>
@@ -23,16 +24,21 @@ type OTableProps_TP = {
 }
 
 const requiredTranslation = () => `${t("required")}`
+const wageError = () => `${t('please enter a valid wage')}`
+const stockError = () => `${t('please enter a valid stock')}`
+const stockRatioError = () => `${t('top stock value is 1')}`
+const weightError = () => `${t('please enter a valid weight')}`
 
 const validationSchema = Yup.object({
   category_id: Yup.string().trim().required(requiredTranslation),
-  weight: Yup.number().positive(`${t('please enter a valid weight')}`).required(requiredTranslation),
+  weight: Yup.number().positive(weightError).required(requiredTranslation),
   karat_id: Yup.string().trim().required(requiredTranslation),
-  stock: Yup.number().positive(`${t('please enter a valid stock')}`).max(1, `${t('top stock value is 1')}`).required(requiredTranslation),
-  wage: Yup.string().trim().required(requiredTranslation),
+  stock: Yup.number().positive(stockError).max(1, stockRatioError).required(requiredTranslation),
+  wage: Yup.number().positive(wageError).required(requiredTranslation),
 })
 
 export function OTable({
+  dirty,
   setDirty,
   data,
   setData,
@@ -97,6 +103,7 @@ export function OTable({
       >
         {({}) => (
           <OTableForm
+            dirty={dirty}
             setDirty={setDirty}
             editRow={editRow}
             categoriesOptions={categoriesOptions}

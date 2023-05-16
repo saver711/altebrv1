@@ -65,11 +65,11 @@ const CreateStoneQuality = ({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
+      queryClient.setQueryData(['stone_quality'], (old: any) => {
+        return [...old, data]
+      })
       if(value && onAdd) {
         onAdd(value)
-        // queryClient.setQueryData(['stone_quality'], (old: any) => {
-        //   return [...old, data]
-        // })
         queryClient.refetchQueries(['view_stones_qualities'])
       }
       if (setDataSource && setShow) {

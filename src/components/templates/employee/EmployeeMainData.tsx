@@ -200,13 +200,15 @@ export const EmployeeMainData = ({ title, editEmployeeData }: EmployeeMainDataPr
           </RadioGroup>
         </div>
         {/* isActive end */}
-        <div className="col-span-2">
+        <div className="col-span-4 flex" >
+        <div className="w-1/2">
           <h2>ارفاق صورة الهوية</h2>
           <DropFile name="national_image" />
         </div>
-        <div className="col-span-2">
+        <div className="w-1/2">
           <h2>ارفاق الصورة الشخصية</h2>
           <DropFile name="image" />
+        </div>
         </div>
       </InnerFormLayout>
       <Modal isOpen={modalOpen} onClose={()=>setModalOpen(false)}>

@@ -26,6 +26,7 @@ export const DocsData = ({ docsData }: DocsDataProps_TP) => {
 
   /////////// VARIABLES
   ///
+
   const imagePreview = images.map(image => ({
     preview: image.preview,
     path: image.path,
