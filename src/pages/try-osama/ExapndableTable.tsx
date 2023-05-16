@@ -24,6 +24,7 @@ import {
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
 import { SubTables } from "./SubTables"
+import { Loading } from "../../components/organisms/Loading"
 
 // types
 type Categories_TP = {

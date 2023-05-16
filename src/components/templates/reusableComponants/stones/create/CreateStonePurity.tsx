@@ -11,7 +11,11 @@ import { mutateData } from "../../../../../utils/mutateData"
 import { notify } from "../../../../../utils/toast"
 import { HandleBackErrors } from "../../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../../atoms"
-import { BaseInputField } from "../../../../molecules"
+import {
+  BaseInputField,
+  InnerFormLayout,
+  OuterFormLayout,
+} from "../../../../molecules"
 import { StonesPurities } from "../view/ViewStonePurity"
 
 ///
@@ -23,6 +27,7 @@ type CreateStonePurity_TP = {
   onAdd?: (value: string) => void
   setDataSource?: Dispatch<SetStateAction<StonesPurities[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?: string
 }
 
 type InitialValues_TP = {
@@ -31,8 +36,7 @@ type InitialValues_TP = {
 
 const requiredTranslation = () => `${t("required")}`
 const validationSchema = Yup.object({
-  name: Yup.string()
-    .required(requiredTranslation)
+  name: Yup.string().required(requiredTranslation),
 })
 
 const CreateStonePurity = ({
@@ -40,45 +44,42 @@ const CreateStonePurity = ({
   value,
   onAdd,
   setDataSource,
-  setShow
+  setShow,
+  title,
 }: CreateStonePurity_TP) => {
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   const initialValues: InitialValues_TP = {
-    name: value!
+    name: value!,
   }
   ///
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const {
-    mutate,
-    isLoading,
-    error
-  } = useMutate({
+  const { mutate, isLoading, error } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
-      queryClient.setQueryData(['stone_purity'], (old: any) => {
+      queryClient.setQueryData(["stone_purity"], (old: any) => {
         return [...old, data]
       })
       if (value && onAdd) {
         onAdd(value)
-        queryClient.refetchQueries(['view_stones_purities'])
+        queryClient.refetchQueries(["view_stones_purities"])
       }
       if (setDataSource && setShow) {
         // setDataSource((prev: StonesPurities[])=> [...prev, data])
-        queryClient.refetchQueries(['view_stones_purities'])
+        queryClient.refetchQueries(["view_stones_purities"])
         setShow(false)
-      } 
+      }
       if (setDataSource && setShow && item) {
         setShow(false)
-        queryClient.refetchQueries(['view_stones_purities'])
-        // setDataSource((prev: StonesPurities[]) => 
+        queryClient.refetchQueries(["view_stones_purities"])
+        // setDataSource((prev: StonesPurities[]) =>
         //   prev.map((p: StonesPurities) => p.id === data.id ? data : p))
       }
-    }
+    },
   })
 
   ///
@@ -86,7 +87,9 @@ const CreateStonePurity = ({
   ///
   function PostNewValue(values: InitialValues_TP) {
     mutate({
-      endpointName: item ? `stones/api/v1/purities/${item.id}` : 'stones/api/v1/purities',
+      endpointName: item
+        ? `stones/api/v1/purities/${item.id}`
+        : "stones/api/v1/purities",
       method: item ? "put" : "post",
       values,
     })
@@ -95,14 +98,24 @@ const CreateStonePurity = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={values => PostNewValue(values)}
+      onSubmit={(values) => PostNewValue(values)}
       validationSchema={validationSchema}
     >
       <Form>
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <div className="flex flex-col">
-            <h2 className="text-xl font-bold mb-4">{t('stones purities')}</h2>
-            <div className="grid grid-cols-4 mb-4 gap-3 text-start">
+          <OuterFormLayout
+            header={title}
+            submitComponent={
+              <Button
+                loading={isLoading}
+                type="submit"
+                className="ms-auto mt-8"
+              >
+                {t("submit")}
+              </Button>
+            }
+          >
+            <InnerFormLayout title={`${t("main data")}`}>
               <BaseInputField
                 id="stones_purities"
                 label={`${t("stones purities")}`}
@@ -110,15 +123,8 @@ const CreateStonePurity = ({
                 type="text"
                 placeholder={`${t("stones purities")}`}
               />
-            </div>
-            <Button
-              type="submit"
-              className="self-end"
-              loading={isLoading}
-            >
-              {t('add')}
-            </Button>
-          </div>
+            </InnerFormLayout>
+          </OuterFormLayout>
         </HandleBackErrors>
       </Form>
     </Formik>

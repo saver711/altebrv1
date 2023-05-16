@@ -21,6 +21,7 @@ type CreateBranchProps_TP = {
   value?: string
   onAdd?: (value: string) => void
   editData?: Branch_Props_TP
+  title?:string
 }
 
 type InitialValues_TP = {
@@ -34,6 +35,7 @@ export const CreateBranch = ({
   value,
   onAdd,
   editData,
+  title,
 }: CreateBranchProps_TP) => {
   /////////// VARIABLES
   ///
@@ -125,7 +127,7 @@ export const CreateBranch = ({
         validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <OuterFormLayout header={t("Add Branch")}>
+          <OuterFormLayout header={title}>
             <Form className="w-full">
               <InnerFormLayout title={t("main data")}>
                 {/* branch name  start */}
@@ -186,6 +188,10 @@ export const CreateBranch = ({
                       district: {
                         id: editData?.nationalAddress?.district.id,
                         name: editData?.nationalAddress?.district.name,
+                      },
+                      market: {
+                        id: editData?.market.id,
+                        name: editData?.market.name,
                       },
                     },
                   }}

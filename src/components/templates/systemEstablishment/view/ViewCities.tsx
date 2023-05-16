@@ -287,6 +287,7 @@ export const ViewCities = () => {
         >
           {model ? (
             <AddCities
+              title={`${editData ? t("edit city") : t("add city")} `}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}

@@ -203,6 +203,7 @@ export const ViewStoneColor = () => {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateColor
+            title={`${editData ? t("edit color") : t("add color")}`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

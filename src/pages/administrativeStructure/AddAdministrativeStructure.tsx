@@ -130,7 +130,7 @@ export const AddAdministrativeStructure = ({
                       {t("confirm")}
                     </Button>
                   }
-                  header={t("add-administrative-structure")}
+                  header={title}
                 >
                   <PermissionForm permissions={permissions} editData={editData} />
                 </OuterFormLayout>

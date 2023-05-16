@@ -204,6 +204,7 @@ export const ViewStoneShape = () => {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateStoneShape
+            title={`${editData ? t("edit shape") : t("add shape")}`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

@@ -31,7 +31,6 @@ type AddEmployeeProps_TP = {
 
 ///
 export const AddEmployee = ({ title, editEmployeeData }: AddEmployeeProps_TP) => {
-console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:", editEmployeeData)
 
   // validation 
   const employeeValidatingSchema = () => Yup.object({
@@ -203,7 +202,7 @@ console.log("🚀 ~ file: AddEmployee.tsx:34 ~ AddEmployee ~ editEmployeeData:",
         <Form>
           <HandleBackErrors errors={error?.response?.data.errors}>
             <OuterFormLayout
-              header={`${t("add employee")}`}
+              header={title}
               submitComponent={
                 <Button type="submit" className="ms-auto mt-8" loading={isLoading}>
                   {t("submit")}

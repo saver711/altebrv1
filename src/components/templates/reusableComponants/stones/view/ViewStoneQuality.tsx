@@ -197,13 +197,16 @@ export const ViewStoneQuality = () => {
         <div className=" m-auto">
           <Header
             className="text-center text-2xl font-bold"
-            header={t(`some thing went wrong ${error.message}`)}
+            header={t(`some thing went wrong ${error?.message}`)}
           />
         </div>
       )}
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateStoneQuality
+            title={`${
+              editData ? t("edit stones qualities") : t("add stones qualities")
+            }`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

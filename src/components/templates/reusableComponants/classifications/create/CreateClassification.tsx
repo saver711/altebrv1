@@ -12,6 +12,7 @@ import { HandleBackErrors } from "../../../../../utils/utils-components/HandleBa
 import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { ViewClassifications_TP } from "../../../systemEstablishment/view/ViewClassifications"
+import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
 
 ///
 /////////// Types
@@ -22,6 +23,7 @@ type CreateClassificationProps_TP = {
   editData?: ViewClassifications_TP
   setDataSource?: Dispatch<SetStateAction<ViewClassifications_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type InitialValues_TP = {
@@ -40,14 +42,15 @@ export const CreateClassification = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: CreateClassificationProps_TP) => {
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_en: editData ? editData.name_en: !isRTL ? value! : "",
-    name_ar: editData ? editData.name_ar: isRTL ? value! : "",
+    name_en: editData ? editData.name_en : !isRTL ? value! : "",
+    name_ar: editData ? editData.name_ar : isRTL ? value! : "",
   }
   ///
   /////////// CUSTOM HOOKS
@@ -62,16 +65,16 @@ export const CreateClassification = ({
         // queryClient.setQueryData(["classifications"], (old: any) => {
         //   return [...old, data]
         // })
-        queryClient.refetchQueries(['AllClassifications'])
+        queryClient.refetchQueries(["AllClassifications"])
       }
       if (setDataSource && setShow && !editData && !error) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllClassifications'])
+        queryClient.refetchQueries(["AllClassifications"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        queryClient.refetchQueries(['AllClassifications'])
+        queryClient.refetchQueries(["AllClassifications"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewClassifications_TP) =>
         //     p.id === data?.id ? data : p
@@ -111,9 +114,19 @@ export const CreateClassification = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <div className="flex flex-col">
-              <h2 className="text-xl font-bold mb-4">{t("classifications")}</h2>
-              <div className="grid grid-cols-4 mb-4 gap-3 text-start">
+            <OuterFormLayout
+              header={title}
+              submitComponent={
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  className="ms-auto mt-8"
+                >
+                  {t("submit")}
+                </Button>
+              }
+            >
+              <InnerFormLayout title={`${t("main data")}`}>
                 <BaseInputField
                   id="classification_ar"
                   label={`${t("classifications in arabic")}`}
@@ -129,11 +142,8 @@ export const CreateClassification = ({
                   type="text"
                   placeholder={`${t("classifications in english")}`}
                 />
-              </div>
-              <Button type="submit" className="self-end" loading={isLoading}>
-                {t("submit")}
-              </Button>
-            </div>
+              </InnerFormLayout>
+            </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>
