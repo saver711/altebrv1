@@ -229,6 +229,7 @@ export const AddPartners = ({
               <Documents
                 setDocsFormValues={setDocsFormValues}
                 docsFormValues={docsFormValues}
+                editable={!!editData}
               />
               <NationalAddress editData={editData} />
             </OuterFormLayout>

@@ -328,7 +328,7 @@ const AddSupplier = ({
                   title={`${t("main data")}`}
                 />
                 <Documents
-                  editData={editData}
+                  editable={!!editData}
                   setDocsFormValues={setDocsFormValues}
                   docsFormValues={docsFormValues}
                 />

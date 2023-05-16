@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
+import { Spinner } from "../../components/atoms"
 import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
 import { Modal } from "../../components/molecules"
 import { SubTables } from "./SubTables"
