@@ -181,7 +181,7 @@ export const Districts = ({
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-    console.log("0", editData?.nationalAddress?.district.name)
+    // console.log("0", editData?.nationalAddress?.district.name)
     setNewValue({
       id: editData?.nationalAddress?.district.id || "",
       value: editData?.nationalAddress?.district.name || "",

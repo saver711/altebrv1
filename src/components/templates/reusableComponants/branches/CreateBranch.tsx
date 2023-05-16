@@ -5,7 +5,7 @@ import { Form, Formik } from "formik"
 import { t } from "i18next"
 import * as Yup from "yup"
 import { NationalAddress } from "../.."
-import { useMutate } from "../../../../hooks"
+import { useIsRTL, useMutate } from "../../../../hooks"
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
@@ -13,13 +13,14 @@ import { Button } from "../../../atoms"
 import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
 import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
+import { Branch_Props_TP } from "./ViewBranches"
 ///
 /////////// Types
 ///
 type CreateBranchProps_TP = {
   value?: string
   onAdd?: (value: string) => void
-  editData?: { [key: string]: any }
+  editData?: Branch_Props_TP
 }
 
 type InitialValues_TP = {
@@ -38,10 +39,11 @@ export const CreateBranch = ({
   ///
   console.log("v", editData)
   const initialValues: InitialValues_TP = {
-    name: editData ? editData.name_ar : "",
-    market_id: editData ? editData.market_name : "",
-    city_id: editData ? editData.city_name : "",
-    district_id: editData ? editData.nationalAddress.name : "",
+    name_ar: editData ? editData.name_ar : "",
+    name_en: editData ? editData.name_en : "",
+    city_id: editData ? editData.city.name_ar : "",
+    district_id: editData ? editData.district.name_ar : "",
+    market_id: editData ? editData.market.name_ar : "",
     market_number: editData ? editData.market_number : "",
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
@@ -53,7 +55,8 @@ export const CreateBranch = ({
     zip_code: editData ? editData.nationalAddress.zip_code : "",
   }
   const validationSchema = Yup.object({
-    name: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    name_en: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     district_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -78,10 +81,9 @@ export const CreateBranch = ({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
-      queryClient.setQueryData(["branches"], (old: any) => {
-        return [...old, data]
+      queryClient.setQueryData(["branches"], () => {
+        return [data]
       })
-      onAdd(value)
     },
     onError: (error) => {
       notify("error")
@@ -118,6 +120,7 @@ export const CreateBranch = ({
         initialValues={initialValues}
         onSubmit={(values) => {
           PostNewValue(values)
+          console.log("formik", values)
         }}
         validationSchema={validationSchema}
       >
@@ -128,12 +131,22 @@ export const CreateBranch = ({
                 {/* branch name  start */}
                 <div className="col-span-1">
                   <BaseInputField
-                    id="name"
+                    id="name_ar"
                     label={`${t("branch in arabic")}`}
                     name="name_ar"
                     type="text"
                     placeholder={`${t("branch in arabic")}`}
-                    defaultValue={editData && editData.name}
+                    defaultValue={editData && editData.name_ar}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <BaseInputField
+                    id="name_en"
+                    label={`${t("branch in english")}`}
+                    name="name_en"
+                    type="text"
+                    placeholder={`${t("branch in english")}`}
+                    defaultValue={editData && editData.name_en}
                   />
                 </div>
                 {/* branch name  end */}
@@ -152,19 +165,30 @@ export const CreateBranch = ({
                 {/* branch number  end */}
                 {/* market  start */}
                 <Country_city_distract_markets
-                  cityFieldKey="value"
-                  cityLabel={`${t("city")}`}
-                  cityName="city_branch_value"
-                  countryFieldKey="value"
+                  countryName="country_id"
                   countryLabel={`${t("country")}`}
-                  countryName="country_branch_value"
-                  distractFieldKey="value"
+                  cityName="city_id"
+                  cityLabel={`${t("city")}`}
+                  distractName="district_id"
                   distractLabel={`${t("district")}`}
-                  distractName="district_branch_value"
-                  marketFieldKey="id"
-                  marketLabel={`${t("market")}`}
                   marketName="market_id"
-                  editData={editData}
+                  marketLabel={`${t("market")}`}
+                  editData={{
+                    nationalAddress: {
+                      country: {
+                        id: editData?.country?.id,
+                        name: editData?.country?.name,
+                      },
+                      city: {
+                        id: editData?.city.id,
+                        name: editData?.city.name,
+                      },
+                      district: {
+                        id: editData?.nationalAddress?.district.id,
+                        name: editData?.nationalAddress?.district.name,
+                      },
+                    },
+                  }}
                 />
                 {/* market  end */}
 
@@ -195,7 +219,7 @@ export const CreateBranch = ({
                 {/* address  end */}
 
                 {/* phone start */}
-                <div className="col-sapn-1">
+                <div className="col-span-1">
                   <BaseInputField
                     id="phone"
                     label={`${t("phone")}`}
