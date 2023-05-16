@@ -36,6 +36,7 @@ type AddMarketProps_TP = {
   editData?: ViewMarkets_TP
   setDataSource?: Dispatch<SetStateAction<ViewMarkets_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -52,6 +53,7 @@ export const AddMarket = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: AddMarketProps_TP) => {
   /////////// VARIABLES
   ///
@@ -100,12 +102,12 @@ export const AddMarket = ({
       }
       if (setDataSource && setShow && !editData && !error) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllMarkets'])
+        queryClient.refetchQueries(["AllMarkets"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        queryClient.refetchQueries(['AllMarkets'])
+        queryClient.refetchQueries(["AllMarkets"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewMarkets_TP) => (p.id === data?.id ? data : p))
         // )
@@ -146,6 +148,7 @@ export const AddMarket = ({
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>
             <OuterFormLayout
+              header={title}
               submitComponent={
                 <Button
                   type="submit"
@@ -156,7 +159,7 @@ export const AddMarket = ({
                 </Button>
               }
             >
-              <InnerFormLayout title={`${t("Markets")}`}>
+              <InnerFormLayout title={`${t("main data")}`}>
                 <Country_city_distract_markets
                   countryName="country_id"
                   cityName="city_id"

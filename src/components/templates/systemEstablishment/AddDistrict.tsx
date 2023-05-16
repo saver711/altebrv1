@@ -36,6 +36,7 @@ type AddDistrictProps_TP = {
   editData?: ViewDistricts_TP
   setDataSource?: Dispatch<SetStateAction<ViewDistricts_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 type CityType = {
   country_name: any
@@ -54,6 +55,7 @@ export const AddDistrict = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: AddDistrictProps_TP) => {
   /////////// VARIABLES
   ///
@@ -147,6 +149,7 @@ export const AddDistrict = ({
     })
   }
 
+
   ///
   return (
     <>
@@ -160,6 +163,7 @@ export const AddDistrict = ({
         <Form>
           <HandleBackErrors errors={errorQuery?.response.data.errors}>
             <OuterFormLayout
+              header={title}
               submitComponent={
                 <Button
                   type="submit"
@@ -170,7 +174,7 @@ export const AddDistrict = ({
                 </Button>
               }
             >
-              <InnerFormLayout title={`${t("districts")}`}>
+              <InnerFormLayout title={`${t("main data")}`}>
                 <Country_city_distract_markets
                   countryName="country_id"
                   cityName="city_id"

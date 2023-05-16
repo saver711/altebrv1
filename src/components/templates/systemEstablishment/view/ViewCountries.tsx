@@ -300,6 +300,7 @@ export const ViewCountries = () => {
           {model ? (
             <AddCountry
               editData={editData}
+              title={`${editData ? t("edit Country") : t("add Country")}`}
               setDataSource={setDataSource}
               setShow={setOpen}
             />
