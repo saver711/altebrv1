@@ -134,14 +134,16 @@ const NewMarketOptionComponent = ({
                 placeholder={`${t("market in english")}`}
               />
             </div>
-            <Button
-              type="submit"
-              className="ms-auto mt-8"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              {t("submit")}
-            </Button>
+            <div className="text-end">
+              <Button
+                type="submit"
+                className="mr-auto mt-8"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {t("submit")}
+              </Button>
+            </div>
           </Form>
         </HandleBackErrors>
       </Formik>

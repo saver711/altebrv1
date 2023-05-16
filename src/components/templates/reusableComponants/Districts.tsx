@@ -125,28 +125,30 @@ const NewDistrictOptionComponent = ({
             <div className="flex gap-x-8 items-center">
               <BaseInputField
                 id="name_ar"
-                label={`${t("district in arabic")}`}
+                label={`${t("district name arabic")}`}
                 name="name_ar"
                 type="text"
-                placeholder={`${t("district in arabic")}`}
+                placeholder={`${t("district name arabic")}`}
               />
 
               <BaseInputField
                 id="name_en"
-                label={`${t("district in english")}`}
+                label={`${t("district name english")}`}
                 name="name_en"
                 type="text"
-                placeholder={`${t("district in english")}`}
+                placeholder={`${t("district name english")}`}
               />
             </div>
-            <Button
-              type="submit"
-              className="ms-auto mt-8"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              {t("submit")}
-            </Button>
+            <div className="text-end">
+              <Button
+                type="submit"
+                className="mr-auto mt-8"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {t("submit")}
+              </Button>
+            </div>
           </Form>
         </HandleBackErrors>
       </Formik>

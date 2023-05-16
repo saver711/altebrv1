@@ -25,7 +25,6 @@ import {
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
         import { Loading } from "../../components/organisms/Loading"
-import { Spinner } from "../../components/atoms"
 
 // types
 type Categories_TP = {
@@ -226,16 +225,7 @@ export function ExpandableTable({
     }
   }, [queryData])
 
-  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
-  const { data: allCategories } = useFetch({
-    endpoint: "classification/api/v1/categories?type=all",
-    queryKey: ["categories"],
-    enabled: !!!categories,
-    refetchInterval: !!!categories,
-    onSuccess: (data) => {
-      console.log("🚀 ~ file: SubTables.tsx:71 ~ SubTables ~ categories:", data)
-    },
-  })
+
 
   return (
     <div className="flex flex-col justify-center items-center w-full">

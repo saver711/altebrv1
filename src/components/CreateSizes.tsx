@@ -12,7 +12,7 @@ import { SizesForm } from "./templates/systemEstablishment/sizeses/SizesForm"
 ///
 
 ///
-export const CreateSizes = ({editData, setModel}:any)=>{
+export const CreateSizes = ({editData, setModel , title}:any)=>{
 /////////// VARIABLES
 ///
 
@@ -32,7 +32,12 @@ export const CreateSizes = ({editData, setModel}:any)=>{
 ///
 
 ///
-return( 
-    <SizesForm showCategories={false} editData={editData} setModel={setModel}/>
+return (
+  <SizesForm
+    showCategories={false}
+    title={title}
+    editData={editData}
+    setModel={setModel}
+  />
 )
 }

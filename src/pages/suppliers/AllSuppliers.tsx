@@ -99,7 +99,8 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
   const [search, setSearch] = useState("")
   const [page, setPage] = useState<number>(1)
   const navigate = useNavigate()
-
+  
+  console.log("🚀 ~ file: AllSuppliers.tsx:97 ~ AllSuppliers ~ editData:", editData)
   const columns = useMemo<ColumnDef<supplier>[]>(
     () => [
       {
@@ -360,7 +361,7 @@ export const AllSuppliers = ({ title }: SupplierProps_TP) => {
         >
           {model ? (
             <AddSupplier
-              title={"اضافة مورد"}
+              title={`${editData ? t("edit supplier") : t("add supplier")}`}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}
