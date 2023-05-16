@@ -25,7 +25,6 @@ import {
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
         import { Loading } from "../../components/organisms/Loading"
-import { Spinner } from "../../components/atoms"
 
 // types
 type Categories_TP = {

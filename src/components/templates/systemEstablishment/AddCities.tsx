@@ -41,6 +41,7 @@ type AddCitiesProps_TP = {
   editData?: ViewCities_TP
   setDataSource?: Dispatch<SetStateAction<ViewCities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -48,6 +49,7 @@ type AddCitiesProps_TP = {
 ///
 export const AddCities = ({
   editData,
+  title,
   setDataSource,
   setShow,
 }: AddCitiesProps_TP) => {
@@ -162,6 +164,7 @@ export const AddCities = ({
           <HandleBackErrors errors={errorQuery?.response.data.errors}>
             <Form className="w-full">
               <OuterFormLayout
+                header={title}
                 submitComponent={
                   <Button
                     type="submit"

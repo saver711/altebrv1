@@ -175,7 +175,10 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         </div>
       )}
       <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <CreateBranch editData={editData} />
+        <CreateBranch
+          editData={editData}
+          title={`${editData ? t("edit Branch") : t("Add Branch")}`}
+        />
       </Modal>
     </>
   )

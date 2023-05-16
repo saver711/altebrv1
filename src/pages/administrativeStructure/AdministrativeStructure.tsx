@@ -151,7 +151,11 @@ export const AdministrativeStructure = ({
         <Modal isOpen={open} onClose={() => setOpen(false)}>
           {model ? (
             <AddAdministrativeStructure
-              title={t("add-administrative-structure")}
+              title={`${
+                editData
+                  ? t("edit-administrative-structure")
+                  : t("add-administrative-structure")
+              }`}
               editData={editData}
             />
           ) : (

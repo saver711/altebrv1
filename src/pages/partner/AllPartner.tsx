@@ -337,7 +337,7 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
         >
           {model ? (
             <AddPartners
-              title={`${t("edit partner")}`}
+              title={`${editData ? t("edit partner") : t("add Partner")}`}
               dataSource={dataSource}
               editData={editData}
               setModel={setModel}

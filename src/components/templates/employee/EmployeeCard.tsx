@@ -124,7 +124,9 @@ export const EmployeeCard = ({ id, img, name , setEditEmployeeData , rest , edit
       </div>
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <AddEmployee
-          title={`${t("add employee")}`}
+          title={`${
+            editEmployeeData ? t("edit employee") : t("add employee")
+          }`}
           editEmployeeData={editEmployeeData}
         />
       </Modal>

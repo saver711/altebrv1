@@ -31,6 +31,7 @@ type AddCountriesProps_TP = {
   editData?: ViewCountries_TP
   setDataSource?: Dispatch<SetStateAction<ViewCountries_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 type CountryType = { name_en: string; name_ar: string; id: string }
 
@@ -40,6 +41,7 @@ type CountryType = { name_en: string; name_ar: string; id: string }
 ///
 export const AddCountry = ({
   editData,
+  title,
   setDataSource,
   setShow,
 }: AddCountriesProps_TP) => {
@@ -141,7 +143,7 @@ console.log("co", values)
         <HandleBackErrors errors={errorQuery?.response.data.errors}>
           <Form>
             <OuterFormLayout
-              header={`${t("add Country")}`}
+              header={title}
               submitComponent={
                 <Button
                   type="submit"

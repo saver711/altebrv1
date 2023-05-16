@@ -283,6 +283,7 @@ export const ViewNationalities = () => {
         >
           {model ? (
             <CreateNationalities
+              title={`${editData ? t("edit nationality") : t("add nationality")}`}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}

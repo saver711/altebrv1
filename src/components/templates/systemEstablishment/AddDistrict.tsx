@@ -36,6 +36,7 @@ type AddDistrictProps_TP = {
   editData?: ViewDistricts_TP
   setDataSource?: Dispatch<SetStateAction<ViewDistricts_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 type CityType = {
   country_name: any
@@ -54,6 +55,7 @@ export const AddDistrict = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: AddDistrictProps_TP) => {
   /////////// VARIABLES
   ///
@@ -82,7 +84,6 @@ export const AddDistrict = ({
   } = useMutate<CityType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
-
       notify("success")
       if (data) {
         queryClient.setQueryData(["districts"], (old: any) => {
@@ -100,12 +101,12 @@ export const AddDistrict = ({
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllDistricts'])
+        queryClient.refetchQueries(["AllDistricts"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        queryClient.refetchQueries(['AllDistricts'])
+        queryClient.refetchQueries(["AllDistricts"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewDistricts_TP) => (p.id === data?.id ? data : p))
         // )
@@ -148,7 +149,7 @@ export const AddDistrict = ({
       method: "post",
     })
   }
-console.log("dd", initialValues)
+  console.log("dd", initialValues)
 
   ///
   return (
@@ -163,6 +164,7 @@ console.log("dd", initialValues)
         <Form>
           <HandleBackErrors errors={errorQuery?.response.data.errors}>
             <OuterFormLayout
+              header={title}
               submitComponent={
                 <Button
                   type="submit"
