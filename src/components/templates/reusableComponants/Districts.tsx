@@ -181,11 +181,12 @@ export const Districts = ({
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-    // console.log("0", editData?.nationalAddress?.district.name)
     setNewValue({
-      id: editData?.nationalAddress?.district.id || "",
-      value: editData?.nationalAddress?.district.name || "",
-      label: editData?.nationalAddress?.district.name || "",
+      id: editData?.nationalAddress?.district.id || editData?.district_id || "",
+      value:
+        editData?.nationalAddress?.district.name || editData?.district_id || "",
+      label:
+        editData?.nationalAddress?.district.name || editData?.district_id || "",
     })
   }, [])
 
@@ -206,9 +207,11 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled:  !!city?.id,
   })
 
+  console.log(!!!city?.id)
+  console.log("f", !!!editData?.city_id)
   //change value
   useEffect(() => {
     if (districts) {

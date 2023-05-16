@@ -130,7 +130,7 @@ export const AddCities = ({
   ///
   /////////// FUNCTIONS & EVENTS
   ///
-  
+  console.log("cities", editData)
   const handleSubmit = (values: InitialValues_TP) => {
     console.log("cities", values)
 

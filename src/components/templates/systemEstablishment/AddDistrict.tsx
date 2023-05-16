@@ -82,7 +82,6 @@ export const AddDistrict = ({
   } = useMutate<CityType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
-
       notify("success")
       if (data) {
         queryClient.setQueryData(["districts"], (old: any) => {
@@ -100,12 +99,12 @@ export const AddDistrict = ({
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllDistricts'])
+        queryClient.refetchQueries(["AllDistricts"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        queryClient.refetchQueries(['AllDistricts'])
+        queryClient.refetchQueries(["AllDistricts"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewDistricts_TP) => (p.id === data?.id ? data : p))
         // )
@@ -134,7 +133,6 @@ export const AddDistrict = ({
   ///
 
   const handleSubmit = (values: InitialValues_TP) => {
-    console.log("dd", values)
     mutate({
       endpointName: editData
         ? `governorate/api/v1/districts/${editData.id}`
@@ -148,7 +146,6 @@ export const AddDistrict = ({
       method: "post",
     })
   }
-console.log("dd", initialValues)
 
   ///
   return (
