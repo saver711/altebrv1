@@ -373,6 +373,9 @@
   "log out": "تسجيل خروج",
   "enter different numbers": "ادخل قيم مختلفة",
   "change language": "تغيير اللغة",
+  "left weight for this piece is equal to 0": "الوزن المتبقي لهذه القطعه يساوي 0",
+  "must be qual or greater than initial wage": "يجب الا يقل عن الاجرة الابتدائية",
   "enter positive numbers": "ادخل قيم موجبة",
+  "there are items already existed you can save it": "هناك قطع مرقمه بالفعل يمكنك الحفظ",
   "no notes": "لا يوجد ملاحظات"
 }
