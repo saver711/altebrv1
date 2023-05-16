@@ -14,17 +14,17 @@ import {
 } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
+import { useParams } from "react-router-dom"
 import { Spinner } from "../../components/atoms"
 import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
 import { Modal } from "../../components/molecules"
-import { SubTables } from "./SubTables"
 import { useFetch, useLocalStorage } from "../../hooks"
-import { useParams } from "react-router-dom"
 import {
   GoldCodingSanad_initialValues_TP,
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
-        import { Loading } from "../../components/organisms/Loading"
+import { SubTables } from "./SubTables"
+import { Loading } from "../../components/organisms/Loading"
 
 // types
 type Categories_TP = {
@@ -224,8 +224,6 @@ export function ExpandableTable({
       )
     }
   }, [queryData])
-
-
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
