@@ -188,7 +188,11 @@ export const Districts = ({
       value:
         editData?.nationalAddress?.district.name || editData?.district_id || "",
       label:
-        editData?.nationalAddress?.district.name || editData?.district_id || "",
+
+        editData?.nationalAddress?.district.name ||
+        editData?.district_id ||
+        "اختر المدينه اولا ",
+
     })
   }, [])
 
@@ -212,8 +216,7 @@ export const Districts = ({
     enabled:  !!city?.id,
   })
 
-  console.log(!!!city?.id)
-  console.log("f", !!!editData?.city_id)
+
   //change value
   useEffect(() => {
     if (districts) {
@@ -236,8 +239,18 @@ export const Districts = ({
         isDisabled={!!!city?.id}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
+        // placeholder={
+        //   city?.id &&
+        //   `
+        //   ${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}
+        //   `
+        // }
         placeholder={
-          city?.id && `${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}`
+          city?.id
+            ? districts?.length !== 0
+              ? " اختر الحي"
+              : " لا يوجد"
+            : " اختر المدينه اولا"
         }
         options={districts}
         value={newValue}

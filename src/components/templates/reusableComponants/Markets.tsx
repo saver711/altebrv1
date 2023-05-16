@@ -202,6 +202,21 @@ export const Markets = ({
       setNewValue(null)
     }
   }, [JSON.stringify(markets)])
+      useEffect(() => {
+        setNewValue({
+          id:
+            editData?.nationalAddress?.market.id || editData?.markets_id || "",
+          value:
+            editData?.nationalAddress?.market.name ||
+            editData?.markets_name ||
+            "",
+          label:
+            editData?.nationalAddress?.market.name ||
+            editData?.markets_name ||
+            "اختر الحي اولا ",
+        })
+      }, [])
+  console.log('m',editData)
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -209,8 +224,16 @@ export const Markets = ({
         id={marketName}
         label={t(`${label}`).toString()}
         name={marketName}
-        placeholder={t(`${label}`).toString()}
-        isDisabled={editData ? !!!editData?.district_id : !!!district?.id}
+
+        placeholder={
+          district?.id
+            ? markets?.length !== 0
+              ? "اختر السوق"
+              : "لايوجد"
+            : "اختر الحي اولا"
+        }
+        isDisabled={!!!district?.id}
+
         loadingPlaceholder={`${
           !district?.id ? "اختر الحي أولا" : t("loading")
         }`}
@@ -231,14 +254,14 @@ export const Markets = ({
           setNewValue(option)
         }}
         fieldKey={fieldKey}
-        defaultValue={{
-          value: editData ? editData?.markets_name : "",
-          label: editData
-            ? editData?.markets_name
-            : markets?.length !== 0
-            ? "اختر المدينه"
-            : "لا يوجد ",
-        }}
+        // defaultValue={{
+        //   value: editData ? editData?.markets_name : "",
+        //   label: editData
+        //     ? editData?.markets_name
+        //     : markets?.length !== 0
+        //     ? "اختر المدينه"
+        //     : "لا يوجد",
+        // }}
       />
       <RefetchErrorHandler
         failureReason={failureReason}

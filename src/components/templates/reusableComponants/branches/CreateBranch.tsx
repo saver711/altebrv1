@@ -189,6 +189,10 @@ export const CreateBranch = ({
                         id: editData?.nationalAddress?.district.id,
                         name: editData?.nationalAddress?.district.name,
                       },
+                      market: {
+                        id: editData?.market.id,
+                        name: editData?.market.name,
+                      },
                     },
                   }}
                 />

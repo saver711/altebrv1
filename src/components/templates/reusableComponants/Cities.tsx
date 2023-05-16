@@ -183,7 +183,9 @@ export const Cities = ({
       label:
         editData?.nationalAddress?.city?.name ||
         editData?.city_name ||
-        "اختر مدينة",
+
+        "اختر الدوله اولا",
+
     })
   }, [])
 

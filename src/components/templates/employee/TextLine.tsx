@@ -5,9 +5,9 @@
 /////////// Types
 ///
 type TextLineProps_TP = {
-  containerClasses?:string
+  containerClasses?: string
   boldText: string
-  lightString: string
+  lightString: string | undefined
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
