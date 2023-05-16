@@ -23,6 +23,7 @@ type CreateNationalitiesProps_TP = {
   setDataSource?: Dispatch<SetStateAction<ViewNationalities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
   title?: string
+  add?:any
 }
 
 type InitialValues_TP = {
@@ -121,19 +122,22 @@ export const CreateNationalities = ({
         }}
         validationSchema={validationSchema}
       >
-
-          <Form className="w-full">
+        <Form className="w-full">
           <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
-                    <OuterFormLayout
-          header={title}
-          submitComponent={
-            <Button type="submit" loading={isLoading} className="ms-auto mt-8">
-              {t("submit")}
-            </Button>
-          }
-        >
+            <OuterFormLayout
+              header={title}
+              submitComponent={
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  className="ms-auto mt-8"
+                >
+                  {t("submit")}
+                </Button>
+              }
+            >
               <>
-                <InnerFormLayout title={`${t("nationalities")}`}>
+                <InnerFormLayout title={`${t("main data")}`}>
                   {/* nationality ar  start */}
                   <BaseInputField
                     id="name_ar"
@@ -158,9 +162,9 @@ export const CreateNationalities = ({
                   {/* nationality en  end */}
                 </InnerFormLayout>
               </>
-        </OuterFormLayout>
-            </HandleBackErrors>
-          </Form>
+            </OuterFormLayout>
+          </HandleBackErrors>
+        </Form>
       </Formik>
     </div>
   )

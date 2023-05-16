@@ -32,6 +32,7 @@ type CreateCategoryProps_TP = {
   editData?: { [key: string]: any }
   setDataSource?: Dispatch<SetStateAction<InitialValues_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type SingleCategory_TP = {
@@ -68,6 +69,7 @@ const CreateCategory = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: CreateCategoryProps_TP) => {
   ///
   /////////// STATES
@@ -139,7 +141,8 @@ const CreateCategory = ({
     // }),
     category_sizes: Yup.string().when("has_size", {
       is: true,
-      then: (schema) => schema.required(`${t('required')}`).typeError(`${t('required')}`),
+      then: (schema) =>
+        schema.required(`${t("required")}`).typeError(`${t("required")}`),
     }),
   })
 
@@ -269,7 +272,7 @@ const CreateCategory = ({
       {(props) => (
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout>
+            <OuterFormLayout header={title}>
               <div className="flex flex-col">
                 <h2 className="text-xl font-bold mb-5">{t("categories")}</h2>
                 <div className="flex justify-between">

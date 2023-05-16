@@ -330,6 +330,7 @@ export const ViewCategories = () => {
       >
         {action.edit && (
           <CreateCategory
+            title={`${editData ? t("edit category") : t("add category")}`}
             editData={editData}
             setDataSource={setDataSource}
             setShow={setOpen}
@@ -337,6 +338,7 @@ export const ViewCategories = () => {
         )}
         {model && (
           <CreateCategory
+            title={`${editData ? t("edit category") : t("add category")}`}
             editData={editData}
             setDataSource={setDataSource}
             setShow={setOpen}

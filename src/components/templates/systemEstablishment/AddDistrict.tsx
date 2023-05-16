@@ -175,7 +175,7 @@ export const AddDistrict = ({
                 </Button>
               }
             >
-              <InnerFormLayout title={`${t("districts")}`}>
+              <InnerFormLayout title={`${t("main data")}`}>
                 <Country_city_distract_markets
                   countryName="country_id"
                   cityName="city_id"

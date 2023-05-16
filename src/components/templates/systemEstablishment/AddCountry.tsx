@@ -154,7 +154,7 @@ console.log("co", values)
                 </Button>
               }
             >
-              <InnerFormLayout title={"البيانات الاساسية"}>
+              <InnerFormLayout title={`${t("main data")}`}>
                 <BaseInputField
                   id="Country_name"
                   label={`${t("Country name arabic")}`}

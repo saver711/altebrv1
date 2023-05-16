@@ -41,7 +41,7 @@ type AddCitiesProps_TP = {
   editData?: ViewCities_TP
   setDataSource?: Dispatch<SetStateAction<ViewCities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -64,6 +64,12 @@ export const AddCities = ({
     country_id: editData ? editData.country_id : "",
   }
 
+  const emptyInitialValues: InitialValues_TP = {
+    name_ar: "",
+    name_en: "",
+    country_id: "",
+  }
+
   const cityValidatingSchema = Yup.object({
     name_ar: Yup.string().trim().required(requiredTranslation),
     name_en: Yup.string().trim().required(requiredTranslation),
@@ -80,6 +86,7 @@ export const AddCities = ({
     mutate,
     error: errorQuery,
     isLoading,
+    isSuccess
   } = useMutate<CitiesType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -99,12 +106,12 @@ export const AddCities = ({
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllCities'])
+        queryClient.refetchQueries(["AllCities"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        queryClient.refetchQueries(['AllCities'])
+        queryClient.refetchQueries(["AllCities"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewCities_TP) => (p.id === data?.id ? data : p))
         // )
@@ -115,24 +122,25 @@ export const AddCities = ({
       notify("error")
     },
   })
+    console.log("🚀 ~ file: AddCities.tsx:125 ~ isSuccess:", isSuccess)
 
-///
+  ///
   /////////// STATES
   ///
   // const { setFieldValue } =  useFormikContext<FormikSharedConfig>()
-  
+
   ///
   /////////// SIDE EFFECTS
   ///
-  
+
   ///
   /////////// IF CASES
   ///
-  
+
   ///
   /////////// FUNCTIONS & EVENTS
   ///
-  
+
   const handleSubmit = (values: InitialValues_TP) => {
     console.log("cities", values)
 
@@ -157,7 +165,7 @@ export const AddCities = ({
         <Formik
           initialValues={initialValues}
           validationSchema={cityValidatingSchema}
-          onSubmit={(values) => {
+          onSubmit={(values , {setFieldValue}) => {
             handleSubmit(values)
           }}
         >
@@ -175,7 +183,7 @@ export const AddCities = ({
                   </Button>
                 }
               >
-                <InnerFormLayout title={`${t("city")}`}>
+                <InnerFormLayout title={`${t("main data")}`}>
                   <Country_city_distract_markets
                     countryName="country_id"
                     editData={editData}

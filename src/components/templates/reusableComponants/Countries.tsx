@@ -97,28 +97,31 @@ const NewCountryOptionComponent = ({
             <div className="flex gap-x-8 items-center">
               <BaseInputField
                 id="name_ar"
-                label={`${t("country in arabic")}`}
+                label={`${t("Country name arabic")}`}
                 name="name_ar"
                 type="text"
-                placeholder={`${t("country in arabic")}`}
+                placeholder={`${t("Country name arabic")}`}
               />
 
               <BaseInputField
                 id="name_en"
-                label={`${t("country in english")}`}
+                label={`${t("Country name english")}`}
                 name="name_en"
                 type="text"
-                placeholder={`${t("country in english")}`}
+                placeholder={`${t("Country name english")}`}
               />
             </div>
+            <div className="text-end">
+
             <Button
               type="submit"
-              className="ms-auto mt-8"
+              className="mr-auto mt-8"
               disabled={isLoading}
               loading={isLoading}
             >
               {t("submit")}
             </Button>
+            </div>
           </Form>
         </HandleBackErrors>
       </Formik>
