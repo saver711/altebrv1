@@ -135,7 +135,6 @@ export const AddDistrict = ({
   ///
 
   const handleSubmit = (values: InitialValues_TP) => {
-    console.log("dd", values)
     mutate({
       endpointName: editData
         ? `governorate/api/v1/districts/${editData.id}`
@@ -149,7 +148,7 @@ export const AddDistrict = ({
       method: "post",
     })
   }
-  console.log("dd", initialValues)
+
 
   ///
   return (
