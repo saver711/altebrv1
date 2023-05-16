@@ -190,7 +190,7 @@ export const Markets = ({
         value: market.name,
         label: market.name,
       })),
-    enabled: !!district?.id,
+    enabled: editData ? !!editData?.district_id : !!district?.id,
   })
   console.log("marketsNameeditData", editData)
 
@@ -222,6 +222,7 @@ export const Markets = ({
         id={marketName}
         label={t(`${label}`).toString()}
         name={marketName}
+
         placeholder={
           district?.id
             ? markets?.length !== 0
@@ -230,6 +231,7 @@ export const Markets = ({
             : "اختر الحي اولا"
         }
         isDisabled={!!!district?.id}
+
         loadingPlaceholder={`${
           !district?.id ? "اختر الحي أولا" : t("loading")
         }`}

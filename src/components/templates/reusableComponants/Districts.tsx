@@ -186,9 +186,11 @@ export const Districts = ({
       value:
         editData?.nationalAddress?.district.name || editData?.district_id || "",
       label:
+
         editData?.nationalAddress?.district.name ||
         editData?.district_id ||
         "اختر المدينه اولا ",
+
     })
   }, [])
 
@@ -209,11 +211,10 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled:  !!city?.id,
   })
 
-  console.log("a", city?.id)
-  console.log("f", districts)
+
   //change value
   useEffect(() => {
     if (districts) {
