@@ -225,16 +225,7 @@ export function ExpandableTable({
     }
   }, [queryData])
 
-  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
-  const { data: allCategories } = useFetch({
-    endpoint: "classification/api/v1/categories?type=all",
-    queryKey: ["categories"],
-    enabled: !!!categories,
-    refetchInterval: !!!categories,
-    onSuccess: (data) => {
-      console.log("🚀 ~ file: SubTables.tsx:71 ~ SubTables ~ categories:", data)
-    },
-  })
+
 
   return (
     <div className="flex flex-col justify-center items-center w-full">

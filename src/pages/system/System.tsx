@@ -49,7 +49,7 @@ export const System = ({ title }: SystemProps_TP) => {
       name: "partners",
       addLabel: `${t("add Partner")}`,
       viewLabel: `${t("view partners")}`,
-      addComponent: <AddPartners title={t("add partner")} />,
+      addComponent: <AddPartners title={`${t("add Partner")}`} />,
       viewHandler: () => navigate("partners"),
     },
     {
