@@ -242,11 +242,11 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-lg font-bold">{t('system establishment')}</h1>
+        <h1 className="text-lg font-bold">{t("system establishment")}</h1>
         <Back path="/system" />
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {globalCards.map(
           ({
             id,
@@ -276,7 +276,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       <div className="mt-12 grid grid-cols-4 gap-6">
         <div className="col-span-1 flex w-full flex-col items-center gap-4">
           <div className="flex w-full items-center justify-center gap-2  rounded-lg  bg-mainGreen p-3 text-white">
-            <h2>{t('stones management')}</h2>
+            <h2>{t("stones management")}</h2>
           </div>
           {stonesCards.map(
             ({

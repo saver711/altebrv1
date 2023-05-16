@@ -2,7 +2,7 @@
 /////////// IMPORTS
 ///
 import { useQueryClient } from "@tanstack/react-query"
-import { Form, Formik } from "formik"
+import { Form, Formik, useFormikContext } from "formik"
 import { t } from "i18next"
 import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
@@ -122,6 +122,11 @@ const CreateCategory = ({
       is: "multi",
       then: (schema) => schema.min(1, requiredTranslation),
     }),
+    // category_sizes: Yup.string().when("has_size", {
+    //   is: true,
+    //   then: (schema) =>
+    //     schema.required(`${t("required")}`).typeError(`${t("required")}`),
+    // }),
     // start: Yup.number().when("has_size", {
     //   is: true && sizes?.length <= 0,
     //   then: (schema) =>
@@ -137,10 +142,6 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    category_sizes: Yup.string().when("has_size", {
-      is: true,
-      then: (schema) => schema.required(`${t('required')}`).typeError(`${t('required')}`),
-    }),
   })
 
   ///
@@ -220,6 +221,7 @@ const CreateCategory = ({
   // }
 
   const send = (values: InitialValues_TP) => {
+    console.log(values)
     const multi = values.type === "multi"
     const singleValues = {
       name_en: values.name_en,
@@ -258,7 +260,6 @@ const CreateCategory = ({
     //         : singleValues
     //     )
   }
-
   return (
     <Formik
       enableReinitialize
@@ -451,4 +452,3 @@ const CreateCategory = ({
 }
 
 export default CreateCategory
-
