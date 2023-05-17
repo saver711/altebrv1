@@ -9,7 +9,7 @@ import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { HandleBackErrors } from "../../utils/utils-components/HandleBackErrors"
 import { Button } from "../atoms"
-import { BaseInputField } from "../molecules"
+import { BaseInputField, InnerFormLayout, OuterFormLayout } from "../molecules"
 import { ViewNationalities_TP } from "./systemEstablishment/view/ViewNationalities"
 import { Dispatch, SetStateAction } from "react"
 
@@ -22,6 +22,8 @@ type CreateNationalitiesProps_TP = {
   editData?: ViewNationalities_TP
   setDataSource?: Dispatch<SetStateAction<ViewNationalities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?: string
+  add?:any
 }
 
 type InitialValues_TP = {
@@ -37,14 +39,15 @@ export const CreateNationalities = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: CreateNationalitiesProps_TP) => {
   /////////// VARIABLES
   ///
 
   const isRTL = useIsRTL()
   const initialValues: InitialValues_TP = {
-    name_en: editData ? editData.name_en: !isRTL ? value! : "",
-    name_ar: editData ? editData.name_ar: isRTL ? value! : "",
+    name_en: editData ? editData.name_en : !isRTL ? value! : "",
+    name_ar: editData ? editData.name_ar : isRTL ? value! : "",
   }
   const validationSchema = Yup.object({
     name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -74,12 +77,12 @@ export const CreateNationalities = ({
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllNationalities'])
-        setShow(false)
+        queryClient.refetchQueries(["AllNationalities"])
+        // setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
-        setShow(false)
-        queryClient.refetchQueries(['AllNationalities'])
+        // setShow(false)
+        queryClient.refetchQueries(["AllNationalities"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewNationalities_TP) => (p.id === data?.id ? data : p))
         // )
@@ -120,41 +123,46 @@ export const CreateNationalities = ({
         validationSchema={validationSchema}
       >
         <Form className="w-full">
-          <HandleBackErrors errors={errorQuery?.response.data.errors}>
-            <>
-              <div className="flex gap-x-8 items-center">
-                {/* nationality ar  start */}
-                <BaseInputField
-                  id="name_ar"
-                  label={`${t("nationality in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("nationality in arabic")}`}
-                  defaultValue={editData ? editData.name : ""}
-                  // value={value}
-                />
-                {/* nationality ar  end */}
+          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
+            <OuterFormLayout
+              header={title}
+              submitComponent={
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  className="ms-auto mt-8"
+                >
+                  {t("submit")}
+                </Button>
+              }
+            >
+              <>
+                <InnerFormLayout title={`${t("main data")}`}>
+                  {/* nationality ar  start */}
+                  <BaseInputField
+                    id="name_ar"
+                    label={`${t("nationality in arabic")}`}
+                    name="name_ar"
+                    type="text"
+                    placeholder={`${t("nationality in arabic")}`}
+                    defaultValue={editData ? editData.name : ""}
+                    // value={value}
+                  />
+                  {/* nationality ar  end */}
 
-                {/* nationality en  start */}
-                <BaseInputField
-                  id="name_en"
-                  label={`${t("nationality in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("nationality in english")}`}
-                  // value={value}
-                />
-                {/* nationality en  end */}
-              </div>
-
-              <Button
-                type="submit"
-                loading={isLoading}
-                className="ms-auto mt-8"
-              >
-                {t("submit")}
-              </Button>
-            </>
+                  {/* nationality en  start */}
+                  <BaseInputField
+                    id="name_en"
+                    label={`${t("nationality in english")}`}
+                    name="name_en"
+                    type="text"
+                    placeholder={`${t("nationality in english")}`}
+                    // value={value}
+                  />
+                  {/* nationality en  end */}
+                </InnerFormLayout>
+              </>
+            </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>

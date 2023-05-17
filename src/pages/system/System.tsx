@@ -49,7 +49,7 @@ export const System = ({ title }: SystemProps_TP) => {
       name: "partners",
       addLabel: `${t("add Partner")}`,
       viewLabel: `${t("view partners")}`,
-      addComponent: <AddPartners title={t("add partner")} />,
+      addComponent: <AddPartners title={`${t("add Partner")}`} />,
       viewHandler: () => navigate("partners"),
     },
     {
@@ -67,7 +67,7 @@ export const System = ({ title }: SystemProps_TP) => {
       name: "add_supplier",
       addLabel: `${t("add supplier")}`,
       viewLabel: `${t("View Suppliers")}`,
-      addComponent: <AddSupplier title={t("add supplier")} />,
+      addComponent: <AddSupplier title={`${t("add supplier")}`} />,
       viewHandler: () => navigate("suppliers"),
     },
     {
@@ -77,7 +77,7 @@ export const System = ({ title }: SystemProps_TP) => {
       addLabel: `${t("add employee")}`,
       viewLabel: `${t("view employees")}`,
       viewHandler: () => navigate("employees"),
-      addComponent: <AddEmployee title={t("add employee")} />,
+      addComponent: <AddEmployee title={`${t("add employee")}`} />,
     },
     {
       id: crypto.randomUUID(),
@@ -87,7 +87,9 @@ export const System = ({ title }: SystemProps_TP) => {
       viewLabel: `${t(t("administrative structure"))}`,
       viewHandler: () => navigate("administrative-structure"),
       addComponent: (
-        <AddAdministrativeStructure title={t("add administrative structure")} />
+        <AddAdministrativeStructure
+          title={`${t("add administrative structure")}`}
+        />
       ),
     },
     {
@@ -106,10 +108,10 @@ export const System = ({ title }: SystemProps_TP) => {
       id: crypto.randomUUID(),
       title: t("الفروع"),
       name: "add_branch",
-      addLabel: `${t("اضافه فرع")}`,
+      addLabel: `${t("add branch")}`,
       viewLabel: `${t(t("branches"))}`,
       viewHandler: () => navigate("branches"),
-      addComponent: <CreateBranch />,
+      addComponent: <CreateBranch title={`${t("add branch")}`} />,
     },
   ]
   //   // XXX

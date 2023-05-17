@@ -23,6 +23,7 @@ type ColorsProps_TP = {
   editData?: ViewColors_TP
   setDataSource?: Dispatch<SetStateAction<ViewColors_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type InitialValues_TP = {
@@ -45,6 +46,7 @@ const StonesColors = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: ColorsProps_TP) => {
   ///
   /////////// CUSTOM HOOKS

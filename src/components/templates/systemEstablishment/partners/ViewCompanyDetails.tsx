@@ -140,17 +140,18 @@ export const ViewCompanyDetails = () => {
           companyDetailsData?.map((company: CompanyDetails_TP) => (
             <InnerFormLayout
               title={
-
                 <div className="flex">
                   {`بيانات ${company?.name}`}{" "}
                   <EditIcon action={() => setEditCompanyOpen(true)} />
-
                 </div>
               }
               leftComponent={
                 <>
                   {company.document.length > 2 && (
-                    <Button className="mb-3" action={() => setDocumentOpen(true)}>
+                    <Button
+                      className="mb-3"
+                      action={() => setDocumentOpen(true)}
+                    >
                       {t("view all documents")}
                     </Button>
                   )}
@@ -313,6 +314,17 @@ export const ViewCompanyDetails = () => {
                                 lightString={doc.data?.reminder}
                               />
                             )}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <p className="mt-1">{t("media")} : </p>
+                            <div className="flex gap-4 flex-col">
+                              {doc?.files && (
+                                <FilesPreviewOutFormik
+                                  preview={true}
+                                  images={doc.files}
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

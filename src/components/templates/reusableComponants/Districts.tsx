@@ -125,28 +125,30 @@ const NewDistrictOptionComponent = ({
             <div className="flex gap-x-8 items-center">
               <BaseInputField
                 id="name_ar"
-                label={`${t("district in arabic")}`}
+                label={`${t("district name arabic")}`}
                 name="name_ar"
                 type="text"
-                placeholder={`${t("district in arabic")}`}
+                placeholder={`${t("district name arabic")}`}
               />
 
               <BaseInputField
                 id="name_en"
-                label={`${t("district in english")}`}
+                label={`${t("district name english")}`}
                 name="name_en"
                 type="text"
-                placeholder={`${t("district in english")}`}
+                placeholder={`${t("district name english")}`}
               />
             </div>
-            <Button
-              type="submit"
-              className="ms-auto mt-8"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              {t("submit")}
-            </Button>
+            <div className="text-end">
+              <Button
+                type="submit"
+                className="mr-auto mt-8"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {t("submit")}
+              </Button>
+            </div>
           </Form>
         </HandleBackErrors>
       </Formik>
@@ -181,11 +183,16 @@ export const Districts = ({
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-    // console.log("0", editData?.nationalAddress?.district.name)
     setNewValue({
-      id: editData?.nationalAddress?.district.id || "",
-      value: editData?.nationalAddress?.district.name || "",
-      label: editData?.nationalAddress?.district.name || "",
+      id: editData?.nationalAddress?.district.id || editData?.district_id || "",
+      value:
+        editData?.nationalAddress?.district.name || editData?.district_id || "",
+      label:
+
+        editData?.nationalAddress?.district.name ||
+        editData?.district_id ||
+        "اختر المدينه اولا ",
+
     })
   }, [])
 
@@ -206,8 +213,9 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled:  !!city?.id,
   })
+
 
   //change value
   useEffect(() => {
@@ -231,8 +239,18 @@ export const Districts = ({
         isDisabled={!!!city?.id}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
+        // placeholder={
+        //   city?.id &&
+        //   `
+        //   ${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}
+        //   `
+        // }
         placeholder={
-          city?.id && `${districts?.length !== 0 ? "اختر الحي" : "لا يوجد "}`
+          city?.id
+            ? districts?.length !== 0
+              ? " اختر الحي"
+              : " لا يوجد"
+            : " اختر المدينه اولا"
         }
         options={districts}
         value={newValue}

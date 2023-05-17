@@ -312,7 +312,7 @@ const AddSupplier = ({
           <Form>
             <HandleBackErrors errors={error?.response?.data?.errors}>
               <OuterFormLayout
-                header={`${t("add supplier")}`}
+                header={title}
                 submitComponent={
                   <Button
                     type="submit"

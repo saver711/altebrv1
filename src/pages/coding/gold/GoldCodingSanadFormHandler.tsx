@@ -73,6 +73,7 @@ export const GoldCodingSanadFormHandler = ({
   const [selectedSanadLocal, setSelectedSanadLocal] =
     useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
 
+    
   const columns: Column[] = [
     {
       name: "category",
@@ -251,7 +252,6 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("sizeIsRequired", false)
     }
   }, [activeBand, isSubmitting])
-  console.log(`activeBand:`, activeBand)
 
   useEffect(() => {
     if (!!activeBand) {
@@ -372,6 +372,7 @@ export const GoldCodingSanadFormHandler = ({
                     setSizes={setSizes}
                     activeBand={activeBand}
                     setActiveBand={setActiveBand}
+                    selectedSanad={selectedSanad}
                   />
                 )}
               </div>
@@ -379,9 +380,9 @@ export const GoldCodingSanadFormHandler = ({
           </Accordion>
 
           {/* الحجر */}
-          {!!values.has_stones && (
+          {(!!values.has_stones && values.left_weight ) ? (
             <AddStone stones={stones} setStones={setStones} />
-          )}
+          ) : (<div></div>)}
           <div className="flex items-end justify-end gap-x-5">
             {/* submit البند */}
             {!!addedPieces.length && (

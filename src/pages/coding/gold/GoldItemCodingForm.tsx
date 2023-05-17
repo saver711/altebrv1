@@ -2,6 +2,7 @@
 ///
 
 import { Formik, useFormikContext } from "formik"
+import { t } from "i18next"
 import { ChangeEvent, useEffect, useState } from "react"
 import { Button } from "../../../components/atoms"
 import { DeleteIcon, WeightIcon } from "../../../components/atoms/icons"
@@ -21,6 +22,7 @@ import { notify } from "../../../utils/toast"
 import {
   GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
+  GoldSanad_TP,
   SizePopup_TP,
   addTa2mSizesSchema,
 } from "../coding-types-and-helpers"
@@ -36,7 +38,8 @@ type ItemCodingFormProps_TP = {
   sizes: SizePopup_TP[]
   setSizes: SetState_TP<SizePopup_TP[]>
   activeBand: GoldSanadBand_TP
-  setActiveBand: SetState_TP<GoldSanadBand_TP| undefined>
+  setActiveBand: SetState_TP<GoldSanadBand_TP | undefined>
+  selectedSanad?:GoldSanad_TP
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -50,10 +53,11 @@ export const GoldItemCodingForm = ({
   sizes,
   setSizes,
   activeBand,
+  selectedSanad
 }: ItemCodingFormProps_TP) => {
-  console.log(`itemsToShowInCaseOfTa2m:`, itemsToShowInCaseOfTa2m)
   /////////// VARIABLES
   ///
+  const selectedBandLeftWeight =  selectedSanad.items.find((item)=>item?.number === activeBand?.number)?.leftWeight
   const hasSizes = !!sizes.length
   const isMultiCategory =
     activeBand.category.id > 1 && activeBand.category.type === "multi"
@@ -90,8 +94,7 @@ export const GoldItemCodingForm = ({
   // })
 
   const { values, setFieldValue } =
-  useFormikContext<GoldCodingSanad_initialValues_TP>()
-  console.log(`values:`, values)
+    useFormikContext<GoldCodingSanad_initialValues_TP>()
   ///
   /////////// STATES
   ///
@@ -117,6 +120,8 @@ export const GoldItemCodingForm = ({
   useEffect(() => {
     setAwzanItems(activeBand.category.items)
   }, [activeBand])
+
+
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,6 +143,14 @@ export const GoldItemCodingForm = ({
   const shouldRenderSizesTable =
     hasSizes && (!isMultiCategory || hasItemsWithSizes)
   ///
+    
+  useEffect(() => {
+   if(!selectedBandLeftWeight)
+    notify('info' ,`${t('left weight for this piece is equal to 0')}`)
+  }, [selectedBandLeftWeight , values?.left_weight])
+ 
+  if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
+
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 relative">
       {/* <div className="col-span-4">
@@ -224,7 +237,6 @@ export const GoldItemCodingForm = ({
       {/* الوزن */}
       <div className="flex flex-col">
         <div className="flex mb-1 justify-between items-center">
-          <label htmlFor="weight">الوزن</label>
           {awzanItems && !!awzanItems?.length && (
             <div className="flex items-center">
               <WeightIcon
@@ -248,18 +260,20 @@ export const GoldItemCodingForm = ({
             </div>
           )}
         </div>
+        <div className="flex relative" >
         <BaseInputField
           {...{
             id: "wight",
             type: "number",
             name: "weight",
+            label:`${t('weight')}`,
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
-                value: detailedWeight_total,
-                onChange: (e) => setDetailedWeight_total(+e.target.value),
-                disabled: true,
-              }),
+              value: detailedWeight_total,
+              onChange: (e) => setDetailedWeight_total(+e.target.value),
+              disabled: true,
+            }),
           }}
           // value={detailedWeight_total !== 0 && detailedWeight_total ? detailedWeight_total : undefined}
           // onChange={(e) => setDetailedWeight_total(+e.target.value)}
@@ -268,10 +282,13 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          className={`${
-            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-          }`}
+          disabled={selectedBandLeftWeight === 0}
+          className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+            } ${selectedBandLeftWeight === 0 && 'bg-red-600'}`}
         />
+          <span className="absolute left-5 text-sm text-mainGreen">{selectedBandLeftWeight}</span>
+
+        </div>
       </div>
 
       {/* المصدر */}
@@ -285,18 +302,21 @@ export const GoldItemCodingForm = ({
         modalTitle="إضافة لون ذهب"
         name="color_id"
         label="لون الذهب"
-        // onChange={(option) => {
-        //   setFieldValue("color_value", option.value)
-        // }}
+      // onChange={(option) => {
+      //   setFieldValue("color_value", option.value)
+      // }}
       />
       {/* الاجرة */}
-      <BaseInputField
-        placeholder="الأجرة"
-        label="الأجرة"
-        id="wage"
-        type="text"
-        name="wage"
-      />
+      <div>
+        <BaseInputField
+          placeholder="الأجرة"
+          label="الأجرة"
+          id="wage"
+          type="text"
+          name="wage"
+        />
+      </div>
+
       {/* جدول المقاسات */}
       {shouldRenderSizesTable && (
         <div className=" col-span-4">
@@ -373,7 +393,7 @@ export const GoldItemCodingForm = ({
               notify("success")
             }}
           >
-            {({ submitForm, values }) => (
+            {({ submitForm}) => (
               <>
                 <div className="grid grid-cols-4 gap-x-5">
                   <SelectCategorySize
@@ -388,6 +408,7 @@ export const GoldItemCodingForm = ({
                   type="button"
                   action={submitForm}
                   className="mt-8 mr-auto flex"
+              
                 >
                   حفظ
                 </Button>
@@ -410,62 +431,62 @@ export const GoldItemCodingForm = ({
         title="الوزن التفصيلي للقطع"
       >
         <>
-            <Formik
-          initialValues={awzanItemsFormInitValues || {}}
-          onSubmit={(vals) => {
-            // لو تجميعة الاوزان اكتر من ال leftWeight اريتيرن
-            let allWeight = 0
-            const weightitems = Object.entries(vals).map(([key, val]) => {
-              // @ts-ignore
-              allWeight += +val
-              return { category_id: key, weight: val }
-            })
-            if (allWeight > activeBand.leftWeight) {
-              notify("error", "تجميعة الأوزان اكثر من الوزن المتبقي")
-              return
-            }
-            if (allWeight <= 0) {
-              notify("error", "أدخل اوزان")
-              return
-            }
+          <Formik
+            initialValues={awzanItemsFormInitValues || {}}
+            onSubmit={(vals) => {
+              // لو تجميعة الاوزان اكتر من ال leftWeight اريتيرن
+              let allWeight = 0
+              const weightitems = Object.entries(vals).map(([key, val]) => {
+                // @ts-ignore
+                allWeight += +val
+                return { category_id: key, weight: val }
+              })
+              if (allWeight > activeBand.leftWeight) {
+                notify("error", "تجميعة الأوزان اكثر من الوزن المتبقي")
+                return
+              }
+              if (allWeight <= 0) {
+                notify("error", "أدخل اوزان")
+                return
+              }
 
-            // ALL ✅
-            /* 
-            - اعمل ابديت للوزن الاجمالي
-            - setFieldValue
-            - اقفل المودل
-            */
-            setFieldValue("weightitems", weightitems)
-            setFieldValue("weight", allWeight)
-            setDetailedWeight_total(allWeight)
-            setWeightItemsModal(false)
-          }}
-        >
-          {({ submitForm, values }) => (
-            <>
-              <div className="grid grid-cols-4 gap-5 py-20">
-                {awzanItems?.map((item, i) => (
-                  <BaseInputField
-                    key={item.id}
-                    label={item.name}
-                    id={`${item.name}_${i}`}
-                    name={item.id.toString()}
-                    type="number"
-                  />
-                ))}
-              </div>
-              <Button
-                type="button"
-                action={submitForm}
-                className="mt-8 mr-auto flex"
-              >
-                تأكيد
-              </Button>
-            </>
-          )}
-            </Formik>
+              // ALL ✅
+              /* 
+              - اعمل ابديت للوزن الاجمالي
+              - setFieldValue
+              - اقفل المودل
+              */
+              setFieldValue("weightitems", weightitems)
+              setFieldValue("weight", allWeight)
+              setDetailedWeight_total(allWeight)
+              setWeightItemsModal(false)
+            }}
+          >
+            {({ submitForm, values }) => (
+              <>
+                <div className="grid grid-cols-4 gap-5 py-20">
+                  {awzanItems?.map((item, i) => (
+                    <BaseInputField
+                      key={item.id}
+                      label={item.name}
+                      id={`${item.name}_${i}`}
+                      name={item.id.toString()}
+                      type="number"
+                    />
+                  ))}
+                </div>
+                <Button
+                  type="button"
+                  action={submitForm}
+                  className="mt-8 mr-auto flex"
+                >
+                  تأكيد
+                </Button>
+              </>
+            )}
+          </Formik>
         </>
-        </Modal>
+      </Modal>
     </div>
   )
 }

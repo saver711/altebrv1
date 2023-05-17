@@ -224,7 +224,7 @@ export const AddStone = ({ stones, setStones }: AddStoneProps_TP) => {
                   id="weight"
                   name="weight"
                   type="number"
-                  label="وزن الحجر بالقيراط"
+                  label="وزن اجمالي عدد الاحجار بالقيراط"
                 />
                 <BaseInputField
                   id="count"

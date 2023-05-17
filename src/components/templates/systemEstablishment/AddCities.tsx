@@ -3,15 +3,14 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
+import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
-import { useFetch, useIsRTL, useMutate } from "../../../hooks"
-import { SelectOption_TP } from "../../../types"
+import { useIsRTL, useMutate } from "../../../hooks"
 import { requiredTranslation } from "../../../utils/helpers"
 import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { HandleBackErrors } from "../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../atoms"
-import { CreateCountry } from "../../CreateCountry"
 import {
   BaseInputField,
   InnerFormLayout,
@@ -19,7 +18,6 @@ import {
 } from "../../molecules"
 import { Country_city_distract_markets } from "../reusableComponants/Country_city_distract_markets"
 import { ViewCities_TP } from "./view/ViewCities"
-import { Dispatch, SetStateAction } from "react"
 
 ///
 /////////// Types
@@ -41,6 +39,7 @@ type AddCitiesProps_TP = {
   editData?: ViewCities_TP
   setDataSource?: Dispatch<SetStateAction<ViewCities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -48,6 +47,7 @@ type AddCitiesProps_TP = {
 ///
 export const AddCities = ({
   editData,
+  title,
   setDataSource,
   setShow,
 }: AddCitiesProps_TP) => {
@@ -60,6 +60,12 @@ export const AddCities = ({
     name_ar: editData ? editData?.name_ar : "",
     name_en: editData ? editData?.name_en : "",
     country_id: editData ? editData.country_id : "",
+  }
+
+  const emptyInitialValues: InitialValues_TP = {
+    name_ar: "",
+    name_en: "",
+    country_id: "",
   }
 
   const cityValidatingSchema = Yup.object({
@@ -78,6 +84,7 @@ export const AddCities = ({
     mutate,
     error: errorQuery,
     isLoading,
+    isSuccess
   } = useMutate<CitiesType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -97,12 +104,12 @@ export const AddCities = ({
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllCities'])
+        queryClient.refetchQueries(["AllCities"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        queryClient.refetchQueries(['AllCities'])
+        queryClient.refetchQueries(["AllCities"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewCities_TP) => (p.id === data?.id ? data : p))
         // )
@@ -113,24 +120,25 @@ export const AddCities = ({
       notify("error")
     },
   })
+    console.log("🚀 ~ file: AddCities.tsx:125 ~ isSuccess:", isSuccess)
 
-///
+  ///
   /////////// STATES
   ///
   // const { setFieldValue } =  useFormikContext<FormikSharedConfig>()
-  
+
   ///
   /////////// SIDE EFFECTS
   ///
-  
+
   ///
   /////////// IF CASES
   ///
-  
+
   ///
   /////////// FUNCTIONS & EVENTS
   ///
-  
+
   const handleSubmit = (values: InitialValues_TP) => {
     console.log("cities", values)
 
@@ -155,13 +163,14 @@ export const AddCities = ({
         <Formik
           initialValues={initialValues}
           validationSchema={cityValidatingSchema}
-          onSubmit={(values) => {
+          onSubmit={(values , {setFieldValue}) => {
             handleSubmit(values)
           }}
         >
           <HandleBackErrors errors={errorQuery?.response.data.errors}>
             <Form className="w-full">
               <OuterFormLayout
+                header={title}
                 submitComponent={
                   <Button
                     type="submit"
@@ -172,7 +181,7 @@ export const AddCities = ({
                   </Button>
                 }
               >
-                <InnerFormLayout title={`${t("city")}`}>
+                <InnerFormLayout title={`${t("main data")}`}>
                   <Country_city_distract_markets
                     countryName="country_id"
                     editData={editData}
