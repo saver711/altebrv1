@@ -55,7 +55,7 @@ export const AccountingTreeForm = ({
     failureReason: failureReasonFirstLevel,
   } = useFetch<SelectOption_TP[], AccountLevel_TP[]>({
     queryKey: ["firstLevel"],
-    endpoint: "/accounting/api/v1/trees",
+    endpoint: "/accounting/api/v1/trees?per_page=10000",
     select: (firstLevel) =>
       firstLevel?.map((first) => ({
         id: first.id,
@@ -73,7 +73,7 @@ export const AccountingTreeForm = ({
     failureReason: failureReasonSecondLevel,
   } = useFetch<SelectOption_TP[], AccountLevel_TP[]>({
     queryKey: ["secundLevel", `tree_id: ${tree_id?.id}`],
-    endpoint: `/accounting/api/v1/accounts?tree_id=${tree_id?.id}`,
+    endpoint: `/accounting/api/v1/accounts?tree_id=${tree_id?.id}?per_page=10000`,
     select: (secondLevel) =>
       secondLevel?.map((second) => ({
         id: second.id,
@@ -91,7 +91,7 @@ export const AccountingTreeForm = ({
     failureReason: failureReasonThreeLevel,
   } = useFetch<SelectOption_TP[], AccountLevel_TP[]>({
     queryKey: ["threeLevel", `account_id: ${account_id?.id}`],
-    endpoint: `/accounting/api/v1/sub_accounts?account_id=${account_id?.id}`,
+    endpoint: `/accounting/api/v1/sub_accounts?account_id=${account_id?.id}?per_page=10000`,
     select: (threeLevel) =>
       threeLevel?.map((three) => ({
         id: three.id,
@@ -135,7 +135,7 @@ export const AccountingTreeForm = ({
             id="tree_id"
             placeholder={
               firstLevel && firstLevel?.length > 0
-                ? t("level one ").toString()
+                ? t("level one").toString()
                 : t("not a thing").toString()
             }
             required
@@ -170,14 +170,11 @@ export const AccountingTreeForm = ({
             id="account_id"
             required
             placeholder={
-              tree_id?.id &&
-              `
-            ${
-              secondLevel?.length !== 0
-                ? t("level two ").toString()
-                : t("not a thing").toString()
-            }
-            `
+              tree_id?.id
+                ? secondLevel?.length !== 0
+                  ? t("level two").toString()
+                  : t("not a thing").toString()
+                : t("choose level one first").toString()
             }
             loadingPlaceholder={
               !tree_id?.id
@@ -212,13 +209,13 @@ export const AccountingTreeForm = ({
             id="parent_id"
             required
             placeholder={
-              account_id?.id &&
-              `${
-                threeLevel?.length !== 0
-                  ? t("level three ").toString()
+              account_id?.id
+                ? threeLevel?.length !== 0
+                  ? t("level three").toString()
                   : t("not a thing").toString()
-              }`
+                : t("choose level tow first").toString()
             }
+          
             loadingPlaceholder={
               !account_id?.id
                 ? t("choose level two first").toString()
