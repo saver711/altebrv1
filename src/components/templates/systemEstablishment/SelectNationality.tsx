@@ -29,7 +29,7 @@ export const SelectNationality = ({ name, editData }: { name: string , editData?
     refetch: refetchNationality,
     failureReason: nationalityErrorReason,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "governorate/api/v1/nationalities",
+    endpoint: "governorate/api/v1/nationalities?per_page=10000",
     queryKey: ["nationalities"],
     select: (nationalities) =>
       nationalities.map((nationality) => {
