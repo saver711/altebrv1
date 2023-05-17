@@ -72,7 +72,7 @@ type AllSizesProps_TP = {
             header: () => <span>{t("Sequence ")} </span>,
           },
           {
-            header: () => <span>{t("size")} </span>,
+            header: () => <span>{t("sizes")} </span>,
             accessorKey: "type",
             cell: (info) => info.getValue(),
           },

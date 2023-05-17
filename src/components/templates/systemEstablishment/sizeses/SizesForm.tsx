@@ -353,7 +353,7 @@ export const SizesForm = ({
                   <BaseInputField
                     id="increase"
                     label="معدل  الزياده"
-                    name="increase"
+                    name="increase rate"
                     type="text"
                     placeholder=" معدل الزياده"
                     required

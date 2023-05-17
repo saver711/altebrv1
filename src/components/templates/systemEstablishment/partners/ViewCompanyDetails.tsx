@@ -125,7 +125,7 @@ export const ViewCompanyDetails = () => {
           <div className=" m-auto">
             <Header
               className="text-center text-2xl font-bold"
-              header={t(`some thing went wrong ${error?.message}`)}
+              header={t(`some thing went wrong ${error?.response.data.errors}`)}
             />
           </div>
         )}
@@ -140,9 +140,13 @@ export const ViewCompanyDetails = () => {
           companyDetailsData?.map((company: CompanyDetails_TP) => (
             <InnerFormLayout
               title={
-                <div className="flex">
-                  {`بيانات ${company?.name}`}{" "}
-                  <EditIcon action={() => setEditCompanyOpen(true)} />
+                <div className="flex gap-4">
+                  <p>بيانات</p>
+                  <p className=" text-mainGreen">{company?.name}</p>
+                  <EditIcon
+                    className=" hover:fill-mainGreen"
+                    action={() => setEditCompanyOpen(true)}
+                  />
                 </div>
               }
               leftComponent={
@@ -302,6 +306,7 @@ export const ViewCompanyDetails = () => {
                           <div className="flex gap-4 flex-col  ">
                             {doc.data?.endDate && (
                               <TextLine
+                                containerClasses="!w-full"
                                 boldText={t("document endDate")}
                                 lightString={doc.data?.endDate}
                               />
