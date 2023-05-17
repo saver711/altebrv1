@@ -79,12 +79,12 @@ export const sideBarItems: MenuItem_TP[] = [
             link: "/bonds/gold",
             icon: AiFillGolden,
           },
-          // {
-          //   id: crypto.randomUUID(),
-          //   label: 'diamond bond supply',
-          //   link: "/bonds/diamond",
-          //   icon: GiCutDiamond,
-          // },
+          {
+            id: crypto.randomUUID(),
+            label: 'diamond bond supply',
+            link: "/bonds/diamond",
+            icon: GiCutDiamond,
+          },
           // {
           //   id: crypto.randomUUID(),
           //   label: 'accessories bond supply',

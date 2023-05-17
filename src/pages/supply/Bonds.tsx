@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
@@ -10,7 +10,7 @@ import { AddIcon, ViewIcon } from "../../components/atoms/icons"
 import { BondTotals } from "../../components/gold-supply/BondTotals"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
-import { numberContext, numberFormatterCtx } from "../../context/settings/number-formatter"
+import { numberContext } from "../../context/settings/number-formatter"
 import { useFetch, useIsRTL } from "../../hooks"
 
 type BondsProps_TP = {
@@ -30,6 +30,12 @@ export type Bond_TP = {
   allboxes: []
 }
 
+type Paginate_Bond_TP = {
+  current_page: number
+  pages: number
+  data: Bond_TP[]
+}
+
 export const Bonds = ({ title }: BondsProps_TP) => {
   const isRTL = useIsRTL()
   const navigate = useNavigate()
@@ -37,8 +43,13 @@ export const Bonds = ({ title }: BondsProps_TP) => {
   const [page, setPage] = useState<number>(1)
   const { formatGram, formatReyal } = numberContext()
 
-  let count = 1
-  const { data, isError, isSuccess, error, refetch, isRefetching, isLoading } = useFetch<Bond_TP[]>({
+  const { 
+    data, 
+    isSuccess, 
+    refetch, 
+    isRefetching, 
+    isLoading 
+  } = useFetch<Paginate_Bond_TP>({
     endpoint: `twredGold/api/v1/bond?page=${page}`,
     queryKey: ["bonds"],
     pagination: true,
@@ -128,20 +139,6 @@ export const Bonds = ({ title }: BondsProps_TP) => {
     refetch()
   }, [page])
    
-  // if(dataSource.length === 0) return(
-  //   <>
-  //   <div className="flex justify-between mb-5">
-  //       <h2 className="font-bold text-2xl">{t("bonds")}</h2>
-  //       <Button
-  //         action={() => navigate(`/bonds/gold`)}
-  //         className="flex items-center gap-2"
-  //       >
-  //         <AddIcon /> {t("add bond")}
-  //       </Button>
-  //     </div>
-  //     <h2 className="text-center font-bold text-2xl mt-40" >{t('There are no bonds')}</h2>
-  //   </>
-  // )
   return (
     <div className="p-4">
       <Helmet>
@@ -164,7 +161,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         </Button>
       </div>
       {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
-      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
+      {isSuccess && !!!dataSource && !isLoading && !isRefetching && (
           <div className="mb-5 pr-5">
             <Header
               header={t('no items')}
@@ -172,9 +169,6 @@ export const Bonds = ({ title }: BondsProps_TP) => {
             />
           </div>
       )}
-      {/* {!(isLoading) && isSuccess && !!data[0]?.boxes?.length && (
-        <BondTotals boxesData={data[0]?.boxes} />
-      )} */}
       <div className="" >
       {isSuccess &&
           !!dataSource &&
@@ -213,14 +207,6 @@ export const Bonds = ({ title }: BondsProps_TP) => {
             </>
           )}
       </div>
-      {isSuccess && !!!dataSource && !isLoading && !isRefetching && !!dataSource.length && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-        )}
     </div>
   )
 }
