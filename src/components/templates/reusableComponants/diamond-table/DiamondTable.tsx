@@ -5,8 +5,8 @@ import {
   GoldTableProperties_TP,
   OTableDataTypes,
   TableHelperValues_TP,
-} from "../../../gold-supply/GoldSupplySecondForm"
-import { FirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
+} from "../../../supply/SupplySecondForm"
+import { FirstFormInitValues_TP } from "../../../supply/formInitialValues_types"
 import { DiamondTableForm } from "./DiamondTableForm"
 import * as Yup from "yup"
 import { t } from "i18next"
@@ -34,11 +34,11 @@ const validationSchema = Yup.object({
   weight: Yup.number().positive(weightError).required(requiredTranslation),
   karat_id: Yup.string().trim().required(requiredTranslation),
   stock: Yup.number().positive(stockError).max(1, stockRatioError).required(requiredTranslation),
-  gold_weight: Yup.number().positive(positiveError).required(requiredTranslation),
+  gold_weight: Yup.number().min(0, positiveError).required(requiredTranslation),
   diamond_value: Yup.number().positive(positiveError).required(requiredTranslation),
   diamond_amount: Yup.number().positive(positiveError).required(requiredTranslation),
   diamond_stone_weight: Yup.number().positive(positiveError).required(requiredTranslation),
-  other_stones_weight: Yup.number().positive(positiveError).required(requiredTranslation),
+  other_stones_weight: Yup.number().min(0, positiveError).required(requiredTranslation),
 })
 
 export function DiamondTable({

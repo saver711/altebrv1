@@ -7,8 +7,8 @@ import { t } from "i18next"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Button } from "../atoms"
 import { OuterFormLayout } from "../molecules"
-import { OTable } from "../templates/reusableComponants/gold-table/GoldTable"
-import { GoldFirstFormView } from "./GoldFirstFormView"
+import { GoldTable } from "../templates/reusableComponants/gold-table/GoldTable"
+import { FirstFormView } from "./FirstFormView"
 import { FirstFormInitValues_TP } from "./formInitialValues_types"
 import { notify } from "../../utils/toast"
 import { BoxesView, Box_TP } from "./BoxesView"
@@ -57,7 +57,7 @@ export type TableHelperValues_TP = {
 export type OTableDataTypes = GoldTableProperties_TP & TableHelperValues_TP
 
 ///
-export const GoldSupplySecondForm = ({ 
+export const SupplySecondForm = ({ 
     formValues, 
     supply,
     setStage, 
@@ -202,12 +202,19 @@ export const GoldSupplySecondForm = ({
             value: boxValues.reduce((acc, curr) => {
                 return +acc + Number(curr.diamond_amount)
             }, 0),
-            unit: 'reyal'
+            unit: 'item'
         },
         total_diamond_stone_weight: {
             title: 'total diamond stone weight',
             value: boxValues.reduce((acc, curr) => {
                 return +acc + Number(curr.diamond_stone_weight)
+            }, 0),
+            unit: 'gram'
+        },
+        total_gold_weight: {
+            title: 'total gold weight',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.gold_weight)
             }, 0),
             unit: 'gram'
         }
@@ -222,7 +229,7 @@ export const GoldSupplySecondForm = ({
     ///
     return <>
         <OuterFormLayout>
-            <GoldFirstFormView 
+            <FirstFormView 
                 supply={supply} 
                 formValues={formValues} 
                 setStage={setStage} 
@@ -236,10 +243,10 @@ export const GoldSupplySecondForm = ({
                     boxes={boxesView}
                 />
             }
-            <h1 className="text-2xl mb-5 mt-10">{t('bond items')}</h1>
+            <h1 className="text-2xl mt-10">{t('bond items')}</h1>
             <div className="flex flex-col gap-6 items-center">
                 {supply == 'gold' ? 
-                <OTable 
+                <GoldTable 
                     dirty={dirty} 
                     setDirty={setDirty} 
                     data={data} 

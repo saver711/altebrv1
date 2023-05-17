@@ -2,8 +2,8 @@ import { ColumnDef } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useMemo } from "react"
 import { Helmet } from "react-helmet-async"
-import { useParams } from "react-router-dom"
-import { BondTotals } from "../../components/gold-supply/BondTotals"
+import { useLocation, useParams } from "react-router-dom"
+import { BondTotals } from "../../components/supply/BondTotals"
 import { Loading } from "../../components/organisms/Loading"
 import { Table } from "../../components/templates/reusableComponants/tantable/Table"
 import { numberContext } from "../../context/settings/number-formatter"
@@ -75,6 +75,8 @@ type Entry_TP = {
 export const Bond = ({ title }: BondProps_TP) => {
   const { bondID } = useParams()
   const { formatGram, formatReyal } = numberContext()
+  const location = useLocation()
+  const path = location.pathname
 
   const { 
     data: contract, 
@@ -84,12 +86,14 @@ export const Bond = ({ title }: BondProps_TP) => {
     isFetching,
     failureReason
   } = useFetch<Contract_TP>({
-    endpoint: `twredGold/api/v1/bond/${bondID}`,
-    queryKey: ['one_bond'],
+    endpoint: path == `/gold-bonds/${bondID}`
+    ? `twredGold/api/v1/bond/${bondID}`
+    : `twredDiamond/api/v1/diamondBonds/${bondID}`,
+    queryKey: path == `/gold-bonds/${bondID}` ? ['one_gold_bond'] : ['one_diamond_bond'],
     onSuccess(data) {
       console.log(data)
     },
-    select: (contract) => ({
+    select: (contract) => (path == `/gold-bonds/${bondID}` ? {
       id: contract.id,
       bond_number: contract.bond_number,
       // entity_gold_price: contract.entity_gold_price,
@@ -119,10 +123,41 @@ export const Bond = ({ title }: BondProps_TP) => {
           computational_movement: box.computational_movement
         }
       }) 
+    } : {
+      id: contract.id,
+      bond_number: contract.bond_number,
+      bond_date: contract.bond_date,
+      classification: contract.classification,
+      supplier_name: contract.supplier_name,
+      items: contract.items.map(item => {
+        return {
+          itemType: item.category.name,
+          itemStock: item.stocks,
+          id: item.id,
+          weight: item.total_weight,
+          goldKarat: item.goldKarat.name,
+          gold_weight: item.gold_weight,
+          total_weight: item.total_weight,
+          diamond_value: item.diamond_value,
+          diamond_amount: item.diamond_number,
+          diamond_stone_weight: item.diamond_stone_weight,
+          other_stones_weight: item.other_stones_weight,
+          diamond_tax: item.diamond_tax,
+        }
+      }),
+      boxes: contract.boxes.map(box => {
+        return {
+          id: box.id,
+          account: box.account,
+          value: box.value,
+          unit_id: box.unit_id,
+          computational_movement: box.computational_movement
+        }
+      }) 
     }),
   })
 
-  const cols1 = useMemo<ColumnDef<TableRow_TP>[]>(
+  const cols1 = path == `/gold-bonds/${bondID}` ? useMemo<ColumnDef<TableRow_TP>[]>(
     () => [
       {
         header: `${t('category')}`,
@@ -193,9 +228,58 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
     ],
     []
+  ) : useMemo<ColumnDef<TableRow_TP>[]>(
+    () => [
+      {
+        header: `${t('category')}`,
+        cell: (info) => info.renderValue(),
+        accessorKey: 'itemType',
+      },
+      {
+        header: `${t('weight')}`,
+        cell: (info) => formatGram(Number(info.renderValue())),
+        accessorKey: 'total_weight',
+      },
+      {
+        header: `${t('gold weight')}`,
+        cell: (info) => info.renderValue(),
+        accessorKey: 'gold_weight',
+      },
+      {
+        header: `${t('karat')}`,
+        cell: (info) => info.renderValue(),
+        accessorKey: 'goldKarat',
+      },
+      {
+        header: `${t('diamond value')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'diamond_value',
+      },
+      {
+        header: `${t('diamond amount')}`,
+        cell: (info) => info.renderValue(),
+        accessorKey: 'diamond_amount',
+      },
+      {
+        header: `${t('diamond stone weight')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'diamond_stone_weight',
+      },
+      {
+        header: `${t('other stones weight')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'other_stones_weight',
+      },
+      {
+        header: `${t('diamond tax')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'diamond_tax',
+      },
+    ],
+    []
   )
 
-  const cols2 = useMemo<ColumnDef<Entry_TP>[]>(
+  const cols2 = path == `/gold-bonds/${bondID}` ? useMemo<ColumnDef<Entry_TP>[]>(
     () => [
       {
         header: `${t('description')}`,
@@ -224,7 +308,26 @@ export const Bond = ({ title }: BondProps_TP) => {
       }
     ],
     []
-  );
+  ) : useMemo<ColumnDef<Entry_TP>[]>(
+    () => [
+      {
+        header: `${t('description')}`,
+        cell: (info) => info.renderValue(),
+        accessorKey: 'bian',
+      },
+      {
+        header: `${t('reyal (debtor)')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'debtor_SRA',
+      },      
+      {
+        header: `${t('reyal (creditor)')}`,
+        cell: (info) => formatReyal(Number(info.renderValue())),
+        accessorKey: 'creditor_SRA',
+      }
+    ],
+    []
+  )
 
   let restrictions = contract?.boxes?.map(
     ({ account, computational_movement, unit_id, value }) => ({
