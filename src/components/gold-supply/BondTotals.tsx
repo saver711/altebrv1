@@ -2,7 +2,7 @@
 ///
 import { t } from "i18next"
 import { numberContext } from "../../context/settings/number-formatter"
-import { Box_TP } from "../../pages/gold-supply/Bond"
+import { Box_TP } from "../../pages/supply/Bond"
 import { Back } from "../../utils/utils-components/Back"
 ///
 /////////// Types
@@ -44,7 +44,7 @@ export const BondTotals = ({
                 key={box.id}
                 className="flex flex-col justify-center gap-3 rounded-xl bg-mainGreen p-3 text-center text-sm font-bold text-white"
               >
-                <p>{box.account}</p>
+                <p>{t(box.account)}</p>
                 {box.unit_id == 'gram' ? (
                   <p>
                     {formatGram(box.value)} {t(box.unit_id)}

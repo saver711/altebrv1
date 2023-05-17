@@ -3,23 +3,23 @@
 ///
 ///
 /////////// Types
-
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { Button } from "../atoms"
-import { BoxesDataBase } from "../atoms/card/BoxesDataBase"
 import { OuterFormLayout } from "../molecules"
-import { OTable } from "../templates/reusableComponants/o-table/OTable"
+import { OTable } from "../templates/reusableComponants/gold-table/GoldTable"
 import { GoldFirstFormView } from "./GoldFirstFormView"
-import { GoldFirstFormInitValues_TP } from "./formInitialValues_types"
+import { FirstFormInitValues_TP } from "./formInitialValues_types"
 import { notify } from "../../utils/toast"
-import { numberContext } from "../../context/settings/number-formatter"
-
+import { BoxesView, Box_TP } from "./BoxesView"
+import { DiamondTable } from "../templates/reusableComponants/diamond-table/DiamondTable"
 ///
 type GoldSupplySecondFormProps_TP = {
-    formValues: GoldFirstFormInitValues_TP | undefined
+    setBoxesView: Dispatch<SetStateAction<Box_TP[] | undefined>>
+    supply: Supply_TP
+    formValues: FirstFormInitValues_TP | undefined
     setStage: Dispatch<SetStateAction<number>>
-    setFormValues: Dispatch<SetStateAction<GoldFirstFormInitValues_TP | undefined>>
+    setFormValues: Dispatch<SetStateAction<FirstFormInitValues_TP | undefined>>
     setFinalData: Dispatch<SetStateAction<FinalData_TP | undefined>>
     data: OTableDataTypes[]
     setData: Dispatch<SetStateAction<OTableDataTypes[]>>
@@ -55,178 +55,213 @@ export type TableHelperValues_TP = {
     category_value: string
 }
 export type OTableDataTypes = GoldTableProperties_TP & TableHelperValues_TP
-/////////// HELPER VARIABLES & FUNCTIONS
-///
 
 ///
 export const GoldSupplySecondForm = ({ 
     formValues, 
+    supply,
     setStage, 
     setFormValues, 
     setFinalData,
     data,
     setData,
     boxValues,
+    setBoxesView,
     setBoxValues,
     editData,
     setEditData,
 }: GoldSupplySecondFormProps_TP) => {
-    ///
-    /////////// CUSTOM HOOKS
-    ///
-    const { formatGram, formatReyal } = numberContext()
-    ///
-    /////////// STATES
-    ///
     const [dirty, setDirty] = useState(false)
-    const defaultValues: OTableDataTypes = {
+    const defaultValues: OTableDataTypes = supply == 'gold' ? {
         id: crypto.randomUUID(),
         number: editData.number || '',
         category_id: editData.category_id || '',
         weight: editData.weight || '',
         karat_id: editData.karat_id || '',
-        stock: editData.stock || '', // must be stocks
+        stock: editData.stock || '',
         wage: editData.wage || '',
-        total_wages: editData.total_wages || '', // must be total_wage
+        total_wages: editData.total_wages || '',
         wage_tax: editData.wage_tax || '',
         gold_tax: editData.gold_tax || '',
         karat_value: '',
         category_value: ''
+    } : {
+        id: crypto.randomUUID(),
+        number: editData.number || '',
+        category_id: editData.category_id || '',
+        weight: editData.weight || '',
+        gold_weight: editData.gold_weight || '',
+        karat_id: editData.karat_id || '',
+        stock: editData.stock || '',
+        diamond_value: editData.diamond_value || '',
+        diamond_amount: editData.diamond_amount || '',
+        diamond_stone_weight: editData.diamond_stone_weight || '',
+        other_stones_weight: editData.other_stones_weight || '',
+        diamond_tax: editData.diamond_tax || '',
+        karat_value: '',
+        category_value: ''
     }
-    ///
-    /////////// SIDE EFFECTS
-    ///
-    /////////// VARIABLES
-    ///
     const karat_24_values = boxValues.filter(item => item.karat_value === '24')
     const karat_22_values = boxValues.filter(item => item.karat_value === '22')
     const karat_21_values = boxValues.filter(item => item.karat_value === '21')
     const karat_18_values = boxValues.filter(item => item.karat_value === '18')
 
-    const karat_24_aggregate = karat_24_values.reduce((acc, curr) => {
-        return +acc + Number(curr.weight)
-    }, 0)
-
-    const karat_22_aggregate = karat_22_values.reduce((acc, curr) => {
-        return +acc + Number(curr.weight)
-    }, 0)
-
-    const karat_21_aggregate = karat_21_values.reduce((acc, curr) => {
-        return +acc + Number(curr.weight)
-    }, 0)
-
-    const karat_18_aggregate = karat_18_values.reduce((acc, curr) => {
-        return +acc + Number(curr.weight)
-    }, 0)
-
-    const total_24_gold_by_stock = boxValues.reduce((acc, curr) => {
-        return +acc + (Number(curr.weight) * Number(curr.stock))
-    }, 0)
-
-    const total_wages = boxValues.reduce((acc, curr) => {
-        return +acc + (Number(curr.wage) * Number(curr.weight))
-    }, 0)
-
-    const total_tax = boxValues.reduce((acc, curr) => {
-        if (curr.karat_value == '24') {
-            return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
-        } else {
-            return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+    const boxes = supply == 'gold' ? {
+        karat_24_aggregate: {
+            title: 'total 24 gold box',
+            value: karat_24_values.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+        karat_22_aggregate: {
+            title: 'total 22 gold box',
+            value: karat_22_values.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+        karat_21_aggregate: {
+            title: 'total 21 gold box',
+            value: karat_21_values.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+        karat_18_aggregate: {
+            title: 'total 18 gold box',
+            value: karat_18_values.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+        total_24_gold_by_stock: {
+            title: 'total 24 gold by stock',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + (Number(curr.weight) * Number(curr.stock))
+            }, 0),
+            unit: 'gram'
+        },
+        total_wages: {
+            title: 'total wages',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + (Number(curr.wage) * Number(curr.weight))
+            }, 0),
+            unit: 'reyal'
+        },
+        total_tax: {
+            title: 'total tax',
+            value: boxValues.reduce((acc, curr) => {
+                if (curr.karat_value == '24') {
+                    return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
+                } else {
+                    return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 
+                    (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+                }
+            }, 0),
+            unit: 'reyal'
+        },
+        total_weight: {
+            title: 'total weight',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+    } : {
+        total_diamond_value: {
+            title: 'total diamond value',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.diamond_value)
+            }, 0),
+            unit: 'reyal'
+        },
+        total_tax: {
+            title: 'total tax',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + (Number(curr.diamond_value) * 0.15)
+            }, 0),
+            unit: 'reyal'
+        },
+        total_weight: {
+            title: 'total weight',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.weight)
+            }, 0),
+            unit: 'gram'
+        },
+        total_other_stones_weight: {
+            title: 'total other stones weight',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.other_stones_weight)
+            }, 0),
+            unit: 'gram'
+        },
+        total_diamond_amount: {
+            title: 'total diamond amount',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.diamond_amount)
+            }, 0),
+            unit: 'reyal'
+        },
+        total_diamond_stone_weight: {
+            title: 'total diamond stone weight',
+            value: boxValues.reduce((acc, curr) => {
+                return +acc + Number(curr.diamond_stone_weight)
+            }, 0),
+            unit: 'gram'
         }
-    }, 0)
-
-    const total_weight = boxValues.reduce((acc, curr) => {
-        return +acc + Number(curr.weight)
-    }, 0)
-
-    /////////// FUNCTIONS | EVENTS | IF CASES
-    ///
+    }
+    const boxesView = Object.values(boxes).map(box => {
+        return {
+            title: box.title,
+            value: box.value,
+            unit: box.unit,
+        }
+    })
     ///
     return <>
         <OuterFormLayout>
-            <GoldFirstFormView formValues={formValues} setStage={setStage} setFormValues={setFormValues} />
+            <GoldFirstFormView 
+                supply={supply} 
+                formValues={formValues} 
+                setStage={setStage} 
+                setFormValues={setFormValues} 
+            />
         </OuterFormLayout>
         <div className="px-4">
             <h1 className="text-2xl mb-5 mt-10">{t('bond total')}</h1>
-            <div className="grid-cols-4 grid gap-8" >
-
-                {/* اجمالي الذهب حسب الاسهم */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total 24 gold by stock')}</p>
-                        <p>{formatGram(total_24_gold_by_stock)} {t('gram')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي الذهب حسب الاسهم */}
-
-                {/* اجمالي الاجور */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total wages')}</p>
-                        <p>{formatReyal(total_wages)} {t('reyal')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي الاجور */}
-
-                {/* اجمالي الضريبة */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total tax')}</p>
-                        <p>{formatReyal(total_tax)} {t('reyal')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي الضريبة */}
-
-                {/* اجمالي الوزن القائم */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total weight')}</p>
-                        <p>{formatGram(total_weight)} {t('gram')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي الوزن القائم */}
-
-                {/* اجمالي صندوق الذهب 18 */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total 18 gold box')}</p>
-                        <p>{formatGram(karat_18_aggregate)} {t('gram')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي صندوق الذهب 18 */}
-
-                {/* اجمالي صندوق الذهب 21 */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total 21 gold box')}</p>
-                        <p>{formatGram(karat_21_aggregate)} {t('gram')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي صندوق الذهب 21 */}
-
-                {/* اجمالي صندوق الذهب 22 */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total 22 gold box')}</p>
-                        <p>{formatGram(karat_22_aggregate)} {t('gram')}</p>
-
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي صندوق الذهب 22 */}
-
-                {/* اجمالي صندوق الذهب 24 */}
-                <div className="col-span-1" >
-                    <BoxesDataBase>
-                        <p>{t('total 24 gold box')}</p>
-                        <p>{formatGram(karat_24_aggregate)} {t('gram')}</p>
-                    </BoxesDataBase>
-                </div>
-                {/* اجمالي صندوق الذهب 24 */}
-
-            </div>
+            {boxesView.length > 0 && 
+                <BoxesView 
+                    boxes={boxesView}
+                />
+            }
             <h1 className="text-2xl mb-5 mt-10">{t('bond items')}</h1>
             <div className="flex flex-col gap-6 items-center">
-                <OTable dirty={dirty} setDirty={setDirty} data={data} setData={setData} defaultValues={defaultValues} setEditData={setEditData} editData={editData} formValues={formValues} setBoxValues={setBoxValues} />
+                {supply == 'gold' ? 
+                <OTable 
+                    dirty={dirty} 
+                    setDirty={setDirty} 
+                    data={data} 
+                    setData={setData} 
+                    defaultValues={defaultValues} 
+                    setEditData={setEditData} 
+                    editData={editData} 
+                    formValues={formValues} 
+                    setBoxValues={setBoxValues} 
+                /> : 
+                <DiamondTable
+                    dirty={dirty} 
+                    setDirty={setDirty} 
+                    data={data} 
+                    setData={setData} 
+                    defaultValues={defaultValues} 
+                    setEditData={setEditData} 
+                    editData={editData} 
+                    formValues={formValues} 
+                    setBoxValues={setBoxValues} 
+                />
+                }
                 <div className="flex justify-end gap-4 w-full">
                     <Button
                         action={() => setStage(1)}
@@ -237,23 +272,35 @@ export const GoldSupplySecondForm = ({
                     <Button 
                         action={() => {
                             setFinalData({
-                                boxes: {
-                                    karat_24_aggregate,
-                                    karat_22_aggregate,
-                                    karat_21_aggregate,
-                                    karat_18_aggregate,
-                                    total_24_gold_by_stock,
-                                    total_wages,
-                                    total_tax,
-                                    total_weight,
+                                boxes: supply == 'gold' ? {
+                                    karat_24_aggregate: boxes.karat_24_aggregate.value,
+                                    karat_22_aggregate: boxes.karat_22_aggregate.value,
+                                    karat_21_aggregate: boxes.karat_21_aggregate.value,
+                                    karat_18_aggregate: boxes.karat_18_aggregate.value,
+                                    total_24_gold_by_stock: boxes.total_24_gold_by_stock.value,
+                                    total_wages: boxes.total_wages.value,
+                                    total_tax: boxes.total_tax.value,
+                                    total_weight: boxes.total_weight.value,
+                                } : {
+                                    total_diamond_value: boxes.total_diamond_value.value,
+                                    total_tax: boxes.total_tax.value,
+                                    total_weight: boxes.total_weight.value,
+                                    total_other_stones_weight: boxes.total_other_stones_weight.value,
+                                    total_diamond_amount: boxes.total_diamond_amount.value,
+                                    total_diamond_stone_weight: boxes.total_diamond_stone_weight.value,
                                 },
                                 table: data.map((item, i) => {
-                                    return {
+                                    return supply == 'gold' ? {
                                         ...item,
                                         number: `${i + 1}`,
                                         total_wages: (Number(item.weight) * Number(item.wage)),
                                         wage_tax: (Number(item.weight) * Number(item.wage) * .15),
-                                        gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * Number(formValues?.api_gold_price) * .15 || 0),
+                                        gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * 
+                                        Number(formValues?.api_gold_price) * Number(item.stock) * .15 || 0),
+                                    } : {
+                                        ...item,
+                                        number: `${i + 1}`,
+                                        diamond_tax: (Number(item.diamond_value) * 0.15),
                                     }
                                 })
                             })
@@ -261,6 +308,7 @@ export const GoldSupplySecondForm = ({
                                 if (dirty) {
                                     notify('error', `${t('must add the item')}`)
                                 } else {
+                                    setBoxesView(boxesView)
                                     setStage(prev => prev + 1)
                                 }
                             } else {
