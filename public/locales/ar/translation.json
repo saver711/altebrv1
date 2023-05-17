@@ -374,5 +374,8 @@
   "enter different numbers": "ادخل قيم مختلفة",
   "change language": "تغيير اللغة",
   "enter positive numbers": "ادخل قيم موجبة",
-  "no notes": "لا يوجد ملاحظات"
+  "no notes": "لا يوجد ملاحظات",
+  "gold supply": "توريد ذهب",
+  "diamond supply": "توريد الماس",
+  "accessories supply": "توريد متفرقات"
 }

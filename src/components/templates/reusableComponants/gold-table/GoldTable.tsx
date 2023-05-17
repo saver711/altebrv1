@@ -6,8 +6,8 @@ import {
   OTableDataTypes,
   TableHelperValues_TP,
 } from "../../../gold-supply/GoldSupplySecondForm"
-import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
-import { OTableForm } from "./OTableForm"
+import { FirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
+import { OTableForm } from "./GoldTableForm"
 import * as Yup from "yup"
 import { t } from "i18next"
 
@@ -19,7 +19,7 @@ type OTableProps_TP = {
   defaultValues: GoldTableProperties_TP & TableHelperValues_TP
   setEditData: Dispatch<SetStateAction<OTableDataTypes>>
   editData: OTableDataTypes
-  formValues: GoldFirstFormInitValues_TP | undefined
+  formValues: FirstFormInitValues_TP | undefined
   setBoxValues: Dispatch<SetStateAction<OTableDataTypes[]>>
 }
 

@@ -25,9 +25,8 @@ const AccountingTree = () => {
   })
 
   useEffect(() => {
-    if (data && data.length > 0 && reset.current) {
+    if (data && data.length > 0 && reset.current)
       reset.current.click()
-    }
   }, [data])  
 
   return (
@@ -46,7 +45,7 @@ const AccountingTree = () => {
             <TransformWrapper 
               initialScale={0.5}
               minScale={0.5}
-              maxScale={7}
+              maxScale={2}
             >
               {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                 <>
@@ -55,16 +54,13 @@ const AccountingTree = () => {
                       <Back />
                     </div>
                     <div className="flex gap-2">
-                      <button ref={reset} onClick={() => {
-                        zoomOut()
-                        rest.centerView()
-                      }}></button>
+                      <button ref={reset} onClick={() => rest.centerView(0.5)}></button>
                       <Button className="bg-mainOrange" action={() => zoomIn()}>
                         <ZoomIn />
                       </Button>
                       <Button
                         className="bg-mainOrange"
-                        action={() => resetTransform()}
+                        action={() => rest.centerView(0.5)}
                       >
                         <Reset />
                       </Button>
