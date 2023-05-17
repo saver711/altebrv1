@@ -23,9 +23,7 @@ import {
   GoldCodingSanad_initialValues_TP,
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
-import { SubTables } from "./SubTables"
 import { Loading } from "../../components/organisms/Loading"
-
 // types
 type Categories_TP = {
   has_selsal: string
@@ -224,7 +222,7 @@ export function ExpandableTable({
       )
     }
   }, [queryData])
-
+    
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <h2 className="font-bold text-2xl">{t("final review")}</h2>
