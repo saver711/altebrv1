@@ -51,80 +51,82 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       id: crypto.randomUUID(),
       title: t("countries"),
       name: "countries",
-      addLabel: `${t('add Country')}`,
-      addComponent: <AddCountry />,
-      viewLabel: `${t('view countries')}`,
+      addLabel: `${t("add Country")}`,
+      addComponent: <AddCountry title={`${t("add Country")}`} />,
+      viewLabel: `${t("view countries")}`,
       viewHandler: () => navigate("countries"),
     },
     {
       id: crypto.randomUUID(),
       title: t("cities"),
       name: "cities",
-      addLabel: `${t('add city')}`,
-      addComponent: <AddCities />,
-      viewLabel: `${t('view cities')}`,
+      addLabel: `${t("add city")}`,
+      addComponent: <AddCities title={`${t("add city")}`} />,
+      viewLabel: `${t("view cities")}`,
       viewHandler: () => navigate("cities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("districts"),
       name: "districts",
-      addLabel: `${t('add district')}`,
-      addComponent: <AddDistrict />,
-      viewLabel: `${t('view districs')}`,
+      addLabel: `${t("add district")}`,
+      addComponent: <AddDistrict title={`${t("add district")}`} />,
+      viewLabel: `${t("view districs")}`,
       viewHandler: () => navigate("districts"),
     },
     {
       id: crypto.randomUUID(),
       title: t("nationalities"),
       name: "nationalities",
-      addLabel: `${t('add nationality')}`,
-      addComponent: <CreateNationalities />,
-      viewLabel: `${t('view nationalities')}`,
+      addLabel: `${t("add nationality")}`,
+      addComponent: <CreateNationalities title={`${t("add nationality")}`}  />,
+      viewLabel: `${t("view nationalities")}`,
       viewHandler: () => navigate("nationalities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("gold colors"),
       name: "colors",
-      addLabel: `${t('add color')}`,
-      addComponent: <CreateColor />,
-      viewLabel: `${t('view colors')}`,
+      addLabel: `${t("add color")}`,
+      addComponent: <CreateColor title={`${t("add color")}`} />,
+      viewLabel: `${t("view colors")}`,
       viewHandler: () => navigate("colors"),
     },
     {
       id: crypto.randomUUID(),
       title: t("classifications"),
       name: "classifications",
-      addLabel: `${t('add classification')}`,
-      addComponent: <CreateClassification />,
-      viewLabel: `${t('view classifications')}`,
+      addLabel: `${t("add classification")}`,
+      addComponent: (
+        <CreateClassification title={`${t("add classification")}`} />
+      ),
+      viewLabel: `${t("view classifications")}`,
       viewHandler: () => navigate("classifications"),
     },
     {
       id: crypto.randomUUID(),
       title: t("karats"),
       name: "karats",
-      addLabel: `${t('add karat')}`,
-      addComponent: <CreateKarat />,
-      viewLabel: `${t('view karats')}`,
+      addLabel: `${t("add karat")}`,
+      addComponent: <CreateKarat title={`${t("add karat")}`} />,
+      viewLabel: `${t("view karats")}`,
       viewHandler: () => navigate("karats"),
     },
     {
-    id: crypto.randomUUID(),
+      id: crypto.randomUUID(),
       title: t("categories"),
       name: "categories",
-      addLabel: `${t('add category')}`,
-      addComponent: <CreateCategory />,
-      viewLabel: `${t('view categories')}`,
+      addLabel: `${t("add category")}`,
+      addComponent: <CreateCategory title={`${t("add category")}`} />,
+      viewLabel: `${t("view categories")}`,
       viewHandler: () => navigate("categories"),
     },
     {
       id: crypto.randomUUID(),
       title: t("sizes"),
       name: "sizes",
-      addLabel: "إضافة مقاس",
-      addComponent: <CreateSizes/>,
+      addLabel: `${t("add size")}`,
+      addComponent: <CreateSizes title={`${t("add size")}`} />,
       viewLabel: "عرض المقاسات",
       viewHandler: () => navigate("sizes"),
     },
@@ -132,9 +134,9 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       id: crypto.randomUUID(),
       title: t("markets"),
       name: "markets",
-      addLabel: `${t('add market')}`,
-      addComponent: <AddMarket />,
-      viewLabel: `${t('view markets')}`,
+      addLabel: `${t("add market")}`,
+      addComponent: <AddMarket title={`${t("add size")}`} />,
+      viewLabel: `${t("view markets")}`,
       viewHandler: () => navigate("markets"),
     },
   ]
@@ -144,41 +146,43 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       id: crypto.randomUUID(),
       title: t("stones types"),
       name: "stones",
-      addComponent: <CreateStoneType />,
+      addComponent: <CreateStoneType title={`${t("add stones types")}`} />,
       viewHandler: () => navigate("stones-types"),
     },
     {
       id: crypto.randomUUID(),
       title: t("stones colors"),
-      addComponent: <CreateColor />,
+      addComponent: <CreateColor title={`${t("add color")}`} />,
       name: "colors",
       viewHandler: () => navigate("stones-colors"),
     },
     {
       id: crypto.randomUUID(),
       title: t("stones shapes"),
-      addComponent: <CreateStoneShape />,
+      addComponent: <CreateStoneShape title={`${t("add shape")}`} />,
       name: "shapes",
       viewHandler: () => navigate("stones-shapes"),
     },
     {
       id: crypto.randomUUID(),
       title: t("stones qualities"),
-      addComponent: <CreateStoneQuality />,
+      addComponent: (
+        <CreateStoneQuality title={`${t("add stones qualities")}`} />
+      ),
       name: "qualities",
       viewHandler: () => navigate("stones-qualities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("stones purities"),
-      addComponent: <CreateStonePurity />,
+      addComponent: <CreateStonePurity title={`${t("add stones purities")}`} />,
       name: "purities",
       viewHandler: () => navigate("stones-purities"),
     },
     {
       id: crypto.randomUUID(),
       title: t("stones natures"),
-      addComponent: <CreateStoneNature />,
+      addComponent: <CreateStoneNature title={`${t("add stones natures")}`} />,
       name: "natures",
       viewHandler: () => navigate("stones-natures"),
     },
@@ -242,11 +246,11 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-lg font-bold">{t('system establishment')}</h1>
+        <h1 className="text-lg font-bold">{t("system establishment")}</h1>
         <Back path="/system" />
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {globalCards.map(
           ({
             id,
@@ -276,7 +280,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       <div className="mt-12 grid grid-cols-4 gap-6">
         <div className="col-span-1 flex w-full flex-col items-center gap-4">
           <div className="flex w-full items-center justify-center gap-2  rounded-lg  bg-mainGreen p-3 text-white">
-            <h2>{t('stones management')}</h2>
+            <h2>{t("stones management")}</h2>
           </div>
           {stonesCards.map(
             ({

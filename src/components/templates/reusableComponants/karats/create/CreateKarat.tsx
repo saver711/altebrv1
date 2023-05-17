@@ -13,6 +13,7 @@ import { HandleBackErrors } from "../../../../../utils/utils-components/HandleBa
 import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { ViewKarats_TP } from "../../../systemEstablishment/view/Viewkarats"
+import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
 
 ///
 /////////// Types
@@ -23,6 +24,7 @@ type CreateKaratProps_TP = {
   editData?: ViewKarats_TP
   setDataSource?: Dispatch<SetStateAction<ViewKarats_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type InitialValues_TP = {
@@ -42,6 +44,7 @@ const CreateKarat = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: CreateKaratProps_TP) => {
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
@@ -103,9 +106,19 @@ const CreateKarat = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <div className="flex flex-col">
-              <h2 className="text-xl font-bold mb-4">{t("karats")}</h2>
-              <div className="grid grid-cols-4 mb-4 gap-3 text-start">
+            <OuterFormLayout
+              header={title}
+              submitComponent={
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  className="ms-auto mt-8"
+                >
+                  {t("submit")}
+                </Button>
+              }
+            >
+              <InnerFormLayout title={`${t("main data")}`}>
                 <BaseInputField
                   id="karats_number"
                   label={`${t("karats number")}`}
@@ -120,11 +133,8 @@ const CreateKarat = ({
                   type="number"
                   placeholder={`${t("karats rate")}`}
                 />
-              </div>
-              <Button type="submit" className="self-end" loading={isLoading}>
-                {t("submit")}
-              </Button>
-            </div>
+              </InnerFormLayout>
+            </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>

@@ -2,7 +2,7 @@
 /////////// IMPORTS
 ///
 import { useQueryClient } from "@tanstack/react-query"
-import { Form, Formik } from "formik"
+import { Form, Formik, useFormikContext } from "formik"
 import { t } from "i18next"
 import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
@@ -32,6 +32,7 @@ type CreateCategoryProps_TP = {
   editData?: { [key: string]: any }
   setDataSource?: Dispatch<SetStateAction<InitialValues_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type SingleCategory_TP = {
@@ -68,6 +69,7 @@ const CreateCategory = ({
   editData,
   setDataSource,
   setShow,
+  title,
 }: CreateCategoryProps_TP) => {
   ///
   /////////// STATES
@@ -122,6 +124,11 @@ const CreateCategory = ({
       is: "multi",
       then: (schema) => schema.min(1, requiredTranslation),
     }),
+    // category_sizes: Yup.string().when("has_size", {
+    //   is: true,
+    //   then: (schema) =>
+    //     schema.required(`${t("required")}`).typeError(`${t("required")}`),
+    // }),
     // start: Yup.number().when("has_size", {
     //   is: true && sizes?.length <= 0,
     //   then: (schema) =>
@@ -139,7 +146,8 @@ const CreateCategory = ({
     // }),
     category_sizes: Yup.string().when("has_size", {
       is: true,
-      then: (schema) => schema.required(`${t('required')}`).typeError(`${t('required')}`),
+      then: (schema) =>
+        schema.required(`${t("required")}`).typeError(`${t("required")}`),
     }),
   })
 
@@ -151,7 +159,7 @@ const CreateCategory = ({
     refetch: categoryRefetch,
     isLoading: categoryLoading,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "classification/api/v1/categories?type=single",
+    endpoint: "classification/api/v1/categories?per_page=10000",
     queryKey: ["categories"],
     select: (categories) => {
       return categories.map((category: any) => ({
@@ -220,6 +228,7 @@ const CreateCategory = ({
   // }
 
   const send = (values: InitialValues_TP) => {
+    console.log(values)
     const multi = values.type === "multi"
     const singleValues = {
       name_en: values.name_en,
@@ -258,7 +267,6 @@ const CreateCategory = ({
     //         : singleValues
     //     )
   }
-
   return (
     <Formik
       enableReinitialize
@@ -269,7 +277,7 @@ const CreateCategory = ({
       {(props) => (
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout>
+            <OuterFormLayout header={title}>
               <div className="flex flex-col">
                 <h2 className="text-xl font-bold mb-5">{t("categories")}</h2>
                 <div className="flex justify-between">
@@ -451,4 +459,3 @@ const CreateCategory = ({
 }
 
 export default CreateCategory
-

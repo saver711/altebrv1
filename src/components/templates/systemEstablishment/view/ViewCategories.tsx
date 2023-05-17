@@ -20,7 +20,12 @@ import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
 import { EditIcon, ViewIcon } from "../../../atoms/icons"
 import { SvgDelete } from "../../../atoms/icons/SvgDelete"
-import { BaseInputField, Modal } from "../../../molecules"
+import {
+  BaseInputField,
+  InnerFormLayout,
+  Modal,
+  OuterFormLayout,
+} from "../../../molecules"
 import { AddButton } from "../../../molecules/AddButton"
 import { Loading } from "../../../organisms/Loading"
 import { TextLine } from "../../employee/TextLine"
@@ -41,7 +46,10 @@ type ViewSingleCategories_TP = {
   type: string
   has_size: string
   has_selsal: string
-  items: { name: string }[]
+  items: {
+    id: string
+    name: string
+  }[]
   sizes: { type: string }[]
 }
 
@@ -68,7 +76,6 @@ export const ViewCategories = () => {
     delete: false,
     view: false,
   })
-
   const [viewSingleCategory, setViewSingleCategory] =
     useState<ViewSingleCategories_TP>()
   const [search, setSearch] = useState("")
@@ -223,8 +230,8 @@ export const ViewCategories = () => {
   //   )
 
   ///
-  console.log(categories)
   console.log(viewSingleCategory)
+
   return (
     <div className="p-4">
       <div className="flex justify-between mb-8">
@@ -260,6 +267,11 @@ export const ViewCategories = () => {
               setEditData(undefined)
               setModel(true)
               setOpen(true)
+              setAction({
+                edit: false,
+                delete: false,
+                view: false,
+              })
             }}
             addLabel={`${t("add")}`}
           />
@@ -297,7 +309,7 @@ export const ViewCategories = () => {
               </div>
               <div className="flex items-center gap-2 ">
                 <Button
-                  className=" rounded bg-mainGreen p-[.18rem] "
+                  className=" rounded bg-mainGreen p-[.12rem] "
                   action={() => setPage((prev) => prev - 1)}
                   disabled={page == 1}
                 >
@@ -330,6 +342,7 @@ export const ViewCategories = () => {
       >
         {action.edit && (
           <CreateCategory
+            title={`${editData ? t("edit category") : t("add category")}`}
             editData={editData}
             setDataSource={setDataSource}
             setShow={setOpen}
@@ -337,6 +350,7 @@ export const ViewCategories = () => {
         )}
         {model && (
           <CreateCategory
+            title={`${editData ? t("edit category") : t("add category")}`}
             editData={editData}
             setDataSource={setDataSource}
             setShow={setOpen}
@@ -358,59 +372,76 @@ export const ViewCategories = () => {
           </div>
         )}
         {action.view && (
-          <>
-            <div className=" flex flex-col gap-6 items-center ">
-              <Header
-                header={` View details for  : ${viewSingleCategory?.name}`}
-                className=" text-mainGreen"
+          <OuterFormLayout header={`${t("view details")}`}>
+            <InnerFormLayout>
+              {/* <div className=" col-span-4 border border-dashed"></div> */}
+              <TextLine
+                boldText={t("arabic name")}
+                lightString={viewSingleCategory?.name}
               />
-              <div className="grid grid-cols-3 gap-12 ">
-                <TextLine
-                  boldText={t("name")}
-                  lightString={viewSingleCategory?.name}
-                />
-                <TextLine
-                  boldText={t("English name")}
-                  lightString={viewSingleCategory?.name_en}
-                />
-                <TextLine
-                  boldText={t("Selling policy")}
-                  lightString={viewSingleCategory?.selling_type}
-                />
+              <TextLine
+                boldText={t("english name")}
+                lightString={viewSingleCategory?.name_en}
+              />
+              <TextLine
+                boldText={t("Selling policy")}
+                lightString={viewSingleCategory?.selling_type}
+              />
 
-                {viewSingleCategory?.type === "multi" &&
-                  viewSingleCategory?.items?.map((item) => (
-                    <TextLine
-                      boldText={t("category type")}
-                      lightString={viewSingleCategory?.name}
-                    />
-                  ))}
-                {viewSingleCategory?.type === "single" && (
+              {/* نوع الصنف */}
+              {viewSingleCategory?.type === "single" && (
+                <TextLine
+                  boldText={t("category type")}
+                  lightString={viewSingleCategory?.type}
+                />
+              )}
+              {viewSingleCategory?.type === "multi" && (
+                <>
                   <TextLine
                     boldText={t("category type")}
                     lightString={viewSingleCategory?.type}
                   />
-                )}
+
+                  {viewSingleCategory?.items?.map((item, i) => (
+                    <div key={item.id}>
+                      <TextLine
+                        boldText={`${t("category")} ${i + 1}`}
+                        lightString={viewSingleCategory?.name}
+                      />
+                    </div>
+                  ))}
+                </>
+              )}
+              <div className="col-span-2">
                 <TextLine
+                  containerClasses="!w-full"
                   boldText={t("category policy")}
                   lightString={
                     viewSingleCategory?.has_selsal ? (
                       <>{`${t("accepts the addition of a chain")}`}</>
                     ) : (
-                      <>{`${t("does not accepts the addition of a chain")}`}</>
+                      <>{`${t("does't accepts additional chain")}`}</>
                     )
                   }
                 />
-                {viewSingleCategory?.has_size &&
-                  viewSingleCategory?.sizes?.map((size) => (
+              </div>
+              {/* سياسه الصنف */}
+              {viewSingleCategory?.has_size && (
+                <>
+                  <TextLine
+                    boldText={t("size policy")}
+                    lightString={`${t("got size")}`}
+                  />
+                  {viewSingleCategory?.sizes?.map((size) => (
                     <TextLine
                       boldText={t("size type")}
                       lightString={size.type}
                     />
                   ))}
-              </div>
-            </div>
-          </>
+                </>
+              )}
+            </InnerFormLayout>{" "}
+          </OuterFormLayout>
         )}
       </Modal>
     </div>

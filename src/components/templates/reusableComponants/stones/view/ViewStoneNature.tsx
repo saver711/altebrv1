@@ -203,6 +203,9 @@ export const ViewStoneNature = () => {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateStoneNature
+            title={`${
+              editData ? t("edit stones natures") : t("add stones natures")
+            }`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

@@ -72,7 +72,7 @@ type AllSizesProps_TP = {
             header: () => <span>{t("Sequence ")} </span>,
           },
           {
-            header: () => <span>{t("size")} </span>,
+            header: () => <span>{t("sizes")} </span>,
             accessorKey: "type",
             cell: (info) => info.getValue(),
           },
@@ -330,7 +330,7 @@ type AllSizesProps_TP = {
           }}
         >
           {model ? (
-            <CreateSizes editData={editData} setModel={setModel} />
+            <CreateSizes editData={editData} setModel={setModel} title={ `${editData ? t("edit size") : t("add size")}`} />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
               <Header header={`${t("delete")} : ${deleteData?.size}`} />

@@ -32,20 +32,20 @@ export const SelectRole = ({ name , field }:SelectRoleProps_TP) => {
   const { values , setFieldValue } = useFormikContext()
  // get job title
  const {
-    data: jobTitlesOptions,
-    isLoading: jobTitlesLoading,
-    refetch: refetchJobTitles,
-    failureReason: jobTitlesErrorReason,
-  } = useFetch<SelectOption_TP[]>({
-    endpoint: "/administrative/api/v1/roles",
-    queryKey: ["allRoles"],
-    select: (jobTitles) =>
-      jobTitles.map((jobTitle: any) => ({
-        id: jobTitle.id,
-        value: jobTitle.name,
-        label: jobTitle.name,
-      })),
-  })
+   data: jobTitlesOptions,
+   isLoading: jobTitlesLoading,
+   refetch: refetchJobTitles,
+   failureReason: jobTitlesErrorReason,
+ } = useFetch<SelectOption_TP[]>({
+   endpoint: "/administrative/api/v1/roles?per_page=10000",
+   queryKey: ["allRoles"],
+   select: (jobTitles) =>
+     jobTitles.map((jobTitle: any) => ({
+       id: jobTitle.id,
+       value: jobTitle.name,
+       label: jobTitle.name,
+     })),
+ })
 
   ///
   /////////// STATES

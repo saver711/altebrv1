@@ -205,6 +205,9 @@ export const ViewStoneType = () => {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateStoneType
+            title={`${
+              editData ? t("edit stones types") : t("add stones types")
+            }`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

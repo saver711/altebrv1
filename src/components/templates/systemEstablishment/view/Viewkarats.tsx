@@ -296,6 +296,7 @@ export const ViewKarats = () => {
         >
           {model ? (
             <CreateKarat
+              title={`${editData ? t("edit karat") : t("add karat")}`}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}

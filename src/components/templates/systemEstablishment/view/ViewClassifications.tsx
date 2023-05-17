@@ -293,6 +293,9 @@ export const ViewClassifications = () => {
         >
           {model ? (
             <CreateClassification
+              title={`${
+                editData ? t("edit classification") : t("add classification")
+              }`}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}

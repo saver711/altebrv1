@@ -24,7 +24,7 @@ const SelectClassification = ({ name, field, label }: SelectClassification_TP) =
     data: classifications,
     isLoading: classificationLoading
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "classification/api/v1/classifications",
+    endpoint: "classification/api/v1/classifications?per_page=10000",
     queryKey: ["classifications"],
     select: (classifications) => {
       return classifications.map((classification) => ({

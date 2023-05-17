@@ -29,9 +29,17 @@ export type Branch_Props_TP = {
   market_number: string
   name_ar: string
   name_en: string
+
   number: string
   phone: string
+  country: {
+    name: string
+    id: string
+    name_ar: string
+    name_en: string
+  }
   city: {
+    name: string
     id: string
     name_ar: string
     name_en: string
@@ -42,11 +50,13 @@ export type Branch_Props_TP = {
     }
   }
   district: {
+    name: string
     id: string
     name_ar: string
     name_en: string
   }
   market: {
+    name: string
     id: string
     name_ar: string
     name_en: string
@@ -106,7 +116,7 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("branches ")}</h2>
+        <h2 className="font-bold text-2xl">{t("branches")}</h2>
         <Button
           action={() => navigate(-1)}
           className="flex items-center gap-2"
@@ -125,8 +135,8 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
       )}
       {isLoading && (
         <Loading
-          mainTitle={`${t("loading")}`}
-          subTitle={`${t("branches are loading")}`}
+          subTitle={`${t("loading")}`}
+          mainTitle={`${t("branches data are loading")}`}
         />
       )}
       {isSuccess && data.length === 0 && (
@@ -151,7 +161,7 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
                   <ViewIcon />
                 </Button>
                 {/* تعديل */}
-                {/* <Button
+                <Button
                   bordered
                   className="flex items-center mx-1"
                   action={() => {
@@ -160,7 +170,7 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
                   }}
                 >
                   <EditIcon />
-                </Button> */}
+                </Button>
                 {/* حذف */}
                 {/* <Button
                   variant="danger"
@@ -175,7 +185,10 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         </div>
       )}
       <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <CreateBranch editData={editData} />
+        <CreateBranch
+          editData={editData}
+          title={`${editData ? t("edit Branch") : t("Add Branch")}`}
+        />
       </Modal>
     </>
   )

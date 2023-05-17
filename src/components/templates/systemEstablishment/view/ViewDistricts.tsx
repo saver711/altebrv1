@@ -299,6 +299,7 @@ export const ViewDistricts = () => {
         >
           {model ? (
             <AddDistrict
+              title={`${editData ? t("edit district") : t("add district")}`}
               editData={editData}
               setDataSource={setDataSource}
               setShow={setOpen}
