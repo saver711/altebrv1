@@ -11,8 +11,8 @@ import { AiOutlinePlus } from "react-icons/ai"
 import { numberContext } from "../../../../context/settings/number-formatter"
 import { useFetch } from "../../../../hooks"
 import { DeleteIcon, EditIcon } from "../../../atoms/icons"
-import { FirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
-import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
+import { FirstFormInitValues_TP } from "../../../supply/formInitialValues_types"
+import { OTableDataTypes } from "../../../supply/SupplySecondForm"
 import { BaseInputField, Select } from "../../../molecules"
 import SelectCategory from "../categories/select/SelectCategory"
 import SelectKarat from "../karats/select/SelectKarat"
@@ -107,10 +107,10 @@ export const DiamondTableForm = ({
       header: () => `${t("karats")}`,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("stock", {
-      header: `${t("stocks")}`,
-      cell: (info) => info.getValue().replace(/\.?0+$/, ''),
-    }),
+    // columnHelper.accessor("stock", {
+    //   header: `${t("stocks")}`,
+    //   cell: (info) => info.getValue().replace(/\.?0+$/, ''),
+    // }),
     columnHelper.accessor("diamond_value", {
       header: `${t("diamond value")}`,
       cell: (info) => formatReyal(info.getValue()),
@@ -186,12 +186,27 @@ export const DiamondTableForm = ({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((header, i) => {
-                  if (i === 1 || i === 4) {
+                  if (i === 1) {
                     return (
                       <th
                         key={header.id}
                         className="p-4 border-l-2 border-l-lightGreen rounded-t-lg"
-                        style={{minWidth: '180px'}}
+                        style={{minWidth: '170px'}}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    )
+                  } else if (i === 4) {
+                    return (
+                      <th
+                        key={header.id}
+                        className="p-4 border-l-2 border-l-lightGreen rounded-t-lg"
+                        style={{minWidth: '130px'}}
                       >
                         {header.isPlaceholder
                           ? null
@@ -269,7 +284,7 @@ export const DiamondTableForm = ({
                           diamond_value: values.diamond_value || editData.diamond_value,
                           diamond_amount: values.diamond_amount || editData.diamond_amount,
                           diamond_stone_weight: values.diamond_stone_weight || editData.diamond_stone_weight,
-                          other_stones_weight: values.other_stones_weight || other_stones_weight.stock,
+                          other_stones_weight: values.other_stones_weight || editData.other_stones_weight,
                           diamond_tax: values.diamond_tax || editData.diamond_tax,
                         }
                         setData(updatedData)
@@ -368,7 +383,7 @@ export const DiamondTableForm = ({
                     }}
                   />
                 </td>
-                <td>
+                {/* <td>
                   <Field
                     id="stock"
                     name="stock"
@@ -379,7 +394,7 @@ export const DiamondTableForm = ({
                     }}
                     className="rounded-md border-2 border-transparent focus:!border-2 focus:!border-mainGreen form-input px-4 py-[.30rem] w-full shadows"
                   />
-                </td>
+                </td> */}
                 <td>
                   <Field
                     id="diamond_value"
@@ -419,7 +434,7 @@ export const DiamondTableForm = ({
                 <td>
                   <Field
                     id="other_stones_weight"
-                    name="diamond_value"
+                    name="other_stones_weight"
                     type="number"
                     value={values.other_stones_weight || editData.other_stones_weight}
                     onChange={(e: any) => {
@@ -480,9 +495,9 @@ export const DiamondTableForm = ({
                     }}
                   />
                 </td>
-                <td className="border-l-2 border-l-flatWhite">
+                {/* <td className="border-l-2 border-l-flatWhite">
                   <BaseInputField id="stock" name="stock" type="number" />
-                </td>
+                </td> */}
                 <td className="border-l-2 border-l-flatWhite">
                   <BaseInputField id="diamond_value" name="diamond_value" type="number" />
                 </td>

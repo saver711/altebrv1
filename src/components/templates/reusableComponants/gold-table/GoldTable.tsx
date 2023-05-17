@@ -5,9 +5,9 @@ import {
   GoldTableProperties_TP,
   OTableDataTypes,
   TableHelperValues_TP,
-} from "../../../gold-supply/GoldSupplySecondForm"
-import { FirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
-import { OTableForm } from "./GoldTableForm"
+} from "../../../supply/SupplySecondForm"
+import { FirstFormInitValues_TP } from "../../../supply/formInitialValues_types"
+import { GoldTableForm } from "./GoldTableForm"
 import * as Yup from "yup"
 import { t } from "i18next"
 
@@ -37,7 +37,7 @@ const validationSchema = Yup.object({
   wage: Yup.number().positive(wageError).required(requiredTranslation),
 })
 
-export function OTable({
+export function GoldTable({
   dirty,
   setDirty,
   data,
@@ -102,7 +102,7 @@ export function OTable({
         validationSchema={validationSchema}
       >
         {({}) => (
-          <OTableForm
+          <GoldTableForm
             dirty={dirty}
             setDirty={setDirty}
             editRow={editRow}

@@ -30,7 +30,7 @@ type FirstFormProps_TP = {
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 ///
-export const GoldSupplyFirstForm = ({
+export const SupplyFirstForm = ({
     supply,
     formValues,
     setFormValues,

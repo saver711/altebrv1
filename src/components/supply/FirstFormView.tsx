@@ -18,7 +18,7 @@ type GoldFirstFormViewProps_TP = {
     setFormValues: Dispatch<SetStateAction<FirstFormInitValues_TP | undefined>>
 }
 ///
-export const GoldFirstFormView = ({ formValues, setStage, setFormValues, supply }: GoldFirstFormViewProps_TP) => {
+export const FirstFormView = ({ formValues, setStage, setFormValues, supply }: GoldFirstFormViewProps_TP) => {
     /////////// VARIABLES
     ///
     const { 
