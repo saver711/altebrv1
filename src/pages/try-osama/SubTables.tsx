@@ -11,18 +11,18 @@ import {
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
 import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
+import { Loading } from "../../components/organisms/Loading"
 import { useFetch } from "../../hooks"
 import { Query_TP } from "../coding/gold/AddStone"
 import { ExpandableTable } from "./ExapndableTable"
 import { StoneTable } from "./StoneTable"
-import { Loading } from "../../components/organisms/Loading"
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 const columnHelper = createColumnHelper<any>()
 
-export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any) => {
+export const SubTables = ({ subTableData  , addedPieces}: any) => {
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -65,13 +65,18 @@ export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any)
     size_number: !!item?.size_unit_id ? item?.size_unit_id : "",
   }))
 
+  const {data:allCategories , isLoading:categoryLoading , isSuccess} = useFetch({
+    endpoint:"/classification/api/v1/categories?type=all",
+    queryKey:['categoriesTable'],
+   })
+
   useEffect(() => {
     if (queryClient) {
-      const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+      const categories = allCategories
       const colors = queryClient.getQueryData<Query_TP[]>(["colors"])
       const countries = queryClient.getQueryData<Query_TP[]>(["countries"])
-      const allQueries = modifiedData?.map((item:any) => {
 
+      const allQueries = modifiedData?.map((item:any) => {
         const sizes_types_ids = item.sizes.map((size:any)=>size.size_type)
         const category_sizes =  categories?.map(category=>category?.category_sizes).flat()
         const units_ids = item.sizes.map((size:any)=>size.size_unit_id)
@@ -81,7 +86,7 @@ export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any)
           categories: !!item?.sizes.length ? category_sizes?.filter(size=> {
             return sizes_types_ids.some((id:any)=> id == size.id)
           }).map(item=>item.type).join(' & ')
-          : categories?.map(type=>type?.category_sizes?.find((type) => type?.id === item.size_type)?.type).filter(item=>item).join(''),
+          :  categories?.filter(type=>type.category_sizes.length)?.find(oneType=>oneType).category_sizes[0]?.type,
 
           country: countries?.find((country) => country?.id == item?.country_id)
             ?.name,
@@ -92,12 +97,6 @@ export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any)
             return units_ids.some(id=> id == size.id)
           }).map(item=>item.value).join(' & ')
           :  category_sizes_units?.filter(unit=> unit.id == item.size_unit_id )[0]?.value , 
-
-          ZZ: category_sizes_units,
-          units_ids: units_ids,
-          xx : category_sizes_units?.filter(size=> {
-            return units_ids.some(id=> id == size.id)
-          }).map(item=>item.value).join(' & ')
         }
         return finaleItem
       })
@@ -113,13 +112,12 @@ export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any)
   useEffect(() => {
     if (queryData) {
       setData(
-        modifiedData.map((item) => ({
+        modifiedData.map((item,index) => ({
           ...item,
-          categories: queryData[0]?.categories,
-          country: queryData[0]?.country,
-          color: queryData[0]?.color,
-          size_type:queryData[0]?.categories,
-          size_unit_id:queryData[0]?.size_number,
+          country: queryData[index]?.country,
+          color: queryData[index]?.color,
+          size_type:queryData[index]?.categories,
+          size_unit_id:queryData[index]?.size_number,
           karat_value: item.karat_value,
           bond_date: item.bond_date,
         }))
@@ -143,7 +141,7 @@ export const SubTables = ({ subTableData  , addedPieces , categoryLoading}: any)
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   ///
-  if(categoryLoading && !!queryData) return <Loading mainTitle={t('loading')} />
+  if(categoryLoading && !!queryData && !isSuccess) return <Loading mainTitle={t('loading')} />
   return (
     <>
     <div className="text-center" >

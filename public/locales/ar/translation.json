@@ -386,7 +386,6 @@
   "must be qual or greater than initial wage": "يجب الا يقل عن الاجرة الابتدائية",
   "enter positive numbers": "ادخل قيم موجبة",
   "there are items already existed you can save it": "هناك قطع مرقمه بالفعل يمكنك الحفظ",
-  "no notes": "لا يوجد ملاحظات"
   "no notes": "لا يوجد ملاحظات",
   "edit Country":"تعديل الدولة",
   "edit city":"تعديل المدينة",
@@ -407,5 +406,8 @@
   "edit stones purities":"تعديل نقاء الحجر",
   "add stones purities":"اضافة نقاء حجر",
   "edit stones natures":"تعديل طبيعة الحجر",
+  "band is closed":"تم اغلاق السند",
+  "back to digitization page":"الرجوع الى شاشة الترقيم",
+  "go to identification management":"الذهاب الى الهويات المرقمة",
   "add stones natures":"اضافة طبيعة الحجر"
 }

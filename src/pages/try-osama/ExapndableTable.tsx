@@ -24,7 +24,6 @@ import {
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
 import { SubTables } from "./SubTables"
-import { Loading } from "../../components/organisms/Loading"
 
 // types
 type Categories_TP = {
@@ -46,7 +45,7 @@ export function ExpandableTable({
   showDetails?: boolean
   addedPieces: GoldCodingSanad_initialValues_TP[]
   setAddedPieces?: SetState_TP<GoldCodingSanad_initialValues_TP[]>
-  setSelectedSanad: SetState_TP<GoldSanad_TP | undefined>
+  setSelectedSanad?: SetState_TP<GoldSanad_TP | undefined>
 }) {
   const { sanadId } = useParams()
 
@@ -80,6 +79,7 @@ export function ExpandableTable({
     data: typeof data
   }>()
   const [queryData, setQueryData] = useState<any[] | undefined>()
+  console.log("🚀 ~ file: ExapndableTable.tsx:83 ~ queryData:", queryData)
 
   const columns = useMemo<any>(
     () => [
@@ -190,13 +190,12 @@ export function ExpandableTable({
 
   // custom hooks
   const queryClient = useQueryClient()
-  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+
   const {data:allCategories , isLoading:categoryLoading} = useFetch({
-   endpoint:"classification/api/v1/categories?type=all",
-   queryKey:['categories'],
-   enabled:!!!categories,
-   refetchInterval:!!!categories,
+   endpoint:"/classification/api/v1/categories?type=all",
+   queryKey:['categoriesx'],
   })
+  
 
   useEffect(() => {
     if (queryClient) {
@@ -206,6 +205,8 @@ export function ExpandableTable({
           category: categories?.find(
             (category) => category.id == item.category_id
           )?.name,
+          categoryX: categories,
+          expandItem:item
         }
         return finaleItem
       })
