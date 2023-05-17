@@ -31,6 +31,8 @@ type Districts_TP = {
   editData?: {
     [key: string]: any
   }
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 type districtsMutate_TP = {
   name: string
@@ -165,6 +167,8 @@ export const Districts = ({
   fieldKey,
   label = "district",
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Districts_TP) => {
   /////////// VARIABLES
   ///
@@ -188,11 +192,9 @@ export const Districts = ({
       value:
         editData?.nationalAddress?.district.name || editData?.district_id || "",
       label:
-
         editData?.nationalAddress?.district.name ||
         editData?.district_id ||
         "اختر المدينه اولا ",
-
     })
   }, [])
 
@@ -213,9 +215,8 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled:  !!city?.id,
+    enabled: !!city?.id,
   })
-
 
   //change value
   useEffect(() => {
@@ -230,6 +231,10 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
+  useEffect(() => {
+    setNewValue(null)
+    if (resetSelect) resetSelect()
+  }, [isSuccessPost])
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select

@@ -2,16 +2,14 @@
 ///
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
-import { t } from "i18next"
+import { Dispatch, SetStateAction } from "react"
 import * as Yup from "yup"
 import { useIsRTL, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { HandleBackErrors } from "../../utils/utils-components/HandleBackErrors"
-import { Button } from "../atoms"
-import { BaseInputField, InnerFormLayout, OuterFormLayout } from "../molecules"
+import { NationalitiesMainData } from "./systemEstablishment/NationalitiesMainData"
 import { ViewNationalities_TP } from "./systemEstablishment/view/ViewNationalities"
-import { Dispatch, SetStateAction } from "react"
 
 ///
 /////////// Types
@@ -23,18 +21,19 @@ type CreateNationalitiesProps_TP = {
   setDataSource?: Dispatch<SetStateAction<ViewNationalities_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
   title?: string
-  add?:any
+  add?: any
 }
 
 type InitialValues_TP = {
-  [x: string]: string
+  name_ar: string
+  name_en: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 export const CreateNationalities = ({
-  value,
+  value = "",
   onAdd,
   editData,
   setDataSource,
@@ -65,6 +64,7 @@ export const CreateNationalities = ({
     mutate,
     error: errorQuery,
     isLoading,
+    isSuccess,
   } = useMutate<ViewNationalities_TP>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -122,49 +122,16 @@ export const CreateNationalities = ({
         }}
         validationSchema={validationSchema}
       >
-        <Form className="w-full">
-          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <>
-                <InnerFormLayout title={`${t("main data")}`}>
-                  {/* nationality ar  start */}
-                  <BaseInputField
-                    id="name_ar"
-                    label={`${t("nationality in arabic")}`}
-                    name="name_ar"
-                    type="text"
-                    placeholder={`${t("nationality in arabic")}`}
-                    defaultValue={editData ? editData.name : ""}
-                    // value={value}
-                  />
-                  {/* nationality ar  end */}
-
-                  {/* nationality en  start */}
-                  <BaseInputField
-                    id="name_en"
-                    label={`${t("nationality in english")}`}
-                    name="name_en"
-                    type="text"
-                    placeholder={`${t("nationality in english")}`}
-                    // value={value}
-                  />
-                  {/* nationality en  end */}
-                </InnerFormLayout>
-              </>
-            </OuterFormLayout>
-          </HandleBackErrors>
-        </Form>
+        <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
+          <Form className="w-full">
+            <NationalitiesMainData
+              editData={editData}
+              title={title}
+              isLoading={isLoading}
+              isSuccessPost={isSuccess}
+            />
+          </Form>
+        </HandleBackErrors>
       </Formik>
     </div>
   )

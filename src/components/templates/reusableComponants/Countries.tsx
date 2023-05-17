@@ -24,6 +24,8 @@ type Countries_TP = {
   label?: string
   editData?: { [key: string]: any }
   fieldKey: "id" | "value" | undefined
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 type CountriesMutate_TP = {
   name: string
@@ -112,15 +114,14 @@ const NewCountryOptionComponent = ({
               />
             </div>
             <div className="text-end">
-
-            <Button
-              type="submit"
-              className="mr-auto mt-8"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              {t("submit")}
-            </Button>
+              <Button
+                type="submit"
+                className="mr-auto mt-8"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {t("submit")}
+              </Button>
             </div>
           </Form>
         </HandleBackErrors>
@@ -137,6 +138,8 @@ export const Countries = ({
   fieldKey,
   label,
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Countries_TP) => {
   /////////// VARIABLES
   ///
@@ -156,8 +159,7 @@ export const Countries = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress?.country?.id ||
-        editData?.country_id || "",
+      id: editData?.nationalAddress?.country?.id || editData?.country_id || "",
       value:
         editData?.nationalAddress?.country?.name ||
         editData?.country_name ||
@@ -168,6 +170,11 @@ export const Countries = ({
         "اختر دولة",
     })
   }, [])
+
+  useEffect(() => {
+    setNewValue(null)
+    if (resetSelect) resetSelect()
+  }, [isSuccessPost])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -195,7 +202,7 @@ export const Countries = ({
         label={t(`${label}`).toString()}
         name={countryName}
         placeholder={t(`${label}`).toString()}
-        isDisabled={!countriesLoading && !!failureReason }
+        isDisabled={!countriesLoading && !!failureReason}
         loadingPlaceholder={`${t("loading")}`}
         loading={countriesLoading}
         options={countriesOptions}

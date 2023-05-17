@@ -13,6 +13,7 @@ import { Button } from "../../atoms"
 import { BaseInputField } from "../../molecules/formik-fields/BaseInputField"
 import { StonesColors } from "./stones/view/ViewStoneColor"
 import { InnerFormLayout, OuterFormLayout } from "../../molecules"
+import { ColorMainData } from "./ColorMainData"
 
 ///
 /////////// Types
@@ -42,7 +43,7 @@ const validationSchema = Yup.object({
 
 const CreateColor = ({
   item,
-  value,
+  value = "",
   onAdd,
   setDataSource,
   setShow,
@@ -60,12 +61,12 @@ const CreateColor = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate({
+  const { mutate, isLoading, error, isSuccess  } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
       queryClient.setQueryData(["colors"], (old: any) => {
-        return [...old, data]
+        return [...(old || []), data]
       })
       if (value && onAdd) {
         onAdd(value)
@@ -107,35 +108,12 @@ const CreateColor = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="stone_color_ar"
-                  label={`${t("name colors in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("name colors in arabic")}`}
-                />
-                <BaseInputField
-                  id="stone_color_en"
-                  label={`${t("name colors in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("name colors in english")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <ColorMainData
+              editData={item}
+              title={title}
+              isLoading={isLoading}
+              isSuccessPost={isSuccess}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

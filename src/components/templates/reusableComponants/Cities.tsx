@@ -29,6 +29,8 @@ type Cities_TP = {
   distractName?: string
   label?: string
   fieldKey?: "id" | "value" | undefined
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 type CitiesMutate_TP = {
   name: string
@@ -159,6 +161,8 @@ export const Cities = ({
   fieldKey,
   label = "city",
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Cities_TP) => {
   /////////// VARIABLES
   ///
@@ -183,11 +187,14 @@ export const Cities = ({
       label:
         editData?.nationalAddress?.city?.name ||
         editData?.city_name ||
-
         "اختر الدوله اولا",
-
     })
   }, [])
+
+  useEffect(() => {
+    setNewValue(null)
+    if (resetSelect) resetSelect()
+  }, [isSuccessPost])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -212,9 +219,6 @@ export const Cities = ({
     enabled: !!country?.id,
   })
 
-
-
-
   useEffect(() => {
     if (cities) {
       setNewValue(null)
@@ -224,8 +228,8 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    setFieldValue("city_value", "")
-  }, [country?.id])
+    setNewValue(null)
+  }, [isSuccessPost])
 
   ///
   return (

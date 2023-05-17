@@ -13,6 +13,7 @@ import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { ViewClassifications_TP } from "../../../systemEstablishment/view/ViewClassifications"
 import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
+import { ClassificationMainData } from "../../../systemEstablishment/ClassificationMainData"
 
 ///
 /////////// Types
@@ -37,7 +38,7 @@ const validationSchema = Yup.object({
 })
 
 export const CreateClassification = ({
-  value,
+  value = "",
   onAdd,
   editData,
   setDataSource,
@@ -56,37 +57,38 @@ export const CreateClassification = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate<ViewClassifications_TP>({
-    mutationFn: mutateData,
-    onSuccess: (data) => {
-      notify("success")
-      if (value && onAdd) {
-        onAdd(value)
-        // queryClient.setQueryData(["classifications"], (old: any) => {
-        //   return [...old, data]
-        // })
-        queryClient.refetchQueries(["AllClassifications"])
-      }
-      if (setDataSource && setShow && !editData && !error) {
-        // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(["AllClassifications"])
-        setShow(false)
-      }
-      if (setDataSource && setShow && editData && !error) {
-        setShow(false)
-        queryClient.refetchQueries(["AllClassifications"])
-        // setDataSource((prev: any) =>
-        //   prev.map((p: ViewClassifications_TP) =>
-        //     p.id === data?.id ? data : p
-        //   )
-        // )
-      }
-    },
-    onError: (error) => {
-      console.log(error)
-      notify("error")
-    },
-  })
+  const { mutate, isLoading, error, isSuccess , reset } =
+    useMutate<ViewClassifications_TP>({
+      mutationFn: mutateData,
+      onSuccess: (data) => {
+        notify("success")
+        if (value && onAdd) {
+          onAdd(value)
+          // queryClient.setQueryData(["classifications"], (old: any) => {
+          //   return [...old, data]
+          // })
+          queryClient.refetchQueries(["AllClassifications"])
+        }
+        if (setDataSource && setShow && !editData && !error) {
+          // setDataSource((prev: any) => [...prev, data])
+          queryClient.refetchQueries(["AllClassifications"])
+          setShow(false)
+        }
+        if (setDataSource && setShow && editData && !error) {
+          setShow(false)
+          queryClient.refetchQueries(["AllClassifications"])
+          // setDataSource((prev: any) =>
+          //   prev.map((p: ViewClassifications_TP) =>
+          //     p.id === data?.id ? data : p
+          //   )
+          // )
+        }
+      },
+      onError: (error) => {
+        console.log(error)
+        notify("error")
+      },
+    })
 
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
@@ -114,36 +116,13 @@ export const CreateClassification = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="classification_ar"
-                  label={`${t("classifications in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("classifications in arabic")}`}
-                  defaultValue={editData ? editData.name : ""}
-                />
-                <BaseInputField
-                  id="classification_en"
-                  label={`${t("classifications in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("classifications in english")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <ClassificationMainData
+              editData={editData}
+              title={title}
+              isLoading={isLoading}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>
