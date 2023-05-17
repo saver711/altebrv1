@@ -68,8 +68,11 @@ const NewMarketOptionComponent = ({
   const { mutate, error, isLoading } = useMutate<MarketsMutate_TP>({
     mutationFn: mutateData,
     onSuccess: (data) => {
-      console.log("marketData", data)
-      queryClient.setQueryData([`market/${districtId}`], (old: any) => {
+      console.log("onSuccess marketData", data)
+      queryClient.setQueryData([ `market/${districtId}` ], (old: any) => {
+        console.log("data", data)
+        
+        console.log("old", old)
         if (old && !old.markets) {
           old.markets = []
         }
@@ -184,7 +187,7 @@ export const Markets = ({
     refetch,
   } = useFetch<SelectOption_TP[], Market_TP>({
     queryKey: [`market/${district?.id}`],
-    endpoint: `/governorate/api/v1/districts/${district?.id}`,
+    endpoint: `/governorate/api/v1/districts/${district?.id}?per_page=10000`,
     select: ({ markets }) =>
       markets.map((market) => ({
         ...market,
@@ -194,7 +197,6 @@ export const Markets = ({
       })),
     enabled: editData ? !!editData?.district_id : !!district?.id,
   })
-  console.log("marketsNameeditData", editData)
 
   //change value
   useEffect(() => {
@@ -216,7 +218,7 @@ export const Markets = ({
             "اختر الحي اولا ",
         })
       }, [])
-  console.log('m',editData)
+  console.log("MARKET EDIT editData", editData)
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">

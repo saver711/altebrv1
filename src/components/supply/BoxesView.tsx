@@ -25,9 +25,13 @@ export const BoxesView = ({boxes}: BoxesView_TP) => {
               <p>
                 {formatGram(box.value)} {t(box.unit)}
               </p>
-            ) : (
+            ) : box.unit == 'reyal' ? (
               <p>
                 {formatReyal(box.value)} {t(box.unit)}
+              </p>
+            ) : (
+              <p>
+                {box.value} {t("item")}
               </p>
             )}
             {/* <p>{box.value} {t(`${box.unit}`)}</p> */}

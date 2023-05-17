@@ -12,14 +12,14 @@ import { Helmet } from "react-helmet-async"
 // } from "../../types"
 import { t } from "i18next"
 import { useLocation, useNavigate } from "react-router-dom"
-import { GoldSupplyFinalForm } from "../../components/gold-supply/GoldSupplyFinalForm"
-import { GoldSupplyFirstForm } from "../../components/gold-supply/GoldSupplyFirstForm"
-import { BoxesTypes, GoldSupplySecondForm, OTableDataTypes } from "../../components/gold-supply/GoldSupplySecondForm"
-import { FirstFormInitValues_TP } from "../../components/gold-supply/formInitialValues_types"
+import { SupplyFinalForm } from "../../components/supply/SupplyFinalForm"
+import { SupplyFirstForm } from "../../components/supply/SupplyFirstForm"
+import { BoxesTypes, SupplySecondForm, OTableDataTypes } from "../../components/supply/SupplySecondForm"
+import { FirstFormInitValues_TP } from "../../components/supply/formInitialValues_types"
 import { Loading } from "../../components/organisms/Loading"
 import { useFetch } from "../../hooks/useFetch"
 import { Back } from "../../utils/utils-components/Back"
-import { Box_TP } from "../../components/gold-supply/BoxesView"
+import { Box_TP } from "../../components/supply/BoxesView"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -90,6 +90,13 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
 
   useEffect(() => {
     if (supply) {
+      setFormValues(undefined)
+      setFinalData(undefined)
+      setData([])
+      setBoxValues([])
+      setEditData({} as OTableDataTypes)
+      setBoxesView(undefined)
+      setStage(1)
       nextBond()
       checkOperationsTitles()
     }
@@ -121,7 +128,8 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
       )}
 
       {stage === 1 && (
-        <GoldSupplyFirstForm
+        <SupplyFirstForm
+          key={supply}
           supply={supply}
           nextBondNumber={nextBondNumber?.supply_bond_number}
           formValues={formValues}
@@ -130,7 +138,8 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
         />
       )}
       {stage === 2 && (
-        <GoldSupplySecondForm 
+        <SupplySecondForm 
+          key={supply}
           setBoxesView={setBoxesView}
           supply={supply}
           formValues={formValues} 
@@ -146,7 +155,8 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
         />
       )}
       {stage === 3 && (
-        <GoldSupplyFinalForm 
+        <SupplyFinalForm 
+          key={supply}
           supply={supply}
           boxesView={boxesView}
           formValues={formValues} 

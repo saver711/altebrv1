@@ -69,8 +69,14 @@ export const sideBarItems: MenuItem_TP[] = [
         items: [
           {
             id: crypto.randomUUID(),
-            label: 'bonds',
-            link: "/bonds",
+            label: 'gold bonds',
+            link: "/gold-bonds",
+            icon: RiVipCrownLine,
+          },
+          {
+            id: crypto.randomUUID(),
+            label: 'diamond bonds',
+            link: "/diamond-bonds",
             icon: RiVipCrownLine,
           },
           {

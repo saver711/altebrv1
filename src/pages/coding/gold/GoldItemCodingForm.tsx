@@ -53,7 +53,8 @@ export const GoldItemCodingForm = ({
   sizes,
   setSizes,
   activeBand,
-  selectedSanad
+  selectedSanad,
+  setActiveBand
 }: ItemCodingFormProps_TP) => {
   /////////// VARIABLES
   ///
@@ -120,8 +121,14 @@ export const GoldItemCodingForm = ({
   useEffect(() => {
     setAwzanItems(activeBand.category.items)
   }, [activeBand])
-
-
+  
+  // go to bond that have left weight if previous left weight is 0
+  useEffect(() => {
+    const index = selectedSanad?.items.findIndex(item=>item.leftWeight)
+    if(!selectedBandLeftWeight)
+    setActiveBand(selectedSanad?.items[index])
+  }, [selectedBandLeftWeight])
+  
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,12 +152,13 @@ export const GoldItemCodingForm = ({
   ///
     
   useEffect(() => {
+    const finishedBondTitles = selectedSanad?.items.filter(item=> item.leftWeight === 0).map(item=>item?.category?.name).join(' & ')
    if(!selectedBandLeftWeight)
-    notify('info' ,`${t('left weight for this piece is equal to 0')}`)
-  }, [selectedBandLeftWeight , values?.left_weight])
+    notify('info' ,`${finishedBondTitles} الوزن المتبقي يساوي صفر `)
+  }, [activeBand])
  
-  if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
-
+  // if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
+ 
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 relative">
       {/* <div className="col-span-4">

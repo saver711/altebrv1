@@ -1,12 +1,12 @@
 import { OuterFormLayout } from "../molecules"
-import { GoldFirstFormView } from "./GoldFirstFormView"
+import { FirstFormView } from "./FirstFormView"
 import { FirstFormInitValues_TP } from "./formInitialValues_types"
 import { Dispatch, SetStateAction, useMemo } from "react"
 import { FinalData_TP, Supply_TP } from "../../pages/supply/Supply"
 import { BoxesDataBase } from "../atoms/card/BoxesDataBase"
 import { Table } from "../templates/reusableComponants/tantable/Table"
 import { ColumnDef } from "@tanstack/react-table"
-import { OTableDataTypes } from "./GoldSupplySecondForm"
+import { OTableDataTypes } from "./SupplySecondForm"
 import { useFetch, useMutate } from "../../hooks"
 import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
@@ -31,7 +31,7 @@ type GoldSupplyFinalFormProps_TP = {
   finalData: FinalData_TP | undefined
 }
 ///
-export const GoldSupplyFinalForm = ({
+export const SupplyFinalForm = ({
   supply,
   boxesView,
   formValues,
@@ -133,11 +133,11 @@ export const GoldSupplyFinalForm = ({
         cell: (info) => info.renderValue(),
         accessorKey: "karat_value",
       },
-      {
-        header: `${t("stocks")}`,
-        cell: (info) => info.renderValue(),
-        accessorKey: "stock",
-      },
+      // {
+      //   header: `${t("stocks")}`,
+      //   cell: (info) => info.renderValue(),
+      //   accessorKey: "stock",
+      // },
       {
         header: `${t("diamond value")}`,
         cell: (info) => formatReyal(Number(info.renderValue())),
@@ -154,7 +154,7 @@ export const GoldSupplyFinalForm = ({
         accessorKey: "diamond_stone_weight",
       },
       {
-        header: `${t("diamond stones weight")}`,
+        header: `${t("other stones weight")}`,
         cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: "other_stones_weight",
       },
@@ -173,7 +173,7 @@ export const GoldSupplyFinalForm = ({
     mutationFn: mutateData,
     onSuccess(data: { id: number } | undefined) {
       notify("success")
-      navigate(`/bonds/${data!.id}`)
+      navigate(supply === 'gold' ? `/gold-bonds/${data!.id}` : `/diamond-bonds/${data!.id}`)
     },
   })
   ///
@@ -445,7 +445,7 @@ export const GoldSupplyFinalForm = ({
   return (
     <>
       <OuterFormLayout>
-        <GoldFirstFormView
+        <FirstFormView
           supply={supply}
           formValues={formValues}
           setStage={setStage}

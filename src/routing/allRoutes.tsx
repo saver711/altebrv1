@@ -203,8 +203,10 @@ export const AllRoutesProvider = () => {
             path="/bonds/accessories"
             element={<Supply title={t("accessories supply")} />}
           />
-          <Route path="/bonds" element={<Bonds title={t("bonds")} />} />
-          <Route path="/bonds/:bondID" element={<Bond title={t("bond")} />} />
+          <Route path="/gold-bonds" element={<Bonds title={t("gold bonds")} />} />
+          <Route path="/gold-bonds/:bondID" element={<Bond title={t("gold bond")} />} />
+          <Route path="/diamond-bonds" element={<Bonds title={t("diamond bonds")} />} />
+          <Route path="/diamond-bonds/:bondID" element={<Bond title={t("diamond bond")} />} />
         </Route>
         <Route
           errorElement={<ErrorPage />}
