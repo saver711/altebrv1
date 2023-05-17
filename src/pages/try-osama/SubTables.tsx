@@ -23,6 +23,7 @@ import { StoneTable } from "./StoneTable"
 const columnHelper = createColumnHelper<any>()
 
 export const SubTables = ({ subTableData  , addedPieces}: any) => {
+  console.log("🚀 ~ file: SubTables.tsx:26 ~ SubTables ~ addedPieces:", addedPieces)
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -55,6 +56,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
   )
   ////////// STATES
   const [queryData, setQueryData] = useState<any[] | undefined>()
+  console.log("🚀 ~ file: SubTables.tsx:58 ~ SubTables ~ queryData:", queryData)
 
   const queryClient = useQueryClient()
 
@@ -86,7 +88,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
           categories: !!item?.sizes.length ? category_sizes?.filter(size=> {
             return sizes_types_ids.some((id:any)=> id == size.id)
           }).map(item=>item.type).join(' & ')
-          :  categories?.filter(type=>type.category_sizes.length)?.find(oneType=>oneType).category_sizes[0]?.type,
+          :  categories?.filter(type=>type.category_sizes.length)?.find(type=>type?.id === item?.category_id )?.sizes[0]?.type,
 
           country: countries?.find((country) => country?.id == item?.country_id)
             ?.name,
@@ -96,7 +98,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
           size_number: !!item?.sizes.length ?  category_sizes_units?.filter(size=> {
             return units_ids.some(id=> id == size.id)
           }).map(item=>item.value).join(' & ')
-          :  category_sizes_units?.filter(unit=> unit.id == item.size_unit_id )[0]?.value , 
+          :  category_sizes_units?.filter(unit=> unit.id == item.size_unit_id )[0]?.value ,
         }
         return finaleItem
       })

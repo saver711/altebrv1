@@ -244,7 +244,11 @@ export const GoldItemCodingForm = ({
       </div>
       {/* الوزن */}
       <div className="flex flex-col">
-        <div className="flex mb-1 justify-between items-center">
+
+        <div className="flex mb-1 justify-between items-center relative">
+      <label htmlFor="wight">{t('weight')}</label> 
+      <span className="absolute left-10 text-xs opacity-80 font-bold text-mainGreen"> الوزن المتبقي للقطعه {selectedBandLeftWeight}</span>
+
           {awzanItems && !!awzanItems?.length && (
             <div className="flex items-center">
               <WeightIcon
@@ -252,7 +256,8 @@ export const GoldItemCodingForm = ({
                   detailedWeight_total !== 0 &&
                   !detailedWeight_total &&
                   setWeightItemsModal(true)
-                }
+                }     
+                
               />
 
               {detailedWeight_total !== 0 && detailedWeight_total && (
@@ -268,13 +273,12 @@ export const GoldItemCodingForm = ({
             </div>
           )}
         </div>
-        <div className="flex relative" >
         <BaseInputField
           {...{
             id: "wight",
             type: "number",
             name: "weight",
-            label:`${t('weight')}`,
+            // label:`${t('weight')}`,
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
@@ -290,13 +294,11 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          disabled={selectedBandLeftWeight === 0}
+          // disabled={selectedBandLeftWeight === 0}
           className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-            } ${selectedBandLeftWeight === 0 && 'bg-red-600'}`}
+            } ${values.weight > values.left_weight && 'bg-red-100'}`}
+            
         />
-          <span className="absolute left-5 text-sm text-mainGreen">{selectedBandLeftWeight}</span>
-
-        </div>
       </div>
 
       {/* المصدر */}
