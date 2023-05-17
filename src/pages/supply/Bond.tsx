@@ -25,21 +25,16 @@ export type Box_TP = {
 }
 
 type TableRow_TP = {
-  category: {
-    name: string
-    name_ar: string
-    name_en: string
-  }
+  itemType: string
   goldWeight: number
-  stocks: number
-  id: string
-  gold_wage: number
+  entity_gold_price: number
+  itemStock: number
   payoffTaxes: number
   wage: number
   totalWage: number
-  goldKarat: {
-    name: string
-  }
+  goldTaxes: number
+  goldKarat: string
+  itemTaxes: number
 }
 
 type Contract_TP = {
@@ -49,8 +44,32 @@ type Contract_TP = {
   classification: "gold"
   supplier_name: string
   entity_gold_price: number
-  items: TableRow_TP[]
+  items: {
+    category: {
+      name: string
+      name_ar: string
+      name_en: string
+    }
+    goldWeight: number
+    stocks: number
+    id: string
+    gold_wage: number
+    payoffTaxes: number
+    wage: number
+    totalWage: number
+    goldKarat: {
+      name: string
+    }
+  }[]
   boxes: Box_TP[]
+}
+
+type Entry_TP = {
+  bian: string
+  debtor_gram: number
+  debtor_SRA: number
+  creditor_gram: number
+  creditor_SRA: number
 }
 
 export const Bond = ({ title }: BondProps_TP) => {
@@ -67,6 +86,9 @@ export const Bond = ({ title }: BondProps_TP) => {
   } = useFetch<Contract_TP>({
     endpoint: `twredGold/api/v1/bond/${bondID}`,
     queryKey: ['one_bond'],
+    onSuccess(data) {
+      console.log(data)
+    },
     select: (contract) => ({
       id: contract.id,
       bond_number: contract.bond_number,
@@ -148,7 +170,9 @@ export const Bond = ({ title }: BondProps_TP) => {
           if (info.row.original.goldKarat == '24') {
             return 0
           } else {
-            return formatReyal((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100)
+            return formatReyal((Number(info.row.original.goldWeight) * 
+            Number(info.row.original.entity_gold_price) * 15 * 
+            Number(info.row.original.itemStock)) / 100)
           }
         },
         accessorKey: 'goldTaxes',
@@ -159,7 +183,10 @@ export const Bond = ({ title }: BondProps_TP) => {
           if (info.row.original.goldKarat == '24') {
             return formatReyal(Number(info.renderValue()) * (15/100))
           } else {
-            return formatReyal(((Number(info.row.original.goldWeight) * Number(info.row.original.entity_gold_price) * 15 * Number(info.row.original.itemStock)) / 100) + (Number(info.renderValue()) * (15/100)))
+            return formatReyal(((Number(info.row.original.goldWeight) *
+             Number(info.row.original.entity_gold_price) * 15 * 
+             Number(info.row.original.itemStock)) / 100) + 
+             (Number(info.renderValue()) * (15/100)))
           }
         },
         accessorKey: 'itemTaxes',
@@ -168,7 +195,7 @@ export const Bond = ({ title }: BondProps_TP) => {
     []
   )
 
-  const cols2 = useMemo<ColumnDef<TableRow_TP>[]>(
+  const cols2 = useMemo<ColumnDef<Entry_TP>[]>(
     () => [
       {
         header: `${t('description')}`,

@@ -385,9 +385,11 @@
   "left weight for this piece is equal to 0": "الوزن المتبقي لهذه القطعه يساوي 0",
   "must be qual or greater than initial wage": "يجب الا يقل عن الاجرة الابتدائية",
   "enter positive numbers": "ادخل قيم موجبة",
+  "gold supply": "توريد ذهب",
+  "diamond supply": "توريد الماس",
+  "accessories supply": "توريد متفرقات"
   "there are items already existed you can save it": "هناك قطع مرقمه بالفعل يمكنك الحفظ",
   "no notes": "لا يوجد ملاحظات"
-  "no notes": "لا يوجد ملاحظات",
   "edit Country":"تعديل الدولة",
   "edit city":"تعديل المدينة",
   "edit district":"تعديل الحي",

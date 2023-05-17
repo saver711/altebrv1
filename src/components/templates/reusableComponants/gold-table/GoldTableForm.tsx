@@ -11,7 +11,7 @@ import { AiOutlinePlus } from "react-icons/ai"
 import { numberContext } from "../../../../context/settings/number-formatter"
 import { useFetch } from "../../../../hooks"
 import { DeleteIcon, EditIcon } from "../../../atoms/icons"
-import { GoldFirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
+import { FirstFormInitValues_TP } from "../../../gold-supply/formInitialValues_types"
 import { OTableDataTypes } from "../../../gold-supply/GoldSupplySecondForm"
 import { BaseInputField, Select } from "../../../molecules"
 import SelectCategory from "../categories/select/SelectCategory"
@@ -27,7 +27,7 @@ import SelectKarat from "../karats/select/SelectKarat"
     data: OTableDataTypes[]
     setBoxValues: Dispatch<SetStateAction<OTableDataTypes[]>>
     setData: Dispatch<SetStateAction<OTableDataTypes[]>>
-    formValues: GoldFirstFormInitValues_TP | undefined
+    formValues: FirstFormInitValues_TP | undefined
     editData: OTableDataTypes
     setEditRow: Dispatch<SetStateAction<boolean>>
     setEditData: Dispatch<SetStateAction<OTableDataTypes>>
