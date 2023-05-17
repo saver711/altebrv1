@@ -72,7 +72,7 @@ export const SelectNationality = ({ name, editData }: { name: string , editData?
     <div className="flex flex-col">
       <Select
         id="nationality"
-        label={`${t("Nationality")}`}
+        label={`${t("nationality")}`}
         name={name}
         placeholder={`${t("nationality")}`}
         loadingPlaceholder={`${t("loading")}`}

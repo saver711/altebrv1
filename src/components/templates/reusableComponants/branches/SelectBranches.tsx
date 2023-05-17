@@ -72,7 +72,7 @@ export const SelectBranches = ({ name, editData }: { name: string; editData?:any
     <div className="flex flex-col">
       <Select
         id="branch"
-        label={`${t("Branch")}`}
+        label={`${t("branch")}`}
         name={name}
         placeholder={
           branchesOptions?.length !== 0 ? `${t("branch")}` : "اضف فرع "

@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
+import { useState } from "react"
 import * as Yup from "yup"
 import { NationalAddress } from "../.."
 import { useIsRTL, useMutate } from "../../../../hooks"
@@ -13,6 +14,7 @@ import { Button } from "../../../atoms"
 import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
 import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
+import { allDocs_TP, Documents } from "../documents/Documents"
 import { Branch_Props_TP } from "./ViewBranches"
 ///
 /////////// Types
@@ -21,7 +23,6 @@ type CreateBranchProps_TP = {
   value?: string
   onAdd?: (value: string) => void
   editData?: Branch_Props_TP
-  title?:string
 }
 
 type InitialValues_TP = {
@@ -35,7 +36,6 @@ export const CreateBranch = ({
   value,
   onAdd,
   editData,
-  title,
 }: CreateBranchProps_TP) => {
   /////////// VARIABLES
   ///
@@ -115,6 +115,18 @@ export const CreateBranch = ({
       },
     })
   }
+  //@ts-ignore
+  const incomingData = !!editData
+    ? editData!.document.map((item) => ({
+        ...item.data,
+        endDate: new Date(item.data.endDate),
+        files: item?.files || [],
+        id: item.id,
+      }))
+    : []
+
+  const [docsFormValues, setDocsFormValues] =
+    useState<allDocs_TP[]>(incomingData)
   ///
   return (
     <div className="flex items-center justify-between gap-2">
@@ -127,27 +139,27 @@ export const CreateBranch = ({
         validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <OuterFormLayout header={title}>
+          <OuterFormLayout header={t("add branch")}>
             <Form className="w-full">
               <InnerFormLayout title={t("main data")}>
                 {/* branch name  start */}
                 <div className="col-span-1">
                   <BaseInputField
                     id="name_ar"
-                    label={`${t("branch in arabic")}`}
+                    label={`${t("branch name in arabic")}`}
                     name="name_ar"
                     type="text"
-                    placeholder={`${t("branch in arabic")}`}
+                    placeholder={`${t("branch name in arabic")}`}
                     defaultValue={editData && editData.name_ar}
                   />
                 </div>
                 <div className="col-span-1">
                   <BaseInputField
                     id="name_en"
-                    label={`${t("branch in english")}`}
+                    label={`${t("branch name in english")}`}
                     name="name_en"
                     type="text"
-                    placeholder={`${t("branch in english")}`}
+                    placeholder={`${t("branch name in english")}`}
                     defaultValue={editData && editData.name_en}
                   />
                 </div>
@@ -174,7 +186,7 @@ export const CreateBranch = ({
                   distractName="district_id"
                   distractLabel={`${t("district")}`}
                   marketName="market_id"
-                  marketLabel={`${t("market")}`}
+                  marketLabel={`${t("markets")}`}
                   editData={{
                     nationalAddress: {
                       country: {
@@ -250,6 +262,11 @@ export const CreateBranch = ({
                 </div>
                 {/* fax end */}
               </InnerFormLayout>
+              <Documents
+                docsFormValues={docsFormValues}
+                setDocsFormValues={setDocsFormValues}
+                editable={!!editData}
+              />
               <NationalAddress editData={editData} />
               <Button loading={isLoading} type="submit" className="mr-auto">
                 {t("submit")}

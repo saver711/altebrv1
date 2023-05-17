@@ -6,10 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/atoms"
 import { OuterFormLayout } from "../../components/molecules/OuterFormLayout"
 ///
-import {
-  ColumnDef,
-  createColumnHelper
-} from "@tanstack/react-table"
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table"
 import { useMemo, useState } from "react"
 import { Header } from "../../components/atoms/Header"
 import { EditIcon } from "../../components/atoms/icons"
@@ -45,7 +42,6 @@ export const AdministrativeStructure = ({
   ///
   const navigate = useNavigate()
 
-
   // states
   const [dataSource, setDataSource] = useState<PermissionGroup_TP[]>([])
   const [open, setOpen] = useState<boolean>(false)
@@ -55,43 +51,46 @@ export const AdministrativeStructure = ({
 
   ///
   const AddAdministrative = (
-    <Button bordered action={() =>{
-      navigate(-1)
-    } }>
+    <Button
+      bordered
+      action={() => {
+        navigate(-1)
+      }}
+    >
       {t("back")}
     </Button>
   )
   /////////// CUSTOM HOOKS
   ///
-  const {  isSuccess, isFetching} = useFetch<PermissionGroup_TP[]>({
-    endpoint: 'administrative/api/v1/roles',
-    queryKey: ['allRoles'],
-    onSuccess: (data)=> { setDataSource(data) }
+  const { isSuccess, isFetching } = useFetch<PermissionGroup_TP[]>({
+    endpoint: "administrative/api/v1/roles",
+    queryKey: ["allRoles"],
+    onSuccess: (data) => {
+      setDataSource(data)
+    },
   })
 
-  const {
-    mutate,
-    isLoading: isDeleting,
-  } = useMutate({
+  const { mutate, isLoading: isDeleting } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
-      setDataSource((prev:PermissionGroup_TP[]) => prev.filter(p => p.id !== deleteData?.id))
+      setDataSource((prev: PermissionGroup_TP[]) =>
+        prev.filter((p) => p.id !== deleteData?.id)
+      )
       setOpen(false)
       notify("success")
-    }
+    },
   })
-
 
   const cols = useMemo<ColumnDef<PermissionGroup_TP>[]>(
     () => [
       {
-        header: t('Name'),
+        header: t("Name").toString(),
         cell: (info) => info.renderValue(),
-        accessorKey: 'name',
+        accessorKey: "name",
       },
       {
-        header: t('Edit'),
-        cell: (info) =>
+        header: t("Edit").toString(),
+        cell: (info) => (
           <div className="flex items-center justify-center gap-4">
             <EditIcon
               action={() => {
@@ -108,8 +107,9 @@ export const AdministrativeStructure = ({
               }}
               stroke="#ef4444"
             />
-          </div>,
-        accessorKey: 'edit',
+          </div>
+        ),
+        accessorKey: "edit",
       },
     ],
     []

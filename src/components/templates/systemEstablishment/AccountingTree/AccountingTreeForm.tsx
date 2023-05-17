@@ -135,7 +135,7 @@ export const AccountingTreeForm = ({
             id="tree_id"
             placeholder={
               firstLevel && firstLevel?.length > 0
-                ? t("level one ").toString()
+                ? t("level one").toString()
                 : t("not a thing").toString()
             }
             required
@@ -170,14 +170,11 @@ export const AccountingTreeForm = ({
             id="account_id"
             required
             placeholder={
-              tree_id?.id &&
-              `
-            ${
-              secondLevel?.length !== 0
-                ? t("level two ").toString()
-                : t("not a thing").toString()
-            }
-            `
+              tree_id?.id
+                ? secondLevel?.length !== 0
+                  ? t("level two").toString()
+                  : t("not a thing").toString()
+                : t("choose level one first").toString()
             }
             loadingPlaceholder={
               !tree_id?.id
@@ -212,13 +209,13 @@ export const AccountingTreeForm = ({
             id="parent_id"
             required
             placeholder={
-              account_id?.id &&
-              `${
-                threeLevel?.length !== 0
-                  ? t("level three ").toString()
+              account_id?.id
+                ? threeLevel?.length !== 0
+                  ? t("level three").toString()
                   : t("not a thing").toString()
-              }`
+                : t("choose level tow first").toString()
             }
+          
             loadingPlaceholder={
               !account_id?.id
                 ? t("choose level two first").toString()
