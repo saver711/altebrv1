@@ -393,6 +393,9 @@
   "left weight for this piece is equal to 0": "الوزن المتبقي لهذه القطعه يساوي 0",
   "must be qual or greater than initial wage": "يجب الا يقل عن الاجرة الابتدائية",
   "enter positive numbers": "ادخل قيم موجبة",
+  "gold supply": "توريد ذهب",
+  "diamond supply": "توريد الماس",
+  "accessories supply": "توريد متفرقات",
   "there are items already existed you can save it": "هناك قطع مرقمه بالفعل يمكنك الحفظ",
   "no notes": "لا يوجد ملاحظات",
   "edit Country": "تعديل الدولة",
@@ -414,14 +417,5 @@
   "edit stones purities": "تعديل نقاء الحجر",
   "add stones purities": "اضافة نقاء حجر",
   "edit stones natures": "تعديل طبيعة الحجر",
-  "add stones natures": "اضافة طبيعة الحجر",
-  "Date from": "بداية التاريخ",
-  "Date end": "  نهاية التاريخ",
-  "national image": "صوره الهويه",
-  "choose level one first": "اختر  المستوي الاول اولا",
-  "not a thing": "لا يوجد ",
-  "choose level tow first": "اختر  المستوي الثاني اولا",
-  "creditor": "دائن",
-  "debtor": "مدين",
-  "view company Details": " عرض بيانات الشركه"
+  "add stones natures": "اضافة طبيعة الحجر"
 }
