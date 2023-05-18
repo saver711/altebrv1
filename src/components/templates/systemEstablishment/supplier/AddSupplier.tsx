@@ -312,7 +312,7 @@ const AddSupplier = ({
           <Form>
             <HandleBackErrors errors={error?.response?.data?.errors}>
               <OuterFormLayout
-                header={`${t("add supplier")}`}
+                header={title}
                 submitComponent={
                   <Button
                     type="submit"
@@ -328,7 +328,7 @@ const AddSupplier = ({
                   title={`${t("main data")}`}
                 />
                 <Documents
-                  editData={editData}
+                  editable={!!editData}
                   setDocsFormValues={setDocsFormValues}
                   docsFormValues={docsFormValues}
                 />

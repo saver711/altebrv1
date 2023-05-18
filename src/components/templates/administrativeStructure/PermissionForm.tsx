@@ -16,7 +16,10 @@ type PermissionProps_TP = {
   editData?: PermissionGroup_TP | undefined
 }
 ///
-export const PermissionForm = ({ permissions , editData }: PermissionProps_TP) => {
+export const PermissionForm = ({
+  permissions,
+  editData,
+}: PermissionProps_TP) => {
   /////////// VARIABLES
   ///
   ///
@@ -40,7 +43,6 @@ export const PermissionForm = ({ permissions , editData }: PermissionProps_TP) =
       <div className="col-span-1">
         <BaseInputField
           placeholder="مدير"
-          labelProps={{ className: "mb-5" }}
           type="text"
           id="name"
           label="الإسم"
@@ -53,9 +55,24 @@ export const PermissionForm = ({ permissions , editData }: PermissionProps_TP) =
         </h4>
 
         <div className=" flex flex-col justify-center items-start gap-8">
-          {permissions.map(({ id, name, permissions }: {id:string , name:string , permissions: Permission_TP[]}) => (
-            <PermissionGroup key={id} name={name} permissions={permissions} editData={editData}/>
-          ))}
+          {permissions.map(
+            ({
+              id,
+              name,
+              permissions,
+            }: {
+              id: string
+              name: string
+              permissions: Permission_TP[]
+            }) => (
+              <PermissionGroup
+                key={id}
+                name={name}
+                permissions={permissions}
+                editData={editData}
+              />
+            )
+          )}
         </div>
       </div>
     </InnerFormLayout>

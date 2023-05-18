@@ -48,7 +48,12 @@ export const Employees = ({ title }: EmployeesProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  if (employeesLoading) return <Loading mainTitle={`${t('loading')}`} subTitle={`${t('employees are loading')}`} />
+  if (employeesLoading) return (
+    <Loading
+      mainTitle={`${t("employees")}`}
+      subTitle={`${t("employees data loading")}`}
+    />
+  )
 
 
   ///

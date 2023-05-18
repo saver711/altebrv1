@@ -73,6 +73,11 @@ export const GoldCodingSanadFormHandler = ({
   const [selectedSanadLocal, setSelectedSanadLocal] =
     useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
 
+    
+  const totalLeftWeight = selectedSanad?.items.map(item=>item?.leftWeight)?.reduce((acc,curr)=>{
+    return acc+curr 
+  },0)
+
   const columns: Column[] = [
     {
       name: "category",
@@ -251,7 +256,6 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("sizeIsRequired", false)
     }
   }, [activeBand, isSubmitting])
-  console.log(`activeBand:`, activeBand)
 
   useEffect(() => {
     if (!!activeBand) {
@@ -259,7 +263,7 @@ export const GoldCodingSanadFormHandler = ({
       setSizes([])
     }
   }, [values.category_id])
-
+  
   useEffect(() => {
     if (activeBand?.category?.type === "multi") {
       const items = prepareItemsToShowInCaseOfTa2m(activeBand?.category, sizes)
@@ -353,35 +357,42 @@ export const GoldCodingSanadFormHandler = ({
               ))}
             </ul>
           </div>
-
-          {/* بنود الترقيم */}
-          <Accordion
-            className=" bg-lightGreen"
-            isInitiallyOpen={true}
-            title="بنود الترقيم"
-          >
-            <div className="bg-lightGreen rounded-md p-4 mt-3">
-              <div className=" bg-white shadows mt-6 rounded-md p-4">
-                {!!activeBand && (
-                  <GoldItemCodingForm
-                    setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
-                    itemsToShowInCaseOfTa2m={itemsToShowInCaseOfTa2m}
-                    detailedWeight_total={detailedWeight_total}
-                    setDetailedWeight_total={setDetailedWeight_total}
-                    sizes={sizes}
-                    setSizes={setSizes}
-                    activeBand={activeBand}
-                    setActiveBand={setActiveBand}
-                  />
-                )}
+          {
+            totalLeftWeight === 0 ? 
+            <h2 className="mt-16 mb-16 text-center text-mainGreen text-2xl font-bold" >{t('band is closed')}</h2>
+             :
+             <>
+            {/* بنود الترقيم */}
+            <Accordion
+              className=" bg-lightGreen"
+              isInitiallyOpen={true}
+              title="بنود الترقيم"
+            >
+              <div className="bg-lightGreen rounded-md p-4 mt-3">
+                <div className=" bg-white shadows mt-6 rounded-md p-4">
+                  {!!activeBand && (
+                    <GoldItemCodingForm
+                      setItemsToShowInCaseOfTa2m={setItemsToShowInCaseOfTa2m}
+                      itemsToShowInCaseOfTa2m={itemsToShowInCaseOfTa2m}
+                      detailedWeight_total={detailedWeight_total}
+                      setDetailedWeight_total={setDetailedWeight_total}
+                      sizes={sizes}
+                      setSizes={setSizes}
+                      activeBand={activeBand}
+                      setActiveBand={setActiveBand}
+                      selectedSanad={selectedSanad}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          </Accordion>
-
-          {/* الحجر */}
-          {!!values.has_stones && (
-            <AddStone stones={stones} setStones={setStones} />
-          )}
+            </Accordion>
+  
+            {/* الحجر */}
+            {(!!values.has_stones && values.left_weight ) ? (
+              <AddStone stones={stones} setStones={setStones} />
+            ) : (<div></div>)}
+             </>
+            }
           <div className="flex items-end justify-end gap-x-5">
             {/* submit البند */}
             {!!addedPieces.length && (
@@ -394,8 +405,14 @@ export const GoldCodingSanadFormHandler = ({
                 </Button>
               </div>
             )}
-            <Button action={submitForm}>{t("save")}</Button>
+            {
+            totalLeftWeight !== 0 &&
+            <Button action={()=>{
+              submitForm()
+            }}>{t("save")}</Button>
+            }
           </div>
+
         </>
         // </HandleBackErrors>
       )}

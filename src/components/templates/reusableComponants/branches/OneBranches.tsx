@@ -4,7 +4,7 @@
 import { t } from "i18next"
 import { Helmet } from "react-helmet-async"
 import { useNavigate, useParams } from "react-router-dom"
-import { useFetch } from "../../../../hooks"
+import { useFetch, useIsRTL } from "../../../../hooks"
 import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
 import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
@@ -29,7 +29,8 @@ export const OneBranches = ({ title }) => {
   ///
   /////////// CUSTOM HOOKS
   ///
-  ///
+  const isRTL = useIsRTL()
+
   /////////// STATES
   ///
 
@@ -71,8 +72,8 @@ export const OneBranches = ({ title }) => {
       )}
       {isLoading && (
         <Loading
-          mainTitle={`${t("loading")}`}
-          subTitle={`${t("branch are loading")}`}
+          subTitle={`${t("loading")}`}
+          mainTitle={`${t("branche data are loading")}`}
         />
       )}
       {isSuccess && !isLoading && (
@@ -84,25 +85,27 @@ export const OneBranches = ({ title }) => {
             </Button>
           }
         >
-          <InnerFormLayout title={data?.name}>
-            <div className="flex gap-4 flex-col col-span-4 m-auto">
-              <img
-                src={data.logo || blankPerson}
-                alt={`branch ${data.name}`}
-                className="w-[7rem] h-[7rem] rounded-full"
-              />
-            </div>
-            <TextLine boldText={t("Name")} lightString={data.name} />
+          <InnerFormLayout title={data?.name_ar}>
+            <TextLine
+              boldText={t("Name")}
+              lightString={isRTL ? data.name_ar : data.name_en}
+            />
             <TextLine boldText={t("address")} lightString={data.address} />
             <TextLine boldText={t("phone")} lightString={data.phone} />
-            <TextLine boldText={t("city name")} lightString={data.city_name} />
             <TextLine
-              boldText={t("city name")}
+              boldText={t("city")}
+              lightString={isRTL ? data.city.name_ar : data.city.name_en}
+            />
+            <TextLine
+              boldText={t("market number")}
               lightString={data.market_number}
             />
             <TextLine boldText={t("branch number")} lightString={data.number} />
             <div className=" col-span-4 border border-dashed"></div>
-            <Header header={t("nationalAddress")} />
+            <Header
+              className=" col-span-4 text-center capitalize"
+              header={t("national Address")}
+            />
             <TextLine
               boldText={t("address")}
               lightString={data.nationalAddress.address}

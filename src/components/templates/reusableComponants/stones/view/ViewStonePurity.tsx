@@ -200,6 +200,9 @@ export const ViewStonePurity = () => {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         {model ? (
           <CreateStonePurity
+            title={`${
+              editData ? t("edit stones purities") : t("add stones purities")
+            }`}
             value={editData?.name}
             item={editData}
             setDataSource={setDataSource}

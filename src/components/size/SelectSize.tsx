@@ -24,17 +24,21 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
     ///
     /////////// CUSTOM HOOKS
     ///
-    const { data: sizes, isLoading, isError } = useFetch({
-        endpoint: 'size/api/v1/sizes',
-        queryKey: ['sizes'],
-        select: (sizes => {
-            return sizes.map(item => ({
-                value: item.type,
-                label: `${item.type}`,
-                id: item.id,
-                units: item.units
-            }))
-        }),
+    const {
+      data: sizes,
+      isLoading,
+      isError,
+    } = useFetch({
+      endpoint: "size/api/v1/sizesSelectOption_TP?per_page=10000",
+      queryKey: ["sizes"],
+      select: (sizes) => {
+        return sizes.map((item) => ({
+          value: item.type,
+          label: `${item.type}`,
+          id: item.id,
+          units: item.units,
+        }))
+      },
     })
 
 

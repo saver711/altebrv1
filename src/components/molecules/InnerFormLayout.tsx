@@ -7,10 +7,10 @@ import { Button } from "../atoms"
 /////////// Types
 ///
 type InnerFormLayoutProps_TP = {
-  title?: string | null
+  title?: string | null | Element
   leftComponent?: ReactNode
   children: ReactNode
-  customStyle?:string
+  customStyle?: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///

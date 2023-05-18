@@ -1,9 +1,11 @@
 /////////// IMPORTS
 ///
-import { useState } from "react"
+import { t } from "i18next"
+import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
 import { Button } from "../../../components/atoms"
+import { Modal } from "../../../components/molecules"
 import { useLocalStorage, useMutate } from "../../../hooks"
 import { CError_TP } from "../../../types"
 import { mutateData } from "../../../utils/mutateData"
@@ -26,23 +28,32 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   ///
   const { sanadId } = useParams()
   const [selectedSanadLocal, setSelectedSanadLocal] =
-    useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
+  useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
 
   const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
-    GoldCodingSanad_initialValues_TP[]
+  GoldCodingSanad_initialValues_TP[]
   >(`addedPiecesLocal_${sanadId}`)
+  const [openModal, setOpenModal] = useState(false)
   ///
   /////////// CUSTOM HOOKS
   ///
   const [addedPieces, setAddedPieces] = useState<
   GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
-  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
+
 
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
+      onSuccess:()=>{
+        setOpenModal(true)
+      }
     })
+    useEffect(() => {
+      if(addedPiecesLocal?.length)
+      notify('info',`${t('there are items already existed you can save it')}`)
+    }, [])
+    
 
   ///
   /////////// STATES
@@ -50,7 +61,6 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
 const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
   selectedSanadLocal
 )
-
   const [stage, setStage] = useState(1)
   ///
   /////////// SIDE EFFECTS
@@ -76,10 +86,8 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
         const filteredPieces = remainingPieces.filter(
           (p) => p.front_key !== result.front_key
         );
-
         setAddedPieces(filteredPieces);
         setAddedPiecesLocal(filteredPieces);
-        setStage(1)
       }
     } catch (err) {
       const error = err as CError_TP
@@ -133,6 +141,22 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
           </Button>
         </div>
       )}
+      <Modal isOpen={openModal} onClose={()=>setOpenModal(false)}>
+        <div className="flex gap-x-2 p-16 justify-center items-center" >
+          <Button type="button" action={()=>{
+            setOpenModal(false)
+            setStage(1)
+          }} bordered>
+              {t('back to digitization page')}
+          </Button>
+
+          <Button type="button"  action={()=>{
+            setOpenModal(false)
+          }}  >
+              <a href='https://alexon.altebr.jewelry/identity/admin/identities' target="_blank">{t('go to identification management')}</a>
+          </Button>
+        </div>
+      </Modal>
     </>
   )
 }

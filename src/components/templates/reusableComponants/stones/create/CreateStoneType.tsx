@@ -12,6 +12,7 @@ import { HandleBackErrors } from "../../../../../utils/utils-components/HandleBa
 import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { StonesTypes } from "../view/ViewStoneType"
+import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
 
 ///
 /////////// Types
@@ -22,6 +23,7 @@ type CreateStoneTypeProps_TP = {
   onAdd?: (value: string) => void
   setDataSource?: Dispatch<SetStateAction<StonesTypes[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
+  title?:string
 }
 
 type InitialValues_TP = {
@@ -43,7 +45,8 @@ const CreateStoneType = ({
   value,
   onAdd,
   setDataSource,
-  setShow
+  setShow,
+  title
 }: CreateStoneTypeProps_TP) => {
   ///
   /////////// HELPER VARIABLES & FUNCTIONS
@@ -101,14 +104,24 @@ const CreateStoneType = ({
     <div className="flex items-center justify-between gap-2">
       <Formik
         initialValues={initialValues}
-        onSubmit={values => PostNewValue(values)}
+        onSubmit={(values) => PostNewValue(values)}
         validationSchema={validationSchema}
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <div className="flex flex-col">
-              <h2 className="text-xl font-bold mb-4">{t('stones types')}</h2>
-              <div className="grid grid-cols-4 mb-4 gap-3 text-start">
+            <OuterFormLayout
+              header={title}
+              submitComponent={
+                <Button
+                  loading={isLoading}
+                  type="submit"
+                  className="ms-auto mt-8"
+                >
+                  {t("submit")}
+                </Button>
+              }
+            >
+              <InnerFormLayout title={`${t("main data")}`}>
                 <BaseInputField
                   id="stone_type_ar"
                   label={`${t("stones types in arabic")}`}
@@ -123,15 +136,8 @@ const CreateStoneType = ({
                   type="text"
                   placeholder={`${t("stones types in english")}`}
                 />
-              </div>
-              <Button
-                type="submit"
-                className="self-end"
-                loading={isLoading}
-              >
-                {t('submit')}
-              </Button>
-            </div>
+              </InnerFormLayout>
+            </OuterFormLayout>
           </HandleBackErrors>
         </Form>
       </Formik>

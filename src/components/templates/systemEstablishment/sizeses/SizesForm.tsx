@@ -133,7 +133,12 @@ type SizeForm_TP={
   editData?:any
 }
 
-export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) => {
+export const SizesForm = ({
+  showCategories,
+  setModel,
+  editData,
+  title,
+}: SizeForm_TP) => {
   /////////// VARIABLES
   ///
   const validatingSchema = Yup.object().shape({
@@ -149,26 +154,30 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
       .required("برجاء ملئ هذا الحقل")
       .min(0)
       .typeError(" مسموح بالارقام  فقط  "),
-    category_id:!showCategories ? Yup.string()
-      .trim()
-      .required("برجاء ملئ هذا الحقل")
-      .typeError("لا يمكن ان يكون الحقل فارغ") : Yup.string(),
+    category_id: !showCategories
+      ? Yup.string()
+          .trim()
+          .required("برجاء ملئ هذا الحقل")
+          .typeError("لا يمكن ان يكون الحقل فارغ")
+      : Yup.string(),
     sizeType: Yup.string()
       .trim()
       .required("برجاء ملئ هذا الحقل")
       .typeError("لا يمكن ان يكون الحقل فارغ"),
-    type: !showCategories ? Yup.string()
-      .trim()
-      .required("برجاء ملئ هذا الحقل")
-      .typeError("لا يمكن ان يكون الحقل فارغ") : Yup.string() ,
+    type: !showCategories
+      ? Yup.string()
+          .trim()
+          .required("برجاء ملئ هذا الحقل")
+          .typeError("لا يمكن ان يكون الحقل فارغ")
+      : Yup.string(),
   })
 
   const initialValues = {
     sizeType: "",
-    start: editData?.start ||"",
-    end:editData?.end || "",
-    increase:editData?.increase || "",
-    type:editData?.type || ""
+    start: editData?.start || "",
+    end: editData?.end || "",
+    increase: editData?.increase || "",
+    type: editData?.type || "",
   }
   ///
   /////////// CUSTOM HOOKS
@@ -232,8 +241,8 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
-      queryClient.setQueriesData(['sizes'],(old)=>[...old,data])
-      if(setModel){
+      queryClient.setQueriesData(["sizes"], (old) => [...old, data])
+      if (setModel) {
         queryClient.refetchQueries(["sizes"])
       }
       notify("success")
@@ -248,17 +257,19 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
       setNewValue(null)
     }
   }, [JSON.stringify(sizeTypes)])
- 
+
   const handleSubmit = (values: any) => {
     sizesMutate({
-      endpointName: editData ?  `/size/api/v1/sizes/${editData.id}` : '/size/api/v1/sizes',
+      endpointName: editData
+        ? `/size/api/v1/sizes/${editData.id}`
+        : "/size/api/v1/sizes",
       values: {
         type: !showCategories ? values.type : values.sizeType,
         start: values.start,
         end: values.end,
         increase: values.increase,
       },
-      method: editData ? "put" : "post"
+      method: editData ? "put" : "post",
     })
   }
 
@@ -273,7 +284,7 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
           <Form>
             <HandleBackErrors errors={error?.response?.data?.errors}>
               <OuterFormLayout
-                header={`${t("add size")}`}
+                header={title}
                 submitComponent={
                   <Button
                     loading={isLoadingSizes}
@@ -284,47 +295,45 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
                   </Button>
                 }
               >
-                <InnerFormLayout>
-                
-                {
-                  showCategories &&
-                  <Select
-                    label="نوع المقاس"
-                    name="sizeType"
-                    id="sizeType"
-                    isMulti={false}
-                    required
-                    isDisabled={!!!categoryID?.id}
-                    placeholder={
-                      categoryID?.id &&
-                      `
+                <InnerFormLayout title={`${t("main data")}`}>
+                  {showCategories && (
+                    <Select
+                      label="نوع المقاس"
+                      name="sizeType"
+                      id="sizeType"
+                      isMulti={false}
+                      required
+                      isDisabled={!!!categoryID?.id}
+                      placeholder={
+                        categoryID?.id &&
+                        `
                     ${sizeTypes?.length !== 0 ? "اختر النوع" : "لا يوجد "} `
-                    }
-                    loadingPlaceholder={`${!categoryID?.id ? "اختر الصنف أولا" : t("loading")
+                      }
+                      loadingPlaceholder={`${
+                        !categoryID?.id ? "اختر الصنف أولا" : t("loading")
                       }`}
-                    loading={loadingSizeType}
-                    creatable={true}
-                    CreateComponent={NewSizeTypeOptionComponent}
-                    // onComplexCreate={(value) => {}}
-                    options={sizeTypes}
-                    value={newValue}
-                    onChange={(option: SingleValue<SelectOption_TP>) => {
-                      setNewValue(option)
-                    }}
-                    fieldKey="id"
-                  />
-                }
-                  {
-                    !showCategories && 
+                      loading={loadingSizeType}
+                      creatable={true}
+                      CreateComponent={NewSizeTypeOptionComponent}
+                      // onComplexCreate={(value) => {}}
+                      options={sizeTypes}
+                      value={newValue}
+                      onChange={(option: SingleValue<SelectOption_TP>) => {
+                        setNewValue(option)
+                      }}
+                      fieldKey="id"
+                    />
+                  )}
+                  {!showCategories && (
                     <BaseInputField
                       id="type"
-                      label={`${t('size type')}`}
+                      label={`${t("size type")}`}
                       name="type"
                       type="text"
-                      placeholder={`${t('size type')}`}
+                      placeholder={`${t("size type")}`}
                       required
                     />
-                  }
+                  )}
                   <BaseInputField
                     id="start"
                     label=" بدايه معدل المقاس"
@@ -344,7 +353,7 @@ export const SizesForm = ({ showCategories , setModel , editData }:SizeForm_TP) 
                   <BaseInputField
                     id="increase"
                     label="معدل  الزياده"
-                    name="increase"
+                    name="increase rate"
                     type="text"
                     placeholder=" معدل الزياده"
                     required

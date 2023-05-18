@@ -1,22 +1,24 @@
 
 import { t } from "i18next"
 import { InnerFormLayout } from "../molecules"
-import { GoldFirstFormInitValues_TP } from "./formInitialValues_types"
+import { FirstFormInitValues_TP } from "./formInitialValues_types"
 import { Dispatch, SetStateAction } from "react"
 import { formatDate, getDayBefore } from "../../utils/date"
 import { FilesPreviewOutFormik } from "../molecules/files/FilesPreviewOutFormik"
 import { Edit } from "../atoms/icons/Edit"
 import { Delete } from "../atoms/icons/Delete"
+import { Supply_TP } from "../../pages/supply/Supply"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 type GoldFirstFormViewProps_TP = {
-    formValues: GoldFirstFormInitValues_TP | undefined
+    supply: Supply_TP
+    formValues: FirstFormInitValues_TP | undefined
     setStage: Dispatch<SetStateAction<number>>
-    setFormValues: Dispatch<SetStateAction<GoldFirstFormInitValues_TP | undefined>>
+    setFormValues: Dispatch<SetStateAction<FirstFormInitValues_TP | undefined>>
 }
 ///
-export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldFirstFormViewProps_TP) => {
+export const FirstFormView = ({ formValues, setStage, setFormValues, supply }: GoldFirstFormViewProps_TP) => {
     /////////// VARIABLES
     ///
     const { 
@@ -46,6 +48,33 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
 
     /////////// FUNCTIONS | EVENTS | IF CASES
     ///
+    const resetValues = supply === 'gold' ? {
+      bond_date: getDayBefore(new Date()),
+      bond_number: "",
+      employee_id: "",
+      goods_media: [],
+      media: [],
+      notes: "",
+      out_goods_value: "",
+      supplier_id: "",
+      twred_type: "local",
+      api_gold_price: "",
+      entity_gold_price: "",
+      employee_value: "",
+      supplier_value: "",
+    } : {
+      bond_date: getDayBefore(new Date()),
+      bond_number: "",
+      employee_id: "",
+      goods_media: [],
+      media: [],
+      notes: "",
+      out_goods_value: "",
+      supplier_id: "",
+      twred_type: "local",
+      employee_value: "",
+      supplier_value: "",
+    }
 
     ///
     return (
@@ -58,22 +87,8 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
               <Edit onClick={() => setStage(1)} />
               {/* @ts-ignore */}
               <Delete
-                onClick={() => {
-                  setFormValues({
-                    bond_date: getDayBefore(new Date()),
-                    bond_number: "",
-                    employee_id: "",
-                    goods_media: [],
-                    media: [],
-                    notes: "",
-                    out_goods_value: "",
-                    supplier_id: "",
-                    twred_type: "local",
-                    api_gold_price: "",
-                    entity_gold_price: "",
-                    employee_value: "",
-                    supplier_value: "",
-                  })
+                action={() => {
+                  setFormValues(resetValues)
                   setStage(1)
                 }}
               />
@@ -97,10 +112,11 @@ export const GoldFirstFormView = ({ formValues, setStage, setFormValues }: GoldF
                 {employee_value}
               </li>
 
+              {supply === 'gold' && 
               <li className="flex gap-x-2 items-center">
                 <strong>{t("gold price")}:</strong>
                 {api_gold_price}
-              </li>
+              </li>}
 
               {!!out_goods_value && (
                 <li className="flex gap-x-2 items-center">

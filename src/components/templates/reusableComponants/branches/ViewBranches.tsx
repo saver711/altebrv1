@@ -4,7 +4,7 @@
 import { t } from "i18next"
 import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
-import { useFetch } from "../../../../hooks"
+import { useFetch, useIsRTL } from "../../../../hooks"
 import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
 import { Loading } from "../../../organisms/Loading"
@@ -25,13 +25,42 @@ type ViewBranches_Props_TP = {
 export type Branch_Props_TP = {
   id: string
   address: string
-  city_name: string
   fax: string
-  logo: string
   market_number: string
-  name: string
+  name_ar: string
+  name_en: string
+
   number: string
   phone: string
+  country: {
+    name: string
+    id: string
+    name_ar: string
+    name_en: string
+  }
+  city: {
+    name: string
+    id: string
+    name_ar: string
+    name_en: string
+    country: {
+      id: string
+      name_ar: string
+      name_en: string
+    }
+  }
+  district: {
+    name: string
+    id: string
+    name_ar: string
+    name_en: string
+  }
+  market: {
+    name: string
+    id: string
+    name_ar: string
+    name_en: string
+  }
   nationalAddress: {
     id: string
     address: string
@@ -53,6 +82,7 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
   /////////// VARIABLES
   ///
   const navigate = useNavigate()
+  const isRTL = useIsRTL()
 
   ///
   /////////// CUSTOM HOOKS
@@ -86,7 +116,7 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("branches ")}</h2>
+        <h2 className="font-bold text-2xl">{t("branches")}</h2>
         <Button
           action={() => navigate(-1)}
           className="flex items-center gap-2"
@@ -105,8 +135,8 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
       )}
       {isLoading && (
         <Loading
-          mainTitle={`${t("loading")}`}
-          subTitle={`${t("branches are loading")}`}
+          subTitle={`${t("loading")}`}
+          mainTitle={`${t("branches data are loading")}`}
         />
       )}
       {isSuccess && data.length === 0 && (
@@ -119,15 +149,8 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         <div className="grid grid-cols-3">
           {data.map((branch) => (
             <div className="col-span-1 shadow-md shadow-slate-400 px-9 py-5 rounded-lg m-5">
-              <div className=" w-32  bg-gray-100 mx-auto mb-10 p-2 rounded-md">
-                <img
-                  src={branch.logo || blankPerson}
-                  alt={`employee: `}
-                  className="  object-cover rounded-md w-full"
-                />
-              </div>
               <h2 className="text-center mb-5 font-bold text-2xl">
-                {branch.name}
+                {isRTL ? branch.name_ar : branch.name_en}
               </h2>
               <div className="flex items-center justify-center">
                 {/* عرض */}
@@ -149,20 +172,23 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
                   <EditIcon />
                 </Button>
                 {/* حذف */}
-                <Button
+                {/* <Button
                   variant="danger"
                   className="flex items-center mx-1"
                   action={() => {}}
                 >
                   <DeleteIcon />
-                </Button>
+                </Button> */}
               </div>
             </div>
           ))}
         </div>
       )}
       <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <CreateBranch editData={editData} />
+        <CreateBranch
+          editData={editData}
+          title={`${editData ? t("edit Branch") : t("Add Branch")}`}
+        />
       </Modal>
     </>
   )

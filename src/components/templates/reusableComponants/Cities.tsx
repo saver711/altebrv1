@@ -120,28 +120,30 @@ const NewCitiesOptionComponent = ({
             <div className="flex gap-x-8 items-center">
               <BaseInputField
                 id="name_ar"
-                label={`${t("city in arabic")}`}
+                label={`${t("city name arabic")}`}
                 name="name_ar"
                 type="text"
-                placeholder={`${t("city in arabic")}`}
+                placeholder={`${t("city name arabic")}`}
               />
 
               <BaseInputField
                 id="name_en"
-                label={`${t("city in english")}`}
+                label={`${t("city name english")}`}
                 name="name_en"
                 type="text"
-                placeholder={`${t("city in english")}`}
+                placeholder={`${t("city name english")}`}
               />
             </div>
-            <Button
-              type="submit"
-              className="ms-auto mt-8"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              {t("submit")}
-            </Button>
+            <div className="text-end">
+              <Button
+                type="submit"
+                className="mr-auto mt-8"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {t("submit")}
+              </Button>
+            </div>
           </Form>
         </HandleBackErrors>
       </Formik>
@@ -176,21 +178,26 @@ export const Cities = ({
   ///
   useEffect(() => {
     setNewValue({
-      id: editData?.nationalAddress?.city?.id,
-      value: editData?.nationalAddress?.city?.name,
-      label: editData?.nationalAddress?.city?.name || "اختر مدينة",
+      id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
+      value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
+      label:
+        editData?.nationalAddress?.city?.name ||
+        editData?.city_name ||
+        "اختر الدوله اولا",
+
     })
   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
+
   const {
     data: cities,
     isLoading: citiesLoading,
     failureReason,
     refetch,
   } = useFetch<SelectOption_TP[], City_TP>({
-    endpoint: `governorate/api/v1/countries/${country?.id}`,
+    endpoint: `governorate/api/v1/countries/${country?.id}?per_page=10000`,
     queryKey: [`cities/${country?.id}`],
     select: ({ cities }) => {
       return cities.map((city) => ({
@@ -203,6 +210,9 @@ export const Cities = ({
     },
     enabled: !!country?.id,
   })
+
+
+
 
   useEffect(() => {
     if (cities) {

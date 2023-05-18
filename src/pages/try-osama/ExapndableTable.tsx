@@ -14,17 +14,16 @@ import {
 } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
+import { useParams } from "react-router-dom"
+import { Spinner } from "../../components/atoms"
 import { DeleteIcon, ViewIcon } from "../../components/atoms/icons"
 import { Modal } from "../../components/molecules"
-import { SubTables } from "./SubTables"
 import { useFetch, useLocalStorage } from "../../hooks"
-import { useParams } from "react-router-dom"
 import {
   GoldCodingSanad_initialValues_TP,
   GoldSanad_TP,
 } from "../coding/coding-types-and-helpers"
-        import { Loading } from "../../components/organisms/Loading"
-import { Spinner } from "../../components/atoms"
+import { SubTables } from "./SubTables"
 
 // types
 type Categories_TP = {
@@ -46,7 +45,7 @@ export function ExpandableTable({
   showDetails?: boolean
   addedPieces: GoldCodingSanad_initialValues_TP[]
   setAddedPieces?: SetState_TP<GoldCodingSanad_initialValues_TP[]>
-  setSelectedSanad: SetState_TP<GoldSanad_TP | undefined>
+  setSelectedSanad?: SetState_TP<GoldSanad_TP | undefined>
 }) {
   const { sanadId } = useParams()
 
@@ -190,13 +189,12 @@ export function ExpandableTable({
 
   // custom hooks
   const queryClient = useQueryClient()
-  const categories = queryClient.getQueryData<Query_TP[]>(["categories"])
+
   const {data:allCategories , isLoading:categoryLoading} = useFetch({
-   endpoint:"classification/api/v1/categories?type=all",
-   queryKey:['categories'],
-   enabled:!!!categories,
-   refetchInterval:!!!categories,
+   endpoint:"/classification/api/v1/categories?type=all",
+   queryKey:['categoriesx'],
   })
+  
 
   useEffect(() => {
     if (queryClient) {
@@ -224,7 +222,6 @@ export function ExpandableTable({
       )
     }
   }, [queryData])
-
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
