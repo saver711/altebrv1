@@ -4,43 +4,45 @@
 /////////// Types
 ///
 
+import { useFormikContext } from "formik"
 import { t } from "i18next"
-import { Button } from "../../atoms"
+import { useEffect } from "react"
+import { Button } from "../../../atoms"
 import {
   BaseInputField,
   InnerFormLayout,
   OuterFormLayout,
-} from "../../molecules"
-import { Country_city_distract_markets } from "../reusableComponants/Country_city_distract_markets"
-import { useFormikContext } from "formik"
-import { useEffect } from "react"
+  Select,
+} from "../../../molecules"
+import { SingleValue } from "react-select"
+import { SelectOption_TP } from "../../../../types"
+import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
-type CitiesMainDataProps_TP = {
-  editData: any
+type MarketMainDataProps_TP = {
+  editData?: any
   title?: string
-  isLoading: boolean
   isSuccessPost?: boolean
-  resetSelect?: () => void
+  resetData?: () => void
+  isLoading?:boolean
 }
 ///
-export const CitiesMainData = ({
-  editData,
+export const MarketMainData = ({
+  resetData,
   title,
-  isLoading,
   isSuccessPost,
-  resetSelect,
-}: CitiesMainDataProps_TP) => {
-  console.log("🚀 ~ file: CitiesMainData.tsx:35 ~ editData:", editData)
-
+  editData,
+  isLoading,
+}: MarketMainDataProps_TP) => {
   /////////// VARIABLES
   ///
 
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { resetForm } = useFormikContext<any>()
+  const { resetForm, values } = useFormikContext<any>()
+  console.log("🚀 ~ file: MarketMainData.tsx:60 ~ values:", values)
 
   ///
   /////////// STATES
@@ -58,9 +60,8 @@ export const CitiesMainData = ({
   /////////// FUNCTIONS & EVENTS
   ///
   useEffect(() => {
-    if (isSuccessPost) {
-      resetForm()
-    }
+    resetForm()
+    if (resetData) resetData()
   }, [isSuccessPost])
 
   ///
@@ -76,27 +77,27 @@ export const CitiesMainData = ({
       >
         <InnerFormLayout title={`${t("main data")}`}>
           <Country_city_distract_markets
-            isSuccessPost={isSuccessPost}
             countryName="country_id"
-            resetSelect={resetSelect}
+            cityName="city_id"
+            distractName="district_id"
             editData={editData}
+            isSuccessPost={isSuccessPost}
+            resetSelect={resetData}
           />
           <BaseInputField
             id="name_ar"
-            label={`${t("city name arabic")}`}
+            label={`${t("market in arabic")}`}
             name="name_ar"
             type="text"
-            placeholder={`${t("city name arabic")}`}
-            required
+            placeholder={`${t("market in arabic")}`}
           />
+
           <BaseInputField
             id="name_en"
-            label={`${t("city name english")}`}
+            label={`${t("market in english")}`}
             name="name_en"
             type="text"
-            placeholder={`${t("city name english")}`}
-            labelProps={{ className: "mb-1" }}
-            required
+            placeholder={`${t("market in english")}`}
           />
         </InnerFormLayout>
       </OuterFormLayout>

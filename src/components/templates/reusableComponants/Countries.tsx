@@ -141,6 +141,8 @@ export const Countries = ({
   isSuccessPost,
   resetSelect,
 }: Countries_TP) => {
+  console.log("🚀 ~ file: Countries.tsx:144 ~ editData:", editData)
+
   /////////// VARIABLES
   ///
 
@@ -152,7 +154,7 @@ export const Countries = ({
   /////////// STATES
   ///
   const [newValue, setNewValue] =
-    useState<SingleValue<SelectOption_TP> | null>()
+  useState<SingleValue<SelectOption_TP> | null>()
 
   ///
   /////////// SIDE EFFECTS
@@ -172,8 +174,15 @@ export const Countries = ({
   }, [])
 
   useEffect(() => {
-    setNewValue(null)
-    if (resetSelect) resetSelect()
+    if (!editData || !editData?.nationalAddress?.country?.name  ) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر دولة",
+      })
+      if (resetSelect) resetSelect()
+    }
+
   }, [isSuccessPost])
 
   /////////// FUNCTIONS | EVENTS | IF CASES

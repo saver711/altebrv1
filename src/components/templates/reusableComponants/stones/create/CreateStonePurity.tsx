@@ -17,6 +17,7 @@ import {
   OuterFormLayout,
 } from "../../../../molecules"
 import { StonesPurities } from "../view/ViewStonePurity"
+import { StonePurityMainData } from "./StonePurityMainData"
 
 ///
 /////////// Types
@@ -41,7 +42,7 @@ const validationSchema = Yup.object({
 
 const CreateStonePurity = ({
   item,
-  value,
+  value='',
   onAdd,
   setDataSource,
   setShow,
@@ -57,12 +58,12 @@ const CreateStonePurity = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate({
+  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
       queryClient.setQueryData(["stone_purity"], (old: any) => {
-        return [...old, data]
+        return [...old || [], data]
       })
       if (value && onAdd) {
         onAdd(value)
@@ -103,28 +104,13 @@ const CreateStonePurity = ({
     >
       <Form>
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <OuterFormLayout
-            header={title}
-            submitComponent={
-              <Button
-                loading={isLoading}
-                type="submit"
-                className="ms-auto mt-8"
-              >
-                {t("submit")}
-              </Button>
-            }
-          >
-            <InnerFormLayout title={`${t("main data")}`}>
-              <BaseInputField
-                id="stones_purities"
-                label={`${t("stones purities")}`}
-                name="name"
-                type="text"
-                placeholder={`${t("stones purities")}`}
-              />
-            </InnerFormLayout>
-          </OuterFormLayout>
+          <StonePurityMainData
+            editData={item}
+            title={title}
+            isSuccessPost={isSuccess}
+            resetData={reset}
+            isLoading={isLoading}
+          />
         </HandleBackErrors>
       </Form>
     </Formik>

@@ -32,6 +32,7 @@ export const DistrictMainData = ({
   resetSelect,
   isSuccessPost,
 }: DistrictMainDataaProps_TP) => {
+  console.log("🚀 ~ file: DistrictMainData.tsx:35 ~ editData:", editData)
   /////////// VARIABLES
   ///
 
@@ -77,9 +78,9 @@ export const DistrictMainData = ({
           <Country_city_distract_markets
             countryName="country_id"
             cityName="city_id"
-            editData={editData}
             isSuccessPost={isSuccessPost}
             resetSelect={resetSelect}
+            editData={editData}
           />
           <BaseInputField
             id="district_name"

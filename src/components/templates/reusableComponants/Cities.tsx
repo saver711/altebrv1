@@ -191,10 +191,7 @@ export const Cities = ({
     })
   }, [])
 
-  useEffect(() => {
-    setNewValue(null)
-    if (resetSelect) resetSelect()
-  }, [isSuccessPost])
+
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -228,7 +225,15 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    setNewValue(null)
+     if (!editData) {
+       setNewValue({
+         id: "",
+         value: "",
+         label: "اختر الدوله اولا",
+       })
+
+       if (resetSelect) resetSelect()
+     }
   }, [isSuccessPost])
 
   ///

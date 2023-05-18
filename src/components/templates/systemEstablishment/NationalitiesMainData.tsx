@@ -21,6 +21,7 @@ type NationalitiesMainDataProps_TP = {
   title?: string
   isLoading: boolean
   isSuccessPost?: boolean
+  resetData:any
 }
 ///
 export const NationalitiesMainData = ({
@@ -28,6 +29,7 @@ export const NationalitiesMainData = ({
   title,
   isLoading,
   isSuccessPost,
+  resetData,
 }: NationalitiesMainDataProps_TP) => {
   console.log(
     "🚀 ~ file: NationalitiesMainData.tsx:33 ~ isSuccessPost:",
@@ -60,6 +62,7 @@ export const NationalitiesMainData = ({
   ///
   useEffect(() => {
     resetForm()
+    resetData()
   }, [isSuccessPost])
 
   ///

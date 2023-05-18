@@ -65,6 +65,7 @@ export const CreateNationalities = ({
     error: errorQuery,
     isLoading,
     isSuccess,
+    reset
   } = useMutate<ViewNationalities_TP>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -129,6 +130,7 @@ export const CreateNationalities = ({
               title={title}
               isLoading={isLoading}
               isSuccessPost={isSuccess}
+              resetData={reset}
             />
           </Form>
         </HandleBackErrors>

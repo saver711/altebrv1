@@ -168,7 +168,7 @@ export const AddCities = ({
             handleSubmit(values)
           }}
         >
-          <HandleBackErrors errors={errorQuery?.response.data.errors}>
+          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
             <Form className="w-full">
               <CitiesMainData
                 editData={editData}

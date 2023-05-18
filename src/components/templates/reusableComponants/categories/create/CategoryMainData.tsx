@@ -56,7 +56,8 @@ export const CategoryMainData = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { resetForm } = useFormikContext<any>()
+  const { resetForm , values } = useFormikContext<any>()
+  console.log("🚀 ~ file: CategoryMainData.tsx:60 ~ values:", values)
 
   ///
   /////////// STATES

@@ -5,35 +5,34 @@
 ///
 
 import { t } from "i18next"
-import { Button } from "../../atoms"
+
+import { useFormikContext } from "formik"
+import { useEffect } from "react"
 import {
   BaseInputField,
   InnerFormLayout,
   OuterFormLayout,
-} from "../../molecules"
-import { Country_city_distract_markets } from "../reusableComponants/Country_city_distract_markets"
-import { useFormikContext } from "formik"
-import { useEffect } from "react"
+} from "../../../../molecules"
+import { Button } from "../../../../atoms"
+import { Country_city_distract_markets } from "../../Country_city_distract_markets"
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
-type CitiesMainDataProps_TP = {
+type StoneNatureMainDataProps_TP = {
   editData: any
   title?: string
   isLoading: boolean
   isSuccessPost?: boolean
-  resetSelect?: () => void
+  resetData: () => void
 }
 ///
-export const CitiesMainData = ({
+export const StoneNatureMainData = ({
   editData,
   title,
   isLoading,
   isSuccessPost,
-  resetSelect,
-}: CitiesMainDataProps_TP) => {
-  console.log("🚀 ~ file: CitiesMainData.tsx:35 ~ editData:", editData)
-
+  resetData,
+}: StoneNatureMainDataProps_TP) => {
   /////////// VARIABLES
   ///
 
@@ -60,6 +59,7 @@ export const CitiesMainData = ({
   useEffect(() => {
     if (isSuccessPost) {
       resetForm()
+      resetData()
     }
   }, [isSuccessPost])
 
@@ -69,34 +69,25 @@ export const CitiesMainData = ({
       <OuterFormLayout
         header={title}
         submitComponent={
-          <Button type="submit" loading={isLoading} className="ms-auto mt-8">
+          <Button loading={isLoading} type="submit" className="ms-auto mt-8">
             {t("submit")}
           </Button>
         }
       >
         <InnerFormLayout title={`${t("main data")}`}>
-          <Country_city_distract_markets
-            isSuccessPost={isSuccessPost}
-            countryName="country_id"
-            resetSelect={resetSelect}
-            editData={editData}
-          />
           <BaseInputField
-            id="name_ar"
-            label={`${t("city name arabic")}`}
+            id="stone_nature_ar"
+            label={`${t("stones natures in arabic")}`}
             name="name_ar"
             type="text"
-            placeholder={`${t("city name arabic")}`}
-            required
+            placeholder={`${t("stones natures in arabic")}`}
           />
           <BaseInputField
-            id="name_en"
-            label={`${t("city name english")}`}
+            id="stone_nature_en"
+            label={`${t("stones natures in english")}`}
             name="name_en"
             type="text"
-            placeholder={`${t("city name english")}`}
-            labelProps={{ className: "mb-1" }}
-            required
+            placeholder={`${t("stones natures in english")}`}
           />
         </InnerFormLayout>
       </OuterFormLayout>

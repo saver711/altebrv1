@@ -61,7 +61,7 @@ const CreateColor = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error, isSuccess  } = useMutate({
+  const { mutate, isLoading, error, isSuccess  , reset  } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
@@ -113,6 +113,7 @@ const CreateColor = ({
               title={title}
               isLoading={isLoading}
               isSuccessPost={isSuccess}
+              resetData={reset}
             />
           </HandleBackErrors>
         </Form>

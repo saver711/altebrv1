@@ -221,7 +221,11 @@ export const Districts = ({
   //change value
   useEffect(() => {
     if (districts) {
-      setNewValue(null)
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينة اولا",
+      })
       setDistrictId({
         id: "",
         label: "",
@@ -231,9 +235,18 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
+
   useEffect(() => {
-    setNewValue(null)
-    if (resetSelect) resetSelect()
+        if (!editData) {
+          setNewValue({
+            id: "",
+            value: "",
+            label: "اختر المدينة اولا",
+          })
+
+          if (resetSelect) resetSelect()
+        }
+
   }, [isSuccessPost])
   return (
     <div className="flex flex-col gap-1 justify-center">

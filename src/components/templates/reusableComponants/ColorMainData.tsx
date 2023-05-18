@@ -21,6 +21,7 @@ type ColorMainDataProps_TP = {
   title?: string
   isLoading: boolean
   isSuccessPost?: boolean
+  resetData:any
 }
 ///
 export const ColorMainData = ({
@@ -28,6 +29,7 @@ export const ColorMainData = ({
   title,
   isLoading,
   isSuccessPost,
+  resetData,
 }: ColorMainDataProps_TP) => {
   console.log("🚀 ~ file: ColorMainData.tsx:33 ~ isSuccessPost:", isSuccessPost)
 
@@ -56,6 +58,7 @@ export const ColorMainData = ({
   ///
   useEffect(() => {
     resetForm()
+    resetData()
   }, [isSuccessPost])
 
   ///
@@ -74,10 +77,10 @@ export const ColorMainData = ({
             {/* nationality ar  start */}
             <BaseInputField
               id="name_ar"
-              label={`${t("nationality in arabic")}`}
+              label={`${t("name colors in arabic")}`}
               name="name_ar"
               type="text"
-              placeholder={`${t("nationality in arabic")}`}
+              placeholder={`${t("name colors in arabic")}`}
               defaultValue={editData ? editData.name : ""}
               // value={value}
             />
@@ -86,10 +89,10 @@ export const ColorMainData = ({
             {/* nationality en  start */}
             <BaseInputField
               id="name_en"
-              label={`${t("nationality in english")}`}
+              label={`${t("name colors in english")}`}
               name="name_en"
               type="text"
-              placeholder={`${t("nationality in english")}`}
+              placeholder={`${t("name colors in english")}`}
               // value={value}
             />
             {/* nationality en  end */}

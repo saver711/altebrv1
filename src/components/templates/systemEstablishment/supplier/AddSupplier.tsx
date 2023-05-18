@@ -195,7 +195,7 @@ const AddSupplier = ({
     queryKey: ["checkOperations"],
   })
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate({
+  const { mutate, isLoading:postLoading, error , isSuccess , reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       queryClient.refetchQueries(["suppliers"])
@@ -309,35 +309,22 @@ const AddSupplier = ({
          validationSchema={() => supplierValidatingSchema()}
       >
         {({ values }) => (
-          <Form>
             <HandleBackErrors errors={error?.response?.data?.errors}>
-              <OuterFormLayout
-                header={title}
-                submitComponent={
-                  <Button
-                    type="submit"
-                    className="ms-auto mt-8"
-                    loading={isLoading}
-                  >
-                    {t("submit")}
-                  </Button>
-                }
-              >
+          <Form>
+            
                 <SupplierMainData
-                  editData={editData}
-                  title={`${t("main data")}`}
+               postLoading={postLoading}
+              title={title}
+              editData={editData}
+              isSuccessPost={isSuccess}
+              restData={reset}
+              setDocsFormValues={setDocsFormValues}
+              docsFormValues={docsFormValues}
                 />
-                <Documents
-                  editable={!!editData}
-                  setDocsFormValues={setDocsFormValues}
-                  docsFormValues={docsFormValues}
-                />
-                {values.type === "local" && (
-                  <NationalAddress editData={editData} />
-                )}
-              </OuterFormLayout>
-            </HandleBackErrors>
+              
+         
           </Form>
+            </HandleBackErrors>
         )}
       </Formik>
     </>

@@ -78,10 +78,10 @@ const CreateCategory = ({
   const handleEditedItems = (items: any) => {
     return items.map((item: any) => {
       return {
-        id: item.id,
-        label: item.name,
-        name: item.name,
-        value: item.id,
+        id: item?.id,
+        label: item?.name,
+        name: item?.name,
+        value: item?.id,
       }
     })
   }
@@ -136,11 +136,11 @@ const CreateCategory = ({
     //   then: (schema) =>
     //     schema.min(1, requiredTranslation).required(requiredTranslation),
     // }),
-    category_sizes: Yup.string().when("has_size", {
-      is: true,
-      then: (schema) =>
-        schema.required(`${t("required")}`).typeError(`${t("required")}`),
-    }),
+    // category_sizes: Yup.string().when("has_size", {
+    //   is: true,
+    //   then: (schema) =>
+    //     schema.required(`${t("required")}`).typeError(`${t("required")}`),
+    // }),
   })
 
   ///
@@ -171,7 +171,7 @@ const CreateCategory = ({
       if (value && onAdd) {
         onAdd(value)
         queryClient.setQueryData(["categories"], (old: any) => {
-          return [...old, data]
+          return [...(old || []), data]
         })
       }
       if (setDataSource && setShow && !editData && !error) {
@@ -263,7 +263,9 @@ const CreateCategory = ({
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={(values) => send(values)}
+      onSubmit={(values) =>
+        send(values)
+      }
       validationSchema={validatingSchema}
     >
       {(props) => (
