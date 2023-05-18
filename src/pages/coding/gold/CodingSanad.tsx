@@ -80,6 +80,7 @@ export const CodingSanad = ({
   >()
 
   const [activeBand, setActiveBand] = useState<GoldSanadBand_TP | undefined>()
+  console.log(`activeBand:`, activeBand)
 
   ///
   /////////// SIDE EFFECTS
@@ -87,6 +88,7 @@ export const CodingSanad = ({
   useEffect(() => {
     setAddedPiecesLocal(addedPieces)
   }, [addedPieces])
+  console.log(`addedPieces:`, addedPieces)
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -106,9 +108,46 @@ export const CodingSanad = ({
     }
     return goAhead
   }
-  const updateSanadWithNewWeight = (formBandId: string, formWeight: number) => {
-    if (selectedSanad) {
-      const newSanadItems = selectedSanad.items.map((band) => {
+  // const updateSanadWithNewWeight = (formBandId: string, formWeight: number) => {
+  //   if (selectedSanad) {
+  //     const newSanadItems = selectedSanad.items.map((band) => {
+  //       if (stones.some((stone) => stone.stone_type === "not_added")) {
+  //         const notAddedStones = stones.filter(
+  //           (stone) => stone.stone_type === "not_added"
+  //         )
+  //         const tableWeight = notAddedStones.reduce(
+  //           (acc, curr) => acc + +curr.weight,
+  //           0
+  //         )
+  //         return {
+  //           ...band,
+  //           leftWeight: band.leftWeight - (formWeight - tableWeight * 0.2),
+  //         }
+  //       }
+
+  //       if (band.id === formBandId) {
+  //         return {
+  //           ...band,
+  //           leftWeight: band.leftWeight - formWeight,
+  //         }
+  //       } else {
+  //         return band
+  //       }
+  //     })
+  //     // .filter((band) => band.leftWeight >= 1)
+
+  //     setSelectedSanad((curr) => ({
+  //       ...(curr || selectedSanad),
+  //       items: newSanadItems,
+  //     }))
+  //   }
+  // }
+
+  const updateBandWithNewWeight = (
+    values: GoldCodingSanad_initialValues_TP
+  ) => {
+    if (activeBand) {
+      const newBand = () => {
         if (stones.some((stone) => stone.stone_type === "not_added")) {
           const notAddedStones = stones.filter(
             (stone) => stone.stone_type === "not_added"
@@ -117,39 +156,73 @@ export const CodingSanad = ({
             (acc, curr) => acc + +curr.weight,
             0
           )
-          return {
-            ...band,
-            leftWeight: band.leftWeight - (formWeight - tableWeight * .2),
-          }
-        }
 
-        if (band.id === formBandId) {
+          setAddedPieces((curr) => [
+            ...curr,
+            {
+              ...values,
+              front_key: crypto.randomUUID(),
+              mezan_weight: values.weight - tableWeight * 0.2,
+            },
+          ])
+
           return {
-            ...band,
-            leftWeight: band.leftWeight - formWeight,
+            ...activeBand,
+            leftWeight:
+              activeBand.leftWeight - (values.weight - tableWeight * 0.2),
           }
+
         } else {
-          return band
+
+          setAddedPieces((curr) => [
+            ...curr,
+            {
+              ...values,
+              front_key: crypto.randomUUID(),
+              mezan_weight: values.weight,
+            },
+          ])
+
+          return {
+            ...activeBand,
+            leftWeight: +activeBand.leftWeight - +values.weight,
+          }
         }
-      })
-      // .filter((band) => band.leftWeight >= 1)
+      }
+
+      const theBand: GoldSanadBand_TP = newBand()
+      setActiveBand(theBand)
+
+      // const activeBandIndex = selectedSanad?.items.findIndex(band => band.id === activeBand.id)
 
       setSelectedSanad((curr) => ({
-        ...(curr || selectedSanad),
-        items: newSanadItems,
+        ...curr,
+        items: curr?.items.map((band) => {
+          console.log("band.id", band.id)
+          console.log("activeBand.id", activeBand.id)
+
+          if (band.id === activeBand.id) {
+            return theBand
+          } else {
+            return band
+          }
+        }),
       }))
+
+      
     }
   }
 
   function finalSubmit(values: GoldCodingSanad_initialValues_TP) {
     if (!isAbleToCodeMore()) return
 
-    updateSanadWithNewWeight(values.band_id!, values.weight)
+    updateBandWithNewWeight(values)
     // setAddedPieces((curr) => [...curr, { ...values, stones }])
-    setAddedPieces((curr) => [
-      ...curr,
-      { ...values, front_key: crypto.randomUUID() },
-    ])
+    // setAddedPieces((curr) => [
+    //   ...curr,
+    //   { ...values, front_key: crypto.randomUUID() },
+    // ])
+
     // setActiveBand((curr) => {
     //   return { ...curr, leftWeight: curr?.leftWeight - values.weight }
     // })

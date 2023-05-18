@@ -20,11 +20,10 @@ import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import { prepareItemsToShowInCaseOfTa2m } from "../../../utils/helpers"
 import { notify } from "../../../utils/toast"
 import {
-  GoldCodingSanad_initialValues_TP,
+  addTa2mSizesSchema, GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
   GoldSanad_TP,
-  SizePopup_TP,
-  addTa2mSizesSchema,
+  SizePopup_TP
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 ///
@@ -58,7 +57,7 @@ export const GoldItemCodingForm = ({
 }: ItemCodingFormProps_TP) => {
   /////////// VARIABLES
   ///
-  const selectedBandLeftWeight =  selectedSanad.items.find((item)=>item?.number === activeBand?.number)?.leftWeight
+  // const selectedBandLeftWeight =  selectedSanad.items.find((item)=>item?.number === activeBand?.number)?.leftWeight
   const hasSizes = !!sizes.length
   const isMultiCategory =
     activeBand.category.id > 1 && activeBand.category.type === "multi"
@@ -119,15 +118,15 @@ export const GoldItemCodingForm = ({
   }, [activeBand])
 
   useEffect(() => {
+    
     setAwzanItems(activeBand.category.items)
   }, [activeBand])
   
   // go to bond that have left weight if previous left weight is 0
   useEffect(() => {
-    const index = selectedSanad?.items.findIndex(item=>item.leftWeight)
-    if(!selectedBandLeftWeight)
-    setActiveBand(selectedSanad?.items[index])
-  }, [selectedBandLeftWeight])
+    const index = selectedSanad?.items.findIndex((item) => item.leftWeight)
+    if (!activeBand.leftWeight) setActiveBand(selectedSanad?.items[index])
+  }, [activeBand.leftWeight])
   
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -152,9 +151,9 @@ export const GoldItemCodingForm = ({
   ///
     
   useEffect(() => {
-    const finishedBondTitles = selectedSanad?.items.filter(item=> item.leftWeight === 0).map(item=>item?.category?.name).join(' & ')
-   if(!selectedBandLeftWeight)
-    notify('info' ,`${finishedBondTitles} الوزن المتبقي يساوي صفر `)
+    // const finishedBondTitles = selectedSanad?.items.filter(item=> item.leftWeight === 0).map(item=>item?.category?.name).join(' & ')
+   if (!activeBand.leftWeight)
+     notify("info", `تم تغيير سطر الترقيم لان السطر السابق انتهي`)
   }, [activeBand])
  
   // if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
@@ -244,10 +243,11 @@ export const GoldItemCodingForm = ({
       </div>
       {/* الوزن */}
       <div className="flex flex-col">
-
         <div className="flex mb-1 justify-between items-center relative">
-      <label htmlFor="wight">{t('weight')}</label> 
-      <span className="absolute left-10 text-xs opacity-80 font-bold text-mainGreen"> الوزن المتبقي للقطعه {selectedBandLeftWeight}</span>
+          <label htmlFor="wight">{t("weight")}</label>
+          <span className="absolute left-10 text-xs opacity-80 font-bold text-mainGreen">
+            الوزن المتبقي للقطعه {activeBand.leftWeight}
+          </span>
 
           {awzanItems && !!awzanItems?.length && (
             <div className="flex items-center">
@@ -256,8 +256,7 @@ export const GoldItemCodingForm = ({
                   detailedWeight_total !== 0 &&
                   !detailedWeight_total &&
                   setWeightItemsModal(true)
-                }     
-                
+                }
               />
 
               {detailedWeight_total !== 0 && detailedWeight_total && (
@@ -275,6 +274,7 @@ export const GoldItemCodingForm = ({
         </div>
         <BaseInputField
           {...{
+            
             id: "wight",
             type: "number",
             name: "weight",
@@ -282,22 +282,24 @@ export const GoldItemCodingForm = ({
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
-              value: detailedWeight_total,
-              onChange: (e) => setDetailedWeight_total(+e.target.value),
-              disabled: true,
-            }),
+                value: detailedWeight_total,
+                onChange: (e) => setDetailedWeight_total(+e.target.value),
+                disabled: true,
+              }),
           }}
+
           // value={detailedWeight_total !== 0 && detailedWeight_total ? detailedWeight_total : undefined}
-          // onChange={(e) => setDetailedWeight_total(+e.target.value)}
+          // onChange={(e) => setFieldValue('mezan_weight', e.target.value)}
+          
           // placeholder="الوزن"
           // label="الوزن"
           // id="weight"
           // type="number"
           // name="weight"
           // disabled={selectedBandLeftWeight === 0}
-          className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-            } ${values.weight > values.left_weight && 'bg-red-100'}`}
-            
+          className={`${
+            detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
+          } ${values.weight > values.left_weight && "bg-red-100"}`}
         />
       </div>
 
@@ -312,9 +314,9 @@ export const GoldItemCodingForm = ({
         modalTitle="إضافة لون ذهب"
         name="color_id"
         label="لون الذهب"
-      // onChange={(option) => {
-      //   setFieldValue("color_value", option.value)
-      // }}
+        // onChange={(option) => {
+        //   setFieldValue("color_value", option.value)
+        // }}
       />
       {/* الاجرة */}
       <div>
@@ -403,7 +405,7 @@ export const GoldItemCodingForm = ({
               notify("success")
             }}
           >
-            {({ submitForm}) => (
+            {({ submitForm }) => (
               <>
                 <div className="grid grid-cols-4 gap-x-5">
                   <SelectCategorySize
@@ -418,7 +420,6 @@ export const GoldItemCodingForm = ({
                   type="button"
                   action={submitForm}
                   className="mt-8 mr-auto flex"
-              
                 >
                   حفظ
                 </Button>
