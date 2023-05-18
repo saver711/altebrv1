@@ -1,3 +1,4 @@
+import { t } from "i18next"
 import { FaWeightHanging } from "react-icons/fa"
 type DeleteProps_TP = {
   className?: string
@@ -16,6 +17,7 @@ export const Weight = ({
       className={` fill-mainGreen cursor-pointer  ${className}`}
       onClick={action}
       {...props}
+      title={`${t('detailed weight')}`}
     />
   )
 }

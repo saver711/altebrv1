@@ -72,8 +72,8 @@ export const OneBranches = ({ title }) => {
       )}
       {isLoading && (
         <Loading
-          mainTitle={`${t("loading")}`}
-          subTitle={`${t("branch are loading")}`}
+          subTitle={`${t("loading")}`}
+          mainTitle={`${t("branche data are loading")}`}
         />
       )}
       {isSuccess && !isLoading && (

@@ -39,7 +39,7 @@ export const SelectBranches = ({
     refetch: refetchBranches,
     failureReason: branchesErrorReason,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "branch/api/v1/branches",
+    endpoint: "branch/api/v1/branches?per_page=10000",
     queryKey: ["branches"],
     select: (branches) =>
       branches.map((branch) => {
@@ -90,7 +90,7 @@ export const SelectBranches = ({
     <div className="flex flex-col">
       <Select
         id="branch"
-        label={`${t("Branch")}`}
+        label={`${t("branch")}`}
         name={name}
         placeholder={
           branchesOptions?.length !== 0 ? `${t("branch")}` : "اضف فرع "

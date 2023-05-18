@@ -380,7 +380,7 @@ export const ViewCategories = () => {
                 lightString={viewSingleCategory?.name}
               />
               <TextLine
-                boldText={t("English name")}
+                boldText={t("english name")}
                 lightString={viewSingleCategory?.name_en}
               />
               <TextLine

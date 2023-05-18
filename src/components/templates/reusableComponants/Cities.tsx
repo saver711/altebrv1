@@ -202,7 +202,7 @@ export const Cities = ({
     failureReason,
     refetch,
   } = useFetch<SelectOption_TP[], City_TP>({
-    endpoint: `governorate/api/v1/countries/${country?.id}`,
+    endpoint: `governorate/api/v1/countries/${country?.id}?per_page=10000`,
     queryKey: [`cities/${country?.id}`],
     select: ({ cities }) => {
       return cities.map((city) => ({

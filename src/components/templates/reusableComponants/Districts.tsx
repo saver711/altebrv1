@@ -207,7 +207,7 @@ export const Districts = ({
     refetch,
   } = useFetch<SelectOption_TP[], District_TP>({
     queryKey: [`districts/${city?.id}`],
-    endpoint: `governorate/api/v1/cities/${city?.id}`,
+    endpoint: `governorate/api/v1/cities/${city?.id}?per_page=10000`,
     select: ({ districts }) =>
       districts.map((district) => ({
         ...district,

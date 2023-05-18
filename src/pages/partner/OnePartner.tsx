@@ -129,7 +129,12 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
       >
         {partnerLoading && <Loading mainTitle={t("view doc Details")} />}
         <InnerFormLayout
-          title={partner?.name}
+          title={
+            <div className="flex gap-4">
+              <p>بيانات</p>
+              <p className=" text-mainGreen">{partner?.name}</p>
+            </div>
+          }
           leftComponent={
             partner?.document?.length !== 0 && (
               <Button className="mb-3" action={() => setDocumentOpen(true)}>
@@ -147,96 +152,95 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                   className="w-[7rem] h-[7rem] rounded-full object-cover"
                 />
               </div>
-              <div className="flex gap-4 flex-col">
-                {partner.name && (
-                  <TextLine boldText={t("Name")} lightString={partner.name} />
-                )}
-                {partner.nationality_name && (
-                  <TextLine
-                    boldText={t("nationality_name")}
-                    lightString={partner?.nationality_name}
-                  />
-                )}
+              {partner.name && (
+                <TextLine boldText={t("Name")} lightString={partner.name} />
+              )}
+              {partner.nationality_name && (
+                <TextLine
+                  boldText={t("nationality_name")}
+                  lightString={partner?.nationality_name}
+                />
+              )}
 
-                {partner.phone && (
-                  <TextLine
-                    boldText={t("phone number")}
-                    lightString={partner?.phone}
-                  />
-                )}
-              </div>
+              {partner.phone && (
+                <TextLine
+                  boldText={t("phone number")}
+                  lightString={partner?.phone}
+                />
+              )}
 
-              <div className="flex gap-4 flex-col">
-                {partner?.country && (
-                  <TextLine
-                    boldText={t("country_name")}
-                    lightString={partner?.country.name}
+              {partner?.country && (
+                <TextLine
+                  boldText={t("country_name")}
+                  lightString={partner?.country.name}
+                />
+              )}
+              {partner?.city && (
+                <TextLine
+                  boldText={t("city_name")}
+                  lightString={partner?.city.name}
+                />
+              )}
+              {partner?.start_date && (
+                <TextLine
+                  boldText={t("hiring date")}
+                  lightString={partner?.start_date}
+                />
+              )}
+              {partner?.end_date && (
+                <TextLine
+                  boldText={t("end date")}
+                  lightString={partner?.end_date}
+                />
+              )}
+              {partner?.tax && (
+                <TextLine boldText={t("tax")} lightString={partner?.tax} />
+              )}
+              {partner?.type && (
+                <TextLine boldText={t("type")} lightString={partner?.type} />
+              )}
+              {partner?.address && (
+                <TextLine
+                  boldText={t("address")}
+                  lightString={partner?.address}
+                />
+              )}
+              {partner?.national_number && (
+                <TextLine
+                  boldText={t("national number")}
+                  lightString={partner?.national_number}
+                />
+              )}
+              {partner?.email && (
+                <TextLine
+                  containerClasses=" !block"
+                  boldText={t("email")}
+                  lightString={partner?.email}
+                />
+              )}
+              {partner.national_image ? (
+                <div className="flex items-center gap-1">
+                  <p className="mt-1">{t("media")} : </p>
+                  <FilesPreviewOutFormik
+                    preview={true}
+                    images={[
+                      {
+                        path: partner.national_image,
+                        type: "image",
+                      },
+                    ]}
                   />
-                )}
-                {partner?.city && (
-                  <TextLine
-                    boldText={t("city_name")}
-                    lightString={partner?.city.name}
-                  />
-                )}
-              </div>
-              <div className="flex gap-4 flex-col">
-                {partner?.start_date && (
-                  <TextLine
-                    boldText={t("hiring date")}
-                    lightString={partner?.start_date}
-                  />
-                )}
-                {partner?.end_date && (
-                  <TextLine
-                    boldText={t("end date")}
-                    lightString={partner?.end_date}
-                  />
-                )}
-                {partner?.tax && (
-                  <TextLine boldText={t("tax")} lightString={partner?.tax} />
-                )}
-                {partner?.type && (
-                  <TextLine boldText={t("type")} lightString={partner?.type} />
-                )}
-              </div>
-              <div className="flex gap-4 flex-col">
-                {partner?.address && (
-                  <TextLine
-                    boldText={t("address")}
-                    lightString={partner?.address}
-                  />
-                )}
-                {partner?.national_number && (
-                  <TextLine
-                    boldText={t("national number")}
-                    lightString={partner?.national_number}
-                  />
-                )}
-                {partner?.email && (
-                  <TextLine
-                    boldText={t("email")}
-                    lightString={partner?.email}
-                  />
-                )}
-                {partner.national_image ? (
-                  <div className="flex items-center gap-1">
-                    <p className="mt-1">{t("media")} : </p>
-                    <FilesPreviewOutFormik
-                      preview={true}
-                      images={[
-                        {
-                          path: partner.national_image,
-                          type: "image",
-                        },
-                      ]}
-                    />
-                  </div>
-                ): " لايوجد وسائط"}
-              </div>
-              <div className="flex justify-between gap-4 col-span-4 align-middle ">
-                <h3 className=" font-bold">{t("main documents")}</h3>
-              </div>
+                </div>
+              ) : (
+                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                  <h3 className="font-bold text-lg">{t("no media")}</h3>
+                </div>
+              )}
+              {partner?.document.length !== 0 && (
+                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                  <h3 className="font-bold text-lg">{t("main documents")}</h3>
+                </div>
+              )}
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                 {partner?.document?.map((doc, i) => (
                   <>
@@ -296,84 +300,97 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                             <p className="mb-3">{t("media")} : </p>
                             <FilesPreviewOutFormik images={doc?.files} />
                           </div>
-                        ):"لايوجد وسائظ"}
+                        ) : (
+                          "لايوجد وسائظ"
+                        )}
                       </div>
                     </div>
                   </>
                 ))}
               </Modal>
-              {partner.document.length !== 0
-                ? partner?.document?.slice(0, 2).map((doc, i) => (
-                    <>
-                      <div className="flex gap-4 flex-col col-span-4 border-t-2 mt-3 p-3 border-b-2 border-dashed  justify-center align-middle">
-                        <div className=" flex items-center justify-center mb-8">
-                          <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
-                            <p className=" text-lg font-bold text-mainGreen">
-                              {t(`document`)} {i + 1}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                          <div className="flex gap-4 flex-col">
-                            {console.log("zz", doc.data.docName)}
-                            {doc.data?.docType?.label && (
-                              <TextLine
-                                boldText={t("document name")}
-                                lightString={doc.data?.docType?.label}
-                              />
-                            )}
-                          </div>
-                          <div className="flex gap-4 flex-col">
-                            {doc.data?.docName && (
-                              <TextLine
-                                boldText={t("document name")}
-                                lightString={doc.data?.docName}
-                              />
-                            )}
-                          </div>
-                          <div className="flex gap-4 flex-col  ">
-                            {doc.data?.docNumber && (
-                              <TextLine
-                                boldText={t("document number")}
-                                lightString={doc.data?.docNumber}
-                              />
-                            )}
-                          </div>
-                          <div className="flex gap-4 flex-col  ">
-                            {doc.data?.endDate && (
-                              <TextLine
-                                boldText={t("document end date")}
-                                lightString={formatDate(
-                                  new Date(doc.data?.endDate)
-                                )}
-                              />
-                            )}
-                          </div>
-                          <div className="flex gap-4 flex-col">
-                            {doc.data?.reminder && (
-                              <TextLine
-                                boldText={t("reminder days count")}
-                                lightString={doc.data?.reminder}
-                              />
-                            )}
-                          </div>
-                          {doc.files?.length !== 0 ? (
-                            <div className="flex items-center">
-                              <p className="mb-3">{t("media")} : </p>
-                              <FilesPreviewOutFormik images={doc?.files} />
-                            </div>
-                          ) : "لاوجد وسائط"}
+              {partner.document.length !== 0 ? (
+                partner?.document?.slice(0, 2).map((doc, i) => (
+                  <>
+                    <div className="flex gap-4 flex-col col-span-4 border-t-2 mt-3 p-3 border-b-2 border-dashed  justify-center align-middle">
+                      <div className=" flex items-center justify-center mb-8">
+                        <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
+                          <p className=" text-lg font-bold text-mainGreen">
+                            {t(`document`)} {i + 1}
+                          </p>
                         </div>
                       </div>
-                    </>
-                  ))
-                : "لايوجد الوثائق"}
+                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.docType?.label && (
+                            <TextLine
+                              boldText={t("document name")}
+                              lightString={doc.data?.docType?.label}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.docName && (
+                            <TextLine
+                              boldText={t("document name")}
+                              lightString={doc.data?.docName}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col  ">
+                          {doc.data?.docNumber && (
+                            <TextLine
+                              boldText={t("document number")}
+                              lightString={doc.data?.docNumber}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col  ">
+                          {doc.data?.endDate && (
+                            <TextLine
+                              boldText={t("document end date")}
+                              lightString={formatDate(
+                                new Date(doc.data?.endDate)
+                              )}
+                            />
+                          )}
+                        </div>
+                        <div className="flex gap-4 flex-col">
+                          {doc.data?.reminder && (
+                            <TextLine
+                              boldText={t("reminder days count")}
+                              lightString={doc.data?.reminder}
+                            />
+                          )}
+                        </div>
+                        {doc.files?.length !== 0 ? (
+                          <div className="flex items-center">
+                            <p className="mb-3">{t("media")} : </p>
+                            <FilesPreviewOutFormik images={doc?.files} />
+                          </div>
+                        ) : (
+                          <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                            <h3 className="font-bold text-lg">
+                              {t("no media")}
+                            </h3>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ))
+              ) : (
+                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                  <h3 className="font-bold text-lg">{t("no documents")}</h3>
+                </div>
+              )}
               {/* العنوان الوطني */}
               <>
                 <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>
                 <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                  <div className="flex gap-4 flex-col col-span-4">
-                    <h3 className="font-bold"> {t("national Address")} </h3>
+                  <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                    <h3 className="font-bold text-lg">
+                      {t("national Address")}{" "}
+                    </h3>
                   </div>
                   <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                     <div className="flex gap-4 flex-col">

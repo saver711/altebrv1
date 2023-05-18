@@ -40,7 +40,7 @@ export const SelectNationality = ({
     refetch: refetchNationality,
     failureReason: nationalityErrorReason,
   } = useFetch<SelectOption_TP[]>({
-    endpoint: "governorate/api/v1/nationalities",
+    endpoint: "governorate/api/v1/nationalities?per_page=10000",
     queryKey: ["nationalities"],
     select: (nationalities) =>
       nationalities.map((nationality) => {
@@ -92,7 +92,7 @@ export const SelectNationality = ({
     <div className="flex flex-col">
       <Select
         id="nationality"
-        label={`${t("Nationality")}`}
+        label={`${t("nationality")}`}
         name={name}
         placeholder={`${t("nationality")}`}
         loadingPlaceholder={`${t("loading")}`}
