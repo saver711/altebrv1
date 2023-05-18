@@ -79,7 +79,6 @@ export function ExpandableTable({
     data: typeof data
   }>()
   const [queryData, setQueryData] = useState<any[] | undefined>()
-  console.log("🚀 ~ file: ExapndableTable.tsx:83 ~ queryData:", queryData)
 
   const columns = useMemo<any>(
     () => [
@@ -205,8 +204,6 @@ export function ExpandableTable({
           category: categories?.find(
             (category) => category.id == item.category_id
           )?.name,
-          categoryX: categories,
-          expandItem:item
         }
         return finaleItem
       })
