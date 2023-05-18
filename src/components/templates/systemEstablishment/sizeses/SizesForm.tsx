@@ -264,12 +264,12 @@ export const SizesForm = ({
 
   const handleSubmit = (values: any) => {
     sizesMutate({
-      endpointName: editData
+      endpointName: editData  
         ? `/size/api/v1/sizes/${editData.id}`
         : "/size/api/v1/sizes",
       values: {
         type: !showCategories ? values.type : values.sizeType,
-        start: values.start,
+        start:  values.start,
         end: values.end,
         increase: values.increase,
       },
