@@ -28,6 +28,7 @@ export type GoldCodingSanad_initialValues_TP = {
     karat_value?: KaratValues_TP
     bond_date?: string
     init_wage?: number
+    mezan_weight?: number
 }
 export const codingSanad_initialValues: GoldCodingSanad_initialValues_TP = {
     mezan_type: 'manual',

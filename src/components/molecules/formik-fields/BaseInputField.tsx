@@ -53,6 +53,7 @@ export const BaseInputField = ({
             setFieldTouched(props.name, true)
           }}
           onChange={(e) => {
+            props.onChange && props.onChange(e)
             if (props.value === undefined) {
               // setFieldValueState(e.target.value)
               setFieldValue(props.name, e.target.value)
