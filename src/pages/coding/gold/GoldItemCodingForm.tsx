@@ -53,7 +53,8 @@ export const GoldItemCodingForm = ({
   sizes,
   setSizes,
   activeBand,
-  selectedSanad
+  selectedSanad,
+  setActiveBand
 }: ItemCodingFormProps_TP) => {
   /////////// VARIABLES
   ///
@@ -120,8 +121,14 @@ export const GoldItemCodingForm = ({
   useEffect(() => {
     setAwzanItems(activeBand.category.items)
   }, [activeBand])
-
-
+  
+  // go to bond that have left weight if previous left weight is 0
+  useEffect(() => {
+    const index = selectedSanad?.items.findIndex(item=>item.leftWeight)
+    if(!selectedBandLeftWeight)
+    setActiveBand(selectedSanad?.items[index])
+  }, [selectedBandLeftWeight])
+  
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const handleFixAllPieceData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,12 +152,13 @@ export const GoldItemCodingForm = ({
   ///
     
   useEffect(() => {
+    const finishedBondTitles = selectedSanad?.items.filter(item=> item.leftWeight === 0).map(item=>item?.category?.name).join(' & ')
    if(!selectedBandLeftWeight)
-    notify('info' ,`${t('left weight for this piece is equal to 0')}`)
-  }, [selectedBandLeftWeight , values?.left_weight])
+    notify('info' ,`${finishedBondTitles} الوزن المتبقي يساوي صفر `)
+  }, [activeBand])
  
-  if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
-
+  // if(!selectedBandLeftWeight) return <h2 className="text-mainRed text-xl text-center" >{t('left weight for this bond is equal to 0')}</h2>
+ 
   return (
     <div className="grid grid-cols-4 gap-x-4 gap-y-8 p-4 relative">
       {/* <div className="col-span-4">
@@ -236,7 +244,11 @@ export const GoldItemCodingForm = ({
       </div>
       {/* الوزن */}
       <div className="flex flex-col">
-        <div className="flex mb-1 justify-between items-center">
+
+        <div className="flex mb-1 justify-between items-center relative">
+      <label htmlFor="wight">{t('weight')}</label> 
+      <span className="absolute left-10 text-xs opacity-80 font-bold text-mainGreen"> الوزن المتبقي للقطعه {selectedBandLeftWeight}</span>
+
           {awzanItems && !!awzanItems?.length && (
             <div className="flex items-center">
               <WeightIcon
@@ -244,7 +256,8 @@ export const GoldItemCodingForm = ({
                   detailedWeight_total !== 0 &&
                   !detailedWeight_total &&
                   setWeightItemsModal(true)
-                }
+                }     
+                
               />
 
               {detailedWeight_total !== 0 && detailedWeight_total && (
@@ -260,13 +273,12 @@ export const GoldItemCodingForm = ({
             </div>
           )}
         </div>
-        <div className="flex relative" >
         <BaseInputField
           {...{
             id: "wight",
             type: "number",
             name: "weight",
-            label:`${t('weight')}`,
+            // label:`${t('weight')}`,
             placeholder: "الوزن",
             ...(detailedWeight_total !== 0 &&
               detailedWeight_total && {
@@ -282,13 +294,11 @@ export const GoldItemCodingForm = ({
           // id="weight"
           // type="number"
           // name="weight"
-          disabled={selectedBandLeftWeight === 0}
+          // disabled={selectedBandLeftWeight === 0}
           className={`${detailedWeight_total !== 0 && detailedWeight_total && "bg-gray-300"
-            } ${selectedBandLeftWeight === 0 && 'bg-red-600'}`}
+            } ${values.weight > values.left_weight && 'bg-red-100'}`}
+            
         />
-          <span className="absolute left-5 text-sm text-mainGreen">{selectedBandLeftWeight}</span>
-
-        </div>
       </div>
 
       {/* المصدر */}

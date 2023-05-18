@@ -40,7 +40,7 @@ export const CodingSanad = ({
   stage,
   setStage,
   selectedSanad,
-  setSelectedSanad
+  setSelectedSanad,
 }: CodingSanadProps_TP) => {
   /////////// VARIABLES
   ///

@@ -16,19 +16,22 @@ import RadioGroup from "../molecules/RadioGroup"
 import { RefetchErrorHandler } from "../molecules/RefetchErrorHandler"
 import { DropFile } from "../molecules/files/DropFile"
 import { Supplier_TP } from "../templates/systemEstablishment/supplier/supplier-types"
-import { GoldFirstFormInitValues_TP, goldValidatingSchema } from "./formInitialValues_types"
+import { diamondValidatingSchema, FirstFormInitValues_TP, goldValidatingSchema } from "./formInitialValues_types"
+import { Supply_TP } from "../../pages/supply/Supply"
 
 ///
 type FirstFormProps_TP = {
-    formValues: GoldFirstFormInitValues_TP | undefined
-    setFormValues: React.Dispatch<React.SetStateAction<GoldFirstFormInitValues_TP | undefined>>
+    supply: Supply_TP
+    formValues: FirstFormInitValues_TP | undefined
+    setFormValues: React.Dispatch<React.SetStateAction<FirstFormInitValues_TP | undefined>>
     setStage: React.Dispatch<React.SetStateAction<number>>
     nextBondNumber: string | undefined
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 ///
-export const GoldSupplyFirstForm = ({
+export const SupplyFirstForm = ({
+    supply,
     formValues,
     setFormValues,
     setStage,
@@ -75,20 +78,32 @@ export const GoldSupplyFirstForm = ({
     /////////// VARIABLES
     ///
 
-    const GoldFirstFormInitValues: GoldFirstFormInitValues_TP = {
-        twred_type: formValues?.twred_type || 'local',
-        bond_date: formValues?.bond_date || getDayBefore(new Date()),
-        employee_id:formValues?.employee_id || '',
-        supplier_id: formValues?.supplier_id || '',
-        employee_value:formValues?.employee_value || '',
-        supplier_value:formValues?.supplier_value || '',
-        bond_number: formValues?.bond_number || "",
-        api_gold_price: formValues?.api_gold_price || 20, // comes from api gold price 
-        entity_gold_price: formValues?.entity_gold_price || "" || "20", // should be api gold price value from api if no entered data
-        notes: formValues?.notes || "",
-        out_goods_value: formValues?.out_goods_value || "",
-        media: formValues?.media || [],
-        goods_media: formValues?.goods_media || [],
+    const FirstFormInitValues: FirstFormInitValues_TP = supply === 'gold' ? {
+      twred_type: formValues?.twred_type || 'local',
+      bond_date: formValues?.bond_date || getDayBefore(new Date()),
+      employee_id:formValues?.employee_id || '',
+      supplier_id: formValues?.supplier_id || '',
+      employee_value:formValues?.employee_value || '',
+      supplier_value:formValues?.supplier_value || '',
+      bond_number: formValues?.bond_number || "",
+      api_gold_price: formValues?.api_gold_price || 20, // comes from api gold price 
+      entity_gold_price: formValues?.entity_gold_price || "" || "20", // should be api gold price value from api if no entered data
+      notes: formValues?.notes || "",
+      out_goods_value: formValues?.out_goods_value || "",
+      media: formValues?.media || [],
+      goods_media: formValues?.goods_media || [],
+    } : {
+      twred_type: formValues?.twred_type || 'local',
+      bond_date: formValues?.bond_date || getDayBefore(new Date()),
+      employee_id:formValues?.employee_id || '',
+      supplier_id: formValues?.supplier_id || '',
+      employee_value:formValues?.employee_value || '',
+      supplier_value:formValues?.supplier_value || '',
+      bond_number: formValues?.bond_number || "",
+      notes: formValues?.notes || "",
+      out_goods_value: formValues?.out_goods_value || "",
+      media: formValues?.media || [],
+      goods_media: formValues?.goods_media || [],
     }
 
     /////////// SIDE EFFECTS
@@ -96,31 +111,51 @@ export const GoldSupplyFirstForm = ({
 
     /////////// FUNCTIONS | EVENTS | IF CASES
     ///
-
+    const handleSubmit = (values: FirstFormInitValues_TP) => {
+      setStage((prev) => prev + 1)
+      if (supply === 'gold') {
+        values.twred_type === "global" 
+        ? setFormValues(values) 
+        : setFormValues({
+          twred_type: values.twred_type,
+          bond_date: values.bond_date,
+          employee_id: values.employee_id,
+          supplier_id: values.supplier_id,
+          employee_value: values.employee_value,
+          supplier_value: values.supplier_value,
+          bond_number: values.bond_number,
+          api_gold_price: values.api_gold_price,
+          entity_gold_price: values.entity_gold_price,
+          notes: values.notes,
+          media: values.media
+        })
+      } else if (supply === 'diamond') {
+        values.twred_type === "global" 
+        ? setFormValues(values) 
+        : setFormValues({
+          twred_type: values.twred_type,
+          bond_date: values.bond_date,
+          employee_id: values.employee_id,
+          supplier_id: values.supplier_id,
+          employee_value: values.employee_value,
+          supplier_value: values.supplier_value,
+          bond_number: values.bond_number,
+          notes: values.notes,
+          media: values.media
+        })
+      }
+    }
     ///
     return (
       <>
         <Formik
-          onSubmit={(values) => {
-            setStage((prev) => prev + 1)
-            setFormValues(values)
-            values.twred_type === "global" ? setFormValues(values) : setFormValues({
-              twred_type: values.twred_type,
-              bond_date: values.bond_date,
-              employee_id: values.employee_id,
-              supplier_id: values.supplier_id,
-              employee_value: values.employee_value,
-              supplier_value: values.supplier_value,
-              bond_number: values.bond_number,
-              api_gold_price: values.api_gold_price,
-              entity_gold_price: values.entity_gold_price,
-              notes: values.notes,
-              media: values.media
-            })
-            console.log({ ...values, bond_date: formatDate(values.bond_date) })
-          }}
-          initialValues={GoldFirstFormInitValues}
-          validationSchema={goldValidatingSchema}
+          onSubmit={(values) => handleSubmit(values)}
+          initialValues={FirstFormInitValues}
+          validationSchema={
+            supply === 'gold' 
+            ? goldValidatingSchema
+            : diamondValidatingSchema
+          }
         >
           {({ values, setFieldValue }) => (
             <Form>
@@ -129,7 +164,7 @@ export const GoldSupplyFirstForm = ({
               <OuterFormLayout
                 submitComponent={
                   <Button type="submit" className="ms-auto mt-8">
-                    {t("submit")}
+                    {t("next")}
                   </Button>
                 }
               >
@@ -252,14 +287,14 @@ export const GoldSupplyFirstForm = ({
                   {/* document number end */}
 
                   {/* gold price start */}
-                  <BaseInputField
+                  {supply === 'gold' && <BaseInputField
                     id="entity_gold_price"
                     label={`${t("gold price")}`}
                     name="api_gold_price"
                     type="text"
                     placeholder={`${t("gold price")}`}
                     required
-                  />
+                  />}
                   {/* gold price end */}
 
                   {/* outer goods amount start */}

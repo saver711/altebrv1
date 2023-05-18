@@ -36,12 +36,12 @@ const SelectCategory = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { data: categories, isLoading: categoryLoading} = useFetch<
+  const { data: categories, isLoading: categoryLoading } = useFetch<
     ExtendedCategory_TP[]
   >({
-    endpoint: all 
-    ? "classification/api/v1/categories?type=all"
-    : "classification/api/v1/categories",
+    endpoint: all
+      ? "classification/api/v1/categories?per_page=10000"
+      : "classification/api/v1/categories?per_page=10000",
     queryKey: ["categories"],
     select: (categories) => {
       if (showNotDefinedType) {

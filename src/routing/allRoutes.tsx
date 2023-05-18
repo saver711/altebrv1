@@ -15,9 +15,9 @@ import { GoldCoding } from "../pages/coding/gold/GoldCoding"
 import { GoldCodingWrapper } from "../pages/coding/gold/GoldCodingWrapper"
 import { Employees } from "../pages/employees/Employees"
 import { OneEmployee } from "../pages/employees/OneEmployee"
-import { Bond } from "../pages/gold-supply/Bond"
-import { Bonds } from "../pages/gold-supply/Bonds"
-import { GoldSupply } from "../pages/gold-supply/GoldSupply"
+import { Bond } from "../pages/supply/Bond"
+import { Bonds } from "../pages/supply/Bonds"
+import { Supply } from "../pages/supply/Supply"
 import { Operation } from "../pages/operation/Operation"
 import { AllPartner } from "../pages/partner/AllPartner"
 import { OnePartner } from "../pages/partner/OnePartner"
@@ -193,10 +193,20 @@ export const AllRoutesProvider = () => {
           />
           <Route
             path="/bonds/gold"
-            element={<GoldSupply title={t("gold supply")} />}
+            element={<Supply title={t("gold supply")} />}
           />
-          <Route path="/bonds" element={<Bonds title={t("bonds")} />} />
-          <Route path="/bonds/:bondID" element={<Bond title={t("bond")} />} />
+          <Route
+            path="/bonds/diamond"
+            element={<Supply title={t("diamond supply")} />}
+          />
+          <Route
+            path="/bonds/accessories"
+            element={<Supply title={t("accessories supply")} />}
+          />
+          <Route path="/gold-bonds" element={<Bonds title={t("gold bonds")} />} />
+          <Route path="/gold-bonds/:bondID" element={<Bond title={t("gold bond")} />} />
+          <Route path="/diamond-bonds" element={<Bonds title={t("diamond bonds")} />} />
+          <Route path="/diamond-bonds/:bondID" element={<Bond title={t("diamond bond")} />} />
         </Route>
         <Route
           errorElement={<ErrorPage />}

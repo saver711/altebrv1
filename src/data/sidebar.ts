@@ -69,8 +69,14 @@ export const sideBarItems: MenuItem_TP[] = [
         items: [
           {
             id: crypto.randomUUID(),
-            label: 'bonds',
-            link: "/bonds",
+            label: 'gold bonds',
+            link: "/gold-bonds",
+            icon: RiVipCrownLine,
+          },
+          {
+            id: crypto.randomUUID(),
+            label: 'diamond bonds',
+            link: "/diamond-bonds",
             icon: RiVipCrownLine,
           },
           {
@@ -79,12 +85,12 @@ export const sideBarItems: MenuItem_TP[] = [
             link: "/bonds/gold",
             icon: AiFillGolden,
           },
-          // {
-          //   id: crypto.randomUUID(),
-          //   label: 'diamond bond supply',
-          //   link: "/bonds/diamond",
-          //   icon: GiCutDiamond,
-          // },
+          {
+            id: crypto.randomUUID(),
+            label: 'diamond bond supply',
+            link: "/bonds/diamond",
+            icon: GiCutDiamond,
+          },
           // {
           //   id: crypto.randomUUID(),
           //   label: 'accessories bond supply',

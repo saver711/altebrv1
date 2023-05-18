@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
 import { Button } from "../../../components/atoms"
+import { Modal } from "../../../components/molecules"
 import { useLocalStorage, useMutate } from "../../../hooks"
 import { CError_TP } from "../../../types"
 import { mutateData } from "../../../utils/mutateData"
@@ -32,6 +33,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
   GoldCodingSanad_initialValues_TP[]
   >(`addedPiecesLocal_${sanadId}`)
+  const [openModal, setOpenModal] = useState(false)
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -39,11 +41,12 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
 
+
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
       onSuccess:()=>{
-        setStage(1)
+        setOpenModal(true)
       }
     })
     useEffect(() => {
@@ -74,7 +77,7 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
 
     try {
       const result = await mutateAsync({
-        endpointName: "tarqimGold/api/v 1/tarqim_gold",
+        endpointName: "tarqimGold/api/v1/tarqim_gold",
         dataType: "formData",
         values: piece,
       });
@@ -138,6 +141,22 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
           </Button>
         </div>
       )}
+      <Modal isOpen={openModal} onClose={()=>setOpenModal(false)}>
+        <div className="flex gap-x-2 p-16 justify-center items-center" >
+          <Button type="button" action={()=>{
+            setOpenModal(false)
+            setStage(1)
+          }} bordered>
+              {t('back to digitization page')}
+          </Button>
+
+          <Button type="button"  action={()=>{
+            setOpenModal(false)
+          }}  >
+              <a href='https://alexon.altebr.jewelry/identity/admin/identities' target="_blank">{t('go to identification management')}</a>
+          </Button>
+        </div>
+      </Modal>
     </>
   )
 }
