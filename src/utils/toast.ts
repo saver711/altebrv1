@@ -26,7 +26,8 @@ type ToastType = keyof typeof STYLES
 export const notify = (
   type: ToastType = "success",
   msg?: string,
-  position: ToastPosition = "top-right"
+  position: ToastPosition = "top-right",
+  autoClose?: number
 ) => {
   let message = msg || "تمت العملية بنجاح"
 
@@ -37,6 +38,7 @@ export const notify = (
 
   toast[type](message, {
     ...toastOptions,
+    autoClose,
     className,
     position,
   })

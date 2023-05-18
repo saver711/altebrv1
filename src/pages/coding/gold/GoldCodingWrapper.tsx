@@ -45,13 +45,13 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
-      onSuccess:()=>{
-        setOpenModal(true)
-      }
+      onError(error) {
+        null
+      },
     })
     useEffect(() => {
       if(addedPiecesLocal?.length)
-      notify('info',`${t('there are items already existed you can save it')}`)
+      notify('info',`${t('there are items already existed you can save it')}`, "top-right" ,5000)
     }, [])
     
 
@@ -62,6 +62,7 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
   selectedSanadLocal
 )
   const [stage, setStage] = useState(1)
+  const [tableKey, setTableKey] = useState(1)
   ///
   /////////// SIDE EFFECTS
 
@@ -83,7 +84,11 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
       });
 
       if (result) {
-        const filteredPieces = remainingPieces.filter(
+        // const filteredPieces = remainingPieces.filter(
+        //   (p) => p.front_key !== result.front_key
+        // );
+
+        const filteredPieces = addedPieces.filter(
           (p) => p.front_key !== result.front_key
         );
         setAddedPieces(filteredPieces);
@@ -91,14 +96,33 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
       }
     } catch (err) {
       const error = err as CError_TP
-      if (error.response.data.message) {
-        notify("error", error.response.data.message)
-      }
-
+      // if(error.response.status === 404){
+      //   notify("error",`${t('try to send to non existing url')}`)
+      // }
+      // if(error.response.status === 401){
+      //   notify("error", `${t('you must login first')}`)
+      // }
+      // if(error.response.status === 503){
+      //   notify("error", `${t('you are unauthorized to do the process')}`)
+      // }
+      // if(error.response.status === 422){
+      //   const errors = Object.entries(error.response.data.errors).map(([key,value])=>`${value}`).join(' & ')
+      //   notify("error", `${t(errors)}`)
+      // }
     }
 
-    await sendPieces(remainingPieces);
+    await sendPieces(remainingPieces).then(()=>{
+      setTableKey(prev=>prev+1)
+    })
   };
+
+  useEffect(() => {
+    if(!!!addedPieces.length){
+      setOpenModal(true)
+      setTableKey(prev=>prev+1)
+    }
+  }, [addedPieces])
+  
   ///
   return (
     <>
@@ -122,6 +146,7 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
             setAddedPieces={setAddedPieces}
             addedPieces={addedPieces}
             showDetails={true}
+            key={tableKey}
           />
           <div className=" flex item-center gap-x-2 mr-auto">
             <Button action={() => setStage(1)} bordered>
