@@ -172,7 +172,7 @@ export function ExpandableTable({
           ]
         : []),
     ],
-    []
+    [addedPieces]
   )
   const table = useReactTable({
     data,
