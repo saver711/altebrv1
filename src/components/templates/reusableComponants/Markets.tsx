@@ -69,9 +69,8 @@ const NewMarketOptionComponent = ({
     mutationFn: mutateData,
     onSuccess: (data) => {
       console.log("onSuccess marketData", data)
-      queryClient.setQueryData([ `market/${districtId}` ], (old: any) => {
+      queryClient.setQueryData([`market/${districtId}`], (old: any) => {
         console.log("data", data)
-        
         console.log("old", old)
         if (old && !old.markets) {
           old.markets = []
@@ -195,7 +194,7 @@ export const Markets = ({
         value: market.name,
         label: market.name,
       })),
-    enabled: editData ? !!editData?.district_id : !!district?.id,
+    enabled: !!district?.id,
   })
 
   //change value
@@ -204,21 +203,18 @@ export const Markets = ({
       setNewValue(null)
     }
   }, [JSON.stringify(markets)])
-      useEffect(() => {
-        setNewValue({
-          id:
-            editData?.nationalAddress?.market.id || editData?.markets_id || "",
-          value:
-            editData?.nationalAddress?.market.name ||
-            editData?.markets_name ||
-            "",
-          label:
-            editData?.nationalAddress?.market.name ||
-            editData?.markets_name ||
-            "اختر الحي اولا ",
-        })
-      }, [])
-  console.log("MARKET EDIT editData", editData)
+  useEffect(() => {
+    setNewValue({
+      id: editData?.nationalAddress?.market.id || editData?.markets_id || "",
+      value:
+        editData?.nationalAddress?.market.name || editData?.markets_name || "",
+      label:
+        editData?.nationalAddress?.market.name ||
+        editData?.markets_name ||
+        "اختر الحي اولا ",
+    })
+  }, [])
+  // console.log("MARKET EDIT editData", editData)
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -226,7 +222,6 @@ export const Markets = ({
         id={marketName}
         label={t(`${label}`).toString()}
         name={marketName}
-
         placeholder={
           district?.id
             ? markets?.length !== 0
@@ -235,7 +230,6 @@ export const Markets = ({
             : "اختر الحي اولا"
         }
         isDisabled={!!!district?.id}
-
         loadingPlaceholder={`${
           !district?.id ? "اختر الحي أولا" : t("loading")
         }`}
