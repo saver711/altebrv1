@@ -118,7 +118,7 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {stage !== 3 && (
+      {stage !== 3 && !checkOperationsLoading && !isLoadingNextBondNumber && !checkOperationRefetching && !nextBondRefetching && (
         <div className="mb-0 px-5 flex justify-between">
           <h1 className="text-2xl font-bold">{title}</h1>
           <div>
@@ -127,7 +127,7 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
         </div>
       )}
 
-      {stage === 1 && (
+      {stage === 1 && !checkOperationsLoading && !isLoadingNextBondNumber && !checkOperationRefetching && !nextBondRefetching && (
         <SupplyFirstForm
           key={supply}
           supply={supply}

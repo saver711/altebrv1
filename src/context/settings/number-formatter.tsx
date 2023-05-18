@@ -50,7 +50,7 @@ export const NumberFormatterProvider = ({
     refetch,
   } = useFetch<Setting_TP>({
     // enabled: false, // >>>> Remove this
-    endpoint: "companySettings/api/v1/companysettings/19",
+    endpoint: "companySettings/api/v1/companysettings/key/before_init",
     queryKey: ["digits_count"],
     select: (digits_countObj) => ({ value: digits_countObj.value }),
     onSuccess: (digits_count) => {
@@ -75,7 +75,7 @@ export const NumberFormatterProvider = ({
 
   const changeDigitsCount = (digit: digits_count_TP) => {
     mutate({
-      endpointName: "companySettings/api/v1/companysettings/19",
+      endpointName: "companySettings/api/v1/companysettings/key/before_init",
       values: {
         key: "before_init",
         value: JSON.stringify(digit),
