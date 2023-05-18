@@ -222,7 +222,7 @@ export function ExpandableTable({
       )
     }
   }, [queryData])
-    
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <h2 className="font-bold text-2xl">{t("final review")}</h2>
