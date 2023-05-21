@@ -99,6 +99,7 @@ export const SelectNationality = ({
         options={nationalityOptions}
         loading={nationalityLoading}
         creatable
+        modalTitle={`${t("add nationality")}`}
         CreateComponent={CreateNationalities}
         fieldKey="id"
         value={newValue}

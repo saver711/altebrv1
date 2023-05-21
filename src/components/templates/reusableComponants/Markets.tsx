@@ -226,7 +226,6 @@ export const Markets = ({
         id={marketName}
         label={t(`${label}`).toString()}
         name={marketName}
-
         placeholder={
           district?.id
             ? markets?.length !== 0
@@ -235,7 +234,6 @@ export const Markets = ({
             : "اختر الحي اولا"
         }
         isDisabled={!!!district?.id}
-
         loadingPlaceholder={`${
           !district?.id ? "اختر الحي أولا" : t("loading")
         }`}
@@ -251,6 +249,7 @@ export const Markets = ({
           })
         }}
         value={newValue}
+        modalTitle={`${t("add market")}`}
         onChange={(option: any) => {
           console.log(option)
           setNewValue(option)

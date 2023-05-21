@@ -175,10 +175,10 @@ export const AdministrativeStructure = ({
           )}
         </Modal>
         <div className="flex flex-col gap-6 items-center">
-          {dataSource.length <= 0 && (
+          {isSuccess && dataSource.length === 0 && (
             <div className="mb-5 pr-5">
               <Header
-                header={t(`add administrative structure`)}
+                header={t("no items")}
                 className="text-center text-2xl font-bold"
               />
             </div>

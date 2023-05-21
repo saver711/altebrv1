@@ -229,10 +229,9 @@ export const ViewStonePurity = () => {
           <Loading mainTitle={t("stones purities")} />
         )}
         {isSuccess &&
-          !!!dataSource &&
           !isLoading &&
           !isRefetching &&
-          !!dataSource.length && (
+          dataSource.length === 0 && (
             <div className="mb-5 pr-5">
               <Header
                 header={t("no items")}

@@ -218,6 +218,7 @@ export const Countries = ({
         creatable={true}
         CreateComponent={NewCountryOptionComponent}
         fieldKey={fieldKey}
+        modalTitle={`${t("add Country")}`}
         value={newValue}
         onChange={(option) => {
           //@ts-ignore

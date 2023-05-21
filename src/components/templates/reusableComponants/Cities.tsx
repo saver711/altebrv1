@@ -243,6 +243,7 @@ export const Cities = ({
         id={cityName}
         label={t(`${label}`).toString()}
         name={cityName}
+        modalTitle={`${t("add city")}`}
         isDisabled={!!!country?.id}
         loadingPlaceholder={`${
           !country?.id ? "اختر الدولة أولا" : t("loading")

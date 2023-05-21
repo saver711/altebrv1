@@ -255,6 +255,7 @@ export const Districts = ({
         label={t(`${label}`).toString()}
         name={distractName}
         isDisabled={!!!city?.id}
+        modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
         // placeholder={
