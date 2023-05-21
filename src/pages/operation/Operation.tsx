@@ -1,6 +1,7 @@
 /////////// IMPORTS
 ///
 //import classes from './Operation.module.css'
+import { t } from "i18next"
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { Modal } from "../../components/molecules"
@@ -64,11 +65,11 @@ export const Operation = ({ title }: Operation_Props_TP) => {
           <h1 className="text-center text-2xl font-bold">{error.message} </h1>
         </div>
       )}
-      {isLoading && <Loading mainTitle="العمليات" subTitle="جاري التحميل" />}
+      {isLoading && <Loading mainTitle={`${t('operations')}`} subTitle={`${t('loading')}`} />}
       {isSuccess && (
         <div className="p-4">
           <div className="mb-5 pr-5 flex justify-between">
-            <h1 className="text-2xl font-bold">العمليات</h1>
+            <h1 className="text-2xl font-bold">{t('operations')}</h1>
             <div>
               <Back/>
             </div>
