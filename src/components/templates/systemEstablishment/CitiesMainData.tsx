@@ -32,7 +32,6 @@ export const CitiesMainData = ({
   isSuccessPost,
   resetSelect,
 }: CitiesMainDataProps_TP) => {
-  console.log("🚀 ~ file: CitiesMainData.tsx:35 ~ editData:", editData)
 
   /////////// VARIABLES
   ///

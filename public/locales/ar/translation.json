@@ -452,5 +452,7 @@
   "go to identification management":"الذهاب الى الهويات المرقمة",
   "you are unauthorized to do the process":"لا تملك الصلاحية لاجراء هذه العملية",
   "add stones natures":"اضافة طبيعة الحجر",
-  "no tax": "لا يوجد ضريبة"
+  "no tax": "لا يوجد ضريبة",
+  "type":"النوع",
+  "company_name":"اسم الشركة"
 }

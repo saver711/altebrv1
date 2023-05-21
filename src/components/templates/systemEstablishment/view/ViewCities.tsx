@@ -227,7 +227,8 @@ export const ViewCities = () => {
       )}
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && <Loading mainTitle={t("cities")} />}
-        {isSuccess && dataSource.length === 0 && (
+        {isSuccess &&  !isLoading &&
+          !isRefetching && dataSource.length === 0 && (
           <div className="mb-5 pr-5">
             <Header
               header={t("no items")}
