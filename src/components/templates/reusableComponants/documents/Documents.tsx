@@ -1,7 +1,7 @@
 /////////// IMPORTS
 ///
 import { t } from "i18next"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { CiFolderOn } from "react-icons/ci"
 import { Button } from "../../../atoms"
 import { Delete } from "../../../atoms/icons/Delete"
@@ -9,6 +9,7 @@ import { Edit } from "../../../atoms/icons/Edit"
 import { InnerFormLayout, Modal } from "../../../molecules"
 import { DocsData } from "./DocsData"
 import { DocumentForm } from "./DocumentForm"
+import { FormikSharedConfig, useFormikContext } from "formik"
 ///
 /////////// Types
 ///
@@ -16,6 +17,8 @@ type DocumentsProps_TP = {
   docsFormValues: any
   setDocsFormValues: Dispatch<SetStateAction<any[]>>
   editable?: boolean
+  isSuccessPost?: any
+  restData?:any
 }
 export type DocType_TP = {
   id: string
@@ -36,8 +39,9 @@ export const Documents = ({
   setDocsFormValues,
   docsFormValues,
   editable = false,
+  isSuccessPost,
+  restData,
 }: DocumentsProps_TP) => {
-
   ///
   /////////// STATES
   ///
@@ -49,8 +53,17 @@ export const Documents = ({
   ///
   /////////// SIDE EFFECTS
   ///
+  const { resetForm } = useFormikContext<FormikSharedConfig>()
+
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
+
+  useEffect(() => {
+    if (isSuccessPost) {
+      resetForm()
+      restData()
+    }
+  }, [isSuccessPost])
   function handleOpenAddDoc() {
     setAddDocPopup(true)
   }
@@ -67,20 +80,20 @@ export const Documents = ({
         title={t("documents")}
         leftComponent={
           <Button action={handleOpenAddDoc} bordered className="mb-2">
-            {docsFormValues.length > 0 ? (
+            {docsFormValues?.length > 0 ? (
               <span>{t("Add another document")}</span>
             ) : (
               <span>{t("Add document")}</span>
             )}
           </Button>
         }
-        customStyle={!(docsFormValues.length > 0) ? "bg-transparent" : ""}
+        customStyle={!(docsFormValues?.length > 0) ? "bg-transparent" : ""}
       >
-        {docsFormValues.length > 0 && (
+        {docsFormValues?.length > 0 && (
           <div className="col-span-4">
             <h2 className="mb-8 text-center">{t("available documents")}</h2>
             <div className="max-h-96 overflow-y-auto scrollbar flex flex-wrap justify-center items-center">
-              {docsFormValues.map((item: any) => (
+              {docsFormValues?.map((item: any) => (
                 <div
                   className="w-1/4  flex justify-center items-center flex-col my-5"
                   key={item.id}

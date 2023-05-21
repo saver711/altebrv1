@@ -244,6 +244,7 @@ export const Markets = ({
           })
         }}
         value={newValue}
+        modalTitle={`${t("add market")}`}
         onChange={(option: any) => {
           console.log(option)
           setNewValue(option)

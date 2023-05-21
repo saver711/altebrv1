@@ -14,6 +14,7 @@ import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { ViewKarats_TP } from "../../../systemEstablishment/view/Viewkarats"
 import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
+import { KaratMainData } from "./KaratMainData"
 
 ///
 /////////// Types
@@ -39,7 +40,7 @@ const validationSchema = Yup.object({
 })
 
 const CreateKarat = ({
-  value,
+  value = "",
   onAdd,
   editData,
   setDataSource,
@@ -57,14 +58,14 @@ const CreateKarat = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate({
+  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
       if (value && onAdd) {
         onAdd(value)
         queryClient.setQueryData(["karats"], (old: any) => {
-          return [...old, data]
+        return [...(old || []), data]
         })
       }
       if (setDataSource && setShow && !editData && !error) {
@@ -106,35 +107,13 @@ const CreateKarat = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="karats_number"
-                  label={`${t("karats number")}`}
-                  name="name"
-                  type="text"
-                  placeholder={`${t("karats number")}`}
-                />
-                <BaseInputField
-                  id="karats_equivalent"
-                  label={`${t("karats rate")}`}
-                  name="equivalent"
-                  type="number"
-                  placeholder={`${t("karats rate")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <KaratMainData
+              editData={editData}
+              title={title}
+              isLoading={isLoading}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

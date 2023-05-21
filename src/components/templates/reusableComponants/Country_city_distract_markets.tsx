@@ -25,6 +25,8 @@ type Country_city_distract_markets_TP = {
   marketLabel?: string
   editData?: { country_name: string } | {}
   marketFieldKey?: "id" | "value" | undefined
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -44,6 +46,8 @@ export const Country_city_distract_markets = ({
   distractFieldKey,
   marketFieldKey,
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Country_city_distract_markets_TP) => {
   /////////// VARIABLES
   ///
@@ -84,6 +88,8 @@ export const Country_city_distract_markets = ({
         distractName={distractName}
         fieldKey={countryFieldKey ? countryFieldKey : "id"}
         editData={editData}
+        isSuccessPost={isSuccessPost}
+        resetSelect={resetSelect}
       />
       {cityName && (
         <Cities
@@ -94,6 +100,8 @@ export const Country_city_distract_markets = ({
           distractName={distractName}
           fieldKey={cityFieldKey ? cityFieldKey : "id"}
           editData={editData}
+          isSuccessPost={isSuccessPost}
+          resetSelect={resetSelect}
         />
       )}
       {distractName && (
@@ -105,6 +113,8 @@ export const Country_city_distract_markets = ({
           marketName={marketName}
           fieldKey={distractFieldKey ? distractFieldKey : "id"}
           editData={editData}
+          isSuccessPost={isSuccessPost}
+          resetSelect={resetSelect}
         />
       )}
       {marketName && (

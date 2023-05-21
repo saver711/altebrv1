@@ -57,6 +57,7 @@ export const ViewCountries = () => {
   const [editData, setEditData] = useState<ViewCountries_TP>()
   const [deleteData, setDeleteData] = useState<ViewCountries_TP>()
   const [dataSource, setDataSource] = useState<ViewCountries_TP[]>([])
+  console.log("🚀 ~ file: ViewCountries.tsx:60 ~ ViewCountries ~ dataSource:", dataSource)
   const [search, setSearch] = useState('')
   const [page, setPage] = useState<number>(1)
   const columns = useMemo<ColumnDef<ViewCountries_TP>[]>(
@@ -239,18 +240,14 @@ export const ViewCountries = () => {
       )}
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && <Loading mainTitle={t("countries")} />}
-        {isSuccess &&
-          !!!dataSource &&
-          !isLoading &&
-          !isRefetching &&
-          !!dataSource.length && (
-            <div className="mb-5 pr-5">
-              <Header
-                header={t("no items")}
-                className="text-center text-2xl font-bold"
-              />
-            </div>
-          )}
+        {isSuccess && dataSource.length === 0 && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t("no items")}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+        )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&

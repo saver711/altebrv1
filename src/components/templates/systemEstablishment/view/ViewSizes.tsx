@@ -269,10 +269,9 @@ type AllSizesProps_TP = {
         <div className="flex flex-col gap-6 items-center">
           {(sizesLoading || isRefetching) && <Loading mainTitle={t("sizes")} />}
           {isSuccess &&
-            !!!dataSource &&
             !sizesLoading &&
             !isRefetching &&
-            !!dataSource.length && (
+            dataSource.length === 0 && (
               <div className="mb-5 pr-5">
                 <Header
                   header={t("no items")}
@@ -330,7 +329,11 @@ type AllSizesProps_TP = {
           }}
         >
           {model ? (
-            <CreateSizes editData={editData} setModel={setModel} title={ `${editData ? t("edit size") : t("add size")}`} />
+            <CreateSizes
+              editData={editData}
+              setModel={setModel}
+              title={`${editData ? t("edit size") : t("add size")}`}
+            />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
               <Header header={`${t("delete")} : ${deleteData?.size}`} />

@@ -125,6 +125,7 @@ export const ViewPartners = () => {
     isLoading,
     isError,
     error,
+    isRefetching,
     isSuccess,
   } = useFetch<ViewPartners_TP[]>({
     endpoint: `/partner/api/v1/partners`,
@@ -183,10 +184,18 @@ export const ViewPartners = () => {
         </div>
       )}
       {isLoading && <Loading mainTitle={t("partners")} />}
-      {isSuccess && !!!dataSource?.length && (
+      {/* {isSuccess && !!!dataSource?.length && (
         <EmptyDataView>
           <></>
         </EmptyDataView>
+      )} */}
+      {isSuccess && !isLoading && !isRefetching && dataSource.length === 0 && (
+        <div className="mb-5 pr-5">
+          <Header
+            header={t("no items")}
+            className="text-center text-2xl font-bold"
+          />
+        </div>
       )}
       {isSuccess && !!dataSource && !!dataSource.length && (
         <Table data={dataSource} showNavigation columns={columns} />
