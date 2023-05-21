@@ -11,7 +11,10 @@ import { CError_TP } from "../../../types"
 import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { ExpandableTable } from "../../try-osama/ExapndableTable"
-import { GoldCodingSanad_initialValues_TP, GoldSanad_TP } from "../coding-types-and-helpers"
+import {
+  GoldCodingSanad_initialValues_TP,
+  GoldSanad_TP,
+} from "../coding-types-and-helpers"
 import { CodingSanad } from "./CodingSanad"
 ///
 /////////// Types
@@ -28,10 +31,10 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   ///
   const { sanadId } = useParams()
   const [selectedSanadLocal, setSelectedSanadLocal] =
-  useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
+    useLocalStorage<GoldSanad_TP>(`selectedSanadLocal_${sanadId}`)
 
   const [addedPiecesLocal, setAddedPiecesLocal] = useLocalStorage<
-  GoldCodingSanad_initialValues_TP[]
+    GoldCodingSanad_initialValues_TP[]
   >(`addedPiecesLocal_${sanadId}`)
   const [openModal, setOpenModal] = useState(false)
   ///
@@ -40,8 +43,8 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const [addedPieces, setAddedPieces] = useState<
   GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
-
-
+  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
+  
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
@@ -49,18 +52,22 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
         null
       },
     })
-    useEffect(() => {
-      if(addedPiecesLocal?.length)
-      notify('info',`${t('there are items already existed you can save it')}`, "top-right" ,5000)
-    }, [])
-    
+  useEffect(() => {
+    if (addedPiecesLocal?.length && stage === 1)
+      notify(
+        "info",
+        `${t("there are items already existed you can save it")}`,
+        "top-right",
+        5000
+      )
+  }, [])
 
   ///
   /////////// STATES
   ///
-const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
-  selectedSanadLocal
-)
+  const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
+    selectedSanadLocal
+  )
   const [stage, setStage] = useState(1)
   const [tableKey, setTableKey] = useState(1)
   ///
@@ -71,31 +78,52 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
   ///
   const sendPieces = async (pieces: GoldCodingSanad_initialValues_TP[]) => {
     if (pieces.length === 0) {
-      return;
+      return
     }
 
-    const [piece, ...remainingPieces] = pieces;
+    const [piece, ...remainingPieces] = pieces
 
     try {
       const result = await mutateAsync({
         endpointName: "tarqimGold/api/v1/tarqim_gold",
         dataType: "formData",
         values: piece,
-      });
+      })
 
       if (result) {
         // const filteredPieces = remainingPieces.filter(
         //   (p) => p.front_key !== result.front_key
         // );
 
-        const filteredPieces = addedPieces.filter(
-          (p) => p.front_key !== result.front_key
-        );
-        setAddedPieces(filteredPieces);
-        setAddedPiecesLocal(filteredPieces);
+        // const filteredPieces = addedPieces.filter(
+        //   (p) => p.front_key !== result.front_key
+        // )
+        // console.log(`sendPieces ~ filteredPieces:`, filteredPieces)
+        setAddedPieces((curr) =>
+          curr.filter((p) => p.front_key !== result.front_key)
+        )
+        setAddedPiecesLocal((curr) =>
+          curr.filter((p) => p.front_key !== result.front_key)
+        )
       }
     } catch (err) {
       const error = err as CError_TP
+      notify('error', error.response.data.message)
+      console.log(`sendPieces ~ error:`, error)
+
+      setAddedPieces((curr) =>
+        curr.map((p) =>
+          p.front_key === piece.front_key ? { ...p, status: error.response.data.message} : p
+        )
+      )
+
+      setAddedPiecesLocal((curr) =>
+        curr.map((p) =>
+          p.front_key === piece.front_key
+            ? { ...p, status: error.response.data.message }
+            : p
+        )
+      )
       // if(error.response.status === 404){
       //   notify("error",`${t('try to send to non existing url')}`)
       // }
@@ -111,18 +139,18 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
       // }
     }
 
-    await sendPieces(remainingPieces).then(()=>{
-      setTableKey(prev=>prev+1)
+    await sendPieces(remainingPieces).then(() => {
+      setTableKey((prev) => prev + 1)
     })
-  };
+  }
 
   useEffect(() => {
-    if(!!!addedPieces.length && stage === 2 ){
+    if (!!!addedPieces.length && stage === 2) {
       setOpenModal(true)
-      setTableKey(prev=>prev+1)
+      // setTableKey((prev) => prev + 1)
     }
   }, [addedPieces])
-  
+
   ///
   return (
     <>
@@ -166,19 +194,31 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
           </Button>
         </div>
       )}
-      <Modal isOpen={openModal} onClose={()=>setOpenModal(false)}>
-        <div className="flex gap-x-2 p-16 justify-center items-center" >
-          <Button type="button" action={()=>{
-            setOpenModal(false)
-            setStage(1)
-          }} bordered>
-              {t('back to digitization page')}
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        <div className="flex gap-x-2 p-16 justify-center items-center">
+          <Button
+            type="button"
+            action={() => {
+              setOpenModal(false)
+              setStage(1)
+            }}
+            bordered
+          >
+            {t("back to digitization page")}
           </Button>
 
-          <Button type="button"  action={()=>{
-            setOpenModal(false)
-          }}  >
-              <a href='https://alexon.altebr.jewelry/identity/admin/identities' target="_blank">{t('go to identification management')}</a>
+          <Button
+            type="button"
+            action={() => {
+              setOpenModal(false)
+            }}
+          >
+            <a
+              href="https://alexon.altebr.jewelry/identity/admin/identities"
+              target="_blank"
+            >
+              {t("go to identification management")}
+            </a>
           </Button>
         </div>
       </Modal>
