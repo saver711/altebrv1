@@ -31,6 +31,8 @@ type Districts_TP = {
   editData?: {
     [key: string]: any
   }
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 type districtsMutate_TP = {
   name: string
@@ -75,6 +77,7 @@ const NewDistrictOptionComponent = ({
     mutationFn: mutateData,
     onSuccess: (data) => {
       queryClient.setQueryData([`districts/${cityId}`], (old: any) => {
+        console.log("first", old)
         if (old && !old.districts) {
           old.districts = []
         }
@@ -165,6 +168,8 @@ export const Districts = ({
   fieldKey,
   label = "district",
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Districts_TP) => {
   /////////// VARIABLES
   ///
@@ -191,7 +196,6 @@ export const Districts = ({
         editData?.nationalAddress?.district.name ||
         editData?.district_id ||
         "اختر المدينه اولا ",
-
     })
   }, [])
 
@@ -215,11 +219,14 @@ export const Districts = ({
     enabled: !!city?.id,
   })
 
-
   //change value
   useEffect(() => {
     if (districts) {
-      setNewValue(null)
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينة اولا",
+      })
       setDistrictId({
         id: "",
         label: "",
@@ -229,6 +236,19 @@ export const Districts = ({
       setFieldValue(distractName, null)
     }
   }, [JSON.stringify(districts)])
+
+  useEffect(() => {
+        if (!editData) {
+          setNewValue({
+            id: "",
+            value: "",
+            label: "اختر المدينة اولا",
+          })
+
+          if (resetSelect) resetSelect()
+        }
+
+  }, [isSuccessPost])
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select
@@ -236,6 +256,7 @@ export const Districts = ({
         label={t(`${label}`).toString()}
         name={distractName}
         isDisabled={!!!city?.id}
+        modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
         // placeholder={

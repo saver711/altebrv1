@@ -11,12 +11,23 @@ import { RefetchErrorHandler } from "../../molecules/RefetchErrorHandler"
 import { CreateNationalities } from "../CreateNationalities"
 ///
 /////////// Types
+type SelectNationalityProps_TP = {
+  name: string
+  editData?: any
+  resetSelect?:any
+  isSuccessPost?:any
+}
 
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
-export const SelectNationality = ({ name, editData }: { name: string , editData?:any }) => {
+export const SelectNationality = ({
+  name,
+  editData,
+  resetSelect,
+  isSuccessPost,
+}: SelectNationalityProps_TP) => {
   /////////// VARIABLES
   ///
 
@@ -51,18 +62,27 @@ export const SelectNationality = ({ name, editData }: { name: string , editData?
   ///
   /////////// SIDE EFFECTS
   ///
-    useEffect(() => {
-      setNewValue({
-        id: editData?.nationality.id,
-        value: editData?.nationality.name,
-        label: editData?.nationality.name || "اختر جنسية",
-      })
-    }, [])
+  useEffect(() => {
+    setNewValue({
+      id: editData?.nationality.id,
+      value: editData?.nationality.name,
+      label: editData?.nationality.name || "اختر جنسية",
+    })
+  }, [])
 
   ///
   /////////// IF CASES
   ///
-
+  useEffect(() => {
+    if (!!!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر جنسية",
+      })
+      if (resetSelect) resetSelect()
+    }
+  }, [isSuccessPost])
   ///
   /////////// FUNCTIONS & EVENTS
   ///
@@ -79,6 +99,7 @@ export const SelectNationality = ({ name, editData }: { name: string , editData?
         options={nationalityOptions}
         loading={nationalityLoading}
         creatable
+        modalTitle={`${t("add nationality")}`}
         CreateComponent={CreateNationalities}
         fieldKey="id"
         value={newValue}

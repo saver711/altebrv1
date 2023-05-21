@@ -79,7 +79,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       title: t("nationalities"),
       name: "nationalities",
       addLabel: `${t("add nationality")}`,
-      addComponent: <CreateNationalities title={`${t("add nationality")}`}  />,
+      addComponent: <CreateNationalities title={`${t("add nationality")}`} />,
       viewLabel: `${t("view nationalities")}`,
       viewHandler: () => navigate("nationalities"),
     },
@@ -135,7 +135,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
       title: t("markets"),
       name: "markets",
       addLabel: `${t("add market")}`,
-      addComponent: <AddMarket title={`${t("add size")}`} />,
+      addComponent: <AddMarket title={`${t("add market")}`} />,
       viewLabel: `${t("view markets")}`,
       viewHandler: () => navigate("markets"),
     },
@@ -250,7 +250,7 @@ export const GlobalAndStones = ({ title }: GlobalAndStonesProps_TP) => {
         <Back path="/system" />
       </div>
 
-      <div className="grid  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {globalCards.map(
           ({
             id,

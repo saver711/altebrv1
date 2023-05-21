@@ -8,13 +8,16 @@ import { useIsRTL } from "../../../hooks"
 import i18n from "../../../i18n"
 import { FormikError } from "../../atoms"
 import { Label } from "../../atoms/Label"
+import { useEffect } from "react"
 ///
 /////////// Types
 ///
 type PhoneInputs_TP = {
   label: string
-  name: "phone" | 'mobile'
+  name: "phone" | "mobile"
   placeholder: string
+  restData?: any
+  isSuccessPost?:any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -27,13 +30,20 @@ const phoneInput = tv({
   },
 })
 ///
-export const PhoneInput = ({ label, name, placeholder }: PhoneInputs_TP) => {
+export const PhoneInput = ({
+  label,
+  name,
+  placeholder,
+  restData,
+  isSuccessPost,
+}: PhoneInputs_TP) => {
   /////////// VARIABLES
   ///
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { setFieldValue, errors, touched, handleBlur } = useFormikContext<any>()
+  const { setFieldValue, errors, touched, handleBlur, resetForm } =
+    useFormikContext<any>()
   ///
   /////////// STATES
   ///
@@ -53,14 +63,19 @@ export const PhoneInput = ({ label, name, placeholder }: PhoneInputs_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-
+  // useEffect(() => {
+  //   if (isSuccessPost) {
+  //     resetForm()
+  //     restData()
+  //     setFieldValue(name, "")
+  //   }
+  // }, [isSuccessPost])
   ///
   return (
     <>
       <div className="col-span-1">
         <div className="flex flex-col gap-1">
           <Label htmlFor={name}>{label}</Label>
-
           <BasePhoneInput
             // ref={console.log("ref")}
             onBlur={handleBlur(name)}
@@ -68,6 +83,7 @@ export const PhoneInput = ({ label, name, placeholder }: PhoneInputs_TP) => {
               error: touched[name] && !!errors.phone,
             })}
             flags={flags}
+            value={isSuccessPost && ""}
             placeholder={placeholder}
             name={name}
             onChange={(number: number | string | undefined) => {

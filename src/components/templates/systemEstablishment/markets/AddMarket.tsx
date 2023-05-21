@@ -17,6 +17,7 @@ import {
 } from "../../../molecules"
 import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
 import { ViewMarkets_TP } from "../view/ViewMarkets"
+import { MarketMainData } from "./MarketMainData"
 
 //import classes from './Markets.module.css'
 ///
@@ -82,7 +83,7 @@ export const AddMarket = ({
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const queryClient = useQueryClient()
-  const { mutate, error, isLoading } = useMutate<MarketType>({
+  const { mutate, error, isLoading, isSuccess , reset } = useMutate<MarketType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
@@ -147,42 +148,13 @@ export const AddMarket = ({
       >
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <Country_city_distract_markets
-                  countryName="country_id"
-                  cityName="city_id"
-                  distractName="district_id"
-                  editData={editData}
-                />
-                <BaseInputField
-                  id="name_ar"
-                  label={`${t("market in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("market in arabic")}`}
-                />
-
-                <BaseInputField
-                  id="name_en"
-                  label={`${t("market in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("market in english")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <MarketMainData
+              editData={editData}
+              title={title}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+              isLoading={isLoading}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

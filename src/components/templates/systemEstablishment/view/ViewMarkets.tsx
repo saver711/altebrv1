@@ -248,10 +248,9 @@ export const ViewMarkets = () => {
       <div className="flex flex-col gap-6 items-center">
         {(isLoading || isRefetching) && <Loading mainTitle={t("markets")} />}
         {isSuccess &&
-          !!!dataSource &&
           !isLoading &&
           !isRefetching &&
-          !!dataSource.length && (
+          dataSource.length === 0 && (
             <div className="mb-5 pr-5">
               <Header
                 header={t("no items")}

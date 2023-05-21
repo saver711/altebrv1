@@ -9,9 +9,9 @@ import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
 import { InnerFormLayout, OuterFormLayout } from "../../../molecules"
 import { Loading } from "../../../organisms/Loading"
-import blankPerson from "../../../../assets/blank-person-image.png"
 import { Branch_Props_TP } from "./ViewBranches"
 import { TextLine } from "../../employee/TextLine"
+import { FilesPreviewOutFormik } from "../../../molecules/files/FilesPreviewOutFormik"
 
 ///
 /////////// Types
@@ -87,20 +87,81 @@ export const OneBranches = ({ title }) => {
         >
           <InnerFormLayout title={data?.name_ar}>
             <TextLine
-              boldText={t("Name")}
+              boldText={t("name")}
               lightString={isRTL ? data.name_ar : data.name_en}
             />
             <TextLine boldText={t("address")} lightString={data.address} />
             <TextLine boldText={t("phone")} lightString={data.phone} />
+            <TextLine boldText={t("branch number")} lightString={data.number} />
+            <TextLine
+              boldText={t("country")}
+              lightString={isRTL ? data.country.name_ar : data.country.name_en}
+            />
             <TextLine
               boldText={t("city")}
               lightString={isRTL ? data.city.name_ar : data.city.name_en}
             />
             <TextLine
+              boldText={t("district")}
+              lightString={
+                isRTL ? data.district.name_ar : data.district.name_en
+              }
+            />
+            <TextLine
+              boldText={t("market")}
+              lightString={isRTL ? data.market.name_ar : data.market.name_en}
+            />
+            <TextLine
               boldText={t("market number")}
               lightString={data.market_number}
             />
-            <TextLine boldText={t("branch number")} lightString={data.number} />
+            <div className=" col-span-4 border border-dashed"></div>
+            <Header
+              className=" col-span-4 text-center capitalize"
+              header={t("documents")}
+            />
+            {data?.document.length > 0 ? (
+              data?.document?.map((doc) => (
+                <>
+                  <TextLine
+                    boldText={t("document name")}
+                    lightString={doc.data.docName}
+                  />
+                  <TextLine
+                    boldText={t("document number")}
+                    lightString={doc.data.docNumber}
+                  />
+                  <TextLine
+                    containerClasses="col-span-2"
+                    boldText={t("end date")}
+                    lightString={doc.data.endDate}
+                  />
+                  <TextLine
+                    boldText={t("reminder days count")}
+                    lightString={doc.data.reminder}
+                  />
+                  <TextLine
+                    boldText={t("document type")}
+                    lightString={doc.data.docType.label}
+                  />
+                  {doc.files?.length !== 0 ? (
+                    <div className="flex items-center">
+                      <p >{t("media")} : </p>
+                      <FilesPreviewOutFormik images={doc?.files} />
+                    </div>
+                  ) : (
+                    <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                      <h3 className="font-bold text-lg">{t("no media")}</h3>
+                    </div>
+                  )}
+                </>
+              ))
+            ) : (
+              <Header
+                className=" col-span-4 text-center capitalize"
+                header={t("no documents")}
+              />
+            )}
             <div className=" col-span-4 border border-dashed"></div>
             <Header
               className=" col-span-4 text-center capitalize"

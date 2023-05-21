@@ -16,9 +16,11 @@ import { OTableDataTypes } from "../../../supply/SupplySecondForm"
 import { BaseInputField, Select } from "../../../molecules"
 import SelectCategory from "../categories/select/SelectCategory"
 import SelectKarat from "../karats/select/SelectKarat"
+import { supplierTax_TP } from "../../../../pages/supply/Supply"
   /////////// HELPER VARIABLES & FUNCTIONS
   ///
   type OTableFormProps_TP = {
+    supplierTax: supplierTax_TP
     dirty: boolean
     setDirty: Dispatch<SetStateAction<boolean>>
     editRow: boolean
@@ -41,6 +43,7 @@ import SelectKarat from "../karats/select/SelectKarat"
   
   ///
   export const GoldTableForm = ({
+    supplierTax,
     dirty,
     setDirty,
     editRow,
@@ -103,7 +106,13 @@ import SelectKarat from "../karats/select/SelectKarat"
       }),
       columnHelper.accessor("wage_tax", {
         header: `${t("wage tax")}`,
-        cell: (info) => formatReyal(info.row.original.weight * info.row.original.wage * 0.15),
+        cell: (info) => {
+          if (supplierTax === 'no' || supplierTax === 'gold') {
+            return 0
+          } else {
+            formatReyal(info.row.original.weight * info.row.original.wage * 0.15)
+          }
+        }
       }),
       columnHelper.accessor("gold_tax", {
         header: `${t("gold tax")}`,
@@ -111,12 +120,16 @@ import SelectKarat from "../karats/select/SelectKarat"
           if (info.row.original.karat_value == '24') {
             return 0
           } else {
-            return formatReyal(
-              info.row.original.weight *
-              Number(formValues?.api_gold_price) *
-              info.row.original.stock * 
-              0.15
-            )
+            if (supplierTax === 'no' || supplierTax === 'wages') {
+              return 0
+            } else {
+              return formatReyal(
+                info.row.original.weight *
+                Number(formValues?.api_gold_price) *
+                info.row.original.stock * 
+                0.15
+              )
+            }
           }
         },
       }),
@@ -435,7 +448,8 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="wage_tax"
                       name="wage_tax"
-                      value={formatReyal(
+                      value={(supplierTax === 'no' || supplierTax === 'gold') ? 0 
+                      : formatReyal(
                         Number(values.weight) *
                         Number(values.wage) *
                         0.15
@@ -443,7 +457,8 @@ import SelectKarat from "../karats/select/SelectKarat"
                       onChange={() =>
                         setFieldValue(
                           "wage_tax",
-                          (Number(values.weight) * Number(values.wage) * 0.15)
+                          (supplierTax === 'no' || supplierTax === 'gold') ? 0 
+                          : (Number(values.weight) * Number(values.wage) * 0.15)
                         )
                       }
                       className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
@@ -453,7 +468,9 @@ import SelectKarat from "../karats/select/SelectKarat"
                     <Field
                       id="gold_tax"
                       name="gold_tax"
-                      value={values.karat_value == '24' ? 0 : formatReyal(
+                      value={values.karat_value == '24' ? 0 
+                      : (supplierTax === 'no' || supplierTax === 'wages') ? 0 
+                      : formatReyal(
                         Number(values.weight) *
                         Number(formValues?.api_gold_price) *
                         Number(values.stock) * 
@@ -462,7 +479,9 @@ import SelectKarat from "../karats/select/SelectKarat"
                       onChange={() =>
                         setFieldValue(
                           "gold_tax",
-                          values.karat_value == '24' ? 0 : (
+                          values.karat_value == '24' ? 0 
+                          : (supplierTax === 'no' || supplierTax === 'wages') ? 0 
+                          : (
                             Number(values.weight) *
                             Number(formValues?.api_gold_price) *
                             Number(values.stock) * 

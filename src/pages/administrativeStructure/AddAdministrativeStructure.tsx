@@ -1,5 +1,6 @@
 /////////// IMPORTS
 ///
+import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik, FormikValues } from "formik"
 import { t } from "i18next"
 import { Helmet } from "react-helmet-async"
@@ -12,11 +13,10 @@ import { mutateData } from "../../utils/mutateData"
 import { notify } from "../../utils/toast"
 import { HandleBackErrors } from "../../utils/utils-components/HandleBackErrors"
 import {
-    addAdministrativeSchema,
-    PermissionGroup_TP,
-    Permission_TP
+  PermissionGroup_TP,
+  Permission_TP,
+  addAdministrativeSchema
 } from "./types-and-schemas"
-import { useQueryClient } from "@tanstack/react-query"
 ///
 /////////// Types
 ///
@@ -24,14 +24,14 @@ type AddAdministrativeStructureProps_TP = {
   title: string
   value?: string
   onAdd?: (value: string) => void
-  editData?:PermissionGroup_TP
+  editData?: PermissionGroup_TP
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 export const AddAdministrativeStructure = ({
-  title,value,onAdd , editData
+  title, value, onAdd, editData
 }: AddAdministrativeStructureProps_TP) => {
   /////////// VARIABLES
   ///
@@ -54,14 +54,14 @@ export const AddAdministrativeStructure = ({
     queryKey: ["roles"],
     endpoint: "administrative/api/v1/permissions/withgrouping",
   })
-  
-  
+
+
   permissions?.map((permissionsGroup) =>
     permissionsGroup.permissions?.map(
       (perm) => (asyncInitValues[perm.id as keyof Permission_TP] = "")
-      )
-      )
-      const queryClient = useQueryClient()
+    )
+  )
+  const queryClient = useQueryClient()
   const {
     mutate,
     isLoading: isMutating,
@@ -69,20 +69,19 @@ export const AddAdministrativeStructure = ({
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
-      notify('success') 
-      if(value && onAdd) {
+      notify('success')
+      if (value && onAdd) {
         onAdd(value)
         queryClient.setQueryData(['allRoles'], (old: any) => {
           return [...old, data]
         })
-      } 
-  },
+      }
+    },
   })
 
   ///
   /////////// STATES
   ///
-
   ///
   /////////// SIDE EFFECTS
   ///
@@ -91,54 +90,55 @@ export const AddAdministrativeStructure = ({
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const addAdminStructureHandler = (values: FormikValues) => {
-    const idsValues = Object.entries(values).map(([key,_])=>{
-      if(values[key] === true) {return key}
-    }).filter(item=> !!item) 
-   
+    const idsValues = Object.entries(values).map(([key, _]) => {
+      if (values[key] === true) { return key }
+    }).filter(item => !!item)
+
     mutate({
       endpointName: "/administrative/api/v1/roles",
-      values: {name: values.name , permissions: idsValues },
+      values: { name: values.name, permissions: idsValues },
     })
   }
   ///
   return (
-    <>
+    <div>
       <Helmet>
         <title>{title}</title>
       </Helmet>
       {permissionsLoading && <Loading mainTitle="تحميل" subTitle="الصلاحيات" />}
       {permissionsError && <p>{error.message}</p>}
-
       {permissionsSuccess && (
-        <Formik
-          onSubmit={addAdminStructureHandler}
-          enableReinitialize={true}
-          initialValues={asyncInitValues}
-          validationSchema={addAdministrativeSchema()}
-        >
-          {({ values, touched }) => (
-            <HandleBackErrors errors={rulePostError?.response.data.errors}>
-              <Form>
-                <OuterFormLayout
-                  submitComponent={
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      className="mr-auto mt-8"
-                      loading={isMutating}
-                    >
-                      {t("confirm")}
-                    </Button>
-                  }
-                  header={title}
-                >
-                  <PermissionForm permissions={permissions} editData={editData} />
-                </OuterFormLayout>
-              </Form>
-            </HandleBackErrors>
-          )}
-        </Formik>
+        <>
+          <Formik
+            onSubmit={addAdminStructureHandler}
+            enableReinitialize={true}
+            initialValues={asyncInitValues}
+            validationSchema={addAdministrativeSchema()}
+          >
+            {({ values, touched }) => (
+              <HandleBackErrors errors={rulePostError?.response.data.errors}>
+                <Form>
+                  <OuterFormLayout
+                    submitComponent={
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        className="mr-auto mt-8"
+                        loading={isMutating}
+                      >
+                        {t("confirm")}
+                      </Button>
+                    }
+                    header={title}
+                  >
+                    <PermissionForm permissions={permissions} editData={editData}/>
+                  </OuterFormLayout>
+                </Form>
+              </HandleBackErrors>
+            )}
+          </Formik>
+        </>
       )}
-    </>
+    </div>
   )
 }

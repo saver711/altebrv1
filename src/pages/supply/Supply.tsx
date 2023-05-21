@@ -30,6 +30,8 @@ type GoldSupplyProps_TP = {
   title: string
 }
 
+export type supplierTax_TP = "no" | "wages" | "gold" | "gold_and_wages"
+
 export type FinalData_TP = {
   table: OTableDataTypes[]
   boxes: BoxesTypes
@@ -42,6 +44,7 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
   const navigate = useNavigate()
   const [stage, setStage] = useState(1)
   const [formValues, setFormValues] = useState<FirstFormInitValues_TP>()
+  const [supplierTax, setSupplierTax] = useState<supplierTax_TP>('no')
   const [finalData, setFinalData] = useState<FinalData_TP>()
   const [data, setData] = useState<OTableDataTypes[]>([])
   const [boxValues, setBoxValues] = useState<OTableDataTypes[]>([])
@@ -132,6 +135,7 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
           key={supply}
           supply={supply}
           nextBondNumber={nextBondNumber?.supply_bond_number}
+          setSupplierTax={setSupplierTax}
           formValues={formValues}
           setFormValues={setFormValues}
           setStage={setStage}
@@ -139,6 +143,7 @@ export const Supply = ({ title }: GoldSupplyProps_TP) => {
       )}
       {stage === 2 && (
         <SupplySecondForm 
+          supplierTax={supplierTax}
           key={supply}
           setBoxesView={setBoxesView}
           supply={supply}

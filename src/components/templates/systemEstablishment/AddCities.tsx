@@ -18,6 +18,7 @@ import {
 } from "../../molecules"
 import { Country_city_distract_markets } from "../reusableComponants/Country_city_distract_markets"
 import { ViewCities_TP } from "./view/ViewCities"
+import { CitiesMainData } from "./CitiesMainData"
 
 ///
 /////////// Types
@@ -84,7 +85,8 @@ export const AddCities = ({
     mutate,
     error: errorQuery,
     isLoading,
-    isSuccess
+    isSuccess,
+    reset,
   } = useMutate<CitiesType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -120,7 +122,6 @@ export const AddCities = ({
       notify("error")
     },
   })
-    console.log("🚀 ~ file: AddCities.tsx:125 ~ isSuccess:", isSuccess)
 
   ///
   /////////// STATES
@@ -163,48 +164,19 @@ export const AddCities = ({
         <Formik
           initialValues={initialValues}
           validationSchema={cityValidatingSchema}
-          onSubmit={(values , {setFieldValue}) => {
+          onSubmit={(values) => {
             handleSubmit(values)
           }}
         >
-          <HandleBackErrors errors={errorQuery?.response.data.errors}>
+          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
             <Form className="w-full">
-              <OuterFormLayout
-                header={title}
-                submitComponent={
-                  <Button
-                    type="submit"
-                    loading={isLoading}
-                    className="ms-auto mt-8"
-                  >
-                    {t("submit")}
-                  </Button>
-                }
-              >
-                <InnerFormLayout title={`${t("main data")}`}>
-                  <Country_city_distract_markets
-                    countryName="country_id"
-                    editData={editData}
-                  />
-                  <BaseInputField
-                    id="name_ar"
-                    label={`${t("city name arabic")}`}
-                    name="name_ar"
-                    type="text"
-                    placeholder={`${t("city name arabic")}`}
-                    required
-                  />
-                  <BaseInputField
-                    id="name_en"
-                    label={`${t("city name english")}`}
-                    name="name_en"
-                    type="text"
-                    placeholder={`${t("city name english")}`}
-                    labelProps={{ className: "mb-1" }}
-                    required
-                  />
-                </InnerFormLayout>
-              </OuterFormLayout>
+              <CitiesMainData
+                editData={editData}
+                title={title}
+                isLoading={isLoading}
+                isSuccessPost={isSuccess}
+                resetSelect={reset}
+              />
             </Form>
           </HandleBackErrors>
         </Formik>

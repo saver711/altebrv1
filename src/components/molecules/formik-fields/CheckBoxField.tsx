@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik"
-import { useEffect } from "react"
+import { Dispatch, SetStateAction, useEffect } from "react"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 import { FormikError } from "../../atoms"
 import { Checkbox } from "../Checkbox"
@@ -8,6 +8,8 @@ import { Checkbox } from "../Checkbox"
 type Props_TP = {
   [key: string]: any
   editData?: PermissionGroup_TP | undefined
+  checked?:boolean
+  setChecked?:Dispatch<SetStateAction<boolean>>
 }
 
 export const CheckBoxField = ({
@@ -15,6 +17,7 @@ export const CheckBoxField = ({
   id,
   name,
   editData,
+  checked,
   ...props
 }: { label: string; name: string } & Props_TP) => {
   const { setFieldValue, setFieldTouched, errors, values } = useFormikContext<{

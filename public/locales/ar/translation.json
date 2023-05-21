@@ -48,7 +48,6 @@
   "branch name in english": "اسم الفرع بالانجليزيه",
   "branch number": "رقم الفرع",
   "branches data are loading": "تحميل بيانات الفروع",
-  "branche data are loading": "تحميل بيانات الفرع",
   "market number": "رقم الفرع بالسوق",
   "address": "العنوان",
   "mobile number": "رقم الجوال",
@@ -263,6 +262,7 @@
   "nationalities": "الجنسيات",
   "gold colors": "لون الذهب",
   "markets": "الاسواق",
+  "market": "السوق",
   "stonesTypes": "انواع الاحجار",
   "stonesColors": "الوان الاحجار",
   "stonesShapes": "اشكال الاحجار",
@@ -408,7 +408,7 @@
   "diamond tax": "ضريبة الالماس",
   "gold bonds": "سندات الذهب",
   "diamond bonds": "سندات الالماس",
-  "gold":"ذهب",
+  "gold": "ذهب",
   "diamond": "الماس",
   "total gold weight": "اجمالي وزن الذهب",
   "item": "قطعة",
@@ -445,9 +445,12 @@
   "edit stones natures":"تعديل طبيعة الحجر",
   "band is closed":"تم اغلاق السند",
   "detailed weight":"اوزان تفصيلية",
+  "select all":"اختيار الكل",
+  "select group":"اختيار المجموعه",
   "try to send to non existing url":"تحاول الارسال على رابط غير موجود",
   "back to digitization page":"الرجوع الى شاشة الترقيم",
   "go to identification management":"الذهاب الى الهويات المرقمة",
   "you are unauthorized to do the process":"لا تملك الصلاحية لاجراء هذه العملية",
-  "add stones natures":"اضافة طبيعة الحجر"
+  "add stones natures":"اضافة طبيعة الحجر",
+  "no tax": "لا يوجد ضريبة"
 }

@@ -211,17 +211,20 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         <title>{title}</title>
       </Helmet>
       {isSuccess &&
-          !!dataSource &&
-          !isLoading &&
-          !isRefetching &&
-          !!dataSource.length && (
-        <BondTotals title={'total bonds'} boxesData={dataSource[0].allboxes} />
-      )}
+        !!dataSource &&
+        !isLoading &&
+        !isRefetching &&
+        !!dataSource.length && (
+          <BondTotals
+            title={"total bonds"}
+            boxesData={dataSource[0].allboxes}
+          />
+        )}
       <div className="flex justify-between my-5">
         <h3 className="text-2xl">{title}</h3>
         <Button
-          action={
-            () => navigate(path === '/gold-bonds' ? `/bonds/gold` : `/bonds/diamond`)
+          action={() =>
+            navigate(path === "/gold-bonds" ? `/bonds/gold` : `/bonds/diamond`)
           }
           className="flex items-center gap-2"
         >
@@ -229,31 +232,31 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         </Button>
       </div>
       {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
-      {isSuccess && !!!dataSource && !isLoading && !isRefetching && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t('no items')}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
+      {isSuccess && dataSource.length === 0 && (
+        <div className="mb-5 pr-5">
+          <Header
+            header={t("no items")}
+            className="text-center text-2xl font-bold"
+          />
+        </div>
       )}
-      <div className="" >
-      {isSuccess &&
+      <div className="">
+        {isSuccess &&
           !!dataSource &&
           !isLoading &&
           !isRefetching &&
           !!dataSource.length && (
             <>
-              <Table key={path} data={dataSource} columns={
-                path === '/gold-bonds' ? goldCols : diamondCols
-                }>
+              <Table
+                key={path}
+                data={dataSource}
+                columns={path === "/gold-bonds" ? goldCols : diamondCols}
+              >
                 <div className="mt-3 flex items-center justify-end gap-5 p-2">
                   <div className="flex items-center gap-2 font-bold">
-                    {t('page')}
-                    <span className=" text-mainGreen">
-                      {data.current_page}
-                    </span>
-                    {t('from')}
+                    {t("page")}
+                    <span className=" text-mainGreen">{data.current_page}</span>
+                    {t("from")}
                     <span className=" text-mainGreen">{data.pages}</span>
                   </div>
                   <div className="flex items-center gap-2 ">
@@ -262,14 +265,22 @@ export const Bonds = ({ title }: BondsProps_TP) => {
                       action={() => setPage((prev) => prev - 1)}
                       disabled={page == 1}
                     >
-                      {isRTL ? <MdKeyboardArrowRight className="h-4 w-4 fill-white" /> : <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />}
+                      {isRTL ? (
+                        <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                      ) : (
+                        <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                      )}
                     </Button>
                     <Button
                       className=" rounded bg-mainGreen p-[.18rem] "
                       action={() => setPage((prev) => prev + 1)}
                       disabled={page == data.pages}
                     >
-                      {isRTL ? <MdKeyboardArrowLeft className="h-4 w-4 fill-white" /> : <MdKeyboardArrowRight className="h-4 w-4 fill-white" />}
+                      {isRTL ? (
+                        <MdKeyboardArrowLeft className="h-4 w-4 fill-white" />
+                      ) : (
+                        <MdKeyboardArrowRight className="h-4 w-4 fill-white" />
+                      )}
                     </Button>
                   </div>
                 </div>
