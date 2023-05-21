@@ -43,13 +43,14 @@ export const CreateBranch = ({
   const initialValues = {
     name_ar: editData ? editData.name_ar : "",
     name_en: editData ? editData.name_en : "",
-    city_id: editData ? editData.city.name_ar : "",
-    district_id: editData ? editData.district.name_ar : "",
-    market_id: editData ? editData.market.name_ar : "",
+    city_id: editData ? editData.city.id : "",
+    district_id: editData ? editData.district.id : "",
+    market_id: editData ? editData.market.id : "",
     market_number: editData ? editData.market_number : "",
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
     number: editData ? editData.number : "",
+    // national address data
     building_number: editData ? editData.nationalAddress.building_number : "",
     street_number: editData ? editData.nationalAddress.street_number : "",
     sub_number: editData ? editData.nationalAddress.sub_number : "",
@@ -92,9 +93,9 @@ export const CreateBranch = ({
       }))
     : []
 
-    const [docsFormValues, setDocsFormValues] =
+  const [docsFormValues, setDocsFormValues] =
     useState<allDocs_TP[]>(incomingData)
-    ///
+  ///
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
@@ -122,6 +123,7 @@ export const CreateBranch = ({
       endpointName: "branch/api/v1/branches",
       values: {
         ...values,
+        document: docsFormValues,
         nationalAddress: {
           address: values.address,
           country_id: values.country_id,
@@ -132,9 +134,9 @@ export const CreateBranch = ({
           sub_number: values.sub_number,
           zip_code: values.zip_code,
         },
-        document: docsFormValues,
       },
     })
+    console.log("branch", values)
   }
 
   ///
@@ -143,10 +145,47 @@ export const CreateBranch = ({
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          PostNewValue(values)
-          console.log("branch", values)
+          let editedValues = {
+            ...values,
+            document: docsFormValues,
+            nationalAddress: {
+              address: values.address,
+              country_id: values.country_id,
+              city_id: values.city_id,
+              district_id: values.district_id,
+              building_number: values.building_number,
+              street_number: values.street_number,
+              sub_number: values.sub_number,
+              zip_code: values.zip_code,
+            },
+          }
+          if (!!editData) {
+            let { document, ...editedValuesWithoutDocument } = editedValues
+            if (docsFormValues.length > editData.document.length)
+              editedValues = {
+                ...editedValues,
+                document: editedValues.document.slice(editData.document.length),
+              }
+            if (docsFormValues.length === editData.document.length)
+              editedValues = editedValuesWithoutDocument
+            console.log("editedValues", editedValues)
+            mutate({
+              endpointName: `branch/api/v1/branches/${editData.id}`,
+              values: editedValues,
+              dataType: "formData",
+              editWithFormData: true,
+            })
+          } else {
+            mutate({
+              endpointName: "branch/api/v1/branches",
+              values: editedValues,
+              dataType: "formData",
+            })
+          }
+          console.log("values", editedValues)
         }}
-        // validationSchema={validationSchema}
+
+        validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
           <OuterFormLayout header={t("add branch")}>

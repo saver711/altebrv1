@@ -134,7 +134,7 @@ export const SupplierMainData = ({
           required
           label={`${t("address")}`}
           name="address"
-          type="text"
+          type="text" 
           placeholder={`${t("address")}`}
           labelProps={{ className: "mb-1" }}
         />

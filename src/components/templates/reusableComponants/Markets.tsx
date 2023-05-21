@@ -71,7 +71,6 @@ const NewMarketOptionComponent = ({
       console.log("onSuccess marketData", data)
       queryClient.setQueryData([`market/${districtId}`], (old: any) => {
         console.log("data", data)
-        console.log("old", old)
         if (old && !old.markets) {
           old.markets = []
         }
