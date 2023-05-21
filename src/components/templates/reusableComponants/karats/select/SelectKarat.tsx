@@ -8,6 +8,7 @@ import { SelectOption_TP } from "../../../../../types"
 import { Select } from "../../../../molecules"
 import CreateKarat from "../../../reusableComponants/karats/create/CreateKarat"
 import { SelectionTP } from "../../../../molecules/table/types"
+import { sortKarats } from "../../../../../api/sortKarats"
 
 ///
 /////////// Types
@@ -33,12 +34,12 @@ const SelectKarat = ({ name, field, label, onChange , value}: SelectKaratProps_T
     endpoint: "classification/api/v1/karats",
     queryKey: ["karats"],
     select: (karats) => {
-      return karats.map((karat: any) => ({
+      return sortKarats(karats.map((karat: any) => ({
         id: karat.id,
         label: karat.name,
         name: karat.name,
         value: karat.name,
-      }))
+      })))
     }
   })
 

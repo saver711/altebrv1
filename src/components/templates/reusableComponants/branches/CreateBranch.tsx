@@ -39,22 +39,30 @@ export const CreateBranch = ({
 }: CreateBranchProps_TP) => {
   /////////// VARIABLES
   ///
-  console.log("v", editData)
-  const initialValues: InitialValues_TP = {
+  console.log("branch editData", editData)
+  const initialValues = {
     name_ar: editData ? editData.name_ar : "",
     name_en: editData ? editData.name_en : "",
-    city_id: editData ? editData.city.name_ar : "",
-    district_id: editData ? editData.district.name_ar : "",
-    market_id: editData ? editData.market.name_ar : "",
+    city_id: editData ? editData.city.id : "",
+    district_id: editData ? editData.district.id : "",
+    market_id: editData ? editData.market.id : "",
     market_number: editData ? editData.market_number : "",
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
     number: editData ? editData.number : "",
+    // national address data
     building_number: editData ? editData.nationalAddress.building_number : "",
     street_number: editData ? editData.nationalAddress.street_number : "",
     sub_number: editData ? editData.nationalAddress.sub_number : "",
     address: editData ? editData.nationalAddress.address : "",
     zip_code: editData ? editData.nationalAddress.zip_code : "",
+    // document type
+    docType: "",
+    docName: "",
+    docNumber: "",
+    endDate: new Date(),
+    reminder: "",
+    files: [],
   }
   const validationSchema = Yup.object({
     name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -75,6 +83,18 @@ export const CreateBranch = ({
 
   /////////// STATES
   ///
+  //@ts-ignore
+  const incomingData = !!editData
+    ? editData!.document.map((item) => ({
+        ...item.data,
+        endDate: new Date(item.data.endDate),
+        files: item?.files || [],
+        id: item.id,
+      }))
+    : []
+
+  const [docsFormValues, setDocsFormValues] =
+    useState<allDocs_TP[]>(incomingData)
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -103,39 +123,68 @@ export const CreateBranch = ({
       endpointName: "branch/api/v1/branches",
       values: {
         ...values,
+        document: docsFormValues,
         nationalAddress: {
-          sub_number: values.sub_number,
+          address: values.address,
+          country_id: values.country_id,
           city_id: values.city_id,
           district_id: values.district_id,
-          zip_code: values.zip_code,
-          address: values.address,
           building_number: values.building_number,
           street_number: values.street_number,
+          sub_number: values.sub_number,
+          zip_code: values.zip_code,
         },
       },
     })
+    console.log("branch", values)
   }
-  //@ts-ignore
-  const incomingData = !!editData
-    ? editData!.document.map((item) => ({
-        ...item.data,
-        endDate: new Date(item.data.endDate),
-        files: item?.files || [],
-        id: item.id,
-      }))
-    : []
 
-  const [docsFormValues, setDocsFormValues] =
-    useState<allDocs_TP[]>(incomingData)
   ///
   return (
     <div className="flex items-center justify-between gap-2">
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          PostNewValue(values)
-          console.log("formik", values)
+          let editedValues = {
+            ...values,
+            document: docsFormValues,
+            nationalAddress: {
+              address: values.address,
+              country_id: values.country_id,
+              city_id: values.city_id,
+              district_id: values.district_id,
+              building_number: values.building_number,
+              street_number: values.street_number,
+              sub_number: values.sub_number,
+              zip_code: values.zip_code,
+            },
+          }
+          if (!!editData) {
+            let { document, ...editedValuesWithoutDocument } = editedValues
+            if (docsFormValues.length > editData.document.length)
+              editedValues = {
+                ...editedValues,
+                document: editedValues.document.slice(editData.document.length),
+              }
+            if (docsFormValues.length === editData.document.length)
+              editedValues = editedValuesWithoutDocument
+            console.log("editedValues", editedValues)
+            mutate({
+              endpointName: `branch/api/v1/branches/${editData.id}`,
+              values: editedValues,
+              dataType: "formData",
+              editWithFormData: true,
+            })
+          } else {
+            mutate({
+              endpointName: "branch/api/v1/branches",
+              values: editedValues,
+              dataType: "formData",
+            })
+          }
+          console.log("values", editedValues)
         }}
+
         validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
@@ -211,7 +260,7 @@ export const CreateBranch = ({
                 {/* market  end */}
 
                 {/* market number start */}
-                <div className="col-sapn-1">
+                <div className="col-span-1">
                   <BaseInputField
                     id="market_number"
                     label={`${t("market number")}`}
@@ -224,7 +273,7 @@ export const CreateBranch = ({
                 {/* market number  end */}
 
                 {/* address start */}
-                <div className="col-sapn-1">
+                <div className="col-span-1">
                   <BaseInputField
                     id="address"
                     label={`${t("address")}`}

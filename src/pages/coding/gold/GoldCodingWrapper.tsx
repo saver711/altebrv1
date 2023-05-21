@@ -117,7 +117,7 @@ const [selectedSanad, setSelectedSanad] = useState<GoldSanad_TP | undefined>(
   };
 
   useEffect(() => {
-    if(!!!addedPieces.length){
+    if(!!!addedPieces.length && stage === 2 ){
       setOpenModal(true)
       setTableKey(prev=>prev+1)
     }

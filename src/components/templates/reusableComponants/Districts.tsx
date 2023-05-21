@@ -77,6 +77,7 @@ const NewDistrictOptionComponent = ({
     mutationFn: mutateData,
     onSuccess: (data) => {
       queryClient.setQueryData([`districts/${cityId}`], (old: any) => {
+        console.log("first", old)
         if (old && !old.districts) {
           old.districts = []
         }
