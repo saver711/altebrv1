@@ -73,7 +73,7 @@ export const OneBranches = ({ title }) => {
       {isLoading && (
         <Loading
           subTitle={`${t("loading")}`}
-          mainTitle={`${t("branche data are loading")}`}
+          mainTitle={`${t("branches data are loading")}`}
         />
       )}
       {isSuccess && !isLoading && (
@@ -146,7 +146,7 @@ export const OneBranches = ({ title }) => {
                   />
                   {doc.files?.length !== 0 ? (
                     <div className="flex items-center">
-                      <p >{t("media")} : </p>
+                      <p>{t("media")} : </p>
                       <FilesPreviewOutFormik images={doc?.files} />
                     </div>
                   ) : (
