@@ -166,8 +166,9 @@ export const GoldCodingSanadFormHandler = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { values, setFieldValue, setFieldError, submitForm, isSubmitting } =
-    useFormikContext<GoldCodingSanad_initialValues_TP>()
+  const { values, setFieldValue, setFieldError, submitForm, isSubmitting,isValid } =
+  useFormikContext<GoldCodingSanad_initialValues_TP>()
+  console.log(`values:`, values)
 
   /* FETCH SANAD */
   const {
@@ -231,6 +232,8 @@ export const GoldCodingSanadFormHandler = ({
       setFieldValue("karat_value", activeBand.goldKarat)
       setFieldValue("wage", activeBand.wage)
       setFieldValue("init_wage", activeBand.wage)
+
+      setStones([])
       
       setItemsToShowInCaseOfTa2m([])
       setSizes([])
@@ -409,6 +412,7 @@ export const GoldCodingSanadFormHandler = ({
             totalLeftWeight !== 0 &&
             <Button action={()=>{
               submitForm()
+              // if(isValid) setFieldValue("left_weight", activeBand?.leftWeight - values.weight)
             }}>{t("save")}</Button>
             }
           </div>

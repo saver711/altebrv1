@@ -76,7 +76,6 @@ export const Operation = ({ title }: Operation_Props_TP) => {
           <div className="grid grid-cols-4 gap-4 gap-y-6">
             {operations?.map((operation) => {
               return (
-                <>
                   <div className="col-span-1 w-full" key={operation.id}>
                     <ShowButton
                       action={() => {
@@ -86,7 +85,6 @@ export const Operation = ({ title }: Operation_Props_TP) => {
                       variant="secondary"
                     />
                   </div>
-                </>
               )
             })}
           </div>
