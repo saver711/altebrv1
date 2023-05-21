@@ -40,8 +40,8 @@ const SelectCategory = ({
     ExtendedCategory_TP[]
   >({
     endpoint: all
-      ? "classification/api/v1/categories?per_page=10000"
-      : "classification/api/v1/categories?per_page=10000",
+      ? "classification/api/v1/categories?type=all"
+      : "classification/api/v1/categories?type=all",
     queryKey: ["categories"],
     select: (categories) => {
       if (showNotDefinedType) {
