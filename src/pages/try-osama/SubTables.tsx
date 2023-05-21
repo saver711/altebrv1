@@ -23,7 +23,6 @@ import { StoneTable } from "./StoneTable"
 const columnHelper = createColumnHelper<any>()
 
 export const SubTables = ({ subTableData  , addedPieces}: any) => {
-  console.log("🚀 ~ file: SubTables.tsx:26 ~ SubTables ~ addedPieces:", addedPieces)
   /// variables
   const selectedRow = subTableData.data.filter(
     (item) => item.index === subTableData.index
@@ -69,7 +68,7 @@ export const SubTables = ({ subTableData  , addedPieces}: any) => {
 
   const {data:allCategories , isLoading:categoryLoading , isSuccess} = useFetch({
     endpoint:"/classification/api/v1/categories?type=all",
-    queryKey:['categoriesTable'],
+    queryKey:['categoriesx'],
    })
 
   useEffect(() => {
