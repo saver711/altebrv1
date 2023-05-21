@@ -32,26 +32,18 @@ export const PermissionGroup = ({
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { setFieldValue , values } = useFormikContext()
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// STATES
   ///
+
   ///
   /////////// SIDE EFFECTS
   ///
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
- const handleCheckGroup = (e:any)=>{
- const checkedBoxesIdGroupArray =  permissions.map((group)=>{
-  if(name !=='name' && e.target.name === name)
-  return group
- }
-  )
-//  console.log("🚀 ~ file: PermissionGroup.tsx:47 ~ handleCheckGroup ~ checkedBoxesGroupStatus:", checkedBoxesIdGroupArray)
 
- }
- 
   ///
   return (
     <div className="flex flex-col w-full gap-4 border-b-2 border-mainGreen border-opacity-20 pb-5 border-dashed">
@@ -59,7 +51,6 @@ export const PermissionGroup = ({
         <h4 className="flex items-center text-lg ml-8">{name}</h4>
         <div>
         <input type="checkbox" id='check_all' name={name} onChange={(e) => {
-          handleCheckGroup(e)
             permissions.map(group=>{
               if(name !=='name' && e.target.name === name)
               Object.values(group).map(value=>{
