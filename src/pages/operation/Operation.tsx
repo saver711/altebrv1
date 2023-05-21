@@ -40,7 +40,7 @@ export const Operation = ({ title }: Operation_Props_TP) => {
     error,
   } = useFetch<Operation__TP[]>({
     queryKey: ["operations"],
-    endpoint: `/accounting/api/v1/operations`,
+    endpoint: `/accounting/api/v1/operations?per_page=10000`,
   })
   ///
   /////////// STATES
