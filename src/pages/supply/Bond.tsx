@@ -54,6 +54,9 @@ type Contract_TP = {
     stocks: number
     id: string
     gold_wage: number
+    gold_tax: number
+    wage_tax: number
+    total_tax: number
     payoffTaxes: number
     wage: number
     totalWage: number
@@ -107,6 +110,9 @@ export const Bond = ({ title }: BondProps_TP) => {
           itemTaxes: item.totalWage,
           payoffTaxes: item.totalWage,
           entity_gold_price: contract.entity_gold_price,
+          gold_tax: item.gold_tax,
+          wage_tax: item.wage_tax,
+          total_tax: item.total_tax,
           id: item.id,
           goldKarat: item.goldKarat.name,
           goldWeight: item.goldWeight,
@@ -196,35 +202,18 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('wage tax')}`,
-        cell: (info) => formatReyal(Number(info.renderValue()) * (15/100)),
-        accessorKey: 'payoffTaxes',
+        cell: (info) => info.renderValue() == 0 ? t('no tax') : formatReyal(Number(info.renderValue())),
+        accessorKey: 'wage_tax',
       },
       {
         header: `${t('gold tax')}`,
-        cell: (info) => {
-          if (info.row.original.goldKarat == '24') {
-            return 0
-          } else {
-            return formatReyal((Number(info.row.original.goldWeight) * 
-            Number(info.row.original.entity_gold_price) * 15 * 
-            Number(info.row.original.itemStock)) / 100)
-          }
-        },
-        accessorKey: 'goldTaxes',
+        cell: (info) => info.renderValue() == 0 ? t('no tax') : formatReyal(Number(info.renderValue())),
+        accessorKey: 'gold_tax',
       },
       {
         header: `${t('total tax')}`,
-        cell: (info) => {
-          if (info.row.original.goldKarat == '24') {
-            return formatReyal(Number(info.renderValue()) * (15/100))
-          } else {
-            return formatReyal(((Number(info.row.original.goldWeight) *
-             Number(info.row.original.entity_gold_price) * 15 * 
-             Number(info.row.original.itemStock)) / 100) + 
-             (Number(info.renderValue()) * (15/100)))
-          }
-        },
-        accessorKey: 'itemTaxes',
+        cell: (info) => info.renderValue() == 0 ? t('no tax') : formatReyal(Number(info.renderValue())),
+        accessorKey: 'total_tax',
       },
     ],
     []
@@ -383,7 +372,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         <BondTotals boxesData={contract?.boxes} />
       )}
       {isSuccess && !!!contract?.boxes?.length && !isLoading && !isFetching && (
-        <h2 className="text-center">لايوجد إجماليات</h2>
+        <h2 className="text-center">{t('no items')}</h2>
       )}
       {!(isLoading || isFetching) && isSuccess && !!contract?.items?.length && (
         <div className="my-9">
@@ -391,7 +380,7 @@ export const Bond = ({ title }: BondProps_TP) => {
         </div>
       )}
       {isSuccess && !!!contract?.items?.length && !isLoading && !isFetching && (
-        <h2 className="text-center">لايوجد بنود</h2>
+        <h2 className="text-center">{t('no bonds')}</h2>
       )}
       {!(isLoading || isFetching) && isSuccess && !!restrictions?.length && (
         <>

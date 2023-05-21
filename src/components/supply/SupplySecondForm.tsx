@@ -13,8 +13,10 @@ import { FirstFormInitValues_TP } from "./formInitialValues_types"
 import { notify } from "../../utils/toast"
 import { BoxesView, Box_TP } from "./BoxesView"
 import { DiamondTable } from "../templates/reusableComponants/diamond-table/DiamondTable"
+import { supplierTax_TP } from "../../pages/supply/Supply"
 ///
 type GoldSupplySecondFormProps_TP = {
+    supplierTax: supplierTax_TP
     setBoxesView: Dispatch<SetStateAction<Box_TP[] | undefined>>
     supply: Supply_TP
     formValues: FirstFormInitValues_TP | undefined
@@ -58,6 +60,7 @@ export type OTableDataTypes = GoldTableProperties_TP & TableHelperValues_TP
 
 ///
 export const SupplySecondForm = ({ 
+    supplierTax,
     formValues, 
     supply,
     setStage, 
@@ -153,10 +156,23 @@ export const SupplySecondForm = ({
             title: 'total tax',
             value: boxValues.reduce((acc, curr) => {
                 if (curr.karat_value == '24') {
-                    return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
+                    if (supplierTax === 'no' || supplierTax === 'gold') {
+                        return 0
+                    } else {
+                        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
+                    }
                 } else {
-                    return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 
-                    (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+                    if (supplierTax === 'no') {
+                        return 0
+                    } else if (supplierTax === 'gold') {
+                        return +acc + (0 + 
+                        (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+                    } else if (supplierTax === 'wages') {
+                        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 0)
+                    } else {
+                        return +acc + ((Number(curr.weight) * (Number(curr.wage)) * .15) + 
+                        (Number(curr.weight) * Number(curr.stock) * Number(formValues?.api_gold_price) * .15))
+                    }
                 }
             }, 0),
             unit: 'reyal'
@@ -226,6 +242,8 @@ export const SupplySecondForm = ({
             unit: box.unit,
         }
     })
+
+    console.log(supplierTax)
     ///
     return <>
         <OuterFormLayout>
@@ -247,6 +265,7 @@ export const SupplySecondForm = ({
             <div className="flex flex-col gap-6 items-center">
                 {supply == 'gold' ? 
                 <GoldTable 
+                    supplierTax={supplierTax}
                     dirty={dirty} 
                     setDirty={setDirty} 
                     data={data} 
@@ -301,8 +320,10 @@ export const SupplySecondForm = ({
                                         ...item,
                                         number: `${i + 1}`,
                                         total_wages: (Number(item.weight) * Number(item.wage)),
-                                        wage_tax: (Number(item.weight) * Number(item.wage) * .15),
-                                        gold_tax: item.karat_value == '24' ? 0 : (Number(item.weight) * 
+                                        wage_tax: (supplierTax === 'no' || supplierTax === 'gold') ? 0 
+                                        : (Number(item.weight) * Number(item.wage) * .15),
+                                        gold_tax: (supplierTax === 'no' || supplierTax === 'wages') ? 0 
+                                        : item.karat_value == '24' ? 0 : (Number(item.weight) * 
                                         Number(formValues?.api_gold_price) * Number(item.stock) * .15 || 0),
                                     } : {
                                         ...item,
