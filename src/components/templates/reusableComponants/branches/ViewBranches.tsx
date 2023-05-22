@@ -15,6 +15,7 @@ import { useState } from "react"
 
 import { Modal } from "../../../molecules"
 import { CreateBranch } from "./CreateBranch"
+import { CImageFile_TP } from "../../../../types"
 
 ///
 /////////// Types
@@ -72,7 +73,22 @@ export type Branch_Props_TP = {
     sub_number: string
     zip_code: string
   }
-  document: {}[]
+  document: {
+    id: string
+    data: {
+      docName: string
+      docNumber: string
+      docType: {
+        id: string
+        label: string
+        value: string
+      }
+      endDate: string
+      id: string
+      reminder: string
+    }
+    files: CImageFile_TP[]
+  }[]
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -172,13 +188,13 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
                   <EditIcon />
                 </Button>
                 {/* حذف */}
-                {/* <Button
+                <Button
                   variant="danger"
                   className="flex items-center mx-1"
                   action={() => {}}
                 >
                   <DeleteIcon />
-                </Button> */}
+                </Button>
               </div>
             </div>
           ))}

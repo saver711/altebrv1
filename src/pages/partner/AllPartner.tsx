@@ -275,18 +275,14 @@ export const AllPartner = ({ title }: AllPartnerProps_TP) => {
         {(partnersLoading || isRefetching) && (
           <Loading mainTitle={t("partners")} />
         )}
-        {isSuccess &&
-          !!!dataSource &&
-          !partnersLoading &&
-          !isRefetching &&
-          !!dataSource.length && (
-            <div className="mb-5 pr-5">
-              <Header
-                header={t("no items")}
-                className="text-center text-2xl font-bold"
-              />
-            </div>
-          )}
+        {isSuccess && dataSource.length === 0 && (
+          <div className="mb-5 pr-5">
+            <Header
+              header={t("no items")}
+              className="text-center text-2xl font-bold"
+            />
+          </div>
+        )}
         {isSuccess &&
           !!dataSource &&
           !partnersLoading &&

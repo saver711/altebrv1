@@ -17,10 +17,12 @@ import { RefetchErrorHandler } from "../molecules/RefetchErrorHandler"
 import { DropFile } from "../molecules/files/DropFile"
 import { Supplier_TP } from "../templates/systemEstablishment/supplier/supplier-types"
 import { diamondValidatingSchema, FirstFormInitValues_TP, goldValidatingSchema } from "./formInitialValues_types"
-import { Supply_TP } from "../../pages/supply/Supply"
+import { supplierTax_TP, Supply_TP } from "../../pages/supply/Supply"
+import { Dispatch, SetStateAction } from "react"
 
 ///
 type FirstFormProps_TP = {
+    setSupplierTax: Dispatch<SetStateAction<supplierTax_TP>>
     supply: Supply_TP
     formValues: FirstFormInitValues_TP | undefined
     setFormValues: React.Dispatch<React.SetStateAction<FirstFormInitValues_TP | undefined>>
@@ -31,6 +33,7 @@ type FirstFormProps_TP = {
 ///
 ///
 export const SupplyFirstForm = ({
+    setSupplierTax,
     supply,
     formValues,
     setFormValues,
@@ -59,13 +62,17 @@ export const SupplyFirstForm = ({
         ({
             endpoint: "/supplier/api/v1/suppliers",
             queryKey: ["suppliers"],
+            onSuccess(data) {
+              console.log(data)
+            },
             select: (suppliers) => suppliers.map((supplier) => {
                 return {
                     //@ts-ignore
                     id: supplier.id,
                     value: supplier.name,
                     label: supplier.name,
-                    name: supplier.name
+                    name: supplier.name,
+                    tax: supplier.tax
                 }
             })
         })
@@ -256,6 +263,7 @@ export const SupplyFirstForm = ({
                       onChange={(option: any) => {
                         setFieldValue("supplier_value", option!.value)
                         setFieldValue("supplier_id", option!.id)
+                        setSupplierTax(option.tax)
                       }}
                       value={{
                         value:

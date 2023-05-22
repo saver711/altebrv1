@@ -10,7 +10,7 @@ import {
   getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable,
+  useReactTable
 } from "@tanstack/react-table"
 import { t } from "i18next"
 import { useEffect, useMemo, useState } from "react"
@@ -21,7 +21,7 @@ import { Modal } from "../../components/molecules"
 import { useFetch, useLocalStorage } from "../../hooks"
 import {
   GoldCodingSanad_initialValues_TP,
-  GoldSanad_TP,
+  GoldSanad_TP
 } from "../coding/coding-types-and-helpers"
 import { SubTables } from "./SubTables"
 
@@ -90,12 +90,15 @@ export function ExpandableTable({
       }),
       columnHelper.accessor("category", {
         header: `${t("category")}`,
-      }), 
+      }),
       columnHelper.accessor("model_number", {
         header: `${t("model number")}`,
       }),
       columnHelper.accessor("weight", {
         header: `${t("weight")}`,
+      }),
+      columnHelper.accessor("mezan_weight", {
+        header: `الوزن الفعلي`,
       }),
       columnHelper.accessor("wage", {
         header: `${t("wage")}`,
@@ -125,7 +128,7 @@ export function ExpandableTable({
                       size={23}
                       action={() => {
                         const row: GoldCodingSanad_initialValues_TP =
-                        info.row.original
+                          info.row.original
                         const thisId = row.front_key
                         setData((curr) =>
                           curr.filter((piece) => piece.front_key !== thisId)
@@ -142,7 +145,8 @@ export function ExpandableTable({
                             if (band.id === row.band_id) {
                               return {
                                 ...band,
-                                leftWeight: +band.leftWeight + +row.mezan_weight,
+                                leftWeight:
+                                  +band.leftWeight + +row.mezan_weight,
                               }
                             } else {
                               return band
@@ -172,8 +176,12 @@ export function ExpandableTable({
             }),
           ]
         : []),
+
+      columnHelper.accessor("status", {
+        header: `الحالة`,
+      }),
     ],
-    [addedPieces]
+    []
   )
   const table = useReactTable({
     data,

@@ -29,6 +29,8 @@ type Cities_TP = {
   distractName?: string
   label?: string
   fieldKey?: "id" | "value" | undefined
+  isSuccessPost?: boolean
+  resetSelect?: () => void
 }
 type CitiesMutate_TP = {
   name: string
@@ -159,6 +161,8 @@ export const Cities = ({
   fieldKey,
   label = "city",
   editData,
+  isSuccessPost,
+  resetSelect,
 }: Cities_TP) => {
   /////////// VARIABLES
   ///
@@ -184,9 +188,10 @@ export const Cities = ({
         editData?.nationalAddress?.city?.name ||
         editData?.city_name ||
         "اختر الدوله اولا",
-
     })
   }, [])
+
+
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -211,9 +216,6 @@ export const Cities = ({
     enabled: !!country?.id,
   })
 
-
-
-
   useEffect(() => {
     if (cities) {
       setNewValue(null)
@@ -223,8 +225,16 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    setFieldValue("city_value", "")
-  }, [country?.id])
+     if (!editData) {
+       setNewValue({
+         id: "",
+         value: "",
+         label: "اختر الدوله اولا",
+       })
+
+       if (resetSelect) resetSelect()
+     }
+  }, [isSuccessPost])
 
   ///
   return (
@@ -233,6 +243,7 @@ export const Cities = ({
         id={cityName}
         label={t(`${label}`).toString()}
         name={cityName}
+        modalTitle={`${t("add city")}`}
         isDisabled={!!!country?.id}
         loadingPlaceholder={`${
           !country?.id ? "اختر الدولة أولا" : t("loading")

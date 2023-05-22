@@ -18,8 +18,9 @@ import {
   BaseInputField,
   InnerFormLayout,
   OuterFormLayout,
-  Select
+  Select,
 } from "../../../molecules"
+import { SizeFormMainData } from "./SizeFormMainData"
 /////////// Types
 ///
 type sizesTypes_TP = {
@@ -127,10 +128,11 @@ const NewSizeTypeOptionComponent = ({
     </div>
   )
 }
-type SizeForm_TP={
-  showCategories?:boolean
-  setModel?:Dispatch<SetStateAction<boolean>>
-  editData?:any
+type SizeForm_TP = {
+  showCategories?: boolean
+  setModel?: Dispatch<SetStateAction<boolean>>
+  editData?: any
+  title?: string
 }
 
 export const SizesForm = ({
@@ -238,6 +240,8 @@ export const SizesForm = ({
     mutate: sizesMutate,
     isLoading: isLoadingSizes,
     error,
+    isSuccess,
+    reset,
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -260,12 +264,12 @@ export const SizesForm = ({
 
   const handleSubmit = (values: any) => {
     sizesMutate({
-      endpointName: editData
+      endpointName: editData  
         ? `/size/api/v1/sizes/${editData.id}`
         : "/size/api/v1/sizes",
       values: {
         type: !showCategories ? values.type : values.sizeType,
-        start: values.start,
+        start:  values.start,
         end: values.end,
         increase: values.increase,
       },
@@ -280,89 +284,24 @@ export const SizesForm = ({
         onSubmit={(values) => handleSubmit(values)}
         //validationSchema={validatingSchema}
       >
-        {({ setFieldValue, values }) => (
-          <Form>
-            <HandleBackErrors errors={error?.response?.data?.errors}>
-              <OuterFormLayout
-                header={title}
-                submitComponent={
-                  <Button
-                    loading={isLoadingSizes}
-                    type="submit"
-                    className="ms-auto mt-8"
-                  >
-                    {t("submit")}
-                  </Button>
-                }
-              >
-                <InnerFormLayout title={`${t("main data")}`}>
-                  {showCategories && (
-                    <Select
-                      label="نوع المقاس"
-                      name="sizeType"
-                      id="sizeType"
-                      isMulti={false}
-                      required
-                      isDisabled={!!!categoryID?.id}
-                      placeholder={
-                        categoryID?.id &&
-                        `
-                    ${sizeTypes?.length !== 0 ? "اختر النوع" : "لا يوجد "} `
-                      }
-                      loadingPlaceholder={`${
-                        !categoryID?.id ? "اختر الصنف أولا" : t("loading")
-                      }`}
-                      loading={loadingSizeType}
-                      creatable={true}
-                      CreateComponent={NewSizeTypeOptionComponent}
-                      // onComplexCreate={(value) => {}}
-                      options={sizeTypes}
-                      value={newValue}
-                      onChange={(option: SingleValue<SelectOption_TP>) => {
-                        setNewValue(option)
-                      }}
-                      fieldKey="id"
-                    />
-                  )}
-                  {!showCategories && (
-                    <BaseInputField
-                      id="type"
-                      label={`${t("size type")}`}
-                      name="type"
-                      type="text"
-                      placeholder={`${t("size type")}`}
-                      required
-                    />
-                  )}
-                  <BaseInputField
-                    id="start"
-                    label=" بدايه معدل المقاس"
-                    name="start"
-                    type="text"
-                    placeholder="من ..."
-                    required
-                  />
-                  <BaseInputField
-                    id="end"
-                    label=" نهايه معدل المقاس"
-                    name="end"
-                    type="text"
-                    placeholder="الي ..."
-                    required
-                  />
-                  <BaseInputField
-                    id="increase"
-                    label="معدل  الزياده"
-                    name="increase rate"
-                    type="text"
-                    placeholder=" معدل الزياده"
-                    required
-                  />
-                </InnerFormLayout>
-              </OuterFormLayout>
-            </HandleBackErrors>
-          </Form>
-        )}
+        <Form>
+          <HandleBackErrors errors={error?.response?.data?.errors}>
+            <SizeFormMainData
+              editData={editData}
+              title={title}
+              isLoadingSizes={isLoadingSizes}
+              showCategories={showCategories}
+              categoryID={categoryID}
+              sizeTypes={sizeTypes}
+              loadingSizeType={loadingSizeType}
+              NewSizeTypeOptionComponent={NewSizeTypeOptionComponent}
+              newValue={newValue}
+              setNewValue={setNewValue}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+            />
+          </HandleBackErrors>
+        </Form>
       </Formik>
     </>
   )

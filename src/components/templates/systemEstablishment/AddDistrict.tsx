@@ -22,6 +22,7 @@ import {
 import { ViewDistricts_TP } from "./view/ViewDistricts"
 import { requiredTranslation } from "../../../utils/helpers"
 import { Country_city_distract_markets } from "../reusableComponants/Country_city_distract_markets"
+import { DistrictMainData } from "./DistrictMainData"
 
 ///
 /////////// Types
@@ -36,7 +37,7 @@ type AddDistrictProps_TP = {
   editData?: ViewDistricts_TP
   setDataSource?: Dispatch<SetStateAction<ViewDistricts_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 type CityType = {
   country_name: any
@@ -81,6 +82,8 @@ export const AddDistrict = ({
     mutate,
     error: errorQuery,
     isLoading,
+    isSuccess,
+    reset,
   } = useMutate<CityType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -149,7 +152,6 @@ export const AddDistrict = ({
     })
   }
 
-
   ///
   return (
     <>
@@ -162,42 +164,13 @@ export const AddDistrict = ({
       >
         <Form>
           <HandleBackErrors errors={errorQuery?.response.data.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <Country_city_distract_markets
-                  countryName="country_id"
-                  cityName="city_id"
-                  editData={editData}
-                />
-                <BaseInputField
-                  id="district_name"
-                  label={`${t("district name arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("district name arabic")}`}
-                  required
-                />
-                <BaseInputField
-                  id="district_name"
-                  label={`${t("district name english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("district name english")}`}
-                  required
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <DistrictMainData
+              editData={editData}
+              title={title}
+              isLoading={isLoading}
+              isSuccessPost={isSuccess}
+              resetSelect={reset}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

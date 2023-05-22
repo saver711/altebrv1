@@ -11,12 +11,22 @@ import { RefetchErrorHandler } from "../../../molecules/RefetchErrorHandler"
 import { CreateBranch } from "./CreateBranch"
 ///
 /////////// Types
-
+type SelectBranchesProps_TP =  {
+  name: string
+  editData?: any
+  isSuccessPost?: any
+  resetSelect?:any
+}
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
-export const SelectBranches = ({ name, editData }: { name: string; editData?:any }) => {
+export const SelectBranches = ({
+  name,
+  editData,
+  isSuccessPost,
+  resetSelect,
+}: SelectBranchesProps_TP) => {
   /////////// VARIABLES
   ///
 
@@ -46,8 +56,7 @@ export const SelectBranches = ({ name, editData }: { name: string; editData?:any
   ///
   const [newValue, setNewValue] =
     useState<SingleValue<SelectOption_TP> | null>()
-      const { setFieldValue, values } = useFormikContext()
-
+  const { setFieldValue, values } = useFormikContext()
 
   ///
   /////////// SIDE EFFECTS
@@ -66,7 +75,16 @@ export const SelectBranches = ({ name, editData }: { name: string; editData?:any
   ///
   /////////// FUNCTIONS & EVENTS
   ///
-
+  useEffect(() => {
+    if (!!!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر فرع",
+      })
+      if (resetSelect) resetSelect()
+    }
+  }, [isSuccessPost])
   ///
   return (
     <div className="flex flex-col">
