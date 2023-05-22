@@ -15,12 +15,12 @@ import {
 } from "../../molecules"
 import RadioGroup from "../../molecules/RadioGroup"
 import { DropFile } from "../../molecules/files/DropFile"
+import { NationalAddress } from "../NationalAddress"
 import { SelectBranches } from "../reusableComponants/branches/SelectBranches"
+import { Documents } from "../reusableComponants/documents/Documents"
 import { SelectRole } from "../reusableComponants/roles/SelectRole"
 import { SelectNationality } from "../systemEstablishment/SelectNationality"
 import { InitialValues_TP } from "./validation-and-types"
-import { Documents } from "../reusableComponants/documents/Documents"
-import { NationalAddress } from "../NationalAddress"
 ///
 /////////// Types
 ///

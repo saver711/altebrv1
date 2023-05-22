@@ -45,5 +45,6 @@ export type InitialValues_TP = {
   city?:any
   branch?:any
   role?:any
+  address_out:string
 }
 

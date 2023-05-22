@@ -19,13 +19,9 @@ import {
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
-import { Button } from "../../../atoms"
-import { OuterFormLayout } from "../../../molecules"
 import { Loading } from "../../../organisms/Loading"
-import { NationalAddress } from "../../NationalAddress"
 import {
-  Documents,
-  allDocs_TP,
+  allDocs_TP
 } from "../../reusableComponants/documents/Documents"
 import { SupplierMainData } from "./SupplierMainData"
 
@@ -48,7 +44,6 @@ const AddSupplier = ({
   setDataSource,
   setShow,
 }: AddSupplierProps_TP) => {
-  console.log("🚀 ~ file: AddSupplier.tsx:51 ~ editData:", editData)
   /////////// VARIABLES
   const supplierValidatingSchema = () =>
     Yup.object({
@@ -57,15 +52,7 @@ const AddSupplier = ({
       type: Yup.string().trim().required(requiredTranslation),
       is_mediator: Yup.boolean(),
       company_name: Yup.string().trim().required(requiredTranslation),
-      address: Yup.string().trim().required(requiredTranslation),
-      // mobile: Yup.string()
-      // .trim()
-      // .required(requiredTranslation).test('isValidateNumber', 'رقم غير صحيح', function (value:string) {
-      //   return isValidPhoneNumber(value || "")
-      // }),
-      // mobile: !!!editData
-      //   ? Yup.string().trim().required(requiredTranslation)
-      //   : Yup.string(),
+      address_out: Yup.string().trim().required(requiredTranslation),
       phone: !!!editData
         ? Yup.string().trim().required(requiredTranslation)
         : Yup.string(),
@@ -151,10 +138,8 @@ const AddSupplier = ({
       : false,
     company_name: editData ? editData?.company_name : "",
     country_id: editData ? editData?.country?.id : "",
-    // country_value: editData?.country_name || "",
     city_id: editData ? editData?.city?.id : "",
-    // city_value: editData?.nationalAddress?.city.name || "",
-    address: editData ? editData?.address : "",
+    address_out: editData ? editData?.address : "",
     mobile: "",
     phone: editData ? editData?.phone : "",
     fax: editData ? editData?.fax : "",
@@ -260,6 +245,7 @@ const AddSupplier = ({
           const is_mediator = values.is_mediator ? 1 : 0
           let editedValues = {
             ...values,
+            address:values.address_out,
             document: docsFormValues,
             tax,
             is_mediator,
@@ -298,7 +284,6 @@ const AddSupplier = ({
             })
           } else {
             if (values.type === "global") delete editedValues.nationalAddress
-            console.log("editedValues", editedValues)
             mutate({
               endpointName: `supplier/api/v1/suppliers`,
               values: editedValues,
