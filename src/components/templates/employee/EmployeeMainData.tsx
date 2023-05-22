@@ -32,6 +32,8 @@ type EmployeeMainDataProps_TP = {
   restData?: any
   setDocsFormValues?: any
   docsFormValues?: any
+  setModalOpen?: any
+  modalOpen?:any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -44,18 +46,23 @@ export const EmployeeMainData = ({
   restData,
   setDocsFormValues,
   docsFormValues,
+  setModalOpen,
+  modalOpen,
 }: EmployeeMainDataProps_TP) => {
+  console.log(
+    "🚀 ~ file: EmployeeMainData.tsx:48 ~ isSuccessPost:",
+    isSuccessPost
+  )
   /////////// VARIABLES
   /////
 
   ///
   /////////// CUSTOM HOOKS
   ///
-  const { values, setFieldValue } = useFormikContext()
+  const { values, setFieldValue, resetForm } = useFormikContext()
   ///
   /////////// STATES
   ///
-  const [modalOpen, setModalOpen] = useState(false)
 
   ///
   /////////// SIDE EFFECTS
@@ -66,10 +73,11 @@ export const EmployeeMainData = ({
   useEffect(() => {
     if (isSuccessPost) {
       restData()
-      restData()
+      resetForm()
       setFieldValue("date_of_birth", new Date())
       setFieldValue("national_expire_date", new Date())
       setDocsFormValues([])
+      setModalOpen(false)
     }
   }, [isSuccessPost])
   ///
@@ -83,7 +91,7 @@ export const EmployeeMainData = ({
           </Button>
         }
       >
-        <InnerFormLayout title={title}>
+        <InnerFormLayout title={`${t("main data")}`}>
           {/* name ar start */}
           <BaseInputField
             id="name"
@@ -98,6 +106,7 @@ export const EmployeeMainData = ({
 
           {/* branch start */}
           <SelectBranches
+            required
             name="branch_id"
             editData={editEmployeeData}
             isSuccessPost={isSuccessPost}
@@ -108,12 +117,12 @@ export const EmployeeMainData = ({
           {/* job title start */}
 
           {/* job title end */}
-          <SelectRole name="role_id" />
+          <SelectRole name="role_id" required />
           {/* address start */}
           <BaseInputField
-            id="address"
+            id="address_out"
             label={`${t("address")}`}
-            name="address"
+            name="address_out"
             type="text"
             placeholder={`${t("address")}`}
             required
@@ -128,6 +137,7 @@ export const EmployeeMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
           {/* mobile end */}
@@ -139,6 +149,7 @@ export const EmployeeMainData = ({
             name="phone"
             type="text"
             placeholder={`${t("phone number")}`}
+            required
           />
           {/* phone end */}
 
@@ -157,6 +168,7 @@ export const EmployeeMainData = ({
           <DateInputField
             label={`${t("birth date")}`}
             name="date_of_birth"
+            required
             maxDate={new Date()}
           />
           {/* birth date end */}
@@ -167,6 +179,7 @@ export const EmployeeMainData = ({
               label={`${t("hiring date")}`}
               name="date_of_hiring"
               maxDate={new Date()}
+              required
             />
           )}
 
@@ -188,6 +201,7 @@ export const EmployeeMainData = ({
             label={`${t("national expire date")}`}
             name="national_expire_date"
             minDate={new Date()}
+            required
           />
           {/* national_expire_date end */}
 

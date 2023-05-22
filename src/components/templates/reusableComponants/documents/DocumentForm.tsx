@@ -124,6 +124,7 @@ export const DocumentForm = ({
               placeholder={`${t("document type")}`}
               loadingPlaceholder={`${t("loading")}`}
               options={docTypeOptions}
+              required
               //@ts-ignore
               onChange={(option) => setDocType(option)} //@ts-ignore
               defaultValue={initialValues.docType}
@@ -133,6 +134,7 @@ export const DocumentForm = ({
               label={`${t("document name")}`}
               name="docName"
               type="text"
+              required
               placeholder={`${t("document name")}`}
             />
             <BaseInputField
@@ -141,18 +143,21 @@ export const DocumentForm = ({
               name="docNumber"
               type="text"
               placeholder={`${t("document number")}`}
+              required
             />
             <DateInputField
               label={`${t("end date")}`}
               name="endDate"
               minDate={new Date()}
               labelProps={{ className: "mb-2" }}
+              required
             />
             <BaseInputField
               id="reminder"
               label={`${t("reminder days count")}`}
               name="reminder"
               type="number"
+              required
               placeholder={`${t("reminder days count")}`}
             />
           </div>

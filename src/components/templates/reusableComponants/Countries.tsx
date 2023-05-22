@@ -141,7 +141,6 @@ export const Countries = ({
   isSuccessPost,
   resetSelect,
 }: Countries_TP) => {
-  console.log("🚀 ~ file: Countries.tsx:144 ~ editData:", editData)
 
   /////////// VARIABLES
   ///
@@ -174,7 +173,7 @@ export const Countries = ({
   }, [])
 
   useEffect(() => {
-    if (!editData || !editData?.nationalAddress?.country?.name  ) {
+    if (!editData && !editData?.nationalAddress?.country?.name  ) {
       setNewValue({
         id: "",
         value: "",
@@ -220,6 +219,7 @@ export const Countries = ({
         fieldKey={fieldKey}
         modalTitle={`${t("add Country")}`}
         value={newValue}
+        required
         onChange={(option) => {
           //@ts-ignore
           setFieldValue(countryName, option!.id)

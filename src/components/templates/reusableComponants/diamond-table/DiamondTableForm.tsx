@@ -95,10 +95,6 @@ export const DiamondTableForm = ({
       header: () => `${t("categories")}`,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("weight", {
-      header: () => `${t("weight")}`,
-      cell: (info) => formatGram(info.getValue()),
-    }),
     columnHelper.accessor("gold_weight", {
       header: () => `${t("gold weight")}`,
       cell: (info) => formatGram(info.getValue()),
@@ -126,6 +122,14 @@ export const DiamondTableForm = ({
     columnHelper.accessor("other_stones_weight", {
       header: `${t("other stones weight")}`,
       cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("weight", {
+      header: () => `${t("weight")}`,
+      cell: (info) => formatGram(
+        Number(info.row.original.diamond_stone_weight) +
+        Number(info.row.original.other_stones_weight) +
+        Number(info.row.original.gold_weight)
+      ),
     }),
     columnHelper.accessor("diamond_tax", {
       header: `${t("diamond tax")}`,
@@ -339,7 +343,7 @@ export const DiamondTableForm = ({
                     }}
                   />
                 </td>
-                <td>
+                {/* <td>
                   <Field
                     id="weight"
                     name="weight"
@@ -350,7 +354,7 @@ export const DiamondTableForm = ({
                     }}
                     className="rounded-md border-2 border-transparent focus:!border-2 focus:!border-mainGreen form-input px-4 py-[.30rem] w-full shadows"
                   />
-                </td>
+                </td> */}
                 <td>
                   <Field
                     id="gold_weight"
@@ -466,9 +470,9 @@ export const DiamondTableForm = ({
                     }}
                   />
                 </td>
-                <td className="border-l-2 border-l-flatWhite">
+                {/* <td className="border-l-2 border-l-flatWhite">
                   <BaseInputField id="weight" name="weight" type="number" />
-                </td>
+                </td> */}
                 <td className="border-l-2 border-l-flatWhite">
                   <BaseInputField id="gold_weight" name="gold_weight" type="number" />
                 </td>
@@ -509,6 +513,16 @@ export const DiamondTableForm = ({
                 </td>
                 <td className="border-l-2 border-l-flatWhite">
                   <BaseInputField id="other_stones_weight" name="other_stones_weight" type="number" />
+                </td>
+                <td className="border-l-2 border-l-flatWhite">
+                  <Field
+                    id="diamond_tax"
+                    name="diamond_tax"
+                    value={formatGram(
+                      Number(values.diamond_stone_weight) + Number(values.other_stones_weight) + Number(values.gold_weight)
+                    )}
+                    className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
+                  />
                 </td>
                 <td className="border-l-2 border-l-flatWhite">
                   <Field

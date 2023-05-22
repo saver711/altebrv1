@@ -193,6 +193,7 @@ export const SupplierMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
@@ -244,6 +245,7 @@ export const SupplierMainData = ({
             label={`${t("national expire date")}`}
             name="national_expire_date"
             minDate={new Date()}
+            required
             labelProps={{ className: "mb-2" }}
           />
 

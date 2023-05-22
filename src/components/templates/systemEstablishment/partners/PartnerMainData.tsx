@@ -119,13 +119,14 @@ export const PartnerMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
           <Country_city_distract_markets
-            countryName="country_id"
+            countryName="country_id_out"
             countryLabel={`${t("country")}`}
-            cityName="city_id"
+            cityName="city_id_out"
             cityLabel={`${t("city")}`}
             isSuccessPost={isSuccessPost}
             resetSelect={restData}
@@ -153,12 +154,17 @@ export const PartnerMainData = ({
             resetSelect={restData}
           />
           {/* تاريخ انتهاء الهوية */}
-          <DateInputField label={`${t("End IdNumber")}`} name="end_date" />
+          <DateInputField
+            label={`${t("End IdNumber")}`}
+            name="end_date"
+            required
+          />
 
           {/* تاريخ بدء الشراكة */}
           <DateInputField
             label={`${t("start Date Partner")}`}
             name="start_date"
+            required
           />
           <div className="col-span-4">
             <h2> {`${t("national image")}`}</h2>

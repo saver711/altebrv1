@@ -141,6 +141,7 @@ export const CategoryMainData = ({
               type="text"
               placeholder={`${t("category name in arabic")}`}
               defaultValue={editData ? editData.name : ""}
+              required
             />
             <BaseInputField
               id="category_name_en"
@@ -148,6 +149,7 @@ export const CategoryMainData = ({
               name="name_en"
               type="text"
               placeholder={`${t("category name in english")}`}
+              required
             />
             <div className="col-span-2">
               {props.values.type == "multi" && (
@@ -156,7 +158,7 @@ export const CategoryMainData = ({
                   name="items"
                   id="items"
                   isMulti={true}
-                  required={false}
+                  required={true}
                   defaultValue={handleEditedItems(props.values.items)}
                   placeholder={`${t("choose categories")}`}
                   loadingPlaceholder="Loading..."

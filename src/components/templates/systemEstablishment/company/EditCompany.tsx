@@ -51,22 +51,29 @@ export const EditCompany = ({
   const initialValues: InitialValues_TP = {
     name_ar: valuesData.name || "",
     name_en: valuesData.name || "",
+    country_id_out: valuesData ? valuesData?.country?.id : "",
+    city_id_out: valuesData ? valuesData?.city?.id : "",
+    district_id_out: valuesData ? valuesData?.district?.id : "",
     country_id: valuesData.country.id || "",
-    country_value:valuesData.country.name,
+    // country_value: valuesData.country.name,
     city_id: valuesData.city.id || "",
     // city_value:valuesData.city.name,
     district_id: valuesData.district.id || "",
     // district_value:valuesData.country.name,
-    // address: valuesData.address || "",
+    address_out: valuesData.address || "",
     establishment_date: new Date() || valuesData.establishmentDate,
     phone: valuesData.phone || "",
     email: valuesData.email || "",
     fax: valuesData.fax || "",
-    tax_number:  valuesData.tax_number  || "",
-    logo:!!valuesData?.logo ? [{
-      path: valuesData?.logo,
-      type: "image"
-    }] : [],
+    tax_number: valuesData.tax_number || "",
+    logo: !!valuesData?.logo
+      ? [
+          {
+            path: valuesData?.logo,
+            type: "image",
+          },
+        ]
+      : [],
 
     // docs data initial valuesData
     docType: "",
@@ -77,16 +84,16 @@ export const EditCompany = ({
     files: [],
     //national Address
     building_number: valuesData.nationalAddress?.building_number || "",
-    address:  valuesData.nationalAddress?.address || "",
-    street_number:  valuesData.nationalAddress?.street_number  || "",
-    sub_number:  valuesData.nationalAddress?.sub_number || "",
-    zip_code:  valuesData.nationalAddress?.zip_code || "",
-  };
+    address: valuesData.nationalAddress?.address || "",
+    street_number: valuesData.nationalAddress?.street_number || "",
+    sub_number: valuesData.nationalAddress?.sub_number || "",
+    zip_code: valuesData.nationalAddress?.zip_code || "",
+  }
 
   const incomingData = !!valuesData
     ? valuesData!.document.map((item) => ({
         ...item.data,
-        endDate: new Date(item.data.endDate),
+        endDate: new Date(item?.data?.endDate),
         files: item?.files || [],
         id: item.id,
       }))
@@ -158,10 +165,10 @@ export const EditCompany = ({
     let editedValues = {
       name_en: values.name_en,
       name_ar: values.name_ar,
-      address: values.address,
-      city_id: values.city_id,
-      country_id: values.country_id,
-      district_id: values.district_id,
+      address: values.address_out,
+      country_id: values.country_id_out,
+      city_id: values.city_id_out,
+      district_id: values.district_id_out,
       email: values.email,
       establishment_date: formatDate(values.establishment_date),
       fax: values.fax,
@@ -171,6 +178,7 @@ export const EditCompany = ({
       phone: values.phone,
       nationalAddress: {
         address: values.address,
+        country_id: values.country_id,
         city_id: values.city_id,
         district_id: values.district_id,
         building_number: values.building_number,

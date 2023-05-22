@@ -43,6 +43,10 @@ export const CreateBranch = ({
   const initialValues = {
     name_ar: editData ? editData.name_ar : "",
     name_en: editData ? editData.name_en : "",
+    country_id_out: editData ? editData.country.id : "",
+    city_id_out: editData ? editData.city.id : "",
+    district_id_out: editData ? editData.district.id : "",
+    country_id: editData ? editData.country.id : "",
     city_id: editData ? editData.city.id : "",
     district_id: editData ? editData.district.id : "",
     market_id: editData ? editData.market.id : "",
@@ -50,6 +54,8 @@ export const CreateBranch = ({
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
     number: editData ? editData.number : "",
+    main_address: editData ? editData.main_address : "",
+
     // national address data
     building_number: editData ? editData.nationalAddress.building_number : "",
     street_number: editData ? editData.nationalAddress.street_number : "",
@@ -68,6 +74,9 @@ export const CreateBranch = ({
     name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     name_en: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    country_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    city_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    district_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     district_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -77,6 +86,7 @@ export const CreateBranch = ({
     street_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     sub_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     address: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    main_address: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     zip_code: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
   })
@@ -118,27 +128,6 @@ export const CreateBranch = ({
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
 
-  function PostNewValue(values: InitialValues_TP) {
-    mutate({
-      endpointName: "branch/api/v1/branches",
-      values: {
-        ...values,
-        document: docsFormValues,
-        nationalAddress: {
-          address: values.address,
-          country_id: values.country_id,
-          city_id: values.city_id,
-          district_id: values.district_id,
-          building_number: values.building_number,
-          street_number: values.street_number,
-          sub_number: values.sub_number,
-          zip_code: values.zip_code,
-        },
-      },
-    })
-    console.log("branch", values)
-  }
-
   ///
   return (
     <div className="flex items-center justify-between gap-2">
@@ -147,6 +136,10 @@ export const CreateBranch = ({
         onSubmit={(values) => {
           let editedValues = {
             ...values,
+            country_id: values.country_id_out,
+            city_id: values.city_id_out,
+            district_id: values.district_id_out,
+            address: values.main_address,
             document: docsFormValues,
             nationalAddress: {
               address: values.address,
@@ -184,8 +177,7 @@ export const CreateBranch = ({
           }
           console.log("values", editedValues)
         }}
-
-        validationSchema={validationSchema}
+         validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
           <OuterFormLayout header={t("add branch")}>
@@ -228,11 +220,11 @@ export const CreateBranch = ({
                 {/* branch number  end */}
                 {/* market  start */}
                 <Country_city_distract_markets
-                  countryName="country_id"
+                  countryName="country_id_out"
                   countryLabel={`${t("country")}`}
-                  cityName="city_id"
+                  cityName="city_id_out"
                   cityLabel={`${t("city")}`}
-                  distractName="district_id"
+                  distractName="district_id_out"
                   distractLabel={`${t("district")}`}
                   marketName="market_id"
                   marketLabel={`${t("markets")}`}
@@ -247,8 +239,8 @@ export const CreateBranch = ({
                         name: editData?.city.name,
                       },
                       district: {
-                        id: editData?.nationalAddress?.district.id,
-                        name: editData?.nationalAddress?.district.name,
+                        id: editData?.district.id,
+                        name: editData?.district.name,
                       },
                       market: {
                         id: editData?.market.id,
@@ -277,7 +269,7 @@ export const CreateBranch = ({
                   <BaseInputField
                     id="address"
                     label={`${t("address")}`}
-                    name="address"
+                    name="main_address"
                     type="text"
                     placeholder={`${t("address")}`}
                     defaultValue={editData && editData.nationalAddress.address}

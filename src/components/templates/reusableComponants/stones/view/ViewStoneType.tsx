@@ -233,14 +233,17 @@ export const ViewStoneType = () => {
         {(isLoading || isRefetching) && (
           <Loading mainTitle={t("stones types")} />
         )}
-        {isSuccess && dataSource.length === 0 && (
-          <div className="mb-5 pr-5">
-            <Header
-              header={t("no items")}
-              className="text-center text-2xl font-bold"
-            />
-          </div>
-        )}
+        {isSuccess &&
+          !isLoading &&
+          !isRefetching &&
+          dataSource.length === 0 && (
+            <div className="mb-5 pr-5">
+              <Header
+                header={t("no items")}
+                className="text-center text-2xl font-bold"
+              />
+            </div>
+          )}
         {isSuccess &&
           !!dataSource &&
           !isLoading &&

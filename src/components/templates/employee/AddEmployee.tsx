@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
@@ -34,6 +34,7 @@ export const AddEmployee = ({
   title,
   editEmployeeData,
 }: AddEmployeeProps_TP) => {
+  console.log("🚀 ~ file: AddEmployee.tsx:40 ~ editEmployeeData:", editEmployeeData)
   // validation
   const employeeValidatingSchema = () =>
     Yup.object({
@@ -92,6 +93,8 @@ export const AddEmployee = ({
   ///
   /////////// STATES
   ///
+    const [modalOpen, setModalOpen] = useState(false)
+
   const [docsFormValues, setDocsFormValues] =
     useState<allDocs_TP[]>(incomingData)
 
@@ -150,8 +153,7 @@ export const AddEmployee = ({
     mutationFn: mutateData,
     onSuccess: () => {
       notify("success")
-      queryClient.refetchQueries(["employees"])
-      console.log("first")
+      queryClient.refetchQueries([ "employees" ])
     },
     onError: (error) => {
       console.log(error)
@@ -210,21 +212,22 @@ export const AddEmployee = ({
               JSON.stringify(editEmployeeData.national_image)
             )
               delete editedValues.national_image
+
             if (
               JSON.stringify(values.image[0].path) ===
-              JSON.stringify(editEmployeeData.image)
+              JSON.stringify(editEmployeeData.img)
             )
               delete editedValues.image
+
             if (values.password === "") delete editedValues.password
-            console.log(editedValues)
             mutate({
               endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
               values: editedValues,
               dataType: "formData",
               editWithFormData: true,
+            
             })
           } else {
-            console.log("editedValues=>", editedValues)
             mutate({
               endpointName: "employee/api/v1/employees",
               values: editedValues,
@@ -244,6 +247,8 @@ export const AddEmployee = ({
               isLoading={isLoading}
               restData={reset}
               isSuccessPost={isSuccess}
+              setModalOpen={setModalOpen}
+              modalOpen={modalOpen}
             />
           </Form>
         </HandleBackErrors>

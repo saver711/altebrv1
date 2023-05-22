@@ -232,7 +232,7 @@ export const Bonds = ({ title }: BondsProps_TP) => {
         </Button>
       </div>
       {(isLoading || isRefetching) && <Loading mainTitle={t("Bonds")} />}
-      {isSuccess && dataSource.length === 0 && (
+      {isSuccess && dataSource.length === 0 && !isLoading && !isRefetching && (
         <div className="mb-5 pr-5">
           <Header
             header={t("no items")}
