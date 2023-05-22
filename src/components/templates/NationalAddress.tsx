@@ -5,18 +5,25 @@ import { t } from "i18next"
 import { InnerFormLayout } from "../molecules/InnerFormLayout"
 import { BaseInputField } from "../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "./reusableComponants/Country_city_distract_markets"
+import { useEffect } from "react"
 
 ///
 /////////// Types
 ///
 type NationalAddress_TP = {
   editData?: any
+  isSuccessPost?: any
+  resetSelect?:any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
-export const NationalAddress = ({ editData }: NationalAddress_TP) => {
+export const NationalAddress = ({
+  editData,
+  isSuccessPost,
+  resetSelect,
+}: NationalAddress_TP) => {
   /////////// VARIABLES
   ///
 
@@ -26,7 +33,7 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
   ///
   ///
   /////////// CUSTOM HOOKS
-  const { setFieldValue } = useFormikContext<FormikSharedConfig>()
+  const { setFieldValue, resetForm } = useFormikContext<FormikSharedConfig>()
 
   ///
   /////////// SIDE EFFECTS
@@ -34,7 +41,12 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-
+  useEffect(() => {
+    if (isSuccessPost) {
+      resetForm()
+      resetSelect()
+    }
+  }, [isSuccessPost])
   ///
   return (
     <>
@@ -44,6 +56,8 @@ export const NationalAddress = ({ editData }: NationalAddress_TP) => {
           countryName="country_id"
           distractName="district_id"
           editData={editData}
+          isSuccessPost={isSuccessPost}
+          resetSelect={resetSelect}
         />
         {/* short address start */}
         <BaseInputField

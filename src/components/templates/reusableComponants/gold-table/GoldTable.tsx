@@ -10,8 +10,10 @@ import { FirstFormInitValues_TP } from "../../../supply/formInitialValues_types"
 import { GoldTableForm } from "./GoldTableForm"
 import * as Yup from "yup"
 import { t } from "i18next"
+import { supplierTax_TP } from "../../../../pages/supply/Supply"
 
 type OTableProps_TP = {
+  supplierTax: supplierTax_TP,
   dirty: boolean,
   setDirty: Dispatch<SetStateAction<boolean>>
   data: OTableDataTypes[]
@@ -38,6 +40,7 @@ const validationSchema = Yup.object({
 })
 
 export function GoldTable({
+  supplierTax,
   dirty,
   setDirty,
   data,
@@ -103,6 +106,7 @@ export function GoldTable({
       >
         {({}) => (
           <GoldTableForm
+            supplierTax={supplierTax}
             dirty={dirty}
             setDirty={setDirty}
             editRow={editRow}

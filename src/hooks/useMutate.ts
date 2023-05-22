@@ -33,6 +33,10 @@ export const useMutate = <T>({ ...args }: Args_TP<T>) => {
       if (!!onError) {
         onError(err)
       }
+
+      if (!!!err.response?.data.errors && !!err.response?.data.message) {
+        notify("error", err.response.data.message)
+      }
       //  else {
       //   if (!!!err.response?.data.errors && !!err.response?.data.message) {
       //     notify("error", err.response.data.message)
@@ -40,15 +44,15 @@ export const useMutate = <T>({ ...args }: Args_TP<T>) => {
       //     notify("error")
       //   }
       // }
-      if (err.response.status === HttpStatusCode.NotFound) {
-        notify("error", err.response.data.message)
-      }
-      if (err.response.status === HttpStatusCode.Unauthorized) {
-        notify("error",err.response.data.message)
-      }
-      if (err.response.status === HttpStatusCode.ServiceUnavailable) {
-        notify("error", err.response.data.message)
-      }
+      // if (err.response.status === HttpStatusCode.NotFound) {
+      //   notify("error", err.response.data.message)
+      // }
+      // if (err.response.status === HttpStatusCode.Unauthorized) {
+      //   notify("error",err.response.data.message)
+      // }
+      // if (err.response.status === HttpStatusCode.ServiceUnavailable) {
+      //   notify("error", err.response.data.message)
+      // }
       // if(error.response.status === 422){
       //   const errors = Object.entries(error.response.data.errors).map(([key,value])=>`${value}`).join(' & ')
       //   notify("error", `${t(errors)}`)

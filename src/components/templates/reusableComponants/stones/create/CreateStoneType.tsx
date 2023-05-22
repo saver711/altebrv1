@@ -13,6 +13,7 @@ import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { StonesTypes } from "../view/ViewStoneType"
 import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
+import { StoneTypeMainData } from "./StoneTypeMainData"
 
 ///
 /////////// Types
@@ -42,7 +43,7 @@ const validationSchema = Yup.object({
 
 const CreateStoneType = ({
   item,
-  value,
+  value = "",
   onAdd,
   setDataSource,
   setShow,
@@ -60,33 +61,29 @@ const CreateStoneType = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const {
-    mutate,
-    isLoading,
-    error
-  } = useMutate({
+  const { mutate, isLoading, error, isSuccess,reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
-      queryClient.setQueryData(['stone_type'], (old: any) => {
-        return [...old, data]
+      queryClient.setQueryData(["stone_type"], (old: any) => {
+        return [...old || [], data]
       })
-      if(value && onAdd) {
+      if (value && onAdd) {
         onAdd(value)
-        queryClient.refetchQueries(['view_stones_types'])
+        queryClient.refetchQueries(["view_stones_types"])
       }
       if (setDataSource && setShow) {
         // setDataSource((prev: any)=> [...prev, data])
-        queryClient.refetchQueries(['view_stones_types'])
+        queryClient.refetchQueries(["view_stones_types"])
         setShow(false)
-      } 
+      }
       if (setDataSource && setShow && item) {
         setShow(false)
-        queryClient.refetchQueries(['view_stones_types'])
-        // setDataSource((prev: StonesTypes[]) => 
+        queryClient.refetchQueries(["view_stones_types"])
+        // setDataSource((prev: StonesTypes[]) =>
         //   prev.map((p: StonesTypes) => p.id === data.id ? data : p))
       }
-    }
+    },
   })
 
   ///
@@ -109,35 +106,13 @@ const CreateStoneType = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  loading={isLoading}
-                  type="submit"
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="stone_type_ar"
-                  label={`${t("stones types in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("stones types in arabic")}`}
-                />
-                <BaseInputField
-                  id="stone_type_en"
-                  label={`${t("stones types in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("stones types in english")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <StoneTypeMainData
+              editData={item}
+              title={title}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+              isLoading={isLoading}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

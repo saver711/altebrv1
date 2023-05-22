@@ -39,10 +39,6 @@ export const AddPartners = ({
   dataSource,
   editData,
 }: AddPartners_props) => {
-  console.log(
-    "🚀 ~ file: AddPartners.tsx:27 ~ AddPartners ~ editData:",
-    editData
-  )
 
   /////////// VARIABLES
   ///
@@ -119,6 +115,8 @@ export const AddPartners = ({
     mutate,
     isLoading,
     error: errorQuery,
+    isSuccess,
+    reset
   } = useMutate({
     mutationFn: mutateData,
     onSuccess: () => {
@@ -180,7 +178,6 @@ export const AddPartners = ({
             document: docsFormValues,
           }
           if (!!editData) {
-
             let { document, ...editedValuesWithoutDocument } = editedValues
             if (docsFormValues.length > editData.document.length)
               editedValues = {
@@ -211,30 +208,19 @@ export const AddPartners = ({
           console.log("partners values ", { ...values, ...[docsFormValues] })
         }}
       >
-        <Form>
-          <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  className="mr-auto mt-8"
-                  loading={isLoading}
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <PartnerMainData editData={editData} />
-              <Documents
-                setDocsFormValues={setDocsFormValues}
-                docsFormValues={docsFormValues}
-                editable={!!editData}
-              />
-              <NationalAddress editData={editData} />
-            </OuterFormLayout>
-          </HandleBackErrors>
-        </Form>
+        <HandleBackErrors errors={errorQuery?.response?.data?.errors}>
+          <Form>
+            <PartnerMainData
+              isLoading={isLoading}
+              title={title}
+              editData={editData}
+              isSuccessPost={isSuccess}
+              restData={reset}
+              setDocsFormValues={setDocsFormValues}
+              docsFormValues={docsFormValues}
+            />
+          </Form>
+        </HandleBackErrors>
       </Formik>
     </>
   )

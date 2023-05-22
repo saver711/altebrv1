@@ -13,6 +13,7 @@ import { Button } from "../../../../atoms"
 import { BaseInputField } from "../../../../molecules/formik-fields/BaseInputField"
 import { StonesShapes } from "../view/ViewStoneShape"
 import { InnerFormLayout, OuterFormLayout } from "../../../../molecules"
+import { StoneShapeMainData } from "./StoneShapeMainData"
 
 ///
 /////////// Types
@@ -42,7 +43,7 @@ const validationSchema = Yup.object({
 
 const CreateStoneShape = ({
   item,
-  value,
+  value = "",
   onAdd,
   setDataSource,
   setShow,
@@ -60,12 +61,12 @@ const CreateStoneShape = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error } = useMutate({
+  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
       queryClient.setQueryData(["stone_shape"], (old: any) => {
-        return [...old, data]
+        return [...old || [], data]
       })
       if (value && onAdd) {
         onAdd(value)
@@ -107,35 +108,13 @@ const CreateStoneShape = ({
       >
         <Form className="w-full">
           <HandleBackErrors errors={error?.response?.data?.errors}>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  loading={isLoading}
-                  type="submit"
-                  className="ms-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="stone_shape_ar"
-                  label={`${t("stones shapes in arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("stones shapes in arabic")}`}
-                />
-                <BaseInputField
-                  id="stone_shape_en"
-                  label={`${t("stones shapes in english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("stones shapes in english")}`}
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <StoneShapeMainData
+              editData={item}
+              title={title}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+              isLoading={isLoading}
+            />
           </HandleBackErrors>
         </Form>
       </Formik>

@@ -18,6 +18,7 @@ import {
 } from "../../molecules"
 import { Dispatch, SetStateAction } from "react"
 import { ViewCountries_TP } from "./view/ViewCountries"
+import { CountryMainData } from "./CountryMainData"
 
 ///
 /////////// Types
@@ -67,6 +68,8 @@ console.log("co",initialValues)
     mutate,
     error: errorQuery,
     isLoading,
+    isSuccess,
+    reset
   } = useMutate<CountryType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
@@ -84,12 +87,12 @@ console.log("co",initialValues)
       }
       if (setDataSource && setShow && !editData && !errorQuery) {
         // setDataSource((prev: any) => [...prev, data])
-        queryClient.refetchQueries(['AllCountries'])
+        queryClient.refetchQueries(["AllCountries"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !errorQuery) {
         setShow(false)
-        queryClient.refetchQueries(['AllCountries'])
+        queryClient.refetchQueries(["AllCountries"])
         // setDataSource((prev: any) =>
         //   prev.map((p: ViewCountries_TP) => (p.id === data?.id ? data : p))
         // )
@@ -142,39 +145,13 @@ console.log("co", values)
       >
         <HandleBackErrors errors={errorQuery?.response.data.errors}>
           <Form>
-            <OuterFormLayout
-              header={title}
-              submitComponent={
-                <Button
-                  type="submit"
-                  loading={isLoading}
-                  className="mr-auto mt-8"
-                >
-                  {t("submit")}
-                </Button>
-              }
-            >
-              <InnerFormLayout title={`${t("main data")}`}>
-                <BaseInputField
-                  id="Country_name"
-                  label={`${t("Country name arabic")}`}
-                  name="name_ar"
-                  type="text"
-                  placeholder={`${t("Country name arabic")}`}
-                  labelProps={{ className: "mb-1" }}
-                  required
-                />
-                <BaseInputField
-                  id="Country_name"
-                  label={`${t("Country name english")}`}
-                  name="name_en"
-                  type="text"
-                  placeholder={`${t("Country name english")}`}
-                  labelProps={{ className: "mb-1" }}
-                  required
-                />
-              </InnerFormLayout>
-            </OuterFormLayout>
+            <CountryMainData
+              editData={editData}
+              title={title}
+              isSuccessPost={isSuccess}
+              resetData={reset}
+              isLoading={isLoading}
+            />
           </Form>
         </HandleBackErrors>
       </Formik>
