@@ -119,11 +119,6 @@ export const SupplyFinalForm = ({
         accessorKey: "category_value",
       },
       {
-        header: `${t("weight")}`,
-        cell: (info) => formatGram(Number(info.renderValue())),
-        accessorKey: "weight",
-      },
-      {
         header: `${t("gold weight")}`,
         cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: "gold_weight",
@@ -157,6 +152,11 @@ export const SupplyFinalForm = ({
         header: `${t("other stones weight")}`,
         cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: "other_stones_weight",
+      },
+      {
+        header: `${t("weight")}`,
+        cell: (info) => formatGram(Number(info.renderValue())),
+        accessorKey: "weight",
       },
       {
         header: `${t("diamond tax")}`,

@@ -3,28 +3,24 @@
 import { FormikSharedConfig, useFormikContext } from "formik"
 import { t } from "i18next"
 import { useEffect, useState } from "react"
-import { AiOutlineReload } from "react-icons/ai"
-import { SingleValue } from "react-select"
 import { useFetch } from "../../../../hooks"
 import { supplier } from "../../../../pages/suppliers/AllSuppliers"
 import { SelectOption_TP } from "../../../../types"
+import { Button } from "../../../atoms"
 import {
   BaseInputField,
   CheckBoxField,
   DateInputField,
   InnerFormLayout,
   OuterFormLayout,
-  PhoneInput,
-  Select,
+  PhoneInput
 } from "../../../molecules"
 import RadioGroup from "../../../molecules/RadioGroup"
 import { DropFile } from "../../../molecules/files/DropFile"
-import { CreateNationalities } from "../../CreateNationalities"
-import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
-import { SelectNationality } from "../SelectNationality"
-import { Button } from "../../../atoms"
-import { Documents } from "../../reusableComponants/documents/Documents"
 import { NationalAddress } from "../../NationalAddress"
+import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
+import { Documents } from "../../reusableComponants/documents/Documents"
+import { SelectNationality } from "../SelectNationality"
 ///
 /////////// Types
 ///
@@ -160,10 +156,10 @@ export const SupplierMainData = ({
             labelProps={{ className: "mb-1" }}
           />
           <BaseInputField
-            id="address"
+            id="address_out"
             required
             label={`${t("address")}`}
-            name="address"
+            name="address_out"
             type="text"
             placeholder={`${t("address")}`}
             labelProps={{ className: "mb-1" }}
@@ -197,6 +193,7 @@ export const SupplierMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
@@ -248,6 +245,7 @@ export const SupplierMainData = ({
             label={`${t("national expire date")}`}
             name="national_expire_date"
             minDate={new Date()}
+            required
             labelProps={{ className: "mb-2" }}
           />
 

@@ -124,8 +124,10 @@ export const ViewCompanyDetails = () => {
         {isError && (
           <div className=" m-auto">
             <Header
-              className="text-center text-2xl font-bold"
-              header={t(`some thing went wrong ${error?.response.data.errors}`)}
+              className="text-center text-2xl font-extrabold text-2xl"
+              header={t(
+                `some thing went wrong ${error?.response?.data?.message}`
+              )}
             />
           </div>
         )}
@@ -148,18 +150,6 @@ export const ViewCompanyDetails = () => {
                     action={() => setEditCompanyOpen(true)}
                   />
                 </div>
-              }
-              leftComponent={
-                <>
-                  {company.document.length > 2 && (
-                    <Button
-                      className="mb-3"
-                      action={() => setDocumentOpen(true)}
-                    >
-                      {t("view all documents")}
-                    </Button>
-                  )}
-                </>
               }
             >
               <>
@@ -238,7 +228,9 @@ export const ViewCompanyDetails = () => {
                         ]}
                       />
                     </div>
-                  ): "لايوجد وسائط"}
+                  ) : (
+                    "لايوجد وسائط"
+                  )}
                 </div>
                 <div className="flex gap-4 flex-col">
                   <div className="col-span-1 flex items-center">
@@ -263,7 +255,17 @@ export const ViewCompanyDetails = () => {
                 {/* الوثائق */}
 
                 <div className="flex justify-between gap-4 col-span-4 align-middle ">
-                  <h1 className="font-bold ">{t("main documents")}</h1>
+                  <h1 className="font-extrabold text-2xl">
+                    {t("main documents")}
+                  </h1>
+                  {company.document.length > 2 && (
+                    <Button
+                      className="mb-3"
+                      action={() => setDocumentOpen(true)}
+                    >
+                      {t("view all documents")}
+                    </Button>
+                  )}
                 </div>
 
                 <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
@@ -272,7 +274,7 @@ export const ViewCompanyDetails = () => {
                       <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed mt-3  justify-center align-middle">
                         <div className=" flex items-center justify-center ">
                           <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
-                            <p className=" text-lg font-bold text-mainGreen">
+                            <p className=" text-lg font-extrabold text-2xl text-mainGreen">
                               {t(`document`)} {i + 1}
                             </p>
                           </div>
@@ -343,7 +345,7 @@ export const ViewCompanyDetails = () => {
                         <div className="flex gap-4 flex-col col-span-4 border-b-2 border-dashed  justify-center align-middle">
                           <div className=" flex items-center justify-center mb-8">
                             <div className="py-2 px-5 rounded-lg  bg-mainGreen  bg-opacity-10 border border-dashed border-gray-400">
-                              <p className=" text-lg font-bold text-mainGreen">
+                              <p className=" text-lg font-extrabold text-2xl text-mainGreen">
                                 {t(`document`)} {i + 1}
                               </p>
                             </div>
@@ -414,7 +416,10 @@ export const ViewCompanyDetails = () => {
                   <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>
                   <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                     <div className="flex gap-4 flex-col col-span-4">
-                      <h3 className="font-bold"> {t("national Address")} </h3>
+                      <h3 className="font-extrabold text-2xl">
+                        {" "}
+                        {t("national Address")}{" "}
+                      </h3>
                     </div>
                     <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                       <div className="flex gap-4 flex-col">

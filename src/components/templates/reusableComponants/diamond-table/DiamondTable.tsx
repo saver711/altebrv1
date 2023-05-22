@@ -31,7 +31,7 @@ const weightError = () => `${t('please enter a valid weight')}`
 
 const validationSchema = Yup.object({
   category_id: Yup.string().trim().required(requiredTranslation),
-  weight: Yup.number().positive(weightError).required(requiredTranslation),
+  // weight: Yup.number().positive(weightError).required(requiredTranslation),
   karat_id: Yup.string().trim().required(requiredTranslation),
   stock: Yup.number().positive(stockError).max(1, stockRatioError).required(requiredTranslation),
   gold_weight: Yup.number().min(0, positiveError).required(requiredTranslation),

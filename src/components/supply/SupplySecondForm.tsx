@@ -202,7 +202,7 @@ export const SupplySecondForm = ({
         total_weight: {
             title: 'total weight',
             value: boxValues.reduce((acc, curr) => {
-                return +acc + Number(curr.weight)
+                return +acc + Number(curr.gold_weight) + Number(curr.diamond_stone_weight) + Number(curr.other_stones_weight)
             }, 0),
             unit: 'gram'
         },
@@ -328,6 +328,7 @@ export const SupplySecondForm = ({
                                     } : {
                                         ...item,
                                         number: `${i + 1}`,
+                                        weight: Number(item.gold_weight) + Number(item.diamond_stone_weight) + Number(item.other_stones_weight),
                                         diamond_tax: (Number(item.diamond_value) * 0.15),
                                     }
                                 })

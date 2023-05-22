@@ -124,9 +124,9 @@ export const PartnerMainData = ({
           )}
 
           <Country_city_distract_markets
-            countryName="country_id"
+            countryName="country_id_out"
             countryLabel={`${t("country")}`}
-            cityName="city_id"
+            cityName="city_id_out"
             cityLabel={`${t("city")}`}
             isSuccessPost={isSuccessPost}
             resetSelect={restData}

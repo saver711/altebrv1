@@ -86,13 +86,6 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
               <p className=" text-mainGreen">{supplier?.name}</p>
             </div>
           }
-          leftComponent={
-            supplier?.document?.length !== 0 && (
-              <Button className="mb-3" action={() => setDocumentOpen(true)}>
-                {t("view all documents")}
-              </Button>
-            )
-          }
         >
           {isSuccess && (
             <>
@@ -270,7 +263,7 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                           </div>
                         ) : (
                           <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                            <h3 className="font-bold text-lg">
+                            <h3 className="font-extrabold text-2xl">
                               {t("no media")}
                             </h3>
                           </div>
@@ -281,10 +274,20 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 ))}
               </Modal>
               {/* الوثائق */}
-              <div className=" border-b-2 border-dashed col-span-4"></div>
+              <div className=" col-span-4"></div>
               {supplier?.document.length !== 0 && (
-                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("main documents")}</h3>
+                <div className="flex justify-between gap-4 col-span-4 align-center items-center">
+                  <h3 className="font-extrabold text-2xl">
+                    {t("main documents")}
+                  </h3>
+                  {supplier?.document?.length > 2 && (
+                    <Button
+                      className="mb-3"
+                      action={() => setDocumentOpen(true)}
+                    >
+                      {t("view all documents")}
+                    </Button>
+                  )}
                 </div>
               )}
               {supplier.document.length !== 0 ? (
@@ -340,7 +343,7 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                           </div>
                         ) : (
                           <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                            <h3 className="font-bold text-lg">
+                            <h3 className="font-extrabold text-2xl">
                               {t("no media")}
                             </h3>
                           </div>
@@ -351,7 +354,9 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 ))
               ) : (
                 <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("no documents")}</h3>
+                  <h3 className="font-extrabold text-2xl">
+                    {t("no documents")}
+                  </h3>
                 </div>
               )}
 
@@ -362,7 +367,10 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 {supplier.nationalAddress ? (
                   <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                     <div className="flex gap-4 flex-col col-span-4">
-                      <h3 className="font-bold"> {t("national Address")} </h3>
+                      <h3 className="font-extrabold text-2xl">
+                        {" "}
+                        {t("national Address")}{" "}
+                      </h3>
                     </div>
                     <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                       <div className="flex gap-4 flex-col">
@@ -441,7 +449,7 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                   </div>
                 ) : (
                   <div className="flex-col col-span-4 text-center">
-                    <p className="m-auto font-bold">لاويجد عنوان وطني</p>
+                    <p className="font-extrabold text-2xl">لاويجد عنوان وطني</p>
                   </div>
                 )}
               </>

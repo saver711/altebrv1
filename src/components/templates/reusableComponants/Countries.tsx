@@ -141,7 +141,6 @@ export const Countries = ({
   isSuccessPost,
   resetSelect,
 }: Countries_TP) => {
-  console.log("🚀 ~ file: Countries.tsx:144 ~ editData:", editData)
 
   /////////// VARIABLES
   ///

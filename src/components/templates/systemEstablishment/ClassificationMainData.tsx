@@ -78,6 +78,7 @@ export const ClassificationMainData = ({
             type="text"
             placeholder={`${t("classifications in arabic")}`}
             defaultValue={editData ? editData.name : ""}
+            required
           />
           <BaseInputField
             id="classification_en"
@@ -85,6 +86,7 @@ export const ClassificationMainData = ({
             name="name_en"
             type="text"
             placeholder={`${t("classifications in english")}`}
+            required
           />
         </InnerFormLayout>
       </OuterFormLayout>

@@ -39,6 +39,7 @@ export const AddPartners = ({
   dataSource,
   editData,
 }: AddPartners_props) => {
+  console.log("🚀 ~ file: AddPartners.tsx:42 ~ editData:", editData)
 
   /////////// VARIABLES
   ///
@@ -51,9 +52,10 @@ export const AddPartners = ({
     // x_city: editData?.city?.id || "",
     // city_value: editData?.city?.name || "",
     // x_country: editData?.country?.id || "",
+    country_id_out: editData ? editData?.country?.id : "",
+    city_id_out: editData ? editData?.city?.id : "",
     country_id: editData?.country?.id || "",
     city_id: editData?.city?.id || "",
-
     nationality_name: editData?.nationality_name || "",
     nationality_id: editData?.nationality.id || "",
     national_image: !!editData?.national_image
@@ -159,8 +161,8 @@ export const AddPartners = ({
             phone: values.phone,
             end_date: formatDate(values.end_date),
             start_date: formatDate(values.start_date),
-            city_id: values.city_id,
-            country_id: values.country_id,
+            country_id: values.country_id_out,
+            city_id: values.city_id_out,
             nationality_name: values.nationality_name,
             national_image: values.national_image[0],
             nationality_id: values.nationality_id,

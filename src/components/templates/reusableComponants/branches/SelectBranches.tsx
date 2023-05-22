@@ -11,11 +11,12 @@ import { RefetchErrorHandler } from "../../../molecules/RefetchErrorHandler"
 import { CreateBranch } from "./CreateBranch"
 ///
 /////////// Types
-type SelectBranchesProps_TP =  {
+type SelectBranchesProps_TP = {
   name: string
   editData?: any
   isSuccessPost?: any
-  resetSelect?:any
+  resetSelect?: any
+  required?:any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -25,6 +26,7 @@ export const SelectBranches = ({
   name,
   editData,
   isSuccessPost,
+  required,
   resetSelect,
 }: SelectBranchesProps_TP) => {
   /////////// VARIABLES
@@ -92,6 +94,7 @@ export const SelectBranches = ({
         id="branch"
         label={`${t("branch")}`}
         name={name}
+        required={required}
         placeholder={
           branchesOptions?.length !== 0 ? `${t("branch")}` : "اضف فرع "
         }
