@@ -133,7 +133,7 @@ export const OneBranches = ({ title }) => {
                     lightString={doc.data.docNumber}
                   />
                   <TextLine
-                    containerClasses="col-span-2"
+                    containerClasses="col-span-2 !w-full"
                     boldText={t("end date")}
                     lightString={doc.data.endDate}
                   />
