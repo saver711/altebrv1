@@ -126,13 +126,13 @@ const AddSupplier = ({
     type: editData ? editData.type : "local",
     is_mediator: editData ? editData.is_mediator : true,
     gold_tax: editData
-      ? editData.tax === "gold" || "gold_and_wages"
+      ? editData.tax == "gold" || editData.tax == "gold_and_wages"
         ? true
         : false
       : true,
     // gold
     wages_tax: editData
-      ? editData.tax === "gold_and_wages"
+      ? editData.tax == "wages" || editData.tax == "gold_and_wages"
         ? true
         : false
       : false,
@@ -196,7 +196,7 @@ const AddSupplier = ({
   const [docsFormValues, setDocsFormValues] =
     useState<allDocs_TP[]>(incomingData)
   const navigate = useNavigate()
-
+  console.log(editData)
   ///
   /////////// SIDE EFFECTS
   ///
