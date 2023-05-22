@@ -179,6 +179,9 @@ export const Countries = ({
         value: "",
         label: "اختر دولة",
       })
+       if (editData) {
+         setCountry({ id: "", label: "", value: "", name: "" })
+       }
       if (resetSelect) resetSelect()
     }
 
@@ -202,6 +205,8 @@ export const Countries = ({
         label: country.name,
       })),
   })
+  console.log(newValue)
+  
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">

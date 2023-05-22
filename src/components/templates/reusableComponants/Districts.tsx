@@ -191,10 +191,10 @@ export const Districts = ({
     setNewValue({
       id: editData?.nationalAddress?.district.id || editData?.district_id || "",
       value:
-        editData?.nationalAddress?.district.name || editData?.district_id || "",
+        editData?.nationalAddress?.district.name || editData?.district_name || "",
       label:
         editData?.nationalAddress?.district.name ||
-        editData?.district_id ||
+        editData?.district_name ||
         "اختر المدينه اولا ",
     })
   }, [])
@@ -250,7 +250,9 @@ export const Districts = ({
           if (resetSelect) resetSelect()
         }
 
-  }, [isSuccessPost])
+  }, [ isSuccessPost ])
+  console.log("ejj", editData?.city_id)
+  
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select
@@ -279,7 +281,7 @@ export const Districts = ({
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (distractName) {
+          if (distractName && editData) {
             setFieldValue(distractName, option?.id)
             setFieldValue("district_value", option!.value)
           }

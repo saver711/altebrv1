@@ -181,7 +181,7 @@ export const Cities = ({
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
-    console.log("three")
+    console.log("1")
 
     setNewValue({
       id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
@@ -218,11 +218,11 @@ export const Cities = ({
     enabled: editData ? true : !!country?.id,
   })
   console.log("v", cities)
-  console.log("e", editData)
-
+  console.log("e", editData?.country_id)
+  console.log("NewValue", newValue)
 
   useEffect(() => {
-    console.log('first')
+    console.log("2")
     if (cities && !editData) {
       setNewValue(null)
       setCityId({ id: "", label: "", value: "", name: "" })
@@ -231,7 +231,7 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    console.log("sec")
+    console.log("3")
 
     if (!editData) {
       setNewValue({
@@ -239,7 +239,9 @@ export const Cities = ({
         value: "",
         label: "اختر الدوله اولا",
       })
-
+      if (editData) {
+        setCityId({ id: "", label: "", value: "", name: "" })
+      }
       if (resetSelect) resetSelect()
     }
   }, [isSuccessPost])
@@ -268,7 +270,7 @@ export const Cities = ({
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (cityName) {
+          if (cityName && editData) {
             setFieldValue(cityName, option?.id)
             // setFieldValue('city_value', option!.value)
           }
