@@ -101,6 +101,7 @@ export const SelectNationality = ({
         creatable
         modalTitle={`${t("add nationality")}`}
         CreateComponent={CreateNationalities}
+        required
         fieldKey="id"
         value={newValue}
         isDisabled={!nationalityLoading && !!nationalityErrorReason}

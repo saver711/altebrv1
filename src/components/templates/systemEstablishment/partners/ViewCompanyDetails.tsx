@@ -225,7 +225,7 @@ export const ViewCompanyDetails = () => {
                       lightString={company?.tax_number}
                     />
                   )}
-                  {company.logo && (
+                  {company.logo ? (
                     <div className="flex items-center gap-1">
                       <p className="mt-1">{t("media")} : </p>
                       <FilesPreviewOutFormik
@@ -238,7 +238,7 @@ export const ViewCompanyDetails = () => {
                         ]}
                       />
                     </div>
-                  )}
+                  ): "لايوجد وسائط"}
                 </div>
                 <div className="flex gap-4 flex-col">
                   <div className="col-span-1 flex items-center">

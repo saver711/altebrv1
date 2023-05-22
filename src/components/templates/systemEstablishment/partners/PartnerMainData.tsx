@@ -119,6 +119,7 @@ export const PartnerMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
@@ -153,12 +154,17 @@ export const PartnerMainData = ({
             resetSelect={restData}
           />
           {/* تاريخ انتهاء الهوية */}
-          <DateInputField label={`${t("End IdNumber")}`} name="end_date" />
+          <DateInputField
+            label={`${t("End IdNumber")}`}
+            name="end_date"
+            required
+          />
 
           {/* تاريخ بدء الشراكة */}
           <DateInputField
             label={`${t("start Date Partner")}`}
             name="start_date"
+            required
           />
           <div className="col-span-4">
             <h2> {`${t("national image")}`}</h2>

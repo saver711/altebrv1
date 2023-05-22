@@ -7,6 +7,7 @@ import { BaseInput, FormikError, Label } from "../../atoms"
 
 const dateInputField = tv({
   base: "direction-rtl",
+  
   variants: {
     active: {
       true: "!rounded-md !border-2 !border-mainGreen !ring-0",
@@ -25,16 +26,18 @@ export const DateInputField = ({
   label,
   name,
   maxDate,
+  required,
   minDate,
   labelProps,
   value,
-  placeholder
+  placeholder,
 }: {
   label: string
   name: string
   maxDate?: Date
   minDate?: Date
   value?: Date
+  required?:any
   placeholder?: string
   labelProps?: {
     [key: string]: any
@@ -49,7 +52,7 @@ export const DateInputField = ({
   return (
     <div className="col-span-1">
       <div className="flex flex-col gap-1">
-        <Label htmlFor={name} {...labelProps}>
+        <Label htmlFor={name} required={required} {...labelProps}>
           {label}
         </Label>
         <DatePicker
