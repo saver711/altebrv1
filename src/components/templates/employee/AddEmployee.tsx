@@ -7,18 +7,15 @@ import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
-import { EmployeeMainData, NationalAddress } from ".."
+import { EmployeeMainData } from ".."
 import { useMutate } from "../../../hooks"
 import { formatDate, getDayBefore } from "../../../utils/date"
 import { requiredTranslation } from "../../../utils/helpers"
 import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { HandleBackErrors } from "../../../utils/utils-components/HandleBackErrors"
-import { Button } from "../../atoms"
-import { OuterFormLayout } from "../../molecules"
 import {
-  Documents,
-  allDocs_TP,
+  allDocs_TP
 } from "../reusableComponants/documents/Documents"
 import { Email_TP, InitialValues_TP } from "./validation-and-types"
 ///
@@ -45,7 +42,7 @@ export const AddEmployee = ({
       name: Yup.string().trim().required(requiredTranslation),
       branch_id: Yup.string().trim().required(requiredTranslation),
       role_id: Yup.string().trim().required(requiredTranslation),
-      address: Yup.string().trim().required(requiredTranslation),
+      address_out: Yup.string().trim().required(requiredTranslation),
       mobile: !!!editEmployeeData
         ? Yup.string()
             .trim()
@@ -107,6 +104,7 @@ export const AddEmployee = ({
     phone: editEmployeeData?.phone || "",
     mobile: editEmployeeData?.mobile || "",
     username: editEmployeeData?.username || "",
+    address_out: editEmployeeData?.address || "",
     is_active: editEmployeeData?.is_active ? "Yes" : "No" || "Yes",
     city_id: editEmployeeData?.nationalAddress?.city?.id || "",
     nationality_id: editEmployeeData?.nationality?.id || "",
@@ -147,7 +145,6 @@ export const AddEmployee = ({
     address: editEmployeeData?.nationalAddress?.address || "",
   }
 
-
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -182,6 +179,7 @@ export const AddEmployee = ({
         onSubmit={(values) => {
           let editedValues = {
             ...values,
+            address:values.address_out,
             image: values.image[0],
             national_image: values.national_image[0],
             is_active: values.is_active === "No" ? 0 : 1,
@@ -242,7 +240,7 @@ export const AddEmployee = ({
         <HandleBackErrors errors={error?.response?.data.errors}>
           <Form>
             <EmployeeMainData
-              title={`${t("main data")}`}
+              title={title}
               editEmployeeData={editEmployeeData}
               docsFormValues={docsFormValues}
               setDocsFormValues={setDocsFormValues}

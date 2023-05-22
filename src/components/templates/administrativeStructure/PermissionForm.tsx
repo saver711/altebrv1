@@ -49,7 +49,7 @@ export const PermissionForm = ({
               setFieldValue(value, e.target.checked)
           }
           )
-        }} className="mx-2  text-mainGreen rounded" />
+        }} className="mx-2  text-mainGreen rounded"/>
         <label htmlFor="check_all">{t('select all')}</label>
       </div>
       <div className="col-span-2 mx-auto">
@@ -79,7 +79,7 @@ export const PermissionForm = ({
               permissions: Permission_TP[]
             }) => (
               <PermissionGroup
-                key={id}
+                key={crypto.randomUUID()}
                 name={name}
                 permissions={permissions}
                 editData={editData}
