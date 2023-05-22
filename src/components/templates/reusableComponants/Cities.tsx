@@ -181,6 +181,8 @@ export const Cities = ({
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
+    console.log("three")
+
     setNewValue({
       id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
       value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
@@ -191,8 +193,6 @@ export const Cities = ({
     })
   }, [])
 
-
-
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
 
@@ -202,7 +202,9 @@ export const Cities = ({
     failureReason,
     refetch,
   } = useFetch<SelectOption_TP[], City_TP>({
-    endpoint: `governorate/api/v1/countries/${country?.id}?per_page=10000`,
+    endpoint: `governorate/api/v1/countries/${
+      editData ? editData?.country_id : country?.id
+    }?per_page=10000`,
     queryKey: [`cities/${country?.id}`],
     select: ({ cities }) => {
       return cities.map((city) => ({
@@ -213,11 +215,15 @@ export const Cities = ({
         country_name: city.country_name,
       }))
     },
-    enabled: !!country?.id,
+    enabled: editData ? true : !!country?.id,
   })
+  console.log("v", cities)
+  console.log("e", editData)
+
 
   useEffect(() => {
-    if (cities) {
+    console.log('first')
+    if (cities && !editData) {
       setNewValue(null)
       setCityId({ id: "", label: "", value: "", name: "" })
       setFieldValue(cityName, null)
@@ -225,15 +231,17 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-     if (!editData) {
-       setNewValue({
-         id: "",
-         value: "",
-         label: "اختر الدوله اولا",
-       })
+    console.log("sec")
 
-       if (resetSelect) resetSelect()
-     }
+    if (!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر الدوله اولا",
+      })
+
+      if (resetSelect) resetSelect()
+    }
   }, [isSuccessPost])
 
   ///
@@ -244,7 +252,7 @@ export const Cities = ({
         label={t(`${label}`).toString()}
         name={cityName}
         modalTitle={`${t("add city")}`}
-        isDisabled={!!!country?.id}
+        isDisabled={editData ? false : !!!country?.id}
         loadingPlaceholder={`${
           !country?.id ? "اختر الدولة أولا" : t("loading")
         }`}

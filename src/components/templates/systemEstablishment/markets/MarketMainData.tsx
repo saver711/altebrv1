@@ -42,7 +42,6 @@ export const MarketMainData = ({
   /////////// CUSTOM HOOKS
   ///
   const { resetForm, values } = useFormikContext<any>()
-  console.log("🚀 ~ file: MarketMainData.tsx:60 ~ values:", values)
 
   ///
   /////////// STATES

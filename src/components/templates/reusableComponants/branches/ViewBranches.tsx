@@ -22,6 +22,7 @@ type ViewBranches_Props_TP = {
   title: string
 }
 export type Branch_Props_TP = {
+  main_address: any
   id: string
   address: string
   fax: string

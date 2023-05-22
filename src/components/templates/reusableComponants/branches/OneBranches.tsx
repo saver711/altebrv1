@@ -87,8 +87,12 @@ export const OneBranches = ({ title }) => {
         >
           <InnerFormLayout title={data?.name_ar}>
             <TextLine
-              boldText={t("name")}
-              lightString={isRTL ? data.name_ar : data.name_en}
+              boldText={t("arabic name")}
+              lightString={ data.name_ar }
+            />
+            <TextLine
+              boldText={t("english name")}
+              lightString={data.name_en}
             />
             <TextLine boldText={t("address")} lightString={data.address} />
             <TextLine boldText={t("phone")} lightString={data.phone} />

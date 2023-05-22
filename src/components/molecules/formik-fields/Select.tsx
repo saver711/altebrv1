@@ -113,6 +113,7 @@ export const SelectComp = ({
       ...animatedComponents,
       LoadingIndicator: () => <Spinner className="ml-2" size="medium" />,
     },
+    
     id: id,
     defaultValue,
     name,
@@ -154,14 +155,11 @@ export const SelectComp = ({
     <>
       <div className="col-span-1">
         <div className="flex flex-col gap-1">
-          {label && (
-            <Label htmlFor={id} required={required}>
-              {label}
-            </Label>
-          )}
+          {label && <Label htmlFor={id}>{label}</Label>}
           {creatable ? (
             <>
               <CreatableSelect
+                isClearable
                 {...selectProps}
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
@@ -188,7 +186,7 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select {...selectProps} />
+            <Select isClearable {...selectProps} />
           )}
         </div>
         <FormikError name={name as string} className="whitespace-nowrap" />

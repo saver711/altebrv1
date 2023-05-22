@@ -208,7 +208,9 @@ export const Districts = ({
     refetch,
   } = useFetch<SelectOption_TP[], District_TP>({
     queryKey: [`districts/${city?.id}`],
-    endpoint: `governorate/api/v1/cities/${city?.id}?per_page=10000`,
+    endpoint: `governorate/api/v1/cities/${
+      editData ? editData?.city_id : city?.id
+    }?per_page=10000`,
     select: ({ districts }) =>
       districts.map((district) => ({
         ...district,
@@ -216,12 +218,12 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled: editData ? true : !!city?.id,
   })
 
   //change value
   useEffect(() => {
-    if (districts) {
+    if (districts && !editData) {
       setNewValue({
         id: "",
         value: "",
@@ -255,7 +257,7 @@ export const Districts = ({
         id={distractName}
         label={t(`${label}`).toString()}
         name={distractName}
-        isDisabled={!!!city?.id}
+        isDisabled={editData ? false : !!!city?.id}
         modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
