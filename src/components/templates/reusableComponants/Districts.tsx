@@ -259,6 +259,7 @@ export const Districts = ({
         modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
+        required
         // placeholder={
         //   city?.id &&
         //   `

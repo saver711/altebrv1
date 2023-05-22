@@ -86,6 +86,7 @@ export const NationalitiesMainData = ({
               type="text"
               placeholder={`${t("nationality in arabic")}`}
               defaultValue={editData ? editData.name : ""}
+              required
               // value={value}
             />
             {/* nationality ar  end */}
@@ -97,6 +98,7 @@ export const NationalitiesMainData = ({
               name="name_en"
               type="text"
               placeholder={`${t("nationality in english")}`}
+              required
               // value={value}
             />
             {/* nationality en  end */}

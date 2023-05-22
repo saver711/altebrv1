@@ -256,6 +256,7 @@ export const Cities = ({
         `
         }
         options={cities}
+        required
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
