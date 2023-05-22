@@ -53,57 +53,6 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
 
   /////////// STATES
   ///
-  // const [allData, setAllData] = useState<any[] | undefined>()
-  // console.log("🚀 ~ file: OnePartner.tsx:51 ~ OnePartner ~ allData:", allData)
-
-  // const queryClient = useQueryClient()
-
-  //   const {
-  //     data: countriesOptions,
-  //     isLoading: countriesLoading,
-  //     refetch: refetchCountries,
-  //     failureReason: countriesErrorReason
-  // } = useFetch<SelectOption_TP[]>({
-  //     endpoint: "governorate/api/v1/countries",
-  //     queryKey: ["countries"],
-  //     select: (countries) => countries.map((country: any) => ({
-  //         id: country.id,
-  //         value: country.name,
-  //         label: country.name ,
-  //     })),
-  // })
-
-  //     const {
-  //       data: citiesOptions,
-  //       isLoading: citiesLoading,
-  //       refetch: refetchCities,
-  //       failureReason: citiesErrorReason,
-  //     } = useFetch<SelectOption_TP[]>({
-  //       endpoint: "governorate/api/v1/cities",
-  //       queryKey: ["cities"],
-  //       select: (cities) =>
-  //         cities.map((city: any) => ({
-  //           id: city.id,
-  //           value: city.name,
-  //           label: city.name,
-  //         })),
-  //     })
-  //       console.log("🚀 ~ file: OnePartner.tsx:87 ~ OnePartner ~ citiesOptions:", citiesOptions)
-  //     console.log("🚀 ~ file: OnePartner.tsx:70 ~ OnePartner ~ countriesOptions:", countriesOptions)
-
-  //   useEffect(() => {
-  //     const allData = {
-
-  //        country : countriesOptions?.find(
-  //         (country) => country.id == partner?.country?.id
-  //       )?.value,
-  //        city : citiesOptions?.find(
-  //         (city) => city.id == partner?.city.id
-  //       )?.value
-  //     }
-
-  //     setAllData(allData)
-  //   }, [countriesOptions, citiesOptions])
   ///
   /////////// SIDE EFFECTS
   ///
@@ -128,6 +77,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
         }
       >
         {partnerLoading && <Loading mainTitle={t("view doc Details")} />}
+        {isSuccess && (
         <InnerFormLayout
           title={
             <div className="flex gap-4">
@@ -135,15 +85,7 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
               <p className=" text-mainGreen">{partner?.name}</p>
             </div>
           }
-          leftComponent={
-            partner?.document?.length !== 0 && (
-              <Button className="mb-3" action={() => setDocumentOpen(true)}>
-                {t("view all documents")}
-              </Button>
-            )
-          }
         >
-          {isSuccess && (
             <>
               <div className="flex gap-4 flex-col col-span-4 m-auto">
                 <img
@@ -237,8 +179,18 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                 </div>
               )}
               {partner?.document.length !== 0 && (
-                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("main documents")}</h3>
+                <div className="flex justify-between gap-4 col-span-4 align-center items-center mt-5">
+                  <h3 className="font-extrabold text-2xl ">
+                    {t("main documents")}
+                  </h3>
+                  {partner?.document.length > 2 && (
+                    <Button
+                      className="mb-3"
+                      action={() => setDocumentOpen(true)}
+                    >
+                      {t("view all documents")}
+                    </Button>
+                  )}
                 </div>
               )}
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
@@ -380,15 +332,17 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                 ))
               ) : (
                 <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("no documents")}</h3>
+                  <h3 className="font-extrabold text-2xl ">
+                    {t("no documents")}
+                  </h3>
                 </div>
               )}
               {/* العنوان الوطني */}
               <>
                 <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>
                 <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                  <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                    <h3 className="font-bold text-lg">
+                  <div className="flex justify-start gap-4 col-span-4 align-center items-center">
+                    <h3 className="font-extrabold text-2xl ">
                       {t("national Address")}{" "}
                     </h3>
                   </div>
@@ -463,8 +417,8 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                 </div>
               </>
             </>
-          )}
         </InnerFormLayout>
+          )}
       </OuterFormLayout>
     </>
   )

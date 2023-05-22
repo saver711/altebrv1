@@ -82,6 +82,7 @@ export const ColorMainData = ({
               type="text"
               placeholder={`${t("name colors in arabic")}`}
               defaultValue={editData ? editData.name : ""}
+              required
               // value={value}
             />
             {/* nationality ar  end */}
@@ -93,6 +94,7 @@ export const ColorMainData = ({
               name="name_en"
               type="text"
               placeholder={`${t("name colors in english")}`}
+              required
               // value={value}
             />
             {/* nationality en  end */}
