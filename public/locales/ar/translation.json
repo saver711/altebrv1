@@ -454,5 +454,6 @@
   "add stones natures":"اضافة طبيعة الحجر",
   "no tax": "لا يوجد ضريبة",
   "type":"النوع",
-  "company_name":"اسم الشركة"
+  "company_name":"اسم الشركة",
+  "lock status switched successfully": "تم تغيير حالة القفل بنجاح"
 }

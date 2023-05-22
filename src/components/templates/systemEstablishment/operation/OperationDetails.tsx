@@ -1,6 +1,7 @@
 /////////// IMPORTS
 ///
 //import classes from './Operation.module.css'
+import { t } from "i18next"
 import { useMemo, useState } from "react"
 import { SingleValue } from "react-select"
 import { useFetch, useMutate } from "../../../../hooks"
@@ -13,7 +14,10 @@ import { Loading } from "../../../organisms/Loading"
 /////////// Types
 ///
 
-type OperationDetails_TP = { operationId: number | null }
+type OperationDetails_TP = { 
+  lock?: "yes" | "no"
+  operationId: number | null 
+}
 type RowData_TP = { id: number; numeric_system: number }
 type SelectedOption_TP = {
   id: number
@@ -46,7 +50,7 @@ export type Sub_AccountSelectOption_TP = {
 ///
 
 ///
-export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
+export const OperationDetails = ({ operationId, lock }: OperationDetails_TP) => {
   /////////// VARIABLES
   ///
   const [rowData, setRowData] = useState<RowData_TP | null>()
@@ -133,7 +137,7 @@ export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
             {selectOptions && !!debtorList?.length && (
               <div className="mb-4 w-full  border-l-2">
                 <div className=" rounded-t-md  bg-mainGreen p-3 text-center text-white">
-                  <h3>مدين</h3>
+                  <h3>{t('debtor')}</h3>
                 </div>
                 {debtorList?.map(
                   ({ id, nature, description, front_key, account }) => (
@@ -144,6 +148,7 @@ export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
                       <h4 className=" col-span-1">{description}</h4>
                       <div className="col-span-1 flex items-center justify-center ">
                         <SelectInput
+                          isDisabled={isLoading || lock === "yes"}
                           options={selectOptions}
                           //@ts-ignore
                           defaultValue={selectOptions?.find(
@@ -189,7 +194,7 @@ export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
             {selectOptions && !!creditorList?.length && (
               <div className=" mb-4 w-full">
                 <div className=" rounded-t-md  bg-mainGreen p-3 text-center text-white">
-                  <h3>دائن</h3>{" "}
+                  <h3>{t('creditor')}</h3>{" "}
                 </div>
                 {creditorList?.map(
                   ({ id, nature, description, front_key, account }) => (
@@ -200,7 +205,7 @@ export const OperationDetails = ({ operationId }: OperationDetails_TP) => {
                       <h4 className=" col-span-1">{description}</h4>
                       <div className="col-span-1 flex items-center justify-center ">
                         <SelectInput
-                          isDisabled={isLoading}
+                          isDisabled={isLoading || lock === "yes"}
                           loading={isLoading}
                           options={selectOptions}
                           //@ts-ignore
