@@ -54,7 +54,7 @@ export const CreateBranch = ({
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
     number: editData ? editData.number : "",
-    main_address: editData ? editData.main_address : "",
+    main_address: editData ? editData.address : "",
 
     // national address data
     building_number: editData ? editData.nationalAddress.building_number : "",
