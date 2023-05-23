@@ -106,7 +106,7 @@ export const ViewCategories = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("action")}</span>,
+        header: () => <span>{t("actions")}</span>,
         accessorKey: "action",
         cell: (info) => {
           return (
@@ -230,7 +230,7 @@ export const ViewCategories = () => {
   //   )
 
   ///
-  console.log(viewSingleCategory)
+  console.log("viewSingleCategory", viewSingleCategory?.items)
 
   return (
     <div className="p-4">
@@ -401,12 +401,11 @@ export const ViewCategories = () => {
                     boldText={t("category type")}
                     lightString={viewSingleCategory?.type}
                   />
-
                   {viewSingleCategory?.items?.map((item, i) => (
                     <div key={item.id}>
                       <TextLine
                         boldText={`${t("category")} ${i + 1}`}
-                        lightString={viewSingleCategory?.name}
+                        lightString={item?.name}
                       />
                     </div>
                   ))}

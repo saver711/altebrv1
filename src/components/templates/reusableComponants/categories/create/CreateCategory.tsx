@@ -24,7 +24,7 @@ type CreateCategoryProps_TP = {
   editData?: { [key: string]: any }
   setDataSource?: Dispatch<SetStateAction<InitialValues_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 
 type SingleCategory_TP = {
@@ -56,7 +56,7 @@ type SizeProps_TP2 = {
 }
 
 const CreateCategory = ({
-  value="",
+  value = "",
   onAdd,
   editData,
   setDataSource,
@@ -164,7 +164,7 @@ const CreateCategory = ({
   })
 
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
+  const { mutate, isLoading, error, isSuccess, reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
@@ -220,7 +220,7 @@ const CreateCategory = ({
   // }
 
   const send = (values: InitialValues_TP) => {
-    console.log(values)
+    console.log("values", values)
     const multi = values.type === "multi"
     const singleValues = {
       name_en: values.name_en,
@@ -263,9 +263,7 @@ const CreateCategory = ({
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={(values) =>
-        send(values)
-      }
+      onSubmit={(values) => send(values)}
       validationSchema={validatingSchema}
     >
       {(props) => (

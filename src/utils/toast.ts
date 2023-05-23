@@ -6,7 +6,7 @@ import {
 
 const toastOptions: ToastOptions_TP = {
   position: "top-right",
-  autoClose: 2000,
+  autoClose: 900,
   hideProgressBar: true,
   closeOnClick: true,
   pauseOnHover: true,

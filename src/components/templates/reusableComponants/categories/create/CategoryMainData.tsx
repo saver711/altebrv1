@@ -46,10 +46,10 @@ export const CategoryMainData = ({
   props,
   categoryLoading,
 }: CategoryMainDataProps_TP) => {
-  console.log(
-    "🚀 ~ file: CategoryMainData.tsx:29 ~ isSuccessPost:",
-    isSuccessPost
-  )
+  // console.log(
+  //   "🚀 ~ file: CategoryMainData.tsx:29 ~ isSuccessPost:",
+  //   isSuccessPost
+  // )
   /////////// VARIABLES
   ///
 
@@ -57,7 +57,7 @@ export const CategoryMainData = ({
   /////////// CUSTOM HOOKS
   ///
   const { resetForm , values } = useFormikContext<any>()
-  console.log("🚀 ~ file: CategoryMainData.tsx:60 ~ values:", values)
+  // console.log("🚀 ~ file: CategoryMainData.tsx:60 ~ values:", values)
 
   ///
   /////////// STATES
