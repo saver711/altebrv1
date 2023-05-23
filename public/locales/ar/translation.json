@@ -398,11 +398,11 @@
   "accessories supply": "توريد متفرقات",
   "total diamond value": "اجمالي قيمة الالماس",
   "total other stones weight": "اجمالي اوزان الاحجار الاخري",
-  "total diamond amount": "اجمالي عدد الالماس",
+  "total diamond amount": "اجمالي عدد القطع",
   "total diamond stone weight": "اجمالي وزن حجر الالماس",
   "gold weight": "وزن الذهب",
   "diamond value": "قيمة الالماس",
-  "diamond amount": "عدد الالماس",
+  "diamond amount": "عدد القطع",
   "diamond stone weight": "وزن حجر الالماس",
   "other stones weight": "وزن الاحجار الاخري",
   "diamond tax": "ضريبة الالماس",
@@ -455,5 +455,6 @@
   "no tax": "لا يوجد ضريبة",
   "type":"النوع",
   "company_name":"اسم الشركة",
-  "lock status switched successfully": "تم تغيير حالة القفل بنجاح"
+  "lock status switched successfully": "تم تغيير حالة القفل بنجاح",
+  "Karat": "قيراط"
 }
