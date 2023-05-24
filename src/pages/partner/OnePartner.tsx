@@ -76,16 +76,21 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
           </Button>
         }
       >
-        {partnerLoading && <Loading mainTitle={t("view doc Details")} />}
+        {partnerLoading && (
+          <Loading
+            mainTitle={`${t("partner data is loading")}`}
+            subTitle={`${t("loading")}`}
+          />
+        )}
         {isSuccess && (
-        <InnerFormLayout
-          title={
-            <div className="flex gap-4">
-              <p>بيانات</p>
-              <p className=" text-mainGreen">{partner?.name}</p>
-            </div>
-          }
-        >
+          <InnerFormLayout
+            title={
+              <div className="flex gap-4">
+                <p>بيانات</p>
+                <p className=" text-mainGreen">{partner?.name}</p>
+              </div>
+            }
+          >
             <>
               <div className="flex gap-4 flex-col col-span-4 m-auto">
                 <img
@@ -417,8 +422,8 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                 </div>
               </>
             </>
-        </InnerFormLayout>
-          )}
+          </InnerFormLayout>
+        )}
       </OuterFormLayout>
     </>
   )

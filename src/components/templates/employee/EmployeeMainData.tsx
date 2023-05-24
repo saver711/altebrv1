@@ -72,12 +72,14 @@ export const EmployeeMainData = ({
   ///
   useEffect(() => {
     if (isSuccessPost) {
-      restData()
-      resetForm()
-      setFieldValue("date_of_birth", new Date())
-      setFieldValue("national_expire_date", new Date())
-      setDocsFormValues([])
-      setModalOpen(false)
+      if (!editEmployeeData) {    
+        restData()
+         resetForm()
+         setFieldValue("date_of_birth", new Date())
+         setFieldValue("national_expire_date", new Date())
+         setDocsFormValues([])
+         setModalOpen(false)
+      }
     }
   }, [isSuccessPost])
   ///
@@ -109,8 +111,8 @@ export const EmployeeMainData = ({
             required
             name="branch_id"
             editData={editEmployeeData}
-            isSuccessPost={isSuccessPost}
-            resetSelect={restData}
+            isSuccessPost={!editEmployeeData && isSuccessPost}
+            resetSelect={!editEmployeeData && restData}
           />
           {/* branch end */}
 
@@ -158,8 +160,8 @@ export const EmployeeMainData = ({
             <SelectNationality
               name="nationality_id"
               editData={editEmployeeData}
-              isSuccessPost={isSuccessPost}
-              resetSelect={restData}
+              isSuccessPost={!editEmployeeData && isSuccessPost}
+              resetSelect={!editEmployeeData && restData}
             />
           </div>
           {/* nationalities end */}
@@ -307,13 +309,13 @@ export const EmployeeMainData = ({
           docsFormValues={docsFormValues}
           setDocsFormValues={setDocsFormValues}
           editable={!!editEmployeeData}
-          isSuccessPost={isSuccessPost}
-          restData={restData}
+          isSuccessPost={!editEmployeeData && isSuccessPost}
+          restData={!editEmployeeData && restData}
         />
         <NationalAddress
           editData={editEmployeeData}
-          isSuccessPost={isSuccessPost}
-          resetSelect={restData}
+          isSuccessPost={!editEmployeeData && isSuccessPost}
+          resetSelect={!editEmployeeData && restData}
         />
       </OuterFormLayout>
     </>

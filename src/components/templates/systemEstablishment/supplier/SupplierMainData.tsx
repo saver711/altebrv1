@@ -13,7 +13,7 @@ import {
   DateInputField,
   InnerFormLayout,
   OuterFormLayout,
-  PhoneInput
+  PhoneInput,
 } from "../../../molecules"
 import RadioGroup from "../../../molecules/RadioGroup"
 import { DropFile } from "../../../molecules/files/DropFile"
@@ -31,7 +31,7 @@ type SupplierMainDataProps_TP = {
   isSuccessPost?: any
   restData?: any
   setDocsFormValues?: any
-  docsFormValues?:any
+  docsFormValues?: any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -47,7 +47,8 @@ export const SupplierMainData = ({
 }: SupplierMainDataProps_TP) => {
   /////////// VARIABLES
   /////
-  const { setFieldValue , values , resetForm } = useFormikContext<FormikSharedConfig>()
+  const { setFieldValue, values, resetForm } =
+    useFormikContext<FormikSharedConfig>()
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -74,16 +75,17 @@ export const SupplierMainData = ({
   ///
   /////////// SIDE EFFECTS
 
-
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   useEffect(() => {
     if (isSuccessPost) {
-      resetForm()
+      if (!editData) {
+        resetForm()
       restData()
       setFieldValue("end_date", new Date())
       setFieldValue("start_date", new Date())
       setDocsFormValues([])
+      } 
     }
   }, [isSuccessPost])
 
@@ -175,7 +177,7 @@ export const SupplierMainData = ({
             labelProps={{ className: "mb-1" }}
           />
           <Country_city_distract_markets
-            countryName="country_id "
+            countryName="country_id_out"
             countryLabel={`${t("country")}`}
             isSuccessPost={isSuccessPost}
             resetSelect={restData}
@@ -274,14 +276,14 @@ export const SupplierMainData = ({
           editable={!!editData}
           setDocsFormValues={setDocsFormValues}
           docsFormValues={docsFormValues}
-          isSuccessPost={isSuccessPost}
-          restData={restData}
+          isSuccessPost={!editData && isSuccessPost}
+          restData={!editData && restData}
         />
         {values?.type === "local" && (
           <NationalAddress
             editData={editData}
-            isSuccessPost={isSuccessPost}
-            resetSelect={restData}
+            isSuccessPost={!editData && isSuccessPost}
+            resetSelect={!editData &&  restData}
           />
         )}
       </OuterFormLayout>

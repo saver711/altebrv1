@@ -61,7 +61,7 @@ export const Documents = ({
   useEffect(() => {
     if (isSuccessPost) {
       resetForm()
-      restData()
+      restData && restData()
     }
   }, [isSuccessPost])
   function handleOpenAddDoc() {

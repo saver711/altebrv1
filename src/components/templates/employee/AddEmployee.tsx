@@ -43,6 +43,7 @@ export const AddEmployee = ({
       branch_id: Yup.string().trim().required(requiredTranslation),
       role_id: Yup.string().trim().required(requiredTranslation),
       address_out: Yup.string().trim().required(requiredTranslation),
+      address: Yup.string().trim().required(requiredTranslation),
       mobile: !!!editEmployeeData
         ? Yup.string()
             .trim()
@@ -77,6 +78,7 @@ export const AddEmployee = ({
       image: Yup.array()
         .required(requiredTranslation)
         .min(1, "can not be empty"),
+      zip_code: Yup.string().trim().required(requiredTranslation),
     })
 
   //@ts-ignore
