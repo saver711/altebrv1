@@ -367,7 +367,7 @@ export const ViewCategories = () => {
               >
                 {`${t("confirm")}`}
               </Button>
-              <Button>{`${t("close")}`}</Button>
+              <Button action={() => setOpen(false)}>{`${t("close")}`}</Button>
             </div>
           </div>
         )}
@@ -387,7 +387,6 @@ export const ViewCategories = () => {
                 boldText={t("Selling policy")}
                 lightString={viewSingleCategory?.selling_type}
               />
-
               {/* نوع الصنف */}
               {viewSingleCategory?.type === "single" && (
                 <TextLine
