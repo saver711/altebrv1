@@ -163,7 +163,6 @@ export const SelectComp = ({
             <>
               <CreatableSelect
                 {...selectProps}
-                menuPosition="fixed"
                 menuPlacement="auto"
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
@@ -190,7 +189,7 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select menuPosition="fixed" menuPlacement="auto" {...selectProps} />
+            <Select  menuPlacement="auto" {...selectProps} />
           )}
         </div>
         <FormikError name={name as string} className="whitespace-nowrap" />
