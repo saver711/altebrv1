@@ -168,7 +168,7 @@ export const GoldCodingSanadFormHandler = ({
   ///
   const { values, setFieldValue, setFieldError, submitForm, isSubmitting,isValid } =
   useFormikContext<GoldCodingSanad_initialValues_TP>()
-  console.log(`values:`, values)
+  console.log(`values media:`, values.media)
 
   /* FETCH SANAD */
   const {

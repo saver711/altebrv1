@@ -1,10 +1,10 @@
 import { useFormikContext } from "formik"
 import { ChangeEvent, useState } from "react"
 import Select, {
-    ActionMeta,
-    MultiValue,
-    SingleValue,
-    Theme,
+  ActionMeta,
+  MultiValue,
+  SingleValue,
+  Theme
 } from "react-select"
 import makeAnimated from "react-select/animated"
 import CreatableSelect from "react-select/creatable"
@@ -163,6 +163,8 @@ export const SelectComp = ({
             <>
               <CreatableSelect
                 {...selectProps}
+                menuPosition="fixed"
+                menuPlacement="auto"
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
               />
@@ -188,7 +190,7 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select {...selectProps} />
+            <Select menuPosition="fixed" menuPlacement="auto" {...selectProps} />
           )}
         </div>
         <FormikError name={name as string} className="whitespace-nowrap" />
