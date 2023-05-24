@@ -69,14 +69,16 @@ const CreateKarat = ({
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(["AllKarats"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewKarats_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(["AllKarats"])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewKarats_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
   })

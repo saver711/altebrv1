@@ -10,7 +10,7 @@ import { Header } from "../../components/atoms/Header"
 import {
   InnerFormLayout,
   Modal,
-  OuterFormLayout,
+  OuterFormLayout
 } from "../../components/molecules"
 import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
 import { Loading } from "../../components/organisms/Loading"
@@ -66,7 +66,7 @@ export const OneEmployee = ({ title }: OneEmployeeProps_TP) => {
   if (employeeLoading)
     return (
       <Loading
-        mainTitle={`${t("loading...")}`}
+        mainTitle={`${t("Loading...")}`}
         subTitle={`${t("employee data is loading")}`}
       />
     )

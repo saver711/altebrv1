@@ -3,7 +3,7 @@
 import { t } from "i18next"
 import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { useParams } from "react-router-dom"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import { Button } from "../../../components/atoms"
 import { Modal } from "../../../components/molecules"
 import { useLocalStorage, useMutate } from "../../../hooks"
@@ -41,10 +41,16 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   /////////// CUSTOM HOOKS
   ///
   const [addedPieces, setAddedPieces] = useState<
-  GoldCodingSanad_initialValues_TP[]
+    GoldCodingSanad_initialValues_TP[]
   >(addedPiecesLocal || [])
-  console.log(`GoldCodingWrapper ~ addedPieces:`, addedPieces)
-  
+
+  if (addedPieces[0]) {
+    console.log(
+      `GoldCodingWrapper ~ addedPieces media:`,
+      addedPieces[0].media[0]
+    )
+  }
+
   const { mutate, error, mutateAsync, isLoading } =
     useMutate<GoldCodingSanad_initialValues_TP>({
       mutationFn: mutateData,
@@ -72,6 +78,7 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
   const [tableKey, setTableKey] = useState(1)
   ///
   /////////// SIDE EFFECTS
+  ///
 
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
@@ -98,7 +105,6 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
         // const filteredPieces = addedPieces.filter(
         //   (p) => p.front_key !== result.front_key
         // )
-        // console.log(`sendPieces ~ filteredPieces:`, filteredPieces)
         setAddedPieces((curr) =>
           curr.filter((p) => p.front_key !== result.front_key)
         )
@@ -108,12 +114,14 @@ export const GoldCodingWrapper = ({ title }: GoldCodingWrapperProps_TP) => {
       }
     } catch (err) {
       const error = err as CError_TP
-      notify('error', error.response.data.message)
+      notify("error", error.response.data.message)
       console.log(`sendPieces ~ error:`, error)
 
       setAddedPieces((curr) =>
         curr.map((p) =>
-          p.front_key === piece.front_key ? { ...p, status: error.response.data.message} : p
+          p.front_key === piece.front_key
+            ? { ...p, status: error.response.data.message }
+            : p
         )
       )
 

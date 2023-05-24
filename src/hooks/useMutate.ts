@@ -22,6 +22,7 @@ export const useMutate = <T>({ ...args }: Args_TP<T>) => {
   const { mutationKey, mutationFn, onSuccess, onError } = args
   // useQuery infers queryFn return type
   const mutation = useMutation({
+    // retry: 4,
     mutationKey,
     mutationFn,
     onSuccess: onSuccess ? onSuccess : () => notify("success"),

@@ -1,10 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode } from "axios"
 import Cookies from "js-cookie"
 import i18n from "../i18n"
-import { CError_TP } from "../types"
-import { useContext } from "react"
-import { authCtx } from "../context/auth-and-perm/auth"
-import { notify } from "./toast"
 
 const baseURL =
   import.meta.env.VITE_BASE_URL || "https://alexon.altebr.jewelry/"
@@ -15,7 +11,7 @@ const client = axios.create({
   baseURL,
 })
 
-export const request = async <T>(options: AxiosRequestConfig, pagination): Promise<T> => {
+export const request = async <T>(options: AxiosRequestConfig, pagination?: boolean): Promise<T> => {
   const token = Cookies.get("token");
 
   const onSuccess = (response: AxiosResponse) => {
@@ -29,6 +25,7 @@ export const request = async <T>(options: AxiosRequestConfig, pagination): Promi
   try {
     const response = await client({
       ...options,
+      // timeout: 3000,
       headers: {
         "Content-Type": `application/json`,
         "Accept-Language": lang,

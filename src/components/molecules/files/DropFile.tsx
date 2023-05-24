@@ -75,13 +75,16 @@ export const DropFile = ({ name }: DropFileProps_TP) => {
             "application/pdf": [".pdf"],
           }}
           onDrop={(acceptedFiles) => {
+            console.log("acceptedFiles", acceptedFiles[0])
             setFieldValue(
               name,
-              acceptedFiles.map((file) =>
-                Object.assign(file, {
+              acceptedFiles.map((file) =>{
+                return Object.assign(file, {
                   preview: URL.createObjectURL(file),
                   id: crypto.randomUUID(),
                 })
+              }
+                
               )
             )
           }}
