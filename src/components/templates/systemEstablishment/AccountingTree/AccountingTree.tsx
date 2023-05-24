@@ -303,6 +303,7 @@ export const AccountingTree = () => {
                     label={t("arabic name").toString()}
                     name="name_ar"
                     placeholder={t("arabic name").toString()}
+                    required
                   />
                   <BaseInputField
                     type="text"
@@ -310,6 +311,7 @@ export const AccountingTree = () => {
                     label={t("english name").toString()}
                     name="name_en"
                     placeholder={t("english name").toString()}
+                    required
                   />
                   <BaseInputField
                     type="text"
@@ -317,6 +319,7 @@ export const AccountingTree = () => {
                     label={t("numeric system").toString()}
                     name="numeric_system"
                     placeholder={t("numeric system").toString()}
+                    required
                   />
                   <Select
                     label={t("unit id").toString()}
@@ -329,6 +332,7 @@ export const AccountingTree = () => {
                     options={unitsData}
                     fieldKey="id"
                     isDisabled={isLoadingUnitsData}
+                    
                   />
 
                   <AccountingTreeForm

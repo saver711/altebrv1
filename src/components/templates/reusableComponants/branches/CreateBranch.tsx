@@ -16,6 +16,7 @@ import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
 import { allDocs_TP, Documents } from "../documents/Documents"
 import { Branch_Props_TP } from "./ViewBranches"
+import { BranchMainData } from "./BranchMainData"
 ///
 /////////// Types
 ///
@@ -34,6 +35,7 @@ type InitialValues_TP = {
 ///
 export const CreateBranch = ({
   value,
+  title,
   onAdd,
   editData,
 }: CreateBranchProps_TP) => {
@@ -43,6 +45,10 @@ export const CreateBranch = ({
   const initialValues = {
     name_ar: editData ? editData.name_ar : "",
     name_en: editData ? editData.name_en : "",
+    country_id_out: editData ? editData.country.id : "",
+    city_id_out: editData ? editData.city.id : "",
+    district_id_out: editData ? editData.district.id : "",
+    country_id: editData ? editData.country.id : "",
     city_id: editData ? editData.city.id : "",
     district_id: editData ? editData.district.id : "",
     market_id: editData ? editData.market.id : "",
@@ -50,6 +56,8 @@ export const CreateBranch = ({
     phone: editData ? editData.phone : "",
     fax: editData ? editData.fax : "",
     number: editData ? editData.number : "",
+    main_address: editData ? editData.address : "",
+
     // national address data
     building_number: editData ? editData.nationalAddress.building_number : "",
     street_number: editData ? editData.nationalAddress.street_number : "",
@@ -68,6 +76,9 @@ export const CreateBranch = ({
     name_ar: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     name_en: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    country_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    city_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    district_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     district_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -77,6 +88,7 @@ export const CreateBranch = ({
     street_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     sub_number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     address: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    main_address: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     number: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     zip_code: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
   })
@@ -99,10 +111,11 @@ export const CreateBranch = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, error, isLoading } = useMutate({
+  const { mutate, error, isLoading, isSuccess, reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
+      queryClient.refetchQueries(["branch"])
       queryClient.setQueryData(["branches"], () => {
         return [data]
       })
@@ -118,27 +131,6 @@ export const CreateBranch = ({
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
 
-  function PostNewValue(values: InitialValues_TP) {
-    mutate({
-      endpointName: "branch/api/v1/branches",
-      values: {
-        ...values,
-        document: docsFormValues,
-        nationalAddress: {
-          address: values.address,
-          country_id: values.country_id,
-          city_id: values.city_id,
-          district_id: values.district_id,
-          building_number: values.building_number,
-          street_number: values.street_number,
-          sub_number: values.sub_number,
-          zip_code: values.zip_code,
-        },
-      },
-    })
-    console.log("branch", values)
-  }
-
   ///
   return (
     <div className="flex items-center justify-between gap-2">
@@ -147,6 +139,10 @@ export const CreateBranch = ({
         onSubmit={(values) => {
           let editedValues = {
             ...values,
+            country_id: values.country_id_out,
+            city_id: values.city_id_out,
+            district_id: values.district_id_out,
+            address: values.main_address,
             document: docsFormValues,
             nationalAddress: {
               address: values.address,
@@ -184,144 +180,20 @@ export const CreateBranch = ({
           }
           console.log("values", editedValues)
         }}
-
         validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <OuterFormLayout header={t("add branch")}>
-            <Form className="w-full">
-              <InnerFormLayout title={t("main data")}>
-                {/* branch name  start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="name_ar"
-                    label={`${t("branch name in arabic")}`}
-                    name="name_ar"
-                    type="text"
-                    placeholder={`${t("branch name in arabic")}`}
-                    defaultValue={editData && editData.name_ar}
-                  />
-                </div>
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="name_en"
-                    label={`${t("branch name in english")}`}
-                    name="name_en"
-                    type="text"
-                    placeholder={`${t("branch name in english")}`}
-                    defaultValue={editData && editData.name_en}
-                  />
-                </div>
-                {/* branch name  end */}
-
-                {/* branch number  start */}
-                <div className="col-sapn-1">
-                  <BaseInputField
-                    id="number"
-                    label={`${t("branch number")}`}
-                    name="number"
-                    type="text"
-                    placeholder={`${t("branch number")}`}
-                    defaultValue={editData && editData.number}
-                  />
-                </div>
-                {/* branch number  end */}
-                {/* market  start */}
-                <Country_city_distract_markets
-                  countryName="country_id"
-                  countryLabel={`${t("country")}`}
-                  cityName="city_id"
-                  cityLabel={`${t("city")}`}
-                  distractName="district_id"
-                  distractLabel={`${t("district")}`}
-                  marketName="market_id"
-                  marketLabel={`${t("markets")}`}
-                  editData={{
-                    nationalAddress: {
-                      country: {
-                        id: editData?.country?.id,
-                        name: editData?.country?.name,
-                      },
-                      city: {
-                        id: editData?.city.id,
-                        name: editData?.city.name,
-                      },
-                      district: {
-                        id: editData?.nationalAddress?.district.id,
-                        name: editData?.nationalAddress?.district.name,
-                      },
-                      market: {
-                        id: editData?.market.id,
-                        name: editData?.market.name,
-                      },
-                    },
-                  }}
-                />
-                {/* market  end */}
-
-                {/* market number start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="market_number"
-                    label={`${t("market number")}`}
-                    name="market_number"
-                    type="number"
-                    placeholder={`${t("market number")}`}
-                    defaultValue={editData && editData.market_number}
-                  />
-                </div>
-                {/* market number  end */}
-
-                {/* address start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="address"
-                    label={`${t("address")}`}
-                    name="address"
-                    type="text"
-                    placeholder={`${t("address")}`}
-                    defaultValue={editData && editData.nationalAddress.address}
-                  />
-                </div>
-                {/* address  end */}
-
-                {/* phone start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="phone"
-                    label={`${t("phone")}`}
-                    name="phone"
-                    type="text"
-                    placeholder={`${t("phone")}`}
-                    defaultValue={editData && editData.phone}
-                  />
-                </div>
-                {/* phone end */}
-
-                {/* fax start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="fax"
-                    label={`${t("fax")}`}
-                    name="fax"
-                    type="text"
-                    placeholder={`${t("fax")}`}
-                    defaultValue={editData && editData.fax}
-                  />
-                </div>
-                {/* fax end */}
-              </InnerFormLayout>
-              <Documents
-                docsFormValues={docsFormValues}
-                setDocsFormValues={setDocsFormValues}
-                editable={!!editData}
-              />
-              <NationalAddress editData={editData} />
-              <Button loading={isLoading} type="submit" className="mr-auto">
-                {t("submit")}
-              </Button>
-            </Form>
-          </OuterFormLayout>
+          <Form className="w-full">
+            <BranchMainData
+              isLoading={isLoading}
+              title={title}
+              editData={editData}
+              isSuccessPost={isSuccess}
+              restData={reset}
+              setDocsFormValues={setDocsFormValues}
+              docsFormValues={docsFormValues}
+            />
+          </Form>
         </HandleBackErrors>
       </Formik>
     </div>

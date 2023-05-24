@@ -19,15 +19,10 @@ import {
 import { mutateData } from "../../../../utils/mutateData"
 import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
-import { Button } from "../../../atoms"
-import { OuterFormLayout } from "../../../molecules"
 import { Loading } from "../../../organisms/Loading"
-import { NationalAddress } from "../../NationalAddress"
-import {
-  Documents,
-  allDocs_TP,
-} from "../../reusableComponants/documents/Documents"
+import { allDocs_TP } from "../../reusableComponants/documents/Documents"
 import { SupplierMainData } from "./SupplierMainData"
+import { isValidPhoneNumber } from "react-phone-number-input"
 
 ///
 /////////// Types
@@ -48,7 +43,6 @@ const AddSupplier = ({
   setDataSource,
   setShow,
 }: AddSupplierProps_TP) => {
-  console.log("🚀 ~ file: AddSupplier.tsx:51 ~ editData:", editData)
   /////////// VARIABLES
   const supplierValidatingSchema = () =>
     Yup.object({
@@ -57,24 +51,28 @@ const AddSupplier = ({
       type: Yup.string().trim().required(requiredTranslation),
       is_mediator: Yup.boolean(),
       company_name: Yup.string().trim().required(requiredTranslation),
-      address: Yup.string().trim().required(requiredTranslation),
-      // mobile: Yup.string()
-      // .trim()
-      // .required(requiredTranslation).test('isValidateNumber', 'رقم غير صحيح', function (value:string) {
-      //   return isValidPhoneNumber(value || "")
-      // }),
-      // mobile: !!!editData
+      address_out: Yup.string().trim().required(requiredTranslation),
+      // phone: !!!editData
       //   ? Yup.string().trim().required(requiredTranslation)
       //   : Yup.string(),
+
       phone: !!!editData
-        ? Yup.string().trim().required(requiredTranslation)
-        : Yup.string(),
+        ? Yup.string()
+            .trim()
+            .required(requiredTranslation)
+            .test("isValidateNumber", "رقم غير صحيح", function (value: string) {
+              return isValidPhoneNumber(value || "")
+            })
+        : Yup.string().trim(),
+
       email: Yup.string().trim().required(requiredTranslation),
       password: !!!editData
         ? Yup.string().trim().required(requiredTranslation)
         : Yup.string(),
       fax: Yup.string().trim().required(requiredTranslation),
       nationality_id: Yup.string().trim().required(requiredTranslation),
+      country_id_out: Yup.string().trim().required(requiredTranslation),
+      address: Yup.string().trim().required(requiredTranslation),
       national_number: Yup.string()
         .min(10, nationalNumberMin)
         .max(30, nationalNumberMax)
@@ -138,23 +136,23 @@ const AddSupplier = ({
     name: editData ? editData.name : "",
     type: editData ? editData.type : "local",
     is_mediator: editData ? editData.is_mediator : true,
+    country_id_out: editData ? editData?.country?.id : "",
+
     gold_tax: editData
-      ? editData.tax === "gold" || "gold_and_wages"
+      ? editData.tax == "gold" || editData.tax == "gold_and_wages"
         ? true
         : false
       : true,
     // gold
     wages_tax: editData
-      ? editData.tax === "gold_and_wages"
+      ? editData.tax == "wages" || editData.tax == "gold_and_wages"
         ? true
         : false
-      : false,
+      : true,
     company_name: editData ? editData?.company_name : "",
     country_id: editData ? editData?.country?.id : "",
-    // country_value: editData?.country_name || "",
     city_id: editData ? editData?.city?.id : "",
-    // city_value: editData?.nationalAddress?.city.name || "",
-    address: editData ? editData?.address : "",
+    address_out: editData ? editData?.address : "",
     mobile: "",
     phone: editData ? editData?.phone : "",
     fax: editData ? editData?.fax : "",
@@ -174,7 +172,7 @@ const AddSupplier = ({
     // national address data
     district_id: editData ? editData?.nationalAddress?.district?.id : "",
     district_value: editData?.nationalAddress?.district.name || "",
-    min_Address: "",
+    address: editData ? editData?.nationalAddress?.address : "",
     building_number: editData ? editData?.nationalAddress?.building_number : "",
     street_number: editData ? editData?.nationalAddress?.street_number : "",
     sub_number: editData ? editData?.nationalAddress?.sub_number : "",
@@ -195,7 +193,13 @@ const AddSupplier = ({
     queryKey: ["checkOperations"],
   })
   const queryClient = useQueryClient()
-  const { mutate, isLoading:postLoading, error , isSuccess , reset } = useMutate({
+  const {
+    mutate,
+    isLoading: postLoading,
+    error,
+    isSuccess,
+    reset,
+  } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       queryClient.refetchQueries(["suppliers"])
@@ -211,7 +215,7 @@ const AddSupplier = ({
   const [docsFormValues, setDocsFormValues] =
     useState<allDocs_TP[]>(incomingData)
   const navigate = useNavigate()
-
+  console.log(editData)
   ///
   /////////// SIDE EFFECTS
   ///
@@ -260,11 +264,14 @@ const AddSupplier = ({
           const is_mediator = values.is_mediator ? 1 : 0
           let editedValues = {
             ...values,
+            address: values.address_out,
+            country_id: values.country_id_out,
             document: docsFormValues,
             tax,
             is_mediator,
             logo: values.logo[0],
             nationalAddress: {
+              country_id: values.country_id,
               city_id: values.city_id,
               district_id: values.district_id,
               building_number: values.building_number,
@@ -290,6 +297,7 @@ const AddSupplier = ({
               delete editedValues.logo
             console.log(editData)
             if (values.password === "") delete editedValues.password
+
             mutate({
               endpointName: `supplier/api/v1/suppliers/${editData.id}`,
               values: editedValues,
@@ -298,7 +306,12 @@ const AddSupplier = ({
             })
           } else {
             if (values.type === "global") delete editedValues.nationalAddress
-            console.log("editedValues", editedValues)
+            delete editedValues.country_id_out
+
+            console.log(
+              "🚀 ~ file: AddSupplier.tsx:268 ~ editedValues:",
+              editedValues
+            )
             mutate({
               endpointName: `supplier/api/v1/suppliers`,
               values: editedValues,
@@ -306,25 +319,22 @@ const AddSupplier = ({
             })
           }
         }}
-         validationSchema={() => supplierValidatingSchema()}
+       validationSchema={() => supplierValidatingSchema()}
       >
         {({ values }) => (
-            <HandleBackErrors errors={error?.response?.data?.errors}>
-          <Form>
-            
-                <SupplierMainData
-               postLoading={postLoading}
-              title={title}
-              editData={editData}
-              isSuccessPost={isSuccess}
-              restData={reset}
-              setDocsFormValues={setDocsFormValues}
-              docsFormValues={docsFormValues}
-                />
-              
-         
-          </Form>
-            </HandleBackErrors>
+          <HandleBackErrors errors={error?.response?.data?.errors}>
+            <Form>
+              <SupplierMainData
+                postLoading={postLoading}
+                title={title}
+                editData={editData}
+                isSuccessPost={isSuccess}
+                restData={reset}
+                setDocsFormValues={setDocsFormValues}
+                docsFormValues={docsFormValues}
+              />
+            </Form>
+          </HandleBackErrors>
         )}
       </Formik>
     </>

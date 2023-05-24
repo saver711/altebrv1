@@ -3,11 +3,10 @@
 import { FormikSharedConfig, useFormikContext } from "formik"
 import { t } from "i18next"
 import { useEffect, useState } from "react"
-import { AiOutlineReload } from "react-icons/ai"
-import { SingleValue } from "react-select"
 import { useFetch } from "../../../../hooks"
 import { supplier } from "../../../../pages/suppliers/AllSuppliers"
 import { SelectOption_TP } from "../../../../types"
+import { Button } from "../../../atoms"
 import {
   BaseInputField,
   CheckBoxField,
@@ -15,16 +14,13 @@ import {
   InnerFormLayout,
   OuterFormLayout,
   PhoneInput,
-  Select,
 } from "../../../molecules"
 import RadioGroup from "../../../molecules/RadioGroup"
 import { DropFile } from "../../../molecules/files/DropFile"
-import { CreateNationalities } from "../../CreateNationalities"
-import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
-import { SelectNationality } from "../SelectNationality"
-import { Button } from "../../../atoms"
-import { Documents } from "../../reusableComponants/documents/Documents"
 import { NationalAddress } from "../../NationalAddress"
+import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
+import { Documents } from "../../reusableComponants/documents/Documents"
+import { SelectNationality } from "../SelectNationality"
 ///
 /////////// Types
 ///
@@ -35,7 +31,7 @@ type SupplierMainDataProps_TP = {
   isSuccessPost?: any
   restData?: any
   setDocsFormValues?: any
-  docsFormValues?:any
+  docsFormValues?: any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -51,7 +47,8 @@ export const SupplierMainData = ({
 }: SupplierMainDataProps_TP) => {
   /////////// VARIABLES
   /////
-  const { setFieldValue , values , resetForm } = useFormikContext<FormikSharedConfig>()
+  const { setFieldValue, values, resetForm } =
+    useFormikContext<FormikSharedConfig>()
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -78,18 +75,29 @@ export const SupplierMainData = ({
   ///
   /////////// SIDE EFFECTS
 
-
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   useEffect(() => {
     if (isSuccessPost) {
-      resetForm()
+      if (!editData) {
+        resetForm()
       restData()
       setFieldValue("end_date", new Date())
       setFieldValue("start_date", new Date())
       setDocsFormValues([])
+      } 
     }
   }, [isSuccessPost])
+
+  useEffect(() => {
+    if (!!!editData && values.type == "global") {
+      setFieldValue("gold_tax", false)
+      setFieldValue("wages_tax", false)
+    } else if (!!!editData && values.type == "local") {
+      setFieldValue("gold_tax", true)
+      setFieldValue("wages_tax", true)
+    }
+  }, [values.type])
   ///
   return (
     <>
@@ -160,16 +168,16 @@ export const SupplierMainData = ({
             labelProps={{ className: "mb-1" }}
           />
           <BaseInputField
-            id="address"
+            id="address_out"
             required
             label={`${t("address")}`}
-            name="address"
+            name="address_out"
             type="text"
             placeholder={`${t("address")}`}
             labelProps={{ className: "mb-1" }}
           />
           <Country_city_distract_markets
-            countryName="country_id "
+            countryName="country_id_out"
             countryLabel={`${t("country")}`}
             isSuccessPost={isSuccessPost}
             resetSelect={restData}
@@ -197,6 +205,7 @@ export const SupplierMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
@@ -248,6 +257,7 @@ export const SupplierMainData = ({
             label={`${t("national expire date")}`}
             name="national_expire_date"
             minDate={new Date()}
+            required
             labelProps={{ className: "mb-2" }}
           />
 
@@ -266,14 +276,14 @@ export const SupplierMainData = ({
           editable={!!editData}
           setDocsFormValues={setDocsFormValues}
           docsFormValues={docsFormValues}
-          isSuccessPost={isSuccessPost}
-          restData={restData}
+          isSuccessPost={!editData && isSuccessPost}
+          restData={!editData && restData}
         />
         {values?.type === "local" && (
           <NationalAddress
             editData={editData}
-            isSuccessPost={isSuccessPost}
-            resetSelect={restData}
+            isSuccessPost={!editData && isSuccessPost}
+            resetSelect={!editData &&  restData}
           />
         )}
       </OuterFormLayout>

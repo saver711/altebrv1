@@ -44,7 +44,7 @@ export const NationalAddress = ({
   useEffect(() => {
     if (isSuccessPost) {
       resetForm()
-      resetSelect()
+     resetSelect && resetSelect()
     }
   }, [isSuccessPost])
   ///

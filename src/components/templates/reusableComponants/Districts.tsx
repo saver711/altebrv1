@@ -238,16 +238,15 @@ export const Districts = ({
   }, [JSON.stringify(districts)])
 
   useEffect(() => {
-        if (!editData) {
-          setNewValue({
-            id: "",
-            value: "",
-            label: "اختر المدينة اولا",
-          })
+    if (!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينة اولا",
+      })
 
-          if (resetSelect) resetSelect()
-        }
-
+      if (resetSelect) resetSelect()
+    }
   }, [isSuccessPost])
   return (
     <div className="flex flex-col gap-1 justify-center">
@@ -259,6 +258,7 @@ export const Districts = ({
         modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
+        required
         // placeholder={
         //   city?.id &&
         //   `

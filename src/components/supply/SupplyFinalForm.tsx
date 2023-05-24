@@ -119,11 +119,6 @@ export const SupplyFinalForm = ({
         accessorKey: "category_value",
       },
       {
-        header: `${t("weight")}`,
-        cell: (info) => formatGram(Number(info.renderValue())),
-        accessorKey: "weight",
-      },
-      {
         header: `${t("gold weight")}`,
         cell: (info) => formatGram(Number(info.renderValue())),
         accessorKey: "gold_weight",
@@ -157,6 +152,11 @@ export const SupplyFinalForm = ({
         header: `${t("other stones weight")}`,
         cell: (info) => formatReyal(Number(info.renderValue())),
         accessorKey: "other_stones_weight",
+      },
+      {
+        header: `${t("weight")}`,
+        cell: (info) => formatGram(Number(info.renderValue())),
+        accessorKey: "weight",
       },
       {
         header: `${t("diamond tax")}`,
@@ -358,9 +358,9 @@ export const SupplyFinalForm = ({
       total_diamond_value: finalData?.boxes.total_diamond_value,
       total_tax: finalData?.boxes.total_tax,
       total_weight: finalData?.boxes.total_weight,
-      total_other_stones_weight: finalData?.boxes.total_other_stones_weight,
+      total_other_stones_weight: finalData?.boxes.total_other_stones_weight / 5,
       total_diamond_number: finalData?.boxes.total_diamond_amount,
-      total_diamond_stone_weight: finalData?.boxes.total_diamond_stone_weight,
+      total_diamond_stone_weight: finalData?.boxes.total_diamond_stone_weight / 5,
     }
     const globalBond = supply === 'gold' ? {
       twred_type: formValues?.twred_type,
@@ -393,9 +393,9 @@ export const SupplyFinalForm = ({
       total_diamond_value: finalData?.boxes.total_diamond_value,
       total_tax: finalData?.boxes.total_tax,
       total_weight: finalData?.boxes.total_weight,
-      total_other_stones_weight: finalData?.boxes.total_other_stones_weight,
+      total_other_stones_weight: finalData?.boxes.total_other_stones_weight / 5,
       total_diamond_number: finalData?.boxes.total_diamond_amount,
-      total_diamond_stone_weight: finalData?.boxes.total_diamond_stone_weight,
+      total_diamond_stone_weight: finalData?.boxes.total_diamond_stone_weight / 5,
     }
     const sendData = {
       operation_name: supply == 'gold' ? "goldtwred" : "diamondtwred",
@@ -421,8 +421,8 @@ export const SupplyFinalForm = ({
           stocks: item.stock,
           diamond_value: item.diamond_value,
           diamond_number: item.diamond_amount,
-          diamond_stone_weight: item.diamond_stone_weight,
-          other_stones_weight: item.other_stones_weight,
+          diamond_stone_weight: item.diamond_stone_weight / 5,
+          other_stones_weight: item.other_stones_weight / 5,
           diamond_tax: item.diamond_tax,
         }
       }),

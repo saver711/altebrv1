@@ -63,7 +63,12 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  if (isLoading) return <Loading mainTitle={t("loading")} />
+  if (isLoading) return (
+    <Loading
+      mainTitle={`${t("supplier data is loading")}`}
+      subTitle={`${t("loading")}`}
+    />
+  )
   ///
   return (
     <>
@@ -86,13 +91,6 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
               <p className=" text-mainGreen">{supplier?.name}</p>
             </div>
           }
-          leftComponent={
-            supplier?.document?.length !== 0 && (
-              <Button className="mb-3" action={() => setDocumentOpen(true)}>
-                {t("view all documents")}
-              </Button>
-            )
-          }
         >
           {isSuccess && (
             <>
@@ -106,86 +104,109 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
               </div>
 
               {/* The rest */}
-              {supplier.name && (
-                <TextLine boldText={t("Name")} lightString={supplier.name} />
-              )}
-              {supplier.nationality_name && (
-                <TextLine
-                  boldText={t("nationality_name")}
-                  lightString={supplier.nationality_name}
-                />
-              )}
-
-              {supplier.phone && (
-                <TextLine
-                  boldText={t("phone number")}
-                  lightString={supplier.phone}
-                />
-              )}
-              {supplier.company_name && (
-                <TextLine
-                  boldText={t("company_name")}
-                  lightString={supplier.company_name}
-                />
-              )}
-              {supplier.country.name && (
-                <TextLine
-                  boldText={t("country_name")}
-                  lightString={supplier.country.name}
-                />
-              )}
-              {supplier.city.name && (
-                <TextLine
-                  boldText={t("city_name")}
-                  lightString={supplier.city.name}
-                />
-              )}
-              {supplier.type && (
-                <TextLine boldText={t("type")} lightString={supplier.type} />
-              )}
-              {supplier.national_expire_date && (
-                <TextLine
-                  boldText={t("hiring date")}
-                  lightString={formatDate(
-                    new Date(supplier.national_expire_date)
-                  )}
-                />
-              )}
-              {supplier.email && (
-                <TextLine boldText={t("email")} lightString={supplier.email} />
-              )}
-              {supplier.tax && (
-                <TextLine boldText={t("tax")} lightString={supplier.tax} />
-              )}
-              {supplier.address && (
-                <TextLine
-                  boldText={t("address")}
-                  lightString={supplier.address}
-                />
-              )}
-              {supplier.national_number && (
-                <TextLine
-                  boldText={t("national number")}
-                  lightString={supplier.national_number}
-                />
-              )}
-              {supplier.email && (
-                <TextLine boldText={t("email")} lightString={supplier.email} />
-              )}
-              {supplier.logo && (
-                <div className="flex items-center gap-1">
-                  <p className="mt-1">{t("media")} : </p>
-                  <FilesPreviewOutFormik
-                    preview={true}
-                    images={[
-                      {
-                        path: supplier.logo,
-                        type: "image",
-                      },
-                    ]}
+              <div className="flex gap- flex-col">
+                {supplier.name && (
+                  <TextLine boldText={t("Name")} lightString={supplier.name} />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.email && (
+                  <TextLine
+                    boldText={t("email")}
+                    lightString={supplier.email}
                   />
-                </div>
-              )}
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.phone && (
+                  <TextLine
+                    boldText={t("phone number")}
+                    lightString={supplier.phone}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.company_name && (
+                  <TextLine
+                    boldText={t("company_name")}
+                    lightString={supplier.company_name}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.country.name && (
+                  <TextLine
+                    boldText={t("country_name")}
+                    lightString={supplier.country.name}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.type && (
+                  <TextLine boldText={t("type")} lightString={supplier.type} />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.national_expire_date && (
+                  <TextLine
+                    boldText={t("hiring date")}
+                    lightString={formatDate(
+                      new Date(supplier.national_expire_date)
+                    )}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.email && (
+                  <TextLine
+                    boldText={t("email")}
+                    lightString={supplier.email}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.tax && (
+                  <TextLine
+                    boldText={t("tax number")}
+                    lightString={supplier.tax}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.address && (
+                  <TextLine
+                    boldText={t("address")}
+                    lightString={supplier.address}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col">
+                {supplier.national_number && (
+                  <TextLine
+                    boldText={t("national number")}
+                    lightString={supplier.national_number}
+                  />
+                )}
+              </div>
+              <div className="flex gap- flex-col"></div>
+              <div className="flex gap- flex-col">
+                {supplier.logo ? (
+                  <div className="flex items-center gap-1">
+                    <p className="mt-1">{t("media")} : </p>
+                    <FilesPreviewOutFormik
+                      preview={true}
+                      images={[
+                        {
+                          path: supplier.logo,
+                          type: "image",
+                        },
+                      ]}
+                    />
+                  </div>
+                ) : (
+                  "لايوجد وسائظ"
+                )}
+              </div>
               <Modal isOpen={documentOpen} onClose={setDocumentOpen}>
                 {supplier?.document?.map((doc, i) => (
                   <>
@@ -247,7 +268,7 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                           </div>
                         ) : (
                           <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                            <h3 className="font-bold text-lg">
+                            <h3 className="font-extrabold text-2xl">
                               {t("no media")}
                             </h3>
                           </div>
@@ -258,10 +279,20 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 ))}
               </Modal>
               {/* الوثائق */}
-              <div className=" border-b-2 border-dashed col-span-4"></div>
+              <div className=" col-span-4"></div>
               {supplier?.document.length !== 0 && (
-                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("main documents")}</h3>
+                <div className="flex justify-between gap-4 col-span-4 align-center items-center">
+                  <h3 className="font-extrabold text-2xl">
+                    {t("main documents")}
+                  </h3>
+                  {supplier?.document?.length > 2 && (
+                    <Button
+                      className="mb-3"
+                      action={() => setDocumentOpen(true)}
+                    >
+                      {t("view all documents")}
+                    </Button>
+                  )}
                 </div>
               )}
               {supplier.document.length !== 0 ? (
@@ -317,7 +348,7 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                           </div>
                         ) : (
                           <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                            <h3 className="font-bold text-lg">
+                            <h3 className="font-extrabold text-2xl">
                               {t("no media")}
                             </h3>
                           </div>
@@ -328,88 +359,104 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
                 ))
               ) : (
                 <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("no documents")}</h3>
+                  <h3 className="font-extrabold text-2xl">
+                    {t("no documents")}
+                  </h3>
                 </div>
               )}
 
               {/* العنوان الوطني */}
+
               <>
                 <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>
-                <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                  <div className="flex gap-4 flex-col col-span-4">
-                    <h3 className="font-bold"> {t("national Address")} </h3>
-                  </div>
+                {supplier.nationalAddress ? (
                   <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.city.name && (
-                        <TextLine
-                          boldText={t("city")}
-                          lightString={supplier.nationalAddress?.city.name}
-                        />
-                      )}
+                    <div className="flex gap-4 flex-col col-span-4">
+                      <h3 className="font-extrabold text-2xl">
+                        {" "}
+                        {t("national Address")}{" "}
+                      </h3>
                     </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.city.country_name && (
-                        <TextLine
-                          boldText={t("country")}
-                          lightString={
-                            supplier.nationalAddress?.city.country_name
-                          }
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.district.name && (
-                        <TextLine
-                          boldText={t("district")}
-                          lightString={supplier.nationalAddress?.district.name}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.address && (
-                        <TextLine
-                          boldText={t("short address")}
-                          lightString={supplier.nationalAddress?.address}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.street_number && (
-                        <TextLine
-                          boldText={t("street number")}
-                          lightString={supplier.nationalAddress?.street_number}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.building_number && (
-                        <TextLine
-                          boldText={t("building number")}
-                          lightString={
-                            supplier.nationalAddress?.building_number
-                          }
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.sub_number && (
-                        <TextLine
-                          boldText={t("sub number")}
-                          lightString={supplier.nationalAddress?.sub_number}
-                        />
-                      )}
-                    </div>
-                    <div className="flex gap-4 flex-col">
-                      {supplier.nationalAddress?.zip_code && (
-                        <TextLine
-                          boldText={t("zip code")}
-                          lightString={supplier.nationalAddress?.zip_code}
-                        />
-                      )}
+                    <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.city.name && (
+                          <TextLine
+                            boldText={t("city")}
+                            lightString={supplier.nationalAddress?.city.name}
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.city.country_name && (
+                          <TextLine
+                            boldText={t("country")}
+                            lightString={
+                              supplier.nationalAddress?.city.country_name
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.district.name && (
+                          <TextLine
+                            boldText={t("district")}
+                            lightString={
+                              supplier.nationalAddress?.district.name
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.address && (
+                          <TextLine
+                            boldText={t("short address")}
+                            lightString={supplier.nationalAddress?.address}
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.street_number && (
+                          <TextLine
+                            boldText={t("street number")}
+                            lightString={
+                              supplier.nationalAddress?.street_number
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.building_number && (
+                          <TextLine
+                            boldText={t("building number")}
+                            lightString={
+                              supplier.nationalAddress?.building_number
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.sub_number && (
+                          <TextLine
+                            boldText={t("sub number")}
+                            lightString={supplier.nationalAddress?.sub_number}
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-4 flex-col">
+                        {supplier.nationalAddress?.zip_code && (
+                          <TextLine
+                            boldText={t("zip code")}
+                            lightString={supplier.nationalAddress?.zip_code}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex-col col-span-4 text-center">
+                    <p className="font-extrabold text-2xl">لاويجد عنوان وطني</p>
+                  </div>
+                )}
               </>
             </>
           )}

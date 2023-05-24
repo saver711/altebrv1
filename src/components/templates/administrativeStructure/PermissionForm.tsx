@@ -5,6 +5,7 @@
 ///
 import { useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect } from "react"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 import { BaseInputField, InnerFormLayout } from "../../molecules"
@@ -35,6 +36,13 @@ export const PermissionForm = ({
   ///
   /////////// SIDE EFFECTS
   ///
+  useEffect(() => {
+    if (!!editData) {
+     editData?.permissions.forEach((permission) => {
+       setFieldValue(permission.id, true)
+     })
+   }
+   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -49,7 +57,7 @@ export const PermissionForm = ({
               setFieldValue(value, e.target.checked)
           }
           )
-        }} className="mx-2  text-mainGreen rounded" />
+        }} className="mx-2  text-mainGreen rounded"/>
         <label htmlFor="check_all">{t('select all')}</label>
       </div>
       <div className="col-span-2 mx-auto">
@@ -79,7 +87,7 @@ export const PermissionForm = ({
               permissions: Permission_TP[]
             }) => (
               <PermissionGroup
-                key={id}
+                key={crypto.randomUUID()}
                 name={name}
                 permissions={permissions}
                 editData={editData}

@@ -1,5 +1,4 @@
 import { t } from "i18next"
-import * as Yup from "yup"
 
 export type InitialValues_TP = {
   [ x: string ]: any
@@ -32,23 +31,3 @@ export type InitialValues_TP = {
 }
 export const requiredTranslation = () => `${t("required")}`
 
-export const partnerValidatingSchema = () =>
-  Yup.object({
-    name: Yup.string().trim().required(requiredTranslation),
-    email: Yup.string().email().trim().required(requiredTranslation),
-    phone: Yup.string().trim().required(requiredTranslation),
-    end_date: Yup.date().required(requiredTranslation),
-    start_date: Yup.date().required(requiredTranslation),
-    // x_city: Yup.string().trim().required(requiredTranslation),
-    // x_country: Yup.string().trim().required(requiredTranslation),
-    nationality_id: Yup.string().trim().required(requiredTranslation),
-    building_number: Yup.string().trim().required(requiredTranslation),
-    country_id: Yup.string().trim().required(requiredTranslation),
-    city_id: Yup.string().trim().required(requiredTranslation),
-    district_id: Yup.string().trim().required(requiredTranslation),
-    street_number: Yup.string().trim().required(requiredTranslation),
-    address: Yup.string().trim().required(requiredTranslation),
-    sub_number: Yup.string().trim().required(requiredTranslation),
-    zip_code: Yup.string().trim().required(requiredTranslation),
-    //  national_image: Yup.string().trim().required(requiredTranslation),
-  })

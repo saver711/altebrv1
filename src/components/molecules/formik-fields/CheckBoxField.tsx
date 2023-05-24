@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik"
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { Dispatch, SetStateAction, memo } from "react"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 import { FormikError } from "../../atoms"
 import { Checkbox } from "../Checkbox"
@@ -8,11 +8,11 @@ import { Checkbox } from "../Checkbox"
 type Props_TP = {
   [key: string]: any
   editData?: PermissionGroup_TP | undefined
-  checked?:boolean
-  setChecked?:Dispatch<SetStateAction<boolean>>
+  checked?: boolean
+  setChecked?: Dispatch<SetStateAction<boolean>>
 }
 
-export const CheckBoxField = ({
+export const CheckBoxField = memo(({
   label,
   id,
   name,
@@ -20,17 +20,11 @@ export const CheckBoxField = ({
   checked,
   ...props
 }: { label: string; name: string } & Props_TP) => {
+
   const { setFieldValue, setFieldTouched, errors, values } = useFormikContext<{
     [key: string]: any
   }>()
 
-  useEffect(() => {
-    if (!!editData) {
-      editData?.permissions.map((permission) => {
-        setFieldValue(permission.id, true)
-      })
-    }
-  }, [JSON.stringify(editData)])
 
   return (
     <div>
@@ -40,7 +34,6 @@ export const CheckBoxField = ({
         name={name}
         value={values[name]}
         className={`${errors[name] && "border-2 border-mainRed"}`}
-        {...props}
         checked={values[name]}
         onChange={(e) => {
           setFieldValue(name, e.target.checked)
@@ -48,8 +41,9 @@ export const CheckBoxField = ({
         onBlur={() => {
           setFieldTouched(name, true)
         }}
+        {...props}
       />
       <FormikError name={name} />
     </div>
   )
-}
+})

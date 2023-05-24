@@ -20,10 +20,11 @@ import { CategoryMainData_TP, SetState_TP } from "../../../types"
 import { prepareItemsToShowInCaseOfTa2m } from "../../../utils/helpers"
 import { notify } from "../../../utils/toast"
 import {
-  addTa2mSizesSchema, GoldCodingSanad_initialValues_TP,
+  GoldCodingSanad_initialValues_TP,
   GoldSanadBand_TP,
   GoldSanad_TP,
-  SizePopup_TP
+  SizePopup_TP,
+  addTa2mSizesSchema
 } from "../coding-types-and-helpers"
 import { SizesTable } from "./SizesTable"
 ///
@@ -245,8 +246,7 @@ export const GoldItemCodingForm = ({
       <div className="flex flex-col">
         <div className="flex mb-1 justify-between items-center relative">
           <label htmlFor="wight">{t("weight")}</label>
-          <span className="absolute left-10 text-xs opacity-80 font-bold text-mainGreen">
-            الوزن المتبقي للقطعه {activeBand.leftWeight}
+          <span className="absolute left-4 text-sm font-bold text-mainOrange ">الوزن المتبقي{activeBand.leftWeight}
           </span>
 
           {awzanItems && !!awzanItems?.length && (

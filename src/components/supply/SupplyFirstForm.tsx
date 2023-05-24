@@ -47,7 +47,7 @@ export const SupplyFirstForm = ({
     // fetch buyer api 
     const { data: employees, isLoading: employeesLoading, failureReason: employeeError, refetch: refetchEmployee } = useFetch<SelectOption_TP[], Employee_TP[]>
         ({
-            endpoint: "employee/api/v1/employees",
+            endpoint: "employee/api/v1/employees?per_page=10000",
             queryKey: ["employees"],
             select: (employess) => employess.map((employee) => {
                 return {
@@ -60,7 +60,7 @@ export const SupplyFirstForm = ({
         })
     const { data: suppliers, isLoading: suppliersLoading, failureReason: suppliersErrorReason, refetch: refetchSupplier } = useFetch<SelectOption_TP[], Supplier_TP[]>
         ({
-            endpoint: "/supplier/api/v1/suppliers",
+            endpoint: "/supplier/api/v1/suppliers?per_page=10000",
             queryKey: ["suppliers"],
             onSuccess(data) {
               console.log(data)

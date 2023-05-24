@@ -8,8 +8,6 @@ import { useFetch, useIsRTL } from "../../../../hooks"
 import { Button } from "../../../atoms"
 import { Header } from "../../../atoms/Header"
 import { Loading } from "../../../organisms/Loading"
-
-import blankPerson from "../../../../assets/blank-person-image.png"
 import { DeleteIcon, EditIcon, ViewIcon } from "../../../atoms/icons"
 import { useState } from "react"
 
@@ -132,7 +130,9 @@ export const ViewBranches = ({ title }: ViewBranches_Props_TP) => {
         <title>{title}</title>
       </Helmet>
       <div className="flex justify-between mb-5">
-        <h2 className="font-bold text-2xl">{t("branches")}</h2>
+        <h2 className="font-bold text-2xl">
+          {`${t("system establishment")} / ${t("branches")}`}
+        </h2>
         <Button
           action={() => navigate(-1)}
           className="flex items-center gap-2"

@@ -225,7 +225,7 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-     if (!editData) {
+     if (!editData || !editData?.nationalAddress?.country?.name) {
        setNewValue({
          id: "",
          value: "",
@@ -256,6 +256,7 @@ export const Cities = ({
         `
         }
         options={cities}
+        required
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {

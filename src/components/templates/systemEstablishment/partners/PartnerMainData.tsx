@@ -43,7 +43,7 @@ export const PartnerMainData = ({
   setDocsFormValues,
   docsFormValues,
 }: PartnerMainDataProps_TP) => {
-  console.log("🚀 ~ file: PartnerMainData.tsx:46 ~ docsFormValues:", docsFormValues)
+
   /////////// VARIABLES
   ///
 
@@ -54,7 +54,8 @@ export const PartnerMainData = ({
   ///
   /////////// STATES
   ///
-  const { resetForm, setFieldValue } = useFormikContext<FormikSharedConfig>()
+  const { resetForm, setFieldValue , values } = useFormikContext<FormikSharedConfig>()
+  console.log("🚀 ~ file: PartnerMainData.tsx:59 ~ values:", values)
 
   ///
   /////////// SIDE EFFECTS
@@ -69,12 +70,13 @@ export const PartnerMainData = ({
   ///
   useEffect(() => {
     if (isSuccessPost) {
-      resetForm()
-      restData()
-      setFieldValue("end_date", new Date())
-      setFieldValue("start_date", new Date())
-      setDocsFormValues([])
-
+      if (!editData) {
+        resetForm()
+        restData()
+        setFieldValue("end_date", new Date())
+        setFieldValue("start_date", new Date())
+        setDocsFormValues([])
+      }
     }
   }, [isSuccessPost])
 
@@ -119,16 +121,17 @@ export const PartnerMainData = ({
               placeholder={`${t("mobile number")}`}
               restData={restData}
               isSuccessPost={isSuccessPost}
+              required
             />
           )}
 
           <Country_city_distract_markets
-            countryName="country_id"
+            countryName="country_id_out"
             countryLabel={`${t("country")}`}
-            cityName="city_id"
+            cityName="city_id_out"
             cityLabel={`${t("city")}`}
-            isSuccessPost={isSuccessPost}
-            resetSelect={restData}
+            isSuccessPost={!editData && isSuccessPost}
+            resetSelect={!editData && restData}
             editData={{
               nationalAddress: {
                 country: {
@@ -149,16 +152,21 @@ export const PartnerMainData = ({
           <SelectNationality
             name="nationality_id"
             editData={editData}
-            isSuccessPost={isSuccessPost}
-            resetSelect={restData}
+            isSuccessPost={!editData && isSuccessPost}
+            resetSelect={!editData && restData}
           />
           {/* تاريخ انتهاء الهوية */}
-          <DateInputField label={`${t("End IdNumber")}`} name="end_date" />
+          <DateInputField
+            label={`${t("End IdNumber")}`}
+            name="end_date"
+            required
+          />
 
           {/* تاريخ بدء الشراكة */}
           <DateInputField
             label={`${t("start Date Partner")}`}
             name="start_date"
+            required
           />
           <div className="col-span-4">
             <h2> {`${t("national image")}`}</h2>
@@ -169,13 +177,13 @@ export const PartnerMainData = ({
           setDocsFormValues={setDocsFormValues}
           docsFormValues={docsFormValues}
           editable={!!editData}
-          isSuccessPost={isSuccessPost}
-          restData={restData}
+          isSuccessPost={!editData && isSuccessPost}
+          restData={!editData && restData}
         />
         <NationalAddress
           editData={editData}
-          isSuccessPost={isSuccessPost}
-          resetSelect={restData}
+          isSuccessPost={!editData && isSuccessPost}
+          resetSelect={!editData && restData}
         />
       </OuterFormLayout>
           

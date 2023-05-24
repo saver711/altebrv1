@@ -154,7 +154,11 @@ export const SelectComp = ({
     <>
       <div className="col-span-1">
         <div className="flex flex-col gap-1">
-          {label && <Label htmlFor={id}>{label}</Label>}
+          {label && (
+            <Label htmlFor={id} required={required}>
+              {label}
+            </Label>
+          )}
           {creatable ? (
             <>
               <CreatableSelect

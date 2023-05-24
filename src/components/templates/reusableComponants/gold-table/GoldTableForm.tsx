@@ -110,7 +110,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
           if (supplierTax === 'no' || supplierTax === 'gold') {
             return 0
           } else {
-            formatReyal(info.row.original.weight * info.row.original.wage * 0.15)
+            return formatReyal(info.row.original.weight * info.row.original.wage * 0.15)
           }
         }
       }),

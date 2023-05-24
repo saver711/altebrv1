@@ -17,7 +17,8 @@ type PhoneInputs_TP = {
   name: "phone" | "mobile"
   placeholder: string
   restData?: any
-  isSuccessPost?:any
+  isSuccessPost?: any
+  required?:any
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -35,6 +36,7 @@ export const PhoneInput = ({
   name,
   placeholder,
   restData,
+  required,
   isSuccessPost,
 }: PhoneInputs_TP) => {
   /////////// VARIABLES
@@ -75,7 +77,9 @@ export const PhoneInput = ({
     <>
       <div className="col-span-1">
         <div className="flex flex-col gap-1">
-          <Label htmlFor={name}>{label}</Label>
+          <Label htmlFor={name} required={required}>
+            {label}
+          </Label>
           <BasePhoneInput
             // ref={console.log("ref")}
             onBlur={handleBlur(name)}

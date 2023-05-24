@@ -178,9 +178,10 @@ export const Countries = ({
         id: "",
         value: "",
         label: "اختر دولة",
-      })
+      }
+      )
       if (resetSelect) resetSelect()
-    }
+    } 
 
   }, [isSuccessPost])
 
@@ -219,6 +220,7 @@ export const Countries = ({
         fieldKey={fieldKey}
         modalTitle={`${t("add Country")}`}
         value={newValue}
+        required
         onChange={(option) => {
           //@ts-ignore
           setFieldValue(countryName, option!.id)

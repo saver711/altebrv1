@@ -202,16 +202,16 @@ export const SupplySecondForm = ({
         total_weight: {
             title: 'total weight',
             value: boxValues.reduce((acc, curr) => {
-                return +acc + Number(curr.weight)
+                return +acc + Number(curr.gold_weight) + (Number(curr.diamond_stone_weight) / 5) + (Number(curr.other_stones_weight) / 5)
             }, 0),
             unit: 'gram'
         },
         total_other_stones_weight: {
             title: 'total other stones weight',
             value: boxValues.reduce((acc, curr) => {
-                return +acc + Number(curr.other_stones_weight)
+                return +acc + (Number(curr.other_stones_weight))
             }, 0),
-            unit: 'gram'
+            unit: 'karat'
         },
         total_diamond_amount: {
             title: 'total diamond amount',
@@ -223,9 +223,9 @@ export const SupplySecondForm = ({
         total_diamond_stone_weight: {
             title: 'total diamond stone weight',
             value: boxValues.reduce((acc, curr) => {
-                return +acc + Number(curr.diamond_stone_weight)
+                return +acc + (Number(curr.diamond_stone_weight))
             }, 0),
-            unit: 'gram'
+            unit: 'karat'
         },
         total_gold_weight: {
             title: 'total gold weight',
@@ -328,6 +328,7 @@ export const SupplySecondForm = ({
                                     } : {
                                         ...item,
                                         number: `${i + 1}`,
+                                        weight: Number(item.gold_weight) + (Number(item.diamond_stone_weight) / 5) + (Number(item.other_stones_weight) / 5),
                                         diamond_tax: (Number(item.diamond_value) * 0.15),
                                     }
                                 })

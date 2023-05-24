@@ -3,22 +3,19 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik } from "formik"
 import { t } from "i18next"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { isValidPhoneNumber } from "react-phone-number-input"
 import * as Yup from "yup"
-import { EmployeeMainData, NationalAddress } from ".."
+import { EmployeeMainData } from ".."
 import { useMutate } from "../../../hooks"
 import { formatDate, getDayBefore } from "../../../utils/date"
 import { requiredTranslation } from "../../../utils/helpers"
 import { mutateData } from "../../../utils/mutateData"
 import { notify } from "../../../utils/toast"
 import { HandleBackErrors } from "../../../utils/utils-components/HandleBackErrors"
-import { Button } from "../../atoms"
-import { OuterFormLayout } from "../../molecules"
 import {
-  Documents,
-  allDocs_TP,
+  allDocs_TP
 } from "../reusableComponants/documents/Documents"
 import { Email_TP, InitialValues_TP } from "./validation-and-types"
 ///
@@ -37,6 +34,7 @@ export const AddEmployee = ({
   title,
   editEmployeeData,
 }: AddEmployeeProps_TP) => {
+  console.log("🚀 ~ file: AddEmployee.tsx:40 ~ editEmployeeData:", editEmployeeData)
   // validation
   const employeeValidatingSchema = () =>
     Yup.object({
@@ -44,6 +42,7 @@ export const AddEmployee = ({
       name: Yup.string().trim().required(requiredTranslation),
       branch_id: Yup.string().trim().required(requiredTranslation),
       role_id: Yup.string().trim().required(requiredTranslation),
+      address_out: Yup.string().trim().required(requiredTranslation),
       address: Yup.string().trim().required(requiredTranslation),
       mobile: !!!editEmployeeData
         ? Yup.string()
@@ -79,6 +78,7 @@ export const AddEmployee = ({
       image: Yup.array()
         .required(requiredTranslation)
         .min(1, "can not be empty"),
+      zip_code: Yup.string().trim().required(requiredTranslation),
     })
 
   //@ts-ignore
@@ -95,6 +95,8 @@ export const AddEmployee = ({
   ///
   /////////// STATES
   ///
+    const [modalOpen, setModalOpen] = useState(false)
+
   const [docsFormValues, setDocsFormValues] =
     useState<allDocs_TP[]>(incomingData)
 
@@ -104,6 +106,7 @@ export const AddEmployee = ({
     phone: editEmployeeData?.phone || "",
     mobile: editEmployeeData?.mobile || "",
     username: editEmployeeData?.username || "",
+    address_out: editEmployeeData?.address || "",
     is_active: editEmployeeData?.is_active ? "Yes" : "No" || "Yes",
     city_id: editEmployeeData?.nationalAddress?.city?.id || "",
     nationality_id: editEmployeeData?.nationality?.id || "",
@@ -144,8 +147,6 @@ export const AddEmployee = ({
     address: editEmployeeData?.nationalAddress?.address || "",
   }
 
-  console.log("initialValues==========>", initialValues)
-
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -154,8 +155,7 @@ export const AddEmployee = ({
     mutationFn: mutateData,
     onSuccess: () => {
       notify("success")
-      queryClient.refetchQueries(["employees"])
-      console.log("first")
+      queryClient.refetchQueries([ "employees" ])
     },
     onError: (error) => {
       console.log(error)
@@ -181,6 +181,7 @@ export const AddEmployee = ({
         onSubmit={(values) => {
           let editedValues = {
             ...values,
+            address:values.address_out,
             image: values.image[0],
             national_image: values.national_image[0],
             is_active: values.is_active === "No" ? 0 : 1,
@@ -213,21 +214,22 @@ export const AddEmployee = ({
               JSON.stringify(editEmployeeData.national_image)
             )
               delete editedValues.national_image
+
             if (
               JSON.stringify(values.image[0].path) ===
-              JSON.stringify(editEmployeeData.image)
+              JSON.stringify(editEmployeeData.img)
             )
               delete editedValues.image
+
             if (values.password === "") delete editedValues.password
-            console.log(editedValues)
             mutate({
               endpointName: `employee/api/v1/employees/${editEmployeeData.id}`,
               values: editedValues,
               dataType: "formData",
               editWithFormData: true,
+            
             })
           } else {
-            console.log("editedValues=>", editedValues)
             mutate({
               endpointName: "employee/api/v1/employees",
               values: editedValues,
@@ -240,13 +242,15 @@ export const AddEmployee = ({
         <HandleBackErrors errors={error?.response?.data.errors}>
           <Form>
             <EmployeeMainData
-              title={`${t("main data")}`}
+              title={title}
               editEmployeeData={editEmployeeData}
               docsFormValues={docsFormValues}
               setDocsFormValues={setDocsFormValues}
               isLoading={isLoading}
               restData={reset}
               isSuccessPost={isSuccess}
+              setModalOpen={setModalOpen}
+              modalOpen={modalOpen}
             />
           </Form>
         </HandleBackErrors>

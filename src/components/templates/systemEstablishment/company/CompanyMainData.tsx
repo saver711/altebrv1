@@ -69,11 +69,11 @@ export const CompanyMainData = ({valuesData}:CompanyMainData_TP) => {
           required
         />
         <Country_city_distract_markets
-          countryName="country_id"
+          countryName="country_id_out"
           countryLabel={`${t("country")}`}
-          cityName="city_id"
+          cityName="city_id_out"
           cityLabel={`${t("city")}`}
-          distractName="district_id"
+          distractName="district_id_out"
           distractLabel={`${t("district")}`}
           editData={valuesData}
         />
@@ -83,7 +83,7 @@ export const CompanyMainData = ({valuesData}:CompanyMainData_TP) => {
         <BaseInputField
           id="company_address"
           label={`${t("company address")}`}
-          name="address"
+          name="address_out"
           type="text"
           placeholder={`${t("company address")}`}
           labelProps={{ className: "mb-1" }}
@@ -100,10 +100,13 @@ export const CompanyMainData = ({valuesData}:CompanyMainData_TP) => {
           required
         />
         {/* رقم الجوال */}
-        {
-        !!!valuesData &&
-          <PhoneInput label={`${t('mobile number')}`} name="phone" placeholder={`${t('mobile number')}`} />
-        }
+        {!!!valuesData && (
+          <PhoneInput
+            label={`${t("mobile number")}`}
+            name="phone"
+            placeholder={`${t("mobile number")}`}
+          />
+        )}
 
         {/* الفاكس */}
 

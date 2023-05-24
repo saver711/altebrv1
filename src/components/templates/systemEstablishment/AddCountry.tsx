@@ -46,6 +46,7 @@ export const AddCountry = ({
   setDataSource,
   setShow,
 }: AddCountriesProps_TP) => {
+  console.log("🚀 ~ file: AddCountry.tsx:49 ~ editData:", editData)
   /////////// VARIABLES
   ///
   const isRTL = useIsRTL()
