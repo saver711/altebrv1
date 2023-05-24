@@ -135,7 +135,7 @@ const AddSupplier = ({
       ? editData.tax == "wages" || editData.tax == "gold_and_wages"
         ? true
         : false
-      : false,
+      : true,
     company_name: editData ? editData?.company_name : "",
     country_id: editData ? editData?.country?.id : "",
     city_id: editData ? editData?.city?.id : "",

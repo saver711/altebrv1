@@ -251,12 +251,12 @@ export const Bond = ({ title }: BondProps_TP) => {
       },
       {
         header: `${t('diamond stone weight')}`,
-        cell: (info) => formatReyal(Number(info.renderValue())),
+        cell: (info) => formatReyal((Number(info.renderValue())) * 5),
         accessorKey: 'diamond_stone_weight',
       },
       {
         header: `${t('other stones weight')}`,
-        cell: (info) => formatReyal(Number(info.renderValue())),
+        cell: (info) => formatReyal((Number(info.renderValue()) * 5)),
         accessorKey: 'other_stones_weight',
       },
       {

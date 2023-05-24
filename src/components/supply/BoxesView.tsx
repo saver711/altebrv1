@@ -29,9 +29,13 @@ export const BoxesView = ({boxes}: BoxesView_TP) => {
               <p>
                 {formatReyal(box.value)} {t(box.unit)}
               </p>
-            ) : (
+            ) : box.unit == 'item' ? (
               <p>
                 {box.value} {t("item")}
+              </p>
+            ) : (
+              <p>
+                {box.value} {t("Karat")}
               </p>
             )}
             {/* <p>{box.value} {t(`${box.unit}`)}</p> */}
