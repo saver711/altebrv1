@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Form, Formik, FormikValues } from "formik"
 import { t } from "i18next"
+import { Dispatch, SetStateAction } from "react"
 import { Helmet } from "react-helmet-async"
 import { Button } from "../../components/atoms"
 import { OuterFormLayout } from "../../components/molecules"
@@ -25,13 +26,14 @@ type AddAdministrativeStructureProps_TP = {
   value?: string
   onAdd?: (value: string) => void
   editData?: PermissionGroup_TP
+  setOpen?:Dispatch<SetStateAction<boolean>>
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
 
 ///
 export const AddAdministrativeStructure = ({
-  title, value, onAdd, editData
+  title, value, onAdd, editData , setOpen
 }: AddAdministrativeStructureProps_TP) => {
   /////////// VARIABLES
   ///
@@ -70,12 +72,9 @@ export const AddAdministrativeStructure = ({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify('success')
-      if (value && onAdd) {
-        onAdd(value)
-        queryClient.setQueryData(['allRoles'], (old: any) => {
-          return [...old, data]
-        })
-      }
+      queryClient.refetchQueries(['allRoles'])
+      if(!!setOpen)
+      setOpen(false)
     },
   })
 
@@ -92,11 +91,12 @@ export const AddAdministrativeStructure = ({
   const addAdminStructureHandler = (values: FormikValues) => {
     const idsValues = Object.entries(values).map(([key, _]) => {
       if (values[key] === true) { return key }
-    }).filter(item => !!item)
+    }).filter(item => !!item).filter(item=> !isNaN(item))
 
     mutate({
-      endpointName: "/administrative/api/v1/roles",
+      endpointName: !!editData?.id ? `/administrative/api/v1/roles/${editData.id}` : "/administrative/api/v1/roles",
       values: { name: values.name, permissions: idsValues },
+      method: !!editData?.id ? "put" : 'post'
     })
   }
   ///

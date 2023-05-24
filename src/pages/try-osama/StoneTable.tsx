@@ -46,6 +46,9 @@ export const StoneTable = ({ subTableData }: any) => {
       columnHelper.accessor('natures', {
         header: `${t('stone nature')}`
       }),
+      columnHelper.accessor('stone_type', {
+        header: `${t('stone status')}`
+      }),
       columnHelper.accessor('certificate_number', {
         header: `${t('stone certificate')}`
       }),
@@ -64,6 +67,7 @@ export const StoneTable = ({ subTableData }: any) => {
   ///
   //@ts-ignore
   const selectedRow = subTableData.data.filter(item => item.index === subTableData.index)
+  console.log("🚀 ~ file: StoneTable.tsx:70 ~ StoneTable ~ selectedRow:", selectedRow)
   const queryClient = useQueryClient()
   const [queryData, setQueryData] = useState<StoneRow_TP[] | undefined>()
   //@ts-ignore
@@ -100,7 +104,7 @@ export const StoneTable = ({ subTableData }: any) => {
   //@ts-ignore
   useEffect(() => {
     if (queryData) {
-      setData(StonesData.map((item, index) => ({ ...item, types: queryData[index]?.stone, colors: queryData[index]?.color, shapes: queryData[index]?.shape, purities: queryData[index]?.purity, natures: queryData[index]?.nature, certificate_source: queryData[index]?.country })))
+      setData(StonesData.map((item, index) => ({ ...item, types: queryData[index]?.stone, colors: queryData[index]?.color, shapes: queryData[index]?.shape, purities: queryData[index]?.purity, natures: queryData[index]?.nature, certificate_source: queryData[index]?.country , stone_type:item.stone_type === 'added' ? t('added') : t('not_added') })))
     }
   }, [queryData])
 
