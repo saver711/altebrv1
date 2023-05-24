@@ -88,6 +88,16 @@ export const SupplierMainData = ({
       } 
     }
   }, [isSuccessPost])
+
+  useEffect(() => {
+    if (!!!editData && values.type == "global") {
+      setFieldValue("gold_tax", false)
+      setFieldValue("wages_tax", false)
+    } else if (!!!editData && values.type == "local") {
+      setFieldValue("gold_tax", true)
+      setFieldValue("wages_tax", true)
+    }
+  }, [values.type])
   ///
   return (
     <>

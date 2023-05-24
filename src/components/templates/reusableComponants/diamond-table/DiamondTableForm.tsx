@@ -126,8 +126,8 @@ export const DiamondTableForm = ({
     columnHelper.accessor("weight", {
       header: () => `${t("weight")}`,
       cell: (info) => formatGram(
-        Number(info.row.original.diamond_stone_weight) +
-        Number(info.row.original.other_stones_weight) +
+        (Number(info.row.original.diamond_stone_weight) / 5) +
+        (Number(info.row.original.other_stones_weight) / 5) +
         Number(info.row.original.gold_weight)
       ),
     }),
@@ -516,10 +516,10 @@ export const DiamondTableForm = ({
                 </td>
                 <td className="border-l-2 border-l-flatWhite">
                   <Field
-                    id="diamond_tax"
-                    name="diamond_tax"
+                    id="weight"
+                    name="weight"
                     value={formatGram(
-                      Number(values.diamond_stone_weight) + Number(values.other_stones_weight) + Number(values.gold_weight)
+                      (Number(values.diamond_stone_weight) / 5) + (Number(values.other_stones_weight) / 5) + Number(values.gold_weight)
                     )}
                     className="border-none bg-inherit outline-none cursor-default caret-transparent text-center w-full"
                   />
