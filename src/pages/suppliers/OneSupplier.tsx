@@ -63,7 +63,12 @@ export const OneSupplier = ({ title }: OneSupplierProps_TP) => {
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
-  if (isLoading) return <Loading mainTitle={t("loading")} />
+  if (isLoading) return (
+    <Loading
+      mainTitle={`${t("supplier data is loading")}`}
+      subTitle={`${t("loading")}`}
+    />
+  )
   ///
   return (
     <>

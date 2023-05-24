@@ -455,5 +455,8 @@
   "no tax": "لا يوجد ضريبة",
   "type":"النوع",
   "company_name":"اسم الشركة",
-  "lock status switched successfully": "تم تغيير حالة القفل بنجاح"
+  "lock status switched successfully": "تم تغيير حالة القفل بنجاح",
+  "partner data is loading":"عرض تفاصيل الشريك",
+  "supplier data is loading":"عرض تفاصيل المورد",
+  "employee data is loading":"تحميل بيانات الموظف"
 }
