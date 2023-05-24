@@ -3,7 +3,7 @@
 
 import { useFormikContext } from "formik"
 import { t } from "i18next"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 import { CheckBoxField } from "../../molecules"
@@ -27,7 +27,7 @@ export const PermissionGroup = ({
 }: PermissionGroupProps_TP) => {
   /////////// VARIABLES
   ///
-
+const memoizedEditData = useMemo(()=> editData, [])
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -50,9 +50,8 @@ export const PermissionGroup = ({
     if(groupIds.length !==  checkedBoxes.length)
     setFlag(false)
     else setFlag(true)
-  },[values])
-
-  
+  },[])
+   
   const handleChange = (e:any) => {
     permissions.map(group=>{
       if(name !=='name' && e.target.name === name)
@@ -84,10 +83,10 @@ export const PermissionGroup = ({
               name={id}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 e.target.checked
-                  ? setFieldValue(id, id)
-                  : setFieldValue(id, "")
+                  ? setFieldValue(id, true)
+                  : setFieldValue(id, false)
               }}
-              editData={editData}
+              editData={memoizedEditData}
             />
           </div>
         ))}

@@ -11,7 +11,7 @@ type Props_TP = {
   [key: string]: any
 }
 
-export const Checkbox = ({
+export const Checkbox =({
   label,
   name,
   id,
@@ -44,4 +44,4 @@ export const Checkbox = ({
       </Label>
     </div>
   )
-}
+};

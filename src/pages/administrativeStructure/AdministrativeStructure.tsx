@@ -157,6 +157,7 @@ export const AdministrativeStructure = ({
                   : t("add-administrative-structure")
               }`}
               editData={editData}
+              setOpen={setOpen}
             />
           ) : (
             <div className="flex flex-col gap-8 justify-center items-center">
