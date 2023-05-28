@@ -325,7 +325,6 @@ export const AccountingTree = () => {
                     label={t("unit id").toString()}
                     name="unit_id"
                     id="unit_id"
-                    required
                     placeholder={t("unit id").toString()}
                     loadingPlaceholder={t("Loading units").toString()}
                     loading={isLoadingUnitsData}

@@ -69,6 +69,7 @@ export const AddDistrict = ({
   }
   const districtValidatingSchema = Yup.object({
     name_ar: Yup.string().trim().required(requiredTranslation),
+    country_id: Yup.string().trim().required(requiredTranslation),
     name_en: Yup.string().trim().required(requiredTranslation),
     city_id: Yup.string().trim().required(requiredTranslation),
   })

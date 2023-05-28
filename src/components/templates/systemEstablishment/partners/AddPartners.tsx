@@ -184,7 +184,7 @@ export const AddPartners = ({
     <>
       <Formik
         initialValues={initialValues}
-        // validationSchema={partnerValidatingSchema}
+        validationSchema={partnerValidatingSchema}
         onSubmit={(values) => {
           let editedValues = {
             name: values.name,

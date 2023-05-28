@@ -282,7 +282,7 @@ export const SizesForm = ({
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => handleSubmit(values)}
-        //validationSchema={validatingSchema}
+        validationSchema={validatingSchema}
       >
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>
