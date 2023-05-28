@@ -90,6 +90,7 @@ export const Country_city_distract_markets = ({
         editData={editData}
         isSuccessPost={isSuccessPost}
         resetSelect={resetSelect}
+        setCityId={setCityId}
       />
       {cityName && (
         <Cities
@@ -102,6 +103,7 @@ export const Country_city_distract_markets = ({
           editData={editData}
           isSuccessPost={isSuccessPost}
           resetSelect={resetSelect}
+          setDistrictId={setDistrictId}
         />
       )}
       {distractName && (

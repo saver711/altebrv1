@@ -191,7 +191,9 @@ export const Districts = ({
     setNewValue({
       id: editData?.nationalAddress?.district.id || editData?.district_id || "",
       value:
-        editData?.nationalAddress?.district.name || editData?.district_name || "",
+        editData?.nationalAddress?.district.name ||
+        editData?.district_name ||
+        "",
       label:
         editData?.nationalAddress?.district.name ||
         editData?.district_name ||
@@ -208,9 +210,7 @@ export const Districts = ({
     refetch,
   } = useFetch<SelectOption_TP[], District_TP>({
     queryKey: [`districts/${city?.id}`],
-    endpoint: `governorate/api/v1/cities/${
-      editData ? editData?.city_id : city?.id
-    }?per_page=10000`,
+    endpoint: `governorate/api/v1/cities/${city?.id}?per_page=10000`,
     select: ({ districts }) =>
       districts.map((district) => ({
         ...district,
@@ -240,19 +240,20 @@ export const Districts = ({
   }, [JSON.stringify(districts)])
 
   useEffect(() => {
-        if (!editData) {
-          setNewValue({
-            id: "",
-            value: "",
-            label: "اختر المدينة اولا",
-          })
+    if (!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينة اولا",
+      })
 
-          if (resetSelect) resetSelect()
-        }
+      if (resetSelect) resetSelect()
+    }
+  }, [isSuccessPost])
+  console.log(" editData?.city_id", editData?.city_id)
+  console.log(" city?.id", city?.id)
+  console.log("districts", districts)
 
-  }, [ isSuccessPost ])
-  console.log("ejj", editData?.city_id)
-  
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select

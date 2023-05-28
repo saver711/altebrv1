@@ -163,6 +163,7 @@ export const Cities = ({
   editData,
   isSuccessPost,
   resetSelect,
+  setDistrictId,
 }: Cities_TP) => {
   /////////// VARIABLES
   ///
@@ -180,9 +181,9 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
+  console.log("newValue", newValue?.id)
+  console.log("editData?.city_id", editData?.city_id)
   useEffect(() => {
-    console.log("1")
-
     setNewValue({
       id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
       value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
@@ -191,6 +192,13 @@ export const Cities = ({
         editData?.city_name ||
         "اختر الدوله اولا",
     })
+    // setDistrictId({
+    //   id: "",
+    //   value: "",
+    //   label: "اختر المدينه؟  ",
+    // })
+    // if (newValue?.id !== editData?.city_id) {
+    // }
   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
@@ -202,9 +210,7 @@ export const Cities = ({
     failureReason,
     refetch,
   } = useFetch<SelectOption_TP[], City_TP>({
-    endpoint: `governorate/api/v1/countries/${
-      editData ? editData?.country_id : country?.id
-    }?per_page=10000`,
+    endpoint: `governorate/api/v1/countries/${country?.id}?per_page=10000`,
     queryKey: [`cities/${country?.id}`],
     select: ({ cities }) => {
       return cities.map((city) => ({
@@ -217,8 +223,8 @@ export const Cities = ({
     },
     enabled: editData ? true : !!country?.id,
   })
-  console.log("v", cities)
-  console.log("e", editData?.country_id)
+  console.log("allcities", cities)
+  console.log("editData?.country_id", editData?.country_id)
   console.log("NewValue", newValue)
 
   useEffect(() => {
@@ -229,6 +235,18 @@ export const Cities = ({
       setFieldValue(cityName, null)
     }
   }, [JSON.stringify(cities)])
+
+  useEffect(() => {
+    console.log("useEffect editData")
+    if (editData) {
+      setCityId({
+        id: newValue?.id,
+        label: newValue?.label,
+        value: newValue?.value,
+        name: newValue?.name,
+      })
+    }
+  }, [newValue])
 
   useEffect(() => {
     console.log("3")

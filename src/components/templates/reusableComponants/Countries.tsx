@@ -139,9 +139,9 @@ export const Countries = ({
   label,
   editData,
   isSuccessPost,
+  setCityId,
   resetSelect,
 }: Countries_TP) => {
-
   /////////// VARIABLES
   ///
 
@@ -153,7 +153,7 @@ export const Countries = ({
   /////////// STATES
   ///
   const [newValue, setNewValue] =
-  useState<SingleValue<SelectOption_TP> | null>()
+    useState<SingleValue<SelectOption_TP> | null>()
 
   ///
   /////////// SIDE EFFECTS
@@ -173,18 +173,17 @@ export const Countries = ({
   }, [])
 
   useEffect(() => {
-    if (!editData && !editData?.nationalAddress?.country?.name  ) {
+    if (!editData && !editData?.nationalAddress?.country?.name) {
       setNewValue({
         id: "",
         value: "",
         label: "اختر دولة",
       })
-       if (editData) {
-         setCountry({ id: "", label: "", value: "", name: "" })
-       }
+      if (editData) {
+        setCountry({ id: "", label: "", value: "", name: "" })
+      }
       if (resetSelect) resetSelect()
     }
-
   }, [isSuccessPost])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
@@ -205,8 +204,24 @@ export const Countries = ({
         label: country.name,
       })),
   })
-  console.log(newValue)
-  
+  useEffect(() => {
+    console.log("useEffect editData")
+    if (editData) {
+      setCountry({
+        id: newValue?.id,
+        label: newValue?.label,
+        value: newValue?.value,
+        name: newValue?.name,
+      })
+      setCityId({
+        id: "",
+        label: "gh",
+        value: "",
+        name: "",
+      })
+    }
+  }, [newValue])
+
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">
