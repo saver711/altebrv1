@@ -138,11 +138,11 @@ export const ViewColors = () => {
         <div className=" m-auto">
           <Header
             className="text-center text-2xl font-bold"
-            header={t(`some thing went wrong ${error.message}`)}
+            header={t(`some thing went wrong ${error.response.data.message}`)}
           />
         </div>
       )}
-      {isLoading && <Loading mainTitle={t("colors")} />}
+    
       {isSuccess && !!!dataSource?.length && (
         <EmptyDataView>
           <StonesColors />

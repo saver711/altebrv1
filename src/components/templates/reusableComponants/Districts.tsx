@@ -114,6 +114,7 @@ const NewDistrictOptionComponent = ({
       },
     })
   }
+  
   return (
     <div className="flex items-center justify-between gap-2">
       <Formik
@@ -191,10 +192,12 @@ export const Districts = ({
     setNewValue({
       id: editData?.nationalAddress?.district.id || editData?.district_id || "",
       value:
-        editData?.nationalAddress?.district.name || editData?.district_id || "",
+        editData?.nationalAddress?.district.name ||
+        editData?.district_name ||
+        "",
       label:
         editData?.nationalAddress?.district.name ||
-        editData?.district_id ||
+        editData?.district_name ||
         "اختر المدينه اولا ",
     })
   }, [])
@@ -225,7 +228,7 @@ export const Districts = ({
       setNewValue({
         id: "",
         value: "",
-        label: "اختر المدينة اولا",
+        label: "اختر الحي ",
       })
       setDistrictId({
         id: "",
