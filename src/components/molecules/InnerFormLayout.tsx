@@ -58,7 +58,7 @@ export const InnerFormLayout = ({
           className={
             customStyle
               ? customStyle
-              : "bg-flatWhite rounded-lg p-4 grid grid-cols-4 gap-x-4 gap-y-8 relative"
+              : "bg-flatWhite rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 relative"
           }
         >
           {children}
