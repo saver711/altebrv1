@@ -20,6 +20,7 @@ type Select_TP = {
   id: string
   isMulti?: boolean
   required?: boolean
+  noMb?: boolean
   placeholder?: string
   loadingPlaceholder?: string
   options: SelectOption_TP[] | undefined
@@ -86,6 +87,7 @@ export const SelectComp = ({
   fieldKey = "value",
   onSimpleCreate,
   CreateComponent,
+  noMb = false,
   onComplexCreate,
   setOptions,
   modalTitle,
@@ -152,7 +154,10 @@ export const SelectComp = ({
 
   return (
     <>
-      <div className="col-span-1">
+      <div 
+        className={noMb ? "col-span-1 relative" 
+        : "col-span-1 relative mb-[10px]"}
+      >
         <div className="flex flex-col gap-1">
           {label && (
             <Label htmlFor={id} required={required}>
@@ -192,7 +197,7 @@ export const SelectComp = ({
             <Select  menuPlacement="auto" {...selectProps} />
           )}
         </div>
-        <FormikError name={name as string} className="whitespace-nowrap" />
+        <FormikError name={name as string} className="whitespace-nowrap absolute" />
       </div>
     </>
   )

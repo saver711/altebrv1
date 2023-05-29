@@ -307,6 +307,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                     <Select
                       options={categoriesOptions}
                       id="category"
+                      noMb={true}
                       name="category_id"
                       placeholder={`${t("categories")}`}
                       value={{
@@ -340,6 +341,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                       options={karatsOptions}
                       id="karat"
                       name="karat_id"
+                      noMb={true}
                       placeholder={`${t("karats")}`}
                       value={{
                         value: values.karat_value || editData.karat_value,
@@ -391,6 +393,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                       onChange={(option) => {
                         setFieldValue("category_value", option!.value)
                       }}
+                      noMb={true}
                       all={true}
                       value={{
                         value: values.category_value || editData.category_value,
@@ -403,12 +406,13 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                     />
                   </td>
                   <td className="border-l-2 border-l-flatWhite">
-                    <BaseInputField id="weight" name="weight" type="number" />
+                    <BaseInputField id="weight" name="weight" type="number" noMb={true} />
                   </td>
                   <td className="border-l-2 border-l-flatWhite">
                     <SelectKarat
                       field="id"
                       name="karat_id"
+                      noMb={true}
                       onChange={(option) => {
                         setFieldValue("karat_value", option!.value)
                         setFieldValue(
@@ -429,10 +433,10 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                     />
                   </td>
                   <td className="border-l-2 border-l-flatWhite">
-                    <BaseInputField id="stock" name="stock" type="number" />
+                    <BaseInputField id="stock" name="stock" type="number" noMb={true} />
                   </td>
                   <td className="border-l-2 border-l-flatWhite">
-                    <BaseInputField id="wage" name="wage" type="number" />
+                    <BaseInputField id="wage" name="wage" type="number" noMb={true} />
                   </td>
                   <td className="border-l-2 border-l-flatWhite">
                     <Field

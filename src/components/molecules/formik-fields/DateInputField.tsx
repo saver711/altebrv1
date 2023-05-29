@@ -50,7 +50,7 @@ export const DateInputField = ({
   const [dateActive, setDateActive] = useState(false)
 
   return (
-    <div className="col-span-1">
+    <div className="col-span-1 relative mb-[10px]">
       <div className="flex flex-col gap-1">
         <Label htmlFor={name} required={required} {...labelProps}>
           {label}
@@ -86,7 +86,7 @@ export const DateInputField = ({
           }
         />
       </div>
-      <FormikError name={name} />
+      <FormikError name={name} className="whitespace-nowrap absolute" />
     </div>
   )
 }
