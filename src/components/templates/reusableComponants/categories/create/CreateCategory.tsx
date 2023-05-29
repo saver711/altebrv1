@@ -24,7 +24,7 @@ type CreateCategoryProps_TP = {
   editData?: { [key: string]: any }
   setDataSource?: Dispatch<SetStateAction<InitialValues_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 
 type SingleCategory_TP = {
@@ -56,7 +56,7 @@ type SizeProps_TP2 = {
 }
 
 const CreateCategory = ({
-  value="",
+  value = "",
   onAdd,
   editData,
   setDataSource,
@@ -164,7 +164,7 @@ const CreateCategory = ({
   })
 
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
+  const { mutate, isLoading, error, isSuccess, reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data: any) => {
       notify("success")
@@ -220,7 +220,7 @@ const CreateCategory = ({
   // }
 
   const send = (values: InitialValues_TP) => {
-    console.log(values)
+    console.log("values", values)
     const multi = values.type === "multi"
     const singleValues = {
       name_en: values.name_en,
@@ -230,15 +230,42 @@ const CreateCategory = ({
       has_selsal: values.has_selsal,
       has_size: values.has_size,
     }
-    const multiValues = {
-      name_en: values.name_en,
-      name_ar: values.name_ar,
-      type: "multi",
-      selling_type: values.selling_type,
-      has_selsal: values.has_selsal,
-      has_size: false,
-      items: values.items,
-    }
+    const sendNewItemsIds = values?.items?.find((item) => {
+      return item?.id
+    })
+    const backItemsIds = editData?.items?.find((item) => {
+      return item?.id
+    })
+    const sendNewSizesIds = values?.category_sizes?.find((item) => {
+      return item?.id
+    })
+    const backSizesIds = editData?.category_sizes?.find((item) => {
+      return item?.id
+    })
+    const categorySizes =
+      sendNewSizesIds?.id === backSizesIds?.id
+        ? { ...singleValues }
+        : { ...singleValues, category_sizes: [values.category_sizes] }
+
+    const multiValues =
+      sendNewItemsIds?.id === backItemsIds?.id
+        ? {
+            name_en: values.name_en,
+            name_ar: values.name_ar,
+            type: "multi",
+            selling_type: values.selling_type,
+            has_selsal: values.has_selsal,
+            has_size: false,
+          }
+        : {
+            name_en: values.name_en,
+            name_ar: values.name_ar,
+            type: "multi",
+            selling_type: values.selling_type,
+            has_selsal: values.has_selsal,
+            has_size: false,
+            items: values.items,
+          }
     mutate({
       endpointName: editData
         ? `/classification/api/v1/categories/${editData.id}`
@@ -246,26 +273,25 @@ const CreateCategory = ({
       values: multi
         ? multiValues
         : values.has_size
-        ? { ...singleValues, category_sizes: [values.category_sizes] }
+        ? categorySizes
         : singleValues,
       method: editData ? "put" : "post",
     })
 
-    // multi
-    //   ? console.log(multiValues)
-    //   : console.log(
-    //       values.has_size
-    //         ? { ...singleValues, category_sizes: values.category_sizes }
-    //         : singleValues
-    //     )
+    multi
+      ? console.log("multiValues", multiValues)
+      : console.log(
+          values.has_size
+            ? { ...singleValues, category_sizes: values.category_sizes }
+            : singleValues
+        )
   }
+
   return (
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={(values) =>
-        send(values)
-      }
+      onSubmit={(values) => send(values)}
       validationSchema={validatingSchema}
     >
       {(props) => (
