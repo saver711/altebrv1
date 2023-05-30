@@ -139,7 +139,7 @@ export const Countries = ({
   label,
   editData,
   isSuccessPost,
-  setCityId,
+  setEditData,
   resetSelect,
 }: Countries_TP) => {
   /////////// VARIABLES
@@ -170,8 +170,10 @@ export const Countries = ({
         editData?.country_name ||
         "اختر دولة",
     })
+    
   }, [])
 
+  
   useEffect(() => {
     if (!editData && !editData?.nationalAddress?.country?.name) {
       setNewValue({
@@ -179,9 +181,7 @@ export const Countries = ({
         value: "",
         label: "اختر دولة",
       })
-      if (editData) {
-        setCountry({ id: "", label: "", value: "", name: "" })
-      }
+
       if (resetSelect) resetSelect()
     }
   }, [isSuccessPost])
@@ -212,12 +212,6 @@ export const Countries = ({
         label: newValue?.label,
         value: newValue?.value,
         name: newValue?.name,
-      })
-      setCityId({
-        id: "",
-        label: "gh",
-        value: "",
-        name: "",
       })
     }
   }, [newValue])

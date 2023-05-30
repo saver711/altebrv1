@@ -25,7 +25,7 @@ type MarketMainDataProps_TP = {
   title?: string
   isSuccessPost?: boolean
   resetData?: () => void
-  isLoading?:boolean
+  isLoading?: boolean
 }
 ///
 export const MarketMainData = ({
@@ -33,6 +33,7 @@ export const MarketMainData = ({
   title,
   isSuccessPost,
   editData,
+  setEditData,
   isLoading,
 }: MarketMainDataProps_TP) => {
   /////////// VARIABLES
@@ -82,6 +83,7 @@ export const MarketMainData = ({
             editData={editData}
             isSuccessPost={isSuccessPost}
             resetSelect={resetData}
+            setEditData={setEditData}
           />
           <BaseInputField
             id="name_ar"

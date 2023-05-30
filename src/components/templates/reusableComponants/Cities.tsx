@@ -181,17 +181,25 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
-  console.log("newValue", newValue?.id)
-  console.log("editData?.city_id", editData?.city_id)
+
   useEffect(() => {
-    setNewValue({
-      id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
-      value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
-      label:
-        editData?.nationalAddress?.city?.name ||
-        editData?.city_name ||
-        "اختر الدوله اولا",
-    })
+    if (country?.id !== editData?.city_id) {
+      setNewValue({
+        id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
+        value:
+          editData?.nationalAddress?.city?.name || editData?.city_name || "",
+        label:
+          editData?.nationalAddress?.city?.name ||
+          editData?.city_name ||
+          "اختر الدوله اولا",
+      })
+    } else {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينه ... ",
+      })
+    }
     // setDistrictId({
     //   id: "",
     //   value: "",
@@ -200,7 +208,9 @@ export const Cities = ({
     // if (newValue?.id !== editData?.city_id) {
     // }
   }, [])
-
+  console.log("country?.id", country?.id)
+  console.log("editData?.country_id", editData?.country_id)
+  console.log("editData ", country?.id === editData?.country_id)
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
 
@@ -223,12 +233,8 @@ export const Cities = ({
     },
     enabled: editData ? true : !!country?.id,
   })
-  console.log("allcities", cities)
-  console.log("editData?.country_id", editData?.country_id)
-  console.log("NewValue", newValue)
 
   useEffect(() => {
-    console.log("2")
     if (cities && !editData) {
       setNewValue(null)
       setCityId({ id: "", label: "", value: "", name: "" })
@@ -237,7 +243,6 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-    console.log("useEffect editData")
     if (editData) {
       setCityId({
         id: newValue?.id,
@@ -249,8 +254,6 @@ export const Cities = ({
   }, [newValue])
 
   useEffect(() => {
-    console.log("3")
-
     if (!editData) {
       setNewValue({
         id: "",

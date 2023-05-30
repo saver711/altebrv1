@@ -11,9 +11,9 @@ import { notify } from "../../../../utils/toast"
 import { HandleBackErrors } from "../../../../utils/utils-components/HandleBackErrors"
 import { Button } from "../../../atoms"
 import {
-    BaseInputField,
-    InnerFormLayout,
-    OuterFormLayout
+  BaseInputField,
+  InnerFormLayout,
+  OuterFormLayout,
 } from "../../../molecules"
 import { Country_city_distract_markets } from "../../reusableComponants/Country_city_distract_markets"
 import { ViewMarkets_TP } from "../view/ViewMarkets"
@@ -34,10 +34,11 @@ type MarketType = {
   district_id: string
 }
 type AddMarketProps_TP = {
-  editData?: ViewMarkets_TP
   setDataSource?: Dispatch<SetStateAction<ViewMarkets_TP[]>>
+  editData?: ViewMarkets_TP
+  setEditData?: any
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
@@ -55,6 +56,7 @@ export const AddMarket = ({
   setDataSource,
   setShow,
   title,
+  setEditData,
 }: AddMarketProps_TP) => {
   /////////// VARIABLES
   ///
@@ -83,7 +85,7 @@ export const AddMarket = ({
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
   const queryClient = useQueryClient()
-  const { mutate, error, isLoading, isSuccess , reset } = useMutate<MarketType>({
+  const { mutate, error, isLoading, isSuccess, reset } = useMutate<MarketType>({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
@@ -120,7 +122,7 @@ export const AddMarket = ({
     },
   })
   const handleSubmit = (values: FormikValues) => {
-    console.log(values)
+
     mutate({
       endpointName: editData
         ? `governorate/api/v1/markets/${editData?.id}`
@@ -150,6 +152,7 @@ export const AddMarket = ({
           <HandleBackErrors errors={error?.response?.data?.errors}>
             <MarketMainData
               editData={editData}
+              setEditData={setEditData}
               title={title}
               isSuccessPost={isSuccess}
               resetData={reset}

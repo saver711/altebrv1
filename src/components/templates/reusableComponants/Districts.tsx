@@ -250,9 +250,6 @@ export const Districts = ({
       if (resetSelect) resetSelect()
     }
   }, [isSuccessPost])
-  console.log(" editData?.city_id", editData?.city_id)
-  console.log(" city?.id", city?.id)
-  console.log("districts", districts)
 
   return (
     <div className="flex flex-col gap-1 justify-center">
