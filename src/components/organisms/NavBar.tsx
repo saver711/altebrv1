@@ -9,7 +9,7 @@ import { Button } from "../atoms"
 
 const NavBar = () => {
 
-  const {logOutHandler, isLoggingOut} = useContext(authCtx)
+  const {isLoggingOut, frontLogOutHandler} = useContext(authCtx)
  return (
    <div className="w-100 flex h-14 items-center justify-between p-2">
      <div className="w-100 flex items-center gap-12 py-6 px-4">
@@ -37,7 +37,7 @@ const NavBar = () => {
          <img src={logo} className="w-6 h-6  object-contain" alt="logo" />
          <h6 className="m-0">اسم المستخدم</h6>
          <IoIosArrowDown className="h-4 w-4 fill-mainBlack" />
-         <Button action={logOutHandler} loading={isLoggingOut}>
+         <Button action={frontLogOutHandler} loading={isLoggingOut}>
            تسجيل خروج
          </Button>
        </div>

@@ -14,11 +14,11 @@ import {
 } from "./auth-permissions-types"
 ///
 /////////TYPES
+///
 
 ///
 /////////// HELPER VARIABLES & FUNCTIONS
 ///
-
 export const authCtx = createContext<AuthCtx_TP>({
   isLoggedIn: false,
   isLoggingIn: false,
@@ -111,6 +111,7 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
     },
     staleTime: Infinity,
     cacheTime: Infinity,
+    enabled: isLoggedIn,
   })
   // Get updated user permissions
   const { isFetching: isLoadingUpdatedUserPermissions } = useFetch<
@@ -124,6 +125,7 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
     },
     staleTime: Infinity,
     cacheTime: Infinity,
+    enabled: isLoggedIn,
   })
   ///
   /////////// SIDE EFFECTS
@@ -189,6 +191,8 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
     updateLocalPermissions("REMOVE")
     // login=false & notify & navigate
     setIsLoggedIn(false)
+    console.log('xxxxx')
+    
     notify("success", "Good bye, Waiting for you!")
     navigate("/login")
   }
