@@ -9,7 +9,7 @@ import { OuterFormLayout } from "../../components/molecules/OuterFormLayout"
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table"
 import { useMemo, useState } from "react"
 import { Header } from "../../components/atoms/Header"
-import { EditIcon } from "../../components/atoms/icons"
+import { EditIcon, ViewIcon } from "../../components/atoms/icons"
 import { SvgDelete } from "../../components/atoms/icons/SvgDelete"
 import { Modal } from "../../components/molecules/Modal"
 import { Loading } from "../../components/organisms/Loading"
@@ -107,6 +107,7 @@ export const AdministrativeStructure = ({
               }}
               stroke="#ef4444"
             />
+              <ViewIcon action={() => navigate(`/administrative/api/v1/roles/${info.row.original.id}`)} />
           </div>
         ),
         accessorKey: "edit",

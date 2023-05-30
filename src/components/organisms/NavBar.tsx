@@ -4,16 +4,15 @@ import { IoIosArrowDown } from "react-icons/io"
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5"
 import logo from "../../assets/altebr_logo.png"
 import { authCtx } from "../../context/auth-and-perm/auth"
-import { Can } from "../../utils/utils-components/Can"
 import { Button } from "../atoms"
 
 const NavBar = () => {
 
-  const {logOutHandler, isLoggingOut} = useContext(authCtx)
+  const {logOutHandler, isLoggingOut , userData} = useContext(authCtx)
  return (
-   <div className="w-100 flex h-14 items-center justify-between p-2">
+   <div className="w-100 flex h-14 items-center justify-between px-4 py-10">
      <div className="w-100 flex items-center gap-12 py-6 px-4">
-       <img src={logo} className="ms-3 h-12 w-12 object-contain" alt="logo" />
+       <img src={logo} className="ms-3 h-20 w-20 object-contain" alt="logo" />
        {/* <Can access={["api.v1.categories.store"]}>
           <form className="flex items-center rounded-md border-2 border-slate-200 p-1 ">
             <input
@@ -26,18 +25,17 @@ const NavBar = () => {
         </Can> */}
      </div>
      <div className="me-2 flex  items-center gap-4">
-       <IoSettingsOutline className="icon fill-mainBlack cursor-pointer" />
-       <div className=" relative">
+       {/* <IoSettingsOutline className="icon fill-mainBlack cursor-pointer" /> */}
+       {/* <div className=" relative">
          <IoNotificationsOutline className="icon fill-mainBlack" />
          <span className=" absolute -top-2 left-3 rounded-full  bg-mainRed p-[2px] text-xs text-white">
            10
          </span>
-       </div>
+       </div> */}
        <div className="flex items-center justify-center gap-2">
-         <img src={logo} className="w-6 h-6  object-contain" alt="logo" />
-         <h6 className="m-0">اسم المستخدم</h6>
-         <IoIosArrowDown className="h-4 w-4 fill-mainBlack" />
-         <Button action={logOutHandler} loading={isLoggingOut}>
+         <h6 className="m-0">{userData?.name}</h6>
+         {/* <IoIosArrowDown className="h-4 w-4 fill-mainBlack" /> */}
+         <Button action={logOutHandler} loading={isLoggingOut} className="text-sm p-2">
            تسجيل خروج
          </Button>
        </div>
