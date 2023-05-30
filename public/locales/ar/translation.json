@@ -456,6 +456,7 @@
   "type":"النوع",
   "added":"مضاف",
   "not_added":"غير مضاف",
+  "stone status":"حالة الحجر",
   "company_name":"اسم الشركة",
   "lock status switched successfully": "تم تغيير حالة القفل بنجاح",
   "partner data is loading":"عرض تفاصيل الشريك",
