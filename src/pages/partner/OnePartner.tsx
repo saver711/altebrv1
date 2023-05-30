@@ -20,6 +20,13 @@ import { Query_TP } from "../coding/gold/AddStone"
 import { SelectOption_TP } from "../../types"
 import { formatDate } from "../../utils/date"
 import { FilesPreviewOutFormik } from "../../components/molecules/files/FilesPreviewOutFormik"
+import { BsCalendarDate, BsFillPersonFill, BsFillPersonVcardFill, BsMailbox } from "react-icons/bs"
+import { AiFillPhone, AiOutlineFieldNumber } from "react-icons/ai"
+import { TbHomeHand } from "react-icons/tb"
+import { BiStreetView } from "react-icons/bi"
+import { FaCity, FaHome } from "react-icons/fa"
+import { GrDocument, GrDocumentTest, GrDocumentText } from "react-icons/gr"
+import { MdEditDocument, MdEmail } from "react-icons/md"
 ///
 /////////// Types
 ///
@@ -99,90 +106,125 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                   className="w-[7rem] h-[7rem] rounded-full object-cover"
                 />
               </div>
-              {partner.name && (
-                <TextLine boldText={t("Name")} lightString={partner.name} />
-              )}
-              {partner.nationality_name && (
-                <TextLine
-                  boldText={t("nationality_name")}
-                  lightString={partner?.nationality_name}
-                />
-              )}
+              <div className="flex gap-4 flex-col col-span-2">
+                <h2 className="text-mainOrange font-bold border-b-2 border-[#5F5F5F] w-[30%] p-1">
+                  البيانات الشخصية :
+                </h2>
 
-              {partner.phone && (
-                <TextLine
-                  boldText={t("phone number")}
-                  lightString={partner?.phone}
-                />
-              )}
+                {partner.name && (
+                  <div className="flex align-middle gap-2">
+                    <BsFillPersonFill className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                    <TextLine boldText={t("Name")} lightString={partner.name} />
+                  </div>
+                )}
+                {partner.nationality && (
+                  <div className="flex align-middle gap-2">
+                    <BsFillPersonVcardFill className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                    <TextLine
+                      boldText={t("nationality")}
+                      lightString={partner?.nationality?.name}
+                    />
+                  </div>
+                )}
 
-              {partner?.country && (
-                <TextLine
-                  boldText={t("country_name")}
-                  lightString={partner?.country.name}
-                />
-              )}
-              {partner?.city && (
-                <TextLine
-                  boldText={t("city_name")}
-                  lightString={partner?.city.name}
-                />
-              )}
-              {partner?.start_date && (
-                <TextLine
-                  boldText={t("hiring date")}
-                  lightString={partner?.start_date}
-                />
-              )}
-              {partner?.end_date && (
-                <TextLine
-                  boldText={t("end date")}
-                  lightString={partner?.end_date}
-                />
-              )}
-              {partner?.tax && (
-                <TextLine boldText={t("tax")} lightString={partner?.tax} />
-              )}
-              {partner?.type && (
-                <TextLine boldText={t("type")} lightString={partner?.type} />
-              )}
-              {partner?.address && (
-                <TextLine
-                  boldText={t("address")}
-                  lightString={partner?.address}
-                />
-              )}
-              {partner?.national_number && (
-                <TextLine
-                  boldText={t("national number")}
-                  lightString={partner?.national_number}
-                />
-              )}
-              {partner?.email && (
-                <TextLine
-                  containerClasses=" !block"
-                  boldText={t("email")}
-                  lightString={partner?.email}
-                />
-              )}
-              {partner.national_image ? (
-                <div className="flex items-center gap-1">
-                  <p className="mt-1">{t("media")} : </p>
-                  <FilesPreviewOutFormik
-                    preview={true}
-                    images={[
-                      {
-                        path: partner.national_image,
-                        type: "image",
-                      },
-                    ]}
+                {partner.phone && (
+                  <div className="flex align-middle gap-2">
+                    <AiFillPhone className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                    <TextLine
+                      boldText={t("phone number")}
+                      lightString={partner?.phone}
+                    />
+                  </div>
+                )}
+
+                {partner?.tax && (
+                  <TextLine boldText={t("tax")} lightString={partner?.tax} />
+                )}
+                {partner?.type && (
+                  <TextLine boldText={t("type")} lightString={partner?.type} />
+                )}
+                {partner?.address && (
+                  <TextLine
+                    boldText={t("address")}
+                    lightString={partner?.address}
                   />
-                </div>
-              ) : (
-                <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                  <h3 className="font-bold text-lg">{t("no media")}</h3>
-                </div>
-              )}
+                )}
+                {partner?.national_number && (
+                  <TextLine
+                    boldText={t("national number")}
+                    lightString={partner?.national_number}
+                  />
+                )}
+                {partner?.email && (
+                  <div className="flex align-middle gap-2">
+                    <MdEmail className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                    <TextLine
+                      containerClasses=" !block"
+                      boldText={t("email")}
+                      lightString={partner?.email}
+                    />
+                  </div>
+                )}
+                {partner.national_image ? (
+                  <div className="flex items-center gap-1">
+                    <p className="mt-1">{t("media")} : </p>
+                    <FilesPreviewOutFormik
+                      preview={true}
+                      images={[
+                        {
+                          path: partner.national_image,
+                          type: "image",
+                        },
+                      ]}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex justify-center gap-4 col-span-4 align-center items-center">
+                    <h3 className="font-bold text-lg">{t("no media")}</h3>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-4 flex-col col-span-2 px-4 border-r-2 border-[#5F5F5F33]">
+                <h2 className="text-mainOrange font-bold border-b-2 border-[#5F5F5F] w-[30%] p-1">
+                  البيانات العامة :
+                </h2>
+                {partner?.country && (
+                     <div className="flex align-middle gap-2">
+                      <FaCity className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                  <TextLine
+                    boldText={t("country_name")}
+                    lightString={partner?.country.name}
+                  />
+                  </div>
+                )}
+                {partner?.city && (
+                                       <div className="flex align-middle gap-2">
+                      <FaCity className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                  <TextLine
+                    boldText={t("city_name")}
+                    lightString={partner?.city.name}
+                    />
+                    </div>
+                )}
+                {partner?.start_date && (
+                  <div className="flex align-middle gap-2">
+                      <BsCalendarDate className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                  <TextLine
+                    boldText={t("hiring date")}
+                    lightString={partner?.start_date}
+                    />
+                    </div>
+                )}
+                {partner?.end_date && (
+                  <div className="flex align-middle gap-2">
+                      <BsCalendarDate className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                  <TextLine
+                    boldText={t("end date")}
+                    lightString={partner?.end_date}
+                    />
+                    </div>
+                )}
+              </div>
               {partner?.document.length !== 0 && (
                 <div className="flex justify-between gap-4 col-span-4 align-center items-center mt-5">
                   <h3 className="font-extrabold text-2xl ">
@@ -209,57 +251,75 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                           </p>
                         </div>
                       </div>
-                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative   ">
                         <div className="flex gap-4 flex-col">
                           {doc.data?.docType?.label && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docType?.label}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocument className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document type")}
+                                lightString={doc.data?.docType?.label}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col">
                           {doc.data?.docName && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docName}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocumentText className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docName}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col  ">
                           {doc.data?.docNumber && (
-                            <TextLine
-                              boldText={t("document number")}
-                              lightString={doc.data?.docNumber}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <MdEditDocument className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document number")}
+                                lightString={doc.data?.docNumber}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col  ">
                           {doc.data?.endDate && (
-                            <TextLine
-                              boldText={t("document endDate")}
-                              lightString={formatDate(
-                                new Date(doc.data?.endDate)
-                              )}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <BsCalendarDate className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document endDate")}
+                                lightString={formatDate(
+                                  new Date(doc.data?.endDate)
+                                )}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col">
                           {doc.data?.reminder && (
-                            <TextLine
-                              boldText={t("reminder days count")}
-                              lightString={doc.data?.reminder}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocumentTest className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("reminder days count")}
+                                lightString={doc.data?.reminder}
+                              />
+                            </div>
                           )}
                         </div>
-                        {doc.files?.length !== 0 ? (
-                          <div className="flex items-center">
-                            <p className="mb-3">{t("media")} : </p>
-                            <FilesPreviewOutFormik images={doc?.files} />
+                        <div className="flex items-center gap-1">
+                          <p className="mt-1">{t("media")} : </p>
+                          <div className="flex gap-4 flex-col">
+                            {doc?.files && (
+                              <FilesPreviewOutFormik
+                                preview={true}
+                                images={doc.files}
+                              />
+                            )}
                           </div>
-                        ) : (
-                          "لايوجد وسائظ"
-                        )}
+                        </div>
                       </div>
                     </div>
                   </>
@@ -276,61 +336,75 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
                           </p>
                         </div>
                       </div>
-                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
+                      <div className="bg-flatWhite rounded-lg p-4 mt-5 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative   ">
                         <div className="flex gap-4 flex-col">
                           {doc.data?.docType?.label && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docType?.label}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocument className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document type")}
+                                lightString={doc.data?.docType?.label}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col">
                           {doc.data?.docName && (
-                            <TextLine
-                              boldText={t("document name")}
-                              lightString={doc.data?.docName}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocumentText className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document name")}
+                                lightString={doc.data?.docName}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col  ">
                           {doc.data?.docNumber && (
-                            <TextLine
-                              boldText={t("document number")}
-                              lightString={doc.data?.docNumber}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <MdEditDocument className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document number")}
+                                lightString={doc.data?.docNumber}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col  ">
                           {doc.data?.endDate && (
-                            <TextLine
-                              boldText={t("document end date")}
-                              lightString={formatDate(
-                                new Date(doc.data?.endDate)
-                              )}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <BsCalendarDate className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("document endDate")}
+                                lightString={formatDate(
+                                  new Date(doc.data?.endDate)
+                                )}
+                              />
+                            </div>
                           )}
                         </div>
                         <div className="flex gap-4 flex-col">
                           {doc.data?.reminder && (
-                            <TextLine
-                              boldText={t("reminder days count")}
-                              lightString={doc.data?.reminder}
-                            />
+                            <div className="flex align-middle gap-2">
+                              <GrDocumentTest className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                              <TextLine
+                                boldText={t("reminder days count")}
+                                lightString={doc.data?.reminder}
+                              />
+                            </div>
                           )}
                         </div>
-                        {doc.files?.length !== 0 ? (
-                          <div className="flex items-center">
-                            <p className="mb-3">{t("media")} : </p>
-                            <FilesPreviewOutFormik images={doc?.files} />
+                        <div className="flex items-center gap-1">
+                          <p className="mt-1">{t("media")} : </p>
+                          <div className="flex gap-4 flex-col">
+                            {doc?.files && (
+                              <FilesPreviewOutFormik
+                                preview={true}
+                                images={doc.files}
+                              />
+                            )}
                           </div>
-                        ) : (
-                          <div className="flex justify-center gap-4 col-span-4 align-center items-center">
-                            <h3 className="font-bold text-lg">
-                              {t("no media")}
-                            </h3>
-                          </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </>
@@ -344,78 +418,104 @@ export const OnePartner = ({ title }: OnePartnerProps_TP) => {
               )}
               {/* العنوان الوطني */}
               <>
-                <div className="flex gap-4 flex-col col-span-4 justify-center align-middle"></div>
-                <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
-                  <div className="flex justify-start gap-4 col-span-4 align-center items-center">
-                    <h3 className="font-extrabold text-2xl ">
+                <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative  border-t-2 border-[#5F5F5F33]">
+                  <div className="flex gap-4 flex-col col-span-4">
+                    <h3 className="font-extrabold text-2xl">
+                      {" "}
                       {t("national Address")}{" "}
                     </h3>
                   </div>
                   <div className="bg-flatWhite rounded-lg p-4 grid justify-center grid-cols-3 col-span-4 gap-x-4 gap-y-8 relative">
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.city.name && (
-                        <TextLine
-                          boldText={t("city")}
-                          lightString={partner.nationalAddress?.city.name}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <FaCity className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("city")}
+                            lightString={partner.nationalAddress?.city.name}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.city.country_name && (
-                        <TextLine
-                          boldText={t("country")}
-                          lightString={
-                            partner.nationalAddress?.city.country_name
-                          }
-                        />
+                        <div className="flex align-middle gap-2">
+                          <FaCity className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("country")}
+                            lightString={
+                              partner.nationalAddress?.city.country_name
+                            }
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.district.name && (
-                        <TextLine
-                          boldText={t("district")}
-                          lightString={partner.nationalAddress?.district.name}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <FaCity className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("district")}
+                            lightString={partner.nationalAddress?.district.name}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.address && (
-                        <TextLine
-                          boldText={t("short address")}
-                          lightString={partner.nationalAddress?.address}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <FaHome className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("short address")}
+                            lightString={partner.nationalAddress?.address}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.street_number && (
-                        <TextLine
-                          boldText={t("street number")}
-                          lightString={partner.nationalAddress?.street_number}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <BiStreetView className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("street number")}
+                            lightString={partner.nationalAddress?.street_number}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.building_number && (
-                        <TextLine
-                          boldText={t("building number")}
-                          lightString={partner.nationalAddress?.building_number}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <TbHomeHand className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("building number")}
+                            lightString={
+                              partner.nationalAddress?.building_number
+                            }
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.sub_number && (
-                        <TextLine
-                          boldText={t("sub number")}
-                          lightString={partner.nationalAddress?.sub_number}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <AiOutlineFieldNumber className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("sub number")}
+                            lightString={partner.nationalAddress?.sub_number}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-4 flex-col">
                       {partner.nationalAddress?.zip_code && (
-                        <TextLine
-                          boldText={t("zip code")}
-                          lightString={partner.nationalAddress?.zip_code}
-                        />
+                        <div className="flex align-middle gap-2">
+                          <BsMailbox className="w-[20px] h-[20px] text-[#A0A0A0]" />
+                          <TextLine
+                            boldText={t("zip code")}
+                            lightString={partner.nationalAddress?.zip_code}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
