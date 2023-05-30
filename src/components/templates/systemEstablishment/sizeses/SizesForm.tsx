@@ -271,7 +271,7 @@ export const SizesForm = ({
         type: !showCategories ? values.type : values.sizeType,
         start:  values.start,
         end: values.end,
-        increase: values.increase,
+        increase: values.increase,u
       },
       method: editData ? "put" : "post",
     })
