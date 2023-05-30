@@ -308,6 +308,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                       options={categoriesOptions}
                       id="category"
                       noMb={true}
+                      placement="top"
                       name="category_id"
                       placeholder={`${t("categories")}`}
                       value={{
@@ -342,6 +343,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                       id="karat"
                       name="karat_id"
                       noMb={true}
+                      placement="top"
                       placeholder={`${t("karats")}`}
                       value={{
                         value: values.karat_value || editData.karat_value,
@@ -394,6 +396,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                         setFieldValue("category_value", option!.value)
                       }}
                       noMb={true}
+                      placement="top"
                       all={true}
                       value={{
                         value: values.category_value || editData.category_value,
@@ -413,6 +416,7 @@ import { supplierTax_TP } from "../../../../pages/supply/Supply"
                       field="id"
                       name="karat_id"
                       noMb={true}
+                      placement="top"
                       onChange={(option) => {
                         setFieldValue("karat_value", option!.value)
                         setFieldValue(

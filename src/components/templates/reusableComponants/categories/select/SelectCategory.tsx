@@ -19,6 +19,7 @@ type SelectCategory_TP = {
   name: string
   label?: string
   noMb?: boolean
+  placement?: "top" | "auto" | "bottom"
   onChange?: (option: ExtendedCategory_TP) => void
   field?: "id" | "value"
   value?:{[x:string]:string}
@@ -31,6 +32,7 @@ const SelectCategory = ({
   field = "id",
   onChange,
   noMb = false,
+  placement = "auto",
   showNotDefinedType = true,
   value,
   all = false
@@ -72,6 +74,7 @@ const SelectCategory = ({
       label={label}
       name={name}
       noMb={noMb}
+      placement={placement}
       placeholder={`${t("categories")}`}
       loadingPlaceholder={`${t("Loading...")}`}
       options={categories}

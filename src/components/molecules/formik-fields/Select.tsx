@@ -21,6 +21,7 @@ type Select_TP = {
   isMulti?: boolean
   required?: boolean
   noMb?: boolean
+  placement?: "top" | "auto" | "bottom"
   placeholder?: string
   loadingPlaceholder?: string
   options: SelectOption_TP[] | undefined
@@ -88,6 +89,7 @@ export const SelectComp = ({
   onSimpleCreate,
   CreateComponent,
   noMb = false,
+  placement = "auto",
   onComplexCreate,
   setOptions,
   modalTitle,
@@ -168,7 +170,7 @@ export const SelectComp = ({
             <>
               <CreatableSelect
                 {...selectProps}
-                menuPlacement="auto"
+                menuPlacement={placement}
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
               />
@@ -194,7 +196,7 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select  menuPlacement="auto" {...selectProps} />
+            <Select  menuPlacement={placement} {...selectProps} />
           )}
         </div>
         <FormikError name={name as string} className="whitespace-nowrap absolute" />

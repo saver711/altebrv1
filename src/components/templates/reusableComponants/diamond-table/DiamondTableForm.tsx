@@ -328,6 +328,7 @@ export const DiamondTableForm = ({
                     options={categoriesOptions}
                     id="category"
                     noMb={true}
+                    placement="top"
                     name="category_id"
                     placeholder={`${t("categories")}`}
                     value={{
@@ -374,6 +375,7 @@ export const DiamondTableForm = ({
                     id="karat"
                     name="karat_id"
                     noMb={true}
+                    placement="top"
                     placeholder={`${t("karats")}`}
                     value={{
                       value: values.karat_value || editData.karat_value,
@@ -459,6 +461,7 @@ export const DiamondTableForm = ({
                   <SelectCategory
                     name="category_id"
                     noMb={true}
+                    placement="top"
                     onChange={(option) => {
                       setFieldValue("category_value", option!.value)
                     }}
@@ -484,6 +487,7 @@ export const DiamondTableForm = ({
                     field="id"
                     name="karat_id"
                     noMb={true}
+                    placement="top"
                     onChange={(option) => {
                       setFieldValue("karat_value", option!.value)
                       setFieldValue(
