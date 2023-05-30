@@ -228,7 +228,7 @@ export const Markets = ({
               : "لايوجد"
             : "اختر الحي اولا"
         }
-        isDisabled={!!!district?.id}
+        isDisabled={editData ? false : !!!district?.id}
         loadingPlaceholder={`${
           !district?.id ? "اختر الحي أولا" : t("loading")
         }`}

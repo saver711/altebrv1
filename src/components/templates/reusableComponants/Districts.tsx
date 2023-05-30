@@ -219,12 +219,12 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled: editData ? true : !!city?.id,
   })
 
   //change value
   useEffect(() => {
-    if (districts) {
+    if (districts && !editData) {
       setNewValue({
         id: "",
         value: "",
@@ -251,13 +251,14 @@ export const Districts = ({
       if (resetSelect) resetSelect()
     }
   }, [isSuccessPost])
+
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select
         id={distractName}
         label={t(`${label}`).toString()}
         name={distractName}
-        isDisabled={!!!city?.id}
+        isDisabled={editData ? false : !!!city?.id}
         modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
@@ -279,7 +280,7 @@ export const Districts = ({
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (distractName) {
+          if (distractName && editData) {
             setFieldValue(distractName, option?.id)
             setFieldValue("district_value", option!.value)
           }

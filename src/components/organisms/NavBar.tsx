@@ -1,14 +1,15 @@
+import { t } from "i18next"
 import { useContext } from "react"
 import { BiSearchAlt } from "react-icons/bi"
 import { IoIosArrowDown } from "react-icons/io"
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 import logo from "../../assets/altebr_logo.png"
 import { authCtx } from "../../context/auth-and-perm/auth"
 import { Can } from "../../utils/utils-components/Can"
 import { Button } from "../atoms"
 
 const NavBar = () => {
-
   const {isLoggingOut, frontLogOutHandler} = useContext(authCtx)
  return (
    <div className="w-100 flex h-14 items-center justify-between p-2">
@@ -26,7 +27,7 @@ const NavBar = () => {
         </Can> */}
      </div>
      <div className="me-2 flex  items-center gap-4">
-       <IoSettingsOutline className="icon fill-mainBlack cursor-pointer" />
+       <IoSettingsOutline onClick={() => navigate("/settings")} className="icon fill-mainBlack cursor-pointer" />
        <div className=" relative">
          <IoNotificationsOutline className="icon fill-mainBlack" />
          <span className=" absolute -top-2 left-3 rounded-full  bg-mainRed p-[2px] text-xs text-white">

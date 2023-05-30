@@ -7,11 +7,13 @@ export const BaseInputField = ({
   id,
   required,
   labelProps,
+  noMb = false,
   type = "text",
   ...props
 }: {
   label?: string
   id: string
+  noMb?: boolean
   required?: boolean
   labelProps?: {
     [key: string]: any
@@ -33,7 +35,10 @@ export const BaseInputField = ({
   // }, [fieldValue])
 
   return (
-    <div className="col-span-1">
+    <div 
+      className={noMb ? "col-span-1 relative" 
+      : "col-span-1 relative mb-[10px]"}
+    >
       <div className="flex flex-col gap-1">
         {label && (
           <Label htmlFor={id} {...labelProps} required={required}>
@@ -61,7 +66,7 @@ export const BaseInputField = ({
           }}
         />
       </div>
-      <FormikError name={props.name} className="whitespace-nowrap" />
+      <FormikError name={props.name} className="whitespace-nowrap absolute" />
     </div>
   )
 }

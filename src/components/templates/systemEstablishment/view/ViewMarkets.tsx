@@ -310,6 +310,7 @@ export const ViewMarkets = () => {
             <AddMarket
               title={`${editData ? t("edit market") : t("add market")}`}
               editData={editData}
+              setEditData={setEditData}
               setDataSource={setDataSource}
               setShow={setOpen}
             />

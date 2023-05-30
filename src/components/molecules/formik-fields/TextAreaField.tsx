@@ -20,7 +20,7 @@ export const TextAreaField = ({
     [key: string]: any
   }>()
   return (
-    <div >
+    <div  className="relative mb-[10px]">
       <Label htmlFor={id} required={required}>
         {label}
       </Label>
@@ -41,7 +41,7 @@ export const TextAreaField = ({
         {...props}
       />
 
-      <FormikError name={name as string} />
+      <FormikError name={name as string} className="whitespace-nowrap absolute" />
     </div>
   )
 }

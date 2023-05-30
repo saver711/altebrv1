@@ -271,7 +271,7 @@ export const SizesForm = ({
         type: !showCategories ? values.type : values.sizeType,
         start:  values.start,
         end: values.end,
-        increase: values.increase,
+        increase: values.increase,u
       },
       method: editData ? "put" : "post",
     })
@@ -282,7 +282,7 @@ export const SizesForm = ({
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => handleSubmit(values)}
-        //validationSchema={validatingSchema}
+        validationSchema={validatingSchema}
       >
         <Form>
           <HandleBackErrors errors={error?.response?.data?.errors}>

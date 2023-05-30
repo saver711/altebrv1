@@ -20,6 +20,9 @@ type Select_TP = {
   id: string
   isMulti?: boolean
   required?: boolean
+  noMb?: boolean
+  placement?: "top" | "auto" | "bottom"
+  requiredAstrict?: boolean
   placeholder?: string
   loadingPlaceholder?: string
   options: SelectOption_TP[] | undefined
@@ -74,7 +77,7 @@ export const SelectComp = ({
   name,
   id,
   isMulti,
-  required,
+  requiredAstrict,
   placeholder,
   loadingPlaceholder,
   options,
@@ -86,6 +89,8 @@ export const SelectComp = ({
   fieldKey = "value",
   onSimpleCreate,
   CreateComponent,
+  noMb = false,
+  placement = "auto",
   onComplexCreate,
   setOptions,
   modalTitle,
@@ -113,11 +118,12 @@ export const SelectComp = ({
       ...animatedComponents,
       LoadingIndicator: () => <Spinner className="ml-2" size="medium" />,
     },
+    
     id: id,
     defaultValue,
     name,
     isMulti,
-    required,
+    requiredAstrict,
     placeholder: loading ? loadingPlaceholder : placeholder,
     options,
     isLoading: loading && !isDisabled,
@@ -152,18 +158,22 @@ export const SelectComp = ({
 
   return (
     <>
-      <div className="col-span-1">
+      <div 
+        className={noMb ? "col-span-1 relative" 
+        : "col-span-1 relative mb-[10px]"}
+      >
         <div className="flex flex-col gap-1">
           {label && (
-            <Label htmlFor={id} required={required}>
+            <Label htmlFor={id} >
               {label}
             </Label>
           )}
           {creatable ? (
             <>
               <CreatableSelect
+                isClearable
                 {...selectProps}
-                menuPlacement="auto"
+                menuPlacement={placement}
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
               />
@@ -189,10 +199,10 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select  menuPlacement="auto" {...selectProps} />
+            <Select  menuPlacement={placement} {...selectProps} />
           )}
         </div>
-        <FormikError name={name as string} className="whitespace-nowrap" />
+        <FormikError name={name as string} className="whitespace-nowrap absolute" />
       </div>
     </>
   )
