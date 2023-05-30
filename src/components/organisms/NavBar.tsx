@@ -1,7 +1,9 @@
+import { t } from "i18next"
 import { useContext } from "react"
 import { BiSearchAlt } from "react-icons/bi"
 import { IoIosArrowDown } from "react-icons/io"
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 import logo from "../../assets/altebr_logo.png"
 import { authCtx } from "../../context/auth-and-perm/auth"
 import { Button } from "../atoms"
@@ -9,6 +11,7 @@ import { Button } from "../atoms"
 const NavBar = () => {
 
   const {logOutHandler, isLoggingOut , userData} = useContext(authCtx)
+
  return (
    <div className="w-100 flex h-14 items-center justify-between px-4 py-10">
      <div className="w-100 flex items-center gap-12 py-6 px-4">

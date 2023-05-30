@@ -226,7 +226,9 @@ export const ViewStoneColor = () => {
         )}
       </Modal>
       <div className="flex flex-col gap-6 items-center">
-        {(isLoading || isRefetching) && <Loading mainTitle={t("color")} />}
+        {(isLoading || isRefetching) && (
+          <Loading mainTitle={t("stones colors")} />
+        )}
         {isSuccess &&
           !isLoading &&
           !isRefetching &&

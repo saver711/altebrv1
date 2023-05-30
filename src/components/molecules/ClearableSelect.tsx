@@ -4,20 +4,57 @@
 ///
 /////////// Types
 ///
-
 import { AiOutlineClose } from "react-icons/ai"
-import { useFetch } from "../../hooks"
-import { Button } from "../atoms"
-import { Country_city_distract_markets } from "../templates/reusableComponants/Country_city_distract_markets"
 import { Select } from "./formik-fields"
-
+import { useFormikContext } from "formik"
+import { useState } from "react"
+import { CError_TP, SelectOption_TP } from "../../types"
+import { SingleValue } from "react-select"
+import { useFetch } from "../../hooks"
+import { t } from "i18next"
+import { RefetchErrorHandler } from "./RefetchErrorHandler"
 /////////// HELPER VARIABLES & FUNCTIONS
+type ClearableSelect_TP = {
+  options: SelectOption_TP[] | undefined
+  name: string
+  label: string
+  id: string
+  placeholder?: string
+  fieldKey?: "id" | "value" | undefined
+  isDisabled: boolean
+  loading: boolean
+  refetch: () => void
+  failureReason: CError_TP
+}
 ///
-
+type ClearableSelect_TP = {
+  options: SelectOption_TP[] | undefined
+  name: string
+  label: string
+  id: string
+  placeholder?: string
+  fieldKey?: "id" | "value" | undefined
+  isDisabled: boolean
+  loading: boolean
+  refetch: () => void
+  failureReason: CError_TP
+}
 ///
-export const ClearableSelect = () => {
+export const ClearableSelect = ({
+  options,
+  name,
+  label,
+  id,
+  placeholder,
+  fieldKey = "id",
+  isDisabled,
+  loading,
+  refetch,
+  failureReason,
+}: ClearableSelect_TP) => {
   /////////// VARIABLES
   ///
+  const { setFieldValue, values } = useFormikContext()
 
   ///
   /////////// CUSTOM HOOKS
@@ -26,47 +63,76 @@ export const ClearableSelect = () => {
   ///
   /////////// STATES
   ///
-
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// SIDE EFFECTS
   ///
-  const {
-    data: countriesOptions,
-    isLoading: countriesLoading,
-    failureReason,
-    refetch,
-  } = useFetch({
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
+
+  const [clear, setClear] = useState(false)
+
+  const { data: countriesOptions, isLoading: countriesLoading } = useFetch({
     queryKey: ["countries"],
-    endpoint: "governorate/api/v1/countries",
+    endpoint: "governorate/api/v1/countries?per_page=10000",
     select: (data) =>
       data.map((country) => ({
         ...country,
-        id: country.id,
-        value: country.name,
         label: country.name,
       })),
   })
-  ///
-  /////////// IF CASES
-  ///
 
   ///
   /////////// FUNCTIONS & EVENTS
   ///
-
   ///
+  const ClearValue = () => {
+    setNewValue({
+      id: "",
+      value: "",
+      label: ".....",
+    })
+    setClear(true)
+    setFieldValue(name, "")
+  }
+
   return (
     <div className="relative">
       <Select
-        id={"countryName"}
-        label={"label"}
-        name={"countryName"}
-        placeholder={"label"}
-        options={countriesOptions}
+        id={id}
+        label={t(`${label}`).toString()}
+        name={name}
+        placeholder={t(`${label}`).toString()}
+        isDisabled={isDisabled && !!failureReason}
+        loadingPlaceholder={`${t("loading")}`}
+        loading={loading}
+        options={options}
+        fieldKey={fieldKey}
+        value={newValue}
+        onChange={(option) => {
+          setFieldValue(name, option!.id)
+          if (clear) {
+            setNewValue({
+              id: option!.id,
+              value: option!.value,
+              label: option!.label,
+            })
+          }
+        }}
       />
-      <Button className=" bg-transparent border-none text-gray-300  absolute top-1/2 left-3">
-        <AiOutlineClose className=" fill-mainRed" />
-      </Button>
+      {loading ? (
+        ""
+      ) : (
+        <AiOutlineClose
+          onClick={() => ClearValue()}
+          className="fill-red-500 p-0  bg-transparent w-4 h-4 text-gray-300  absolute top-10 left-12"
+        />
+      )}
+      <RefetchErrorHandler
+        failureReason={failureReason}
+        isLoading={loading}
+        refetch={refetch}
+      />
     </div>
   )
 }

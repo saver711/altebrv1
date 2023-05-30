@@ -114,6 +114,7 @@ const NewDistrictOptionComponent = ({
       },
     })
   }
+  
   return (
     <div className="flex items-center justify-between gap-2">
       <Formik
@@ -191,10 +192,12 @@ export const Districts = ({
     setNewValue({
       id: editData?.nationalAddress?.district.id || editData?.district_id || "",
       value:
-        editData?.nationalAddress?.district.name || editData?.district_id || "",
+        editData?.nationalAddress?.district.name ||
+        editData?.district_name ||
+        "",
       label:
         editData?.nationalAddress?.district.name ||
-        editData?.district_id ||
+        editData?.district_name ||
         "اختر المدينه اولا ",
     })
   }, [])
@@ -216,16 +219,16 @@ export const Districts = ({
         value: district.name,
         label: district.name,
       })),
-    enabled: !!city?.id,
+    enabled: editData ? true : !!city?.id,
   })
 
   //change value
   useEffect(() => {
-    if (districts) {
+    if (districts && !editData) {
       setNewValue({
         id: "",
         value: "",
-        label: "اختر المدينة اولا",
+        label: "اختر الحي ",
       })
       setDistrictId({
         id: "",
@@ -248,13 +251,14 @@ export const Districts = ({
       if (resetSelect) resetSelect()
     }
   }, [isSuccessPost])
+
   return (
     <div className="flex flex-col gap-1 justify-center">
       <Select
         id={distractName}
         label={t(`${label}`).toString()}
         name={distractName}
-        isDisabled={!!!city?.id}
+        isDisabled={editData ? false : !!!city?.id}
         modalTitle={`${t("add district")}`}
         loadingPlaceholder={`${!city?.id ? "اختر المدينه أولا" : t("loading")}`}
         loading={districtsLoading}
@@ -276,7 +280,7 @@ export const Districts = ({
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (distractName) {
+          if (distractName && editData) {
             setFieldValue(distractName, option?.id)
             setFieldValue("district_value", option!.value)
           }

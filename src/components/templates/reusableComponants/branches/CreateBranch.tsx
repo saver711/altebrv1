@@ -77,6 +77,8 @@ export const CreateBranch = ({
     name_en: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     country_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    country_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+
     city_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     district_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),

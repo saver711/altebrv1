@@ -17,12 +17,21 @@ type SelectKaratProps_TP = {
   name: string,
   label?: string,
   field: "id" | "value",
+  noMb?: boolean
+  placement?: "top" | "auto" | "bottom"
   onChange?: (option:any) => void,
   stateValue?: any
   value?:{[x:string]:string}
 }
 
-const SelectKarat = ({ name, field, label, onChange , value}: SelectKaratProps_TP) => {
+const SelectKarat = ({ 
+  name, 
+  field, 
+  label, 
+  onChange, 
+  noMb = false, 
+  placement = "auto", 
+  value}: SelectKaratProps_TP) => {
   ///
   /////////// CUSTOM HOOKS
   ///
@@ -48,6 +57,8 @@ const SelectKarat = ({ name, field, label, onChange , value}: SelectKaratProps_T
       id="select_karats"
       label={label}
       name={name}
+      noMb={noMb}
+      placement={placement}
       placeholder={`${t('karats')}`}
       loadingPlaceholder={`${t('Loading...')}`}
       options={karats}

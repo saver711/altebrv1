@@ -163,6 +163,7 @@ export const Cities = ({
   editData,
   isSuccessPost,
   resetSelect,
+  setDistrictId,
 }: Cities_TP) => {
   /////////// VARIABLES
   ///
@@ -180,19 +181,36 @@ export const Cities = ({
   ///
   /////////// SIDE EFFECTS
   ///
+
   useEffect(() => {
-    setNewValue({
-      id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
-      value: editData?.nationalAddress?.city?.name || editData?.city_name || "",
-      label:
-        editData?.nationalAddress?.city?.name ||
-        editData?.city_name ||
-        "اختر الدوله اولا",
-    })
+    if (country?.id !== editData?.city_id) {
+      setNewValue({
+        id: editData?.nationalAddress?.city?.id || editData?.city_id || "",
+        value:
+          editData?.nationalAddress?.city?.name || editData?.city_name || "",
+        label:
+          editData?.nationalAddress?.city?.name ||
+          editData?.city_name ||
+          "اختر الدوله اولا",
+      })
+    } else {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر المدينه ... ",
+      })
+    }
+    // setDistrictId({
+    //   id: "",
+    //   value: "",
+    //   label: "اختر المدينه؟  ",
+    // })
+    // if (newValue?.id !== editData?.city_id) {
+    // }
   }, [])
-
-
-
+  console.log("country?.id", country?.id)
+  console.log("editData?.country_id", editData?.country_id)
+  console.log("editData ", country?.id === editData?.country_id)
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
 
@@ -213,11 +231,11 @@ export const Cities = ({
         country_name: city.country_name,
       }))
     },
-    enabled: !!country?.id,
+    enabled: editData ? true : !!country?.id,
   })
 
   useEffect(() => {
-    if (cities) {
+    if (cities && !editData) {
       setNewValue(null)
       setCityId({ id: "", label: "", value: "", name: "" })
       setFieldValue(cityName, null)
@@ -225,15 +243,28 @@ export const Cities = ({
   }, [JSON.stringify(cities)])
 
   useEffect(() => {
-     if (!editData || !editData?.nationalAddress?.country?.name) {
-       setNewValue({
-         id: "",
-         value: "",
-         label: "اختر الدوله اولا",
-       })
+    if (editData) {
+      setCityId({
+        id: newValue?.id,
+        label: newValue?.label,
+        value: newValue?.value,
+        name: newValue?.name,
+      })
+    }
+  }, [newValue])
 
-       if (resetSelect) resetSelect()
-     }
+  useEffect(() => {
+    if (!editData) {
+      setNewValue({
+        id: "",
+        value: "",
+        label: "اختر الدوله اولا",
+      })
+      if (editData) {
+        setCityId({ id: "", label: "", value: "", name: "" })
+      }
+      if (resetSelect) resetSelect()
+    }
   }, [isSuccessPost])
 
   ///
@@ -244,7 +275,7 @@ export const Cities = ({
         label={t(`${label}`).toString()}
         name={cityName}
         modalTitle={`${t("add city")}`}
-        isDisabled={!!!country?.id}
+        isDisabled={editData ? false : !!!country?.id}
         loadingPlaceholder={`${
           !country?.id ? "اختر الدولة أولا" : t("loading")
         }`}
@@ -260,7 +291,7 @@ export const Cities = ({
         value={newValue}
         //@ts-ignore
         onChange={(option: SingleValue<SelectOption_TP>) => {
-          if (cityName) {
+          if (cityName && editData) {
             setFieldValue(cityName, option?.id)
             // setFieldValue('city_value', option!.value)
           }
