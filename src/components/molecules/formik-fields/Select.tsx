@@ -19,7 +19,7 @@ type Select_TP = {
   modalTitle?: string,
   id: string
   isMulti?: boolean
-  required?: boolean
+  requiredAstrict?: boolean
   placeholder?: string
   loadingPlaceholder?: string
   options: SelectOption_TP[] | undefined
@@ -74,7 +74,7 @@ export const SelectComp = ({
   name,
   id,
   isMulti,
-  required,
+  requiredAstrict,
   placeholder,
   loadingPlaceholder,
   options,
@@ -117,7 +117,7 @@ export const SelectComp = ({
     defaultValue,
     name,
     isMulti,
-    required,
+    requiredAstrict,
     placeholder: loading ? loadingPlaceholder : placeholder,
     options,
     isLoading: loading && !isDisabled,
@@ -155,7 +155,7 @@ export const SelectComp = ({
       <div className="col-span-1">
         <div className="flex flex-col gap-1">
           {label && (
-            <Label htmlFor={id} required={required}>
+            <Label htmlFor={id} >
               {label}
             </Label>
           )}
@@ -189,7 +189,7 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select  menuPlacement="auto" {...selectProps} />
+            <Select menuPlacement="auto" {...selectProps} />
           )}
         </div>
         <FormikError name={name as string} className="whitespace-nowrap" />
