@@ -4,7 +4,6 @@
 ///
 /////////// Types
 ///
-
 import { AiOutlineClose } from "react-icons/ai"
 import { Select } from "./formik-fields"
 import { useFormikContext } from "formik"
@@ -14,8 +13,20 @@ import { SingleValue } from "react-select"
 import { useFetch } from "../../hooks"
 import { t } from "i18next"
 import { RefetchErrorHandler } from "./RefetchErrorHandler"
-
 /////////// HELPER VARIABLES & FUNCTIONS
+type ClearableSelect_TP = {
+  options: SelectOption_TP[] | undefined
+  name: string
+  label: string
+  id: string
+  placeholder?: string
+  fieldKey?: "id" | "value" | undefined
+  isDisabled: boolean
+  loading: boolean
+  refetch: () => void
+  failureReason: CError_TP
+}
+///
 type ClearableSelect_TP = {
   options: SelectOption_TP[] | undefined
   name: string
@@ -52,33 +63,29 @@ export const ClearableSelect = ({
   ///
   /////////// STATES
   ///
-  const [newValue, setNewValue] =
-    useState<SingleValue<SelectOption_TP> | null>()
-  const [clear, setClear] = useState(false)
-
+  const { setFieldValue, values } = useFormikContext()
   ///
   /////////// SIDE EFFECTS
   ///
+  const [newValue, setNewValue] =
+    useState<SingleValue<SelectOption_TP> | null>()
 
-  ///
-  /////////// IF CASES
-  ///
+  const [clear, setClear] = useState(false)
+
   const { data: countriesOptions, isLoading: countriesLoading } = useFetch({
     queryKey: ["countries"],
     endpoint: "governorate/api/v1/countries?per_page=10000",
     select: (data) =>
       data.map((country) => ({
         ...country,
-        id: country.id,
-        value: country.name,
         label: country.name,
       })),
   })
+
   ///
   /////////// FUNCTIONS & EVENTS
   ///
   ///
-
   const ClearValue = () => {
     setNewValue({
       id: "",

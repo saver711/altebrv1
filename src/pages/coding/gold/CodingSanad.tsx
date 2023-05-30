@@ -1,5 +1,6 @@
 /////////// IMPORTS
 ///
+import { OTF } from "@ahmedhassan713/object-2-formdata"
 import { Formik } from "formik"
 import { t } from "i18next"
 import { useEffect, useState } from "react"
@@ -80,15 +81,16 @@ export const CodingSanad = ({
   >()
 
   const [activeBand, setActiveBand] = useState<GoldSanadBand_TP | undefined>()
-  console.log(`activeBand:`, activeBand)
 
   ///
   /////////// SIDE EFFECTS
   ///
   useEffect(() => {
+    // const x = OTF(addedPieces)
+    // localStorage.setItem(`addedPiecesLocal_${sanadId}`, JSON.stringify(x))
+
     setAddedPiecesLocal(addedPieces)
   }, [addedPieces])
-  console.log(`addedPieces:`, addedPieces)
   ///
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///
@@ -171,9 +173,7 @@ export const CodingSanad = ({
             leftWeight:
               activeBand.leftWeight - (values.weight - tableWeight * 0.2),
           }
-
         } else {
-
           setAddedPieces((curr) => [
             ...curr,
             {
@@ -198,9 +198,6 @@ export const CodingSanad = ({
       setSelectedSanad((curr) => ({
         ...curr,
         items: curr?.items.map((band) => {
-          console.log("band.id", band.id)
-          console.log("activeBand.id", activeBand.id)
-
           if (band.id === activeBand.id) {
             return theBand
           } else {
@@ -208,8 +205,6 @@ export const CodingSanad = ({
           }
         }),
       }))
-
-      
     }
   }
 

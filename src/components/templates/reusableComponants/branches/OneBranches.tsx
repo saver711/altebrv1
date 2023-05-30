@@ -88,12 +88,9 @@ export const OneBranches = ({ title }) => {
           <InnerFormLayout title={data?.name_ar}>
             <TextLine
               boldText={t("arabic name")}
-              lightString={ data.name_ar }
+              lightString={data.name_ar}
             />
-            <TextLine
-              boldText={t("english name")}
-              lightString={data.name_en}
-            />
+            <TextLine boldText={t("english name")} lightString={data.name_en} />
             <TextLine boldText={t("address")} lightString={data.address} />
             <TextLine boldText={t("phone")} lightString={data.phone} />
             <TextLine boldText={t("branch number")} lightString={data.number} />
@@ -136,7 +133,7 @@ export const OneBranches = ({ title }) => {
                     lightString={doc.data.docNumber}
                   />
                   <TextLine
-                    containerClasses="col-span-2"
+                    containerClasses="col-span-2 !w-full"
                     boldText={t("end date")}
                     lightString={doc.data.endDate}
                   />

@@ -175,15 +175,16 @@ export const Countries = ({
 
   
   useEffect(() => {
-    if (!editData && !editData?.nationalAddress?.country?.name) {
+    if (!editData || !editData?.nationalAddress?.country?.name  ) {
       setNewValue({
         id: "",
         value: "",
         label: "اختر دولة",
-      })
-
+      }
+      )
       if (resetSelect) resetSelect()
-    }
+    } 
+
   }, [isSuccessPost])
 
   /////////// FUNCTIONS | EVENTS | IF CASES

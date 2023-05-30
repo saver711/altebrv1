@@ -1,10 +1,10 @@
 import { useFormikContext } from "formik"
 import { ChangeEvent, useState } from "react"
 import Select, {
-    ActionMeta,
-    MultiValue,
-    SingleValue,
-    Theme,
+  ActionMeta,
+  MultiValue,
+  SingleValue,
+  Theme
 } from "react-select"
 import makeAnimated from "react-select/animated"
 import CreatableSelect from "react-select/creatable"
@@ -20,6 +20,9 @@ type Select_TP = {
   id: string
   isMulti?: boolean
   required?: boolean
+  noMb?: boolean
+  placement?: "top" | "auto" | "bottom"
+  requiredAstrict?: boolean
   placeholder?: string
   loadingPlaceholder?: string
   options: SelectOption_TP[] | undefined
@@ -74,7 +77,7 @@ export const SelectComp = ({
   name,
   id,
   isMulti,
-  required,
+  requiredAstrict,
   placeholder,
   loadingPlaceholder,
   options,
@@ -86,6 +89,8 @@ export const SelectComp = ({
   fieldKey = "value",
   onSimpleCreate,
   CreateComponent,
+  noMb = false,
+  placement = "auto",
   onComplexCreate,
   setOptions,
   modalTitle,
@@ -118,7 +123,7 @@ export const SelectComp = ({
     defaultValue,
     name,
     isMulti,
-    required,
+    requiredAstrict,
     placeholder: loading ? loadingPlaceholder : placeholder,
     options,
     isLoading: loading && !isDisabled,
@@ -153,14 +158,22 @@ export const SelectComp = ({
 
   return (
     <>
-      <div className="col-span-1">
+      <div 
+        className={noMb ? "col-span-1 relative" 
+        : "col-span-1 relative mb-[10px]"}
+      >
         <div className="flex flex-col gap-1">
-          {label && <Label htmlFor={id}>{label}</Label>}
+          {label && (
+            <Label htmlFor={id} >
+              {label}
+            </Label>
+          )}
           {creatable ? (
             <>
               <CreatableSelect
                 isClearable
                 {...selectProps}
+                menuPlacement={placement}
                 formatCreateLabel={formatCreateLabel}
                 onCreateOption={handleCreate}
               />
@@ -186,10 +199,10 @@ export const SelectComp = ({
               )}
             </>
           ) : (
-            <Select isClearable {...selectProps} />
+            <Select  menuPlacement={placement} {...selectProps} />
           )}
         </div>
-        <FormikError name={name as string} className="whitespace-nowrap" />
+        <FormikError name={name as string} className="whitespace-nowrap absolute" />
       </div>
     </>
   )

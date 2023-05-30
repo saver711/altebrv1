@@ -25,7 +25,7 @@ type CreateKaratProps_TP = {
   editData?: ViewKarats_TP
   setDataSource?: Dispatch<SetStateAction<ViewKarats_TP[]>>
   setShow?: Dispatch<SetStateAction<boolean>>
-  title?:string
+  title?: string
 }
 
 type InitialValues_TP = {
@@ -58,25 +58,30 @@ const CreateKarat = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, isLoading, error, isSuccess , reset } = useMutate({
+  const { mutate, isLoading, error, isSuccess, reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
+      queryClient.refetchQueries(["AllKarats"])
+
       notify("success")
+
       if (value && onAdd) {
         onAdd(value)
-        queryClient.setQueryData(["karats"], (old: any) => {
-        return [...(old || []), data]
+        queryClient.setQueryData(["AllKarats"], (old: any) => {
+          return [...(old || []), data]
         })
       }
       if (setDataSource && setShow && !editData && !error) {
-        setDataSource((prev: any) => [...prev, data])
+        // setDataSource((prev: any) => [...prev, data])
+        queryClient.refetchQueries(["AllKarats"])
         setShow(false)
       }
       if (setDataSource && setShow && editData && !error) {
         setShow(false)
-        setDataSource((prev: any) =>
-          prev.map((p: ViewKarats_TP) => (p.id === data?.id ? data : p))
-        )
+        queryClient.refetchQueries(["AllKarats"])
+        // setDataSource((prev: any) =>
+        //   prev.map((p: ViewKarats_TP) => (p.id === data?.id ? data : p))
+        // )
       }
     },
   })

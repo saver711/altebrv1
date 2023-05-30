@@ -61,13 +61,13 @@ const label = tv({
   },
 })
 
-export interface LabelProps_TP
-  extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps_TP extends React.LabelHTMLAttributes<HTMLLabelElement> {
   className?: string
   children: ReactNode | string
   htmlFor: string
   size?: "sm" | "md" | "lg"
   required?: boolean
+  requiredAstrict?: boolean
 }
 
 export const Label = ({
@@ -76,6 +76,7 @@ export const Label = ({
   children,
   size = "md",
   required = false,
+  requiredAstrict,
 }: LabelProps_TP) => {
   return (
     <label
@@ -83,6 +84,7 @@ export const Label = ({
         className,
         size,
         required,
+        
       })}
       htmlFor={htmlFor}
     >

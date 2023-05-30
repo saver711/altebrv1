@@ -5,6 +5,7 @@
 ///
 import { useFormikContext } from "formik"
 import { t } from "i18next"
+import { useEffect } from "react"
 import { Permission_TP } from "../../../context/auth-and-perm/auth-permissions-types"
 import { PermissionGroup_TP } from "../../../pages/administrativeStructure/types-and-schemas"
 import { BaseInputField, InnerFormLayout } from "../../molecules"
@@ -35,6 +36,13 @@ export const PermissionForm = ({
   ///
   /////////// SIDE EFFECTS
   ///
+  useEffect(() => {
+    if (!!editData) {
+     editData?.permissions.forEach((permission) => {
+       setFieldValue(permission.id, true)
+     })
+   }
+   }, [])
 
   /////////// FUNCTIONS | EVENTS | IF CASES
   ///

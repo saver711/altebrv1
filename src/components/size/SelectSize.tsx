@@ -29,7 +29,7 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
       isLoading,
       isError,
     } = useFetch({
-      endpoint: "size/api/v1/sizesSelectOption_TP?per_page=10000",
+      endpoint: "size/api/v1/sizes?per_page=10000",
       queryKey: ["sizes"],
       select: (sizes) => {
         return sizes.map((item) => ({
@@ -40,6 +40,7 @@ export const SelectSize = ({ editData }: SelectSize_TP) => {
         }))
       },
     })
+console.log("sizes", sizes)
 
 
     ///

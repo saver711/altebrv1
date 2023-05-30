@@ -16,6 +16,7 @@ import { BaseInputField } from "../../../molecules/formik-fields/BaseInputField"
 import { Country_city_distract_markets } from "../Country_city_distract_markets"
 import { allDocs_TP, Documents } from "../documents/Documents"
 import { Branch_Props_TP } from "./ViewBranches"
+import { BranchMainData } from "./BranchMainData"
 ///
 /////////// Types
 ///
@@ -34,6 +35,7 @@ type InitialValues_TP = {
 ///
 export const CreateBranch = ({
   value,
+  title,
   onAdd,
   editData,
 }: CreateBranchProps_TP) => {
@@ -75,6 +77,8 @@ export const CreateBranch = ({
     name_en: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     market_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     country_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+    country_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
+
     city_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     district_id_out: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
     city_id: Yup.string().trim().required("برجاء ملئ هذا الحقل"),
@@ -109,10 +113,11 @@ export const CreateBranch = ({
   /////////// CUSTOM HOOKS
   ///
   const queryClient = useQueryClient()
-  const { mutate, error, isLoading } = useMutate({
+  const { mutate, error, isLoading, isSuccess, reset } = useMutate({
     mutationFn: mutateData,
     onSuccess: (data) => {
       notify("success")
+      queryClient.refetchQueries(["branch"])
       queryClient.setQueryData(["branches"], () => {
         return [data]
       })
@@ -177,143 +182,20 @@ export const CreateBranch = ({
           }
           console.log("values", editedValues)
         }}
-         validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
         <HandleBackErrors errors={error?.response?.data?.errors}>
-          <OuterFormLayout header={t("add branch")}>
-            <Form className="w-full">
-              <InnerFormLayout title={t("main data")}>
-                {/* branch name  start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="name_ar"
-                    label={`${t("branch name in arabic")}`}
-                    name="name_ar"
-                    type="text"
-                    placeholder={`${t("branch name in arabic")}`}
-                    defaultValue={editData && editData.name_ar}
-                  />
-                </div>
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="name_en"
-                    label={`${t("branch name in english")}`}
-                    name="name_en"
-                    type="text"
-                    placeholder={`${t("branch name in english")}`}
-                    defaultValue={editData && editData.name_en}
-                  />
-                </div>
-                {/* branch name  end */}
-
-                {/* branch number  start */}
-                <div className="col-sapn-1">
-                  <BaseInputField
-                    id="number"
-                    label={`${t("branch number")}`}
-                    name="number"
-                    type="text"
-                    placeholder={`${t("branch number")}`}
-                    defaultValue={editData && editData.number}
-                  />
-                </div>
-                {/* branch number  end */}
-                {/* market  start */}
-                <Country_city_distract_markets
-                  countryName="country_id_out"
-                  countryLabel={`${t("country")}`}
-                  cityName="city_id_out"
-                  cityLabel={`${t("city")}`}
-                  distractName="district_id_out"
-                  distractLabel={`${t("district")}`}
-                  marketName="market_id"
-                  marketLabel={`${t("markets")}`}
-                  editData={{
-                    nationalAddress: {
-                      country: {
-                        id: editData?.country?.id,
-                        name: editData?.country?.name,
-                      },
-                      city: {
-                        id: editData?.city.id,
-                        name: editData?.city.name,
-                      },
-                      district: {
-                        id: editData?.district.id,
-                        name: editData?.district.name,
-                      },
-                      market: {
-                        id: editData?.market.id,
-                        name: editData?.market.name,
-                      },
-                    },
-                  }}
-                />
-                {/* market  end */}
-
-                {/* market number start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="market_number"
-                    label={`${t("market number")}`}
-                    name="market_number"
-                    type="number"
-                    placeholder={`${t("market number")}`}
-                    defaultValue={editData && editData.market_number}
-                  />
-                </div>
-                {/* market number  end */}
-
-                {/* address start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="address"
-                    label={`${t("address")}`}
-                    name="main_address"
-                    type="text"
-                    placeholder={`${t("address")}`}
-                    defaultValue={editData && editData.nationalAddress.address}
-                  />
-                </div>
-                {/* address  end */}
-
-                {/* phone start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="phone"
-                    label={`${t("phone")}`}
-                    name="phone"
-                    type="text"
-                    placeholder={`${t("phone")}`}
-                    defaultValue={editData && editData.phone}
-                  />
-                </div>
-                {/* phone end */}
-
-                {/* fax start */}
-                <div className="col-span-1">
-                  <BaseInputField
-                    id="fax"
-                    label={`${t("fax")}`}
-                    name="fax"
-                    type="text"
-                    placeholder={`${t("fax")}`}
-                    defaultValue={editData && editData.fax}
-                  />
-                </div>
-                {/* fax end */}
-              </InnerFormLayout>
-              <Documents
-                docsFormValues={docsFormValues}
-                setDocsFormValues={setDocsFormValues}
-                editable={!!editData}
-              />
-              <NationalAddress editData={editData} />
-              <Button loading={isLoading} type="submit" className="mr-auto">
-                {t("submit")}
-              </Button>
-            </Form>
-          </OuterFormLayout>
+          <Form className="w-full">
+            <BranchMainData
+              isLoading={isLoading}
+              title={title}
+              editData={editData}
+              isSuccessPost={isSuccess}
+              restData={reset}
+              setDocsFormValues={setDocsFormValues}
+              docsFormValues={docsFormValues}
+            />
+          </Form>
         </HandleBackErrors>
       </Formik>
     </div>

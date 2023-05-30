@@ -35,7 +35,7 @@ export const sideBarItems: MenuItem_TP[] = [
   {
     id: crypto.randomUUID(),
     label: 'system establishment',
-    link: "system",
+    link: "/system",
     icon: CiSettings,
   },
   {
@@ -162,7 +162,7 @@ export const sideBarItems: MenuItem_TP[] = [
   {
     id: crypto.randomUUID(),
     label: 'settings',
-    link: "settings",
+    link: "/settings",
     icon: CiSettings,
   },
 ]
