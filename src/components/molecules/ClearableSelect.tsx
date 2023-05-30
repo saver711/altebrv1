@@ -14,6 +14,18 @@ import { useFetch } from "../../hooks"
 import { t } from "i18next"
 import { RefetchErrorHandler } from "./RefetchErrorHandler"
 /////////// HELPER VARIABLES & FUNCTIONS
+type ClearableSelect_TP = {
+  options: SelectOption_TP[] | undefined
+  name: string
+  label: string
+  id: string
+  placeholder?: string
+  fieldKey?: "id" | "value" | undefined
+  isDisabled: boolean
+  loading: boolean
+  refetch: () => void
+  failureReason: CError_TP
+}
 ///
 type ClearableSelect_TP = {
   options: SelectOption_TP[] | undefined
@@ -42,6 +54,7 @@ export const ClearableSelect = ({
 }: ClearableSelect_TP) => {
   /////////// VARIABLES
   ///
+  const { setFieldValue, values } = useFormikContext()
 
   ///
   /////////// CUSTOM HOOKS
@@ -70,13 +83,8 @@ export const ClearableSelect = ({
   })
 
   ///
-  /////////// IF CASES
-  ///
-
-  ///
   /////////// FUNCTIONS & EVENTS
   ///
-
   ///
   const ClearValue = () => {
     setNewValue({

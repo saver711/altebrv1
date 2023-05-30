@@ -139,9 +139,9 @@ export const Countries = ({
   label,
   editData,
   isSuccessPost,
+  setEditData,
   resetSelect,
 }: Countries_TP) => {
-
   /////////// VARIABLES
   ///
 
@@ -153,7 +153,7 @@ export const Countries = ({
   /////////// STATES
   ///
   const [newValue, setNewValue] =
-  useState<SingleValue<SelectOption_TP> | null>()
+    useState<SingleValue<SelectOption_TP> | null>()
 
   ///
   /////////// SIDE EFFECTS
@@ -170,8 +170,10 @@ export const Countries = ({
         editData?.country_name ||
         "اختر دولة",
     })
+    
   }, [])
 
+  
   useEffect(() => {
     if (!editData || !editData?.nationalAddress?.country?.name  ) {
       setNewValue({
@@ -203,6 +205,18 @@ export const Countries = ({
         label: country.name,
       })),
   })
+  useEffect(() => {
+    console.log("useEffect editData")
+    if (editData) {
+      setCountry({
+        id: newValue?.id,
+        label: newValue?.label,
+        value: newValue?.value,
+        name: newValue?.name,
+      })
+    }
+  }, [newValue])
+
   ///
   return (
     <div className="flex flex-col gap-1 justify-center">

@@ -118,6 +118,7 @@ export const SelectComp = ({
       ...animatedComponents,
       LoadingIndicator: () => <Spinner className="ml-2" size="medium" />,
     },
+    
     id: id,
     defaultValue,
     name,
@@ -170,6 +171,7 @@ export const SelectComp = ({
           {creatable ? (
             <>
               <CreatableSelect
+                isClearable
                 {...selectProps}
                 menuPlacement={placement}
                 formatCreateLabel={formatCreateLabel}
